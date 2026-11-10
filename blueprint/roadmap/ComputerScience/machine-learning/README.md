@@ -7,3 +7,5 @@ Mathematical theory of learning from data, including the probabilistic modelling
 - [Unsupervised learning and matrix factorization](unsupervised-learning/README.md)
 - [Probabilistic graphical models](probabilistic-graphical-models/README.md)
 - [Bayesian inference and sampling](bayesian-inference-and-sampling/README.md)
+- [Attention and low-rank adaptation](attention-and-low-rank-adaptation/README.md)
+- [Linear state-space sequence models](linear-state-space-sequence-models/README.md)

@@ -8,3 +8,4 @@ Vector spaces and modules, linear maps and their invariants such as trace, dual 
 - [Trace on invariant subspaces](trace-on-invariant-subspaces/README.md)
 - [Evaluation of an affine function at two points](affine-evaluation.md)
 - [Hom detects exact sequences ending in a surjection](exact-and-surjective-iff-forall-lcomp.md)
+- [Rank of a product of matrices](rank-of-a-product.md)
