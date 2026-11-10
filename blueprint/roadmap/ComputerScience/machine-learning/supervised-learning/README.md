@@ -12,3 +12,4 @@ Prediction from labelled data: least squares, ridge, lasso and kernel or Gaussia
 - [Least squares, ridge and lasso regression](least-squares-ridge-and-lasso-regression/README.md)
 - [Kernel ridge regression and GBLUP](kernel-ridge-regression-and-gblup/README.md)
 - [Sufficient input subsets](sufficient-input-subsets/README.md)
+- [Matrix-aware optimizers](matrix-aware-optimizers/README.md)
