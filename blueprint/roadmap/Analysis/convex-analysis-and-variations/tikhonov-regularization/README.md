@@ -18,3 +18,7 @@
 - [Existence and uniqueness of the Tikhonov minimizer](exists-unique-tikhonov-minimizer.md)
 - [Stability bound for Tikhonov regularized solutions](norm-le-of-tikhonov-normal-equations.md)
 - [Tikhonov solutions tend to zero as the parameter grows](tendsto-tikhonov-solution-zero.md)
+
+## Related topics
+
+- [Radon transform](../../harmonic-analysis/integral-transforms/radon-transform/README.md)
