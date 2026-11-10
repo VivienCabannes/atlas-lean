@@ -1,0 +1,5759 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../fast-fourier-transform/index.html">
+      
+      
+        <link rel="next" href="../horner-s-method/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Floating-point rounding - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rounding-to-an-integer" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Floating-point rounding
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23" id="__nav_2_1_23_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_23_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Computer Science
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../data-structures/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data structures
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../graph-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../process-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Process calculi and behavioural equivalence
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../type-systems-and-lambda-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Type systems and lambda calculi
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../programming-language-semantics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programming language semantics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../machine-learning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Machine learning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../sorting-and-searching/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sorting and searching
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../dynamic-programming/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic programming
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../greedy-algorithms-and-matroids/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Greedy algorithms and matroids
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../approximation-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Approximation algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../online-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Online algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../randomized-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Randomized algorithms and probabilistic analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../parallel-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23_15" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic and numerical algorithms
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23_15" id="__nav_2_1_23_15_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_23_15_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Algebraic and numerical algorithms
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bitvectors-and-boolean-lists/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bitvectors and Boolean lists
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../binary-polynomial-arithmetic-on-bitvectors/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Binary polynomial arithmetic on bitvectors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fast-fourier-transform/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fast Fourier transform
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Floating-point rounding
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Floating-point rounding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rounding-to-an-integer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rounding to an integer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#floating-point-numbers-and-rounding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Floating-point numbers and rounding
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-normal-range-of-a-bounded-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The normal range of a bounded format
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sterbenzs-lemma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sterbenz's lemma
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../horner-s-method/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Horner&#39;s method
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../karatsuba-algorithm/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Karatsuba algorithm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../matrix-multiplication-algorithms/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Matrix multiplication algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modular-exponentiation/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modular exponentiation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../miller-rabin-primality-test/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Miller–Rabin primality test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../solving-linear-congruences/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Solving linear congruences
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../strassen-algorithm/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Strassen algorithm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../computational-geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computational geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../string-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    String algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../heuristic-search-and-planning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heuristic search and planning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../cryptography/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cryptography
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../databases/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Databases
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../quantum-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../concurrent-systems-and-protocols/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concurrent systems and protocols
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../program-logics-and-verification/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Program logics and verification
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rounding-to-an-integer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rounding to an integer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#floating-point-numbers-and-rounding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Floating-point numbers and rounding
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-normal-range-of-a-bounded-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The normal range of a bounded format
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sterbenzs-lemma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sterbenz's lemma
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../index.html" tabindex="-1">Computer Science</a></li><li><a href="../index.html" tabindex="-1">Algebraic and numerical algorithms</a></li><li aria-current="page">Floating-point rounding</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Floating-point rounding</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding" data-page-title="Floating-point rounding">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="floating-point-rounding">Floating-point rounding</h1>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>25</strong> fully proved</span></div>
+</div>
+<h2 id="rounding-to-an-integer">Rounding to an integer</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/rne">
+<h4 class="bp-thmheading" id="rne">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Nearest-integer rounding with ties to even</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L64" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.rne in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.rne in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#rne" aria-label="Link to Nearest-integer rounding with ties to even" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.rne</div>
+<div class="bp-thmcontent">
+<p>For <span class="arithmatex">\(m\)</span> in a linearly ordered field <span class="arithmatex">\(K\)</span> with a
+floor function, <span class="arithmatex">\(\operatorname{rne}(m)\)</span> is the integer <span class="arithmatex">\(\lfloor m \rfloor\)</span> if
+<span class="arithmatex">\(m - \lfloor m \rfloor &lt; 1/2\)</span>, the integer <span class="arithmatex">\(\lfloor m \rfloor + 1\)</span> if
+<span class="arithmatex">\(m - \lfloor m \rfloor &gt; 1/2\)</span>, and, when <span class="arithmatex">\(m - \lfloor m \rfloor = 1/2\)</span>, whichever of
+<span class="arithmatex">\(\lfloor m \rfloor\)</span> and <span class="arithmatex">\(\lfloor m \rfloor + 1\)</span> is even.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rne (m : K) : ℤ :=
+  <span class="bp-lean-keyword">if</span> m - ⌊m⌋ &lt; 1 / 2 <span class="bp-lean-keyword">then</span> ⌊m⌋
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> 1 / 2 &lt; m - ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ + 1
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Even#doc" title="Even">Even</a> ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ <span class="bp-lean-keyword">else</span> ⌊m⌋ + 1</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 14</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-fl-sub-le">The relative error bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-fl-sub-le-of-is-float">Round to nearest for floating-point numbers</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#abs-rne-le">Bound on the rounded significand</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#abs-rne-sub-le">Round to nearest integer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#abs-rne-sub-le-half">Rounding to the nearest integer is within one half</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#abs-rne-sub-le-min">Rounding error bounded by the distances to neighbouring integers</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#even-of-abs-fl-sub-eq">Ties to even for floating-point rounding</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#even-rne-of-abs-sub-eq-half">Ties to even for the nearest integer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#fl">Round to nearest, ties to even</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#fl-sub-eq">The rounding error at the scale of the last place</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-float-fl">Rounding gives a floating-point number</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-float-in-fl">In the normal range, rounding stays in the format</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#le-rne-of-le">Rounding to nearest preserves integer lower bounds</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rne-le-of-le">Rounding to nearest preserves integer upper bounds</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/abs-rne-sub-le-min">
+<h4 class="bp-thmheading" id="abs-rne-sub-le-min">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Rounding error bounded by the distances to neighbouring integers</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L71" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.abs_rne_sub_le_min in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.abs_rne_sub_le_min in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#abs-rne-sub-le-min" aria-label="Link to Rounding error bounded by the distances to neighbouring integers" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.abs_rne_sub_le_min</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly
+ordered field with a floor function. For every <span class="arithmatex">\(m \in K\)</span>, the integer <span class="arithmatex">\(\operatorname{rne}(m)\)</span>
+obtained by rounding <span class="arithmatex">\(m\)</span> to the nearest integer, ties to even, satisfies
+<span class="arithmatex">\(|\operatorname{rne}(m) - m| \le m - \lfloor m \rfloor\)</span> and
+<span class="arithmatex">\(|\operatorname{rne}(m) - m| \le \lfloor m \rfloor + 1 - m\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> abs_rne_sub_le_min (m : K) :
+    |(<a class="bp-lean-ref" href="#rne" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">rne</a> m : K) - m| ≤ m - ⌊m⌋ ∧ |(<a class="bp-lean-ref" href="#rne" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">rne</a> m : K) - m| ≤ ⌊m⌋ + 1 - m</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rne (m : K) : ℤ :=
+  <span class="bp-lean-keyword">if</span> m - ⌊m⌋ &lt; 1 / 2 <span class="bp-lean-keyword">then</span> ⌊m⌋
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> 1 / 2 &lt; m - ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ + 1
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> Even ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ <span class="bp-lean-keyword">else</span> ⌊m⌋ + 1</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:64</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rne">Nearest-integer rounding with ties to even</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-rne-sub-le">Round to nearest integer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-rne-sub-le-half">Rounding to the nearest integer is within one half</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/abs-rne-sub-le">
+<h4 class="bp-thmheading" id="abs-rne-sub-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Round to nearest integer</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L89" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.abs_rne_sub_le in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.abs_rne_sub_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#abs-rne-sub-le" aria-label="Link to Round to nearest integer" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.abs_rne_sub_le</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field with a floor function. For
+every <span class="arithmatex">\(m \in K\)</span> and every integer <span class="arithmatex">\(k\)</span>, the integer <span class="arithmatex">\(\operatorname{rne}(m)\)</span> obtained by rounding
+<span class="arithmatex">\(m\)</span> to the nearest integer, ties to even, satisfies <span class="arithmatex">\(|\operatorname{rne}(m) - m| \le |k - m|\)</span>:
+no integer is closer to <span class="arithmatex">\(m\)</span> than <span class="arithmatex">\(\operatorname{rne}(m)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> abs_rne_sub_le (m : K) (k : ℤ) : |(<a class="bp-lean-ref" href="#rne" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">rne</a> m : K) - m| ≤ |(k : K) - m|</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rne (m : K) : ℤ :=
+  <span class="bp-lean-keyword">if</span> m - ⌊m⌋ &lt; 1 / 2 <span class="bp-lean-keyword">then</span> ⌊m⌋
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> 1 / 2 &lt; m - ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ + 1
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> Even ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ <span class="bp-lean-keyword">else</span> ⌊m⌋ + 1</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:64</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rne">Nearest-integer rounding with ties to even</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-rne-sub-le-min">Rounding error bounded by the distances to neighbouring integers</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-fl-sub-le">The relative error bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-fl-sub-le-of-is-float">Round to nearest for floating-point numbers</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-float-fl">Rounding gives a floating-point number</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#le-rne-of-le">Rounding to nearest preserves integer lower bounds</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rne-le-of-le">Rounding to nearest preserves integer upper bounds</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/abs-rne-sub-le-half">
+<h4 class="bp-thmheading" id="abs-rne-sub-le-half">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Rounding to the nearest integer is within one half</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L100" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.abs_rne_sub_le_half in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.abs_rne_sub_le_half in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#abs-rne-sub-le-half" aria-label="Link to Rounding to the nearest integer is within one half" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.abs_rne_sub_le_half</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field
+with a floor function. For every <span class="arithmatex">\(m \in K\)</span>, the integer <span class="arithmatex">\(\operatorname{rne}(m)\)</span> obtained by
+rounding <span class="arithmatex">\(m\)</span> to the nearest integer, ties to even, satisfies
+<span class="arithmatex">\(|\operatorname{rne}(m) - m| \le 1/2\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> abs_rne_sub_le_half (m : K) : |(<a class="bp-lean-ref" href="#rne" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">rne</a> m : K) - m| ≤ 1 / 2</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rne (m : K) : ℤ :=
+  <span class="bp-lean-keyword">if</span> m - ⌊m⌋ &lt; 1 / 2 <span class="bp-lean-keyword">then</span> ⌊m⌋
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> 1 / 2 &lt; m - ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ + 1
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> Even ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ <span class="bp-lean-keyword">else</span> ⌊m⌋ + 1</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:64</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rne">Nearest-integer rounding with ties to even</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-rne-sub-le-min">Rounding error bounded by the distances to neighbouring integers</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-fl-sub-le">The relative error bound</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/even-rne-of-abs-sub-eq-half">
+<h4 class="bp-thmheading" id="even-rne-of-abs-sub-eq-half">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Ties to even for the nearest integer</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L107" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.even_rne_of_abs_sub_eq_half in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.even_rne_of_abs_sub_eq_half in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#even-rne-of-abs-sub-eq-half" aria-label="Link to Ties to even for the nearest integer" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.even_rne_of_abs_sub_eq_half</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field with a floor
+function, let <span class="arithmatex">\(m \in K\)</span>, and let <span class="arithmatex">\(\operatorname{rne}(m)\)</span> be the integer obtained by rounding <span class="arithmatex">\(m\)</span>
+to the nearest integer, ties to even. If <span class="arithmatex">\(|\operatorname{rne}(m) - m| = 1/2\)</span>, that is, <span class="arithmatex">\(m\)</span> is
+halfway between two consecutive integers, then <span class="arithmatex">\(\operatorname{rne}(m)\)</span> is even.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> even_rne_of_abs_sub_eq_half {m : K} (h : |(<a class="bp-lean-ref" href="#rne" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">rne</a> m : K) - m| = 1 / 2) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Even#doc" title="Even">Even</a> (<a class="bp-lean-ref" href="#rne" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">rne</a> m)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rne (m : K) : ℤ :=
+  <span class="bp-lean-keyword">if</span> m - ⌊m⌋ &lt; 1 / 2 <span class="bp-lean-keyword">then</span> ⌊m⌋
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> 1 / 2 &lt; m - ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ + 1
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> Even ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ <span class="bp-lean-keyword">else</span> ⌊m⌋ + 1</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:64</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rne">Nearest-integer rounding with ties to even</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#even-of-abs-fl-sub-eq">Ties to even for floating-point rounding</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/rne-le-of-le">
+<h4 class="bp-thmheading" id="rne-le-of-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Rounding to nearest preserves integer upper bounds</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L129" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.rne_le_of_le in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.rne_le_of_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#rne-le-of-le" aria-label="Link to Rounding to nearest preserves integer upper bounds" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.rne_le_of_le</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field
+with a floor function, let <span class="arithmatex">\(m \in K\)</span> and let <span class="arithmatex">\(k\)</span> be an integer. If <span class="arithmatex">\(m \le k\)</span>, then
+<span class="arithmatex">\(\operatorname{rne}(m) \le k\)</span>, where <span class="arithmatex">\(\operatorname{rne}(m)\)</span> is <span class="arithmatex">\(m\)</span> rounded to the nearest
+integer with ties to even.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> rne_le_of_le {m : K} {k : ℤ} (h : m ≤ k) : <a class="bp-lean-ref" href="#rne" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">rne</a> m ≤ k</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rne (m : K) : ℤ :=
+  <span class="bp-lean-keyword">if</span> m - ⌊m⌋ &lt; 1 / 2 <span class="bp-lean-keyword">then</span> ⌊m⌋
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> 1 / 2 &lt; m - ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ + 1
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> Even ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ <span class="bp-lean-keyword">else</span> ⌊m⌋ + 1</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:64</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rne">Nearest-integer rounding with ties to even</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-rne-sub-le">Round to nearest integer</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-rne-le">Bound on the rounded significand</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-float-in-fl">In the normal range, rounding stays in the format</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/le-rne-of-le">
+<h4 class="bp-thmheading" id="le-rne-of-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Rounding to nearest preserves integer lower bounds</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L138" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.le_rne_of_le in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.le_rne_of_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#le-rne-of-le" aria-label="Link to Rounding to nearest preserves integer lower bounds" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.le_rne_of_le</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field
+with a floor function, let <span class="arithmatex">\(m \in K\)</span> and let <span class="arithmatex">\(k\)</span> be an integer. If <span class="arithmatex">\(k \le m\)</span>, then
+<span class="arithmatex">\(k \le \operatorname{rne}(m)\)</span>, where <span class="arithmatex">\(\operatorname{rne}(m)\)</span> is <span class="arithmatex">\(m\)</span> rounded to the nearest
+integer with ties to even.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> le_rne_of_le {m : K} {k : ℤ} (h : (k : K) ≤ m) : k ≤ <a class="bp-lean-ref" href="#rne" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">rne</a> m</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rne (m : K) : ℤ :=
+  <span class="bp-lean-keyword">if</span> m - ⌊m⌋ &lt; 1 / 2 <span class="bp-lean-keyword">then</span> ⌊m⌋
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> 1 / 2 &lt; m - ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ + 1
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> Even ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ <span class="bp-lean-keyword">else</span> ⌊m⌋ + 1</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:64</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rne">Nearest-integer rounding with ties to even</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-rne-sub-le">Round to nearest integer</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-rne-le">Bound on the rounded significand</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-float-in-fl">In the normal range, rounding stays in the format</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="floating-point-numbers-and-rounding">Floating-point numbers and rounding</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/is-float">
+<h4 class="bp-thmheading" id="is-float">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Binary floating-point numbers</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L152" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.IsFloat in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.IsFloat in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#is-float" aria-label="Link to Binary floating-point numbers" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.IsFloat</div>
+<div class="bp-thmcontent">
+<p>For a natural number <span class="arithmatex">\(p\)</span>, an element <span class="arithmatex">\(x\)</span> of a linearly
+ordered field with a floor function is a binary floating-point number with a <span class="arithmatex">\(p\)</span>-bit significand
+and unbounded exponent when <span class="arithmatex">\(x = m \cdot 2^e\)</span> for some integers <span class="arithmatex">\(m\)</span> and <span class="arithmatex">\(e\)</span> with <span class="arithmatex">\(|m| &lt; 2^p\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsFloat (x : K) : <span class="bp-lean-keyword">Prop</span> := ∃ m e : ℤ, |m| &lt; 2 ^ p ∧ x = m * 2 ^ e</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 6</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#abs-fl-sub-le-of-is-float">Round to nearest for floating-point numbers</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-fl-sub-le-of-is-float-in">Round to nearest in a bounded format</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#fl-eq-self">Floating-point numbers round to themselves</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#fl-sub-eq-sub">Floating-point subtraction is exact under Sterbenz&#x27;s condition</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-float-fl">Rounding gives a floating-point number</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-float-sub">Sterbenz&#x27;s lemma</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/is-float-in">
+<h4 class="bp-thmheading" id="is-float-in">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Floating-point numbers of a bounded format</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L157" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.IsFloatIn in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.IsFloatIn in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#is-float-in" aria-label="Link to Floating-point numbers of a bounded format" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.IsFloatIn</div>
+<div class="bp-thmcontent">
+<p>For a natural number <span class="arithmatex">\(p\)</span> and integers
+<span class="arithmatex">\(q_{\min}\)</span> and <span class="arithmatex">\(q_{\max}\)</span>, an element <span class="arithmatex">\(x\)</span> of a linearly ordered field with a floor function is a
+number of the binary format with <span class="arithmatex">\(p\)</span>-bit significands and last-place exponents in
+<span class="arithmatex">\([q_{\min}, q_{\max}]\)</span> when <span class="arithmatex">\(x = m \cdot 2^e\)</span> for some integers <span class="arithmatex">\(m\)</span> and <span class="arithmatex">\(e\)</span> with <span class="arithmatex">\(|m| &lt; 2^p\)</span> and
+<span class="arithmatex">\(q_{\min} \le e \le q_{\max}\)</span>. These are zero, the subnormal numbers and the normal numbers of
+the format.</p>
+<p>In IEEE 754 terms, <span class="arithmatex">\(q_{\min} = e_{\min} - p + 1\)</span> and <span class="arithmatex">\(q_{\max} = e_{\max} - p + 1\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsFloatIn (qmin qmax : ℤ) (x : K) : <span class="bp-lean-keyword">Prop</span> :=
+  ∃ m e : ℤ, |m| &lt; 2 ^ p ∧ qmin ≤ e ∧ e ≤ qmax ∧ x = m * 2 ^ e</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#abs-fl-sub-le-of-is-float-in">Round to nearest in a bounded format</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-float-in-fl">In the normal range, rounding stays in the format</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-float-in-sub">Sterbenz&#x27;s lemma in a bounded format</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/ulp-exp">
+<h4 class="bp-thmheading" id="ulp-exp">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Exponent of the last place</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L168" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.ulpExp in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.ulpExp in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#ulp-exp" aria-label="Link to Exponent of the last place" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.ulpExp</div>
+<div class="bp-thmcontent">
+<p>For a natural number <span class="arithmatex">\(p\)</span> (the significand length) and <span class="arithmatex">\(x\)</span> in a
+linearly ordered field <span class="arithmatex">\(K\)</span> with a floor function, the exponent of the last place of <span class="arithmatex">\(x\)</span> is the
+integer <span class="arithmatex">\(\lfloor \log_2 |x| \rfloor - (p - 1)\)</span>. Here <span class="arithmatex">\(\lfloor \log_2 |x| \rfloor\)</span> is the integer
+logarithm: the largest integer <span class="arithmatex">\(n\)</span> with <span class="arithmatex">\(2^n \le |x|\)</span> when <span class="arithmatex">\(x \ne 0\)</span>, and <span class="arithmatex">\(0\)</span> when <span class="arithmatex">\(x = 0\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> ulpExp (x : K) : ℤ := <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Int.log#doc" title="Int.log">Int.log</a> 2 |x| - ((p : ℤ) - 1)</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 9</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-fl-sub-le">The relative error bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-fl-sub-le-of-is-float">Round to nearest for floating-point numbers</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#abs-rne-le">Bound on the rounded significand</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#even-of-abs-fl-sub-eq">Ties to even for floating-point rounding</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#fl">Round to nearest, ties to even</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#fl-sub-eq">The rounding error at the scale of the last place</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-float-fl">Rounding gives a floating-point number</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-float-in-fl">In the normal range, rounding stays in the format</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#scaled-bounds">Bounds on the scaled significand</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/fl">
+<h4 class="bp-thmheading" id="fl">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Round to nearest, ties to even</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L172" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.fl in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.fl in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#fl" aria-label="Link to Round to nearest, ties to even" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.fl</div>
+<div class="bp-thmcontent">
+<p>For a natural number <span class="arithmatex">\(p\)</span> and an element <span class="arithmatex">\(x\)</span> of a linearly
+ordered field with a floor function, let <span class="arithmatex">\(e\)</span> be the exponent of the last place of <span class="arithmatex">\(x\)</span> at precision
+<span class="arithmatex">\(p\)</span>, and let <span class="arithmatex">\(\operatorname{rne}\)</span> round to the nearest integer with ties to the even one. The
+rounding of <span class="arithmatex">\(x\)</span> to nearest, ties to even, is
+<span class="arithmatex">\(\mathrm{fl}_p(x) = \operatorname{rne}(x / 2^e) \cdot 2^e\)</span>: scale <span class="arithmatex">\(x\)</span> so that its last place is the
+units digit, round to the nearest integer with ties to even, and scale back.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> fl (x : K) : K := <a class="bp-lean-ref" href="#rne" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">rne</a> (x / 2 ^ <a class="bp-lean-ref" href="#ulp-exp" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.ulpExp">ulpExp</a> p x) * 2 ^ <a class="bp-lean-ref" href="#ulp-exp" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.ulpExp">ulpExp</a> p x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rne (m : K) : ℤ :=
+  <span class="bp-lean-keyword">if</span> m - ⌊m⌋ &lt; 1 / 2 <span class="bp-lean-keyword">then</span> ⌊m⌋
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> 1 / 2 &lt; m - ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ + 1
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> Even ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ <span class="bp-lean-keyword">else</span> ⌊m⌋ + 1</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:64</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.ulpExp">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> ulpExp (x : K) : ℤ := Int.log 2 |x| - ((p : ℤ) - 1)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:168</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 9</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rne">Nearest-integer rounding with ties to even</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ulp-exp">Exponent of the last place</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#abs-fl-sub-le">The relative error bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#abs-fl-sub-le-of-is-float">Round to nearest for floating-point numbers</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#abs-fl-sub-le-of-is-float-in">Round to nearest in a bounded format</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#even-of-abs-fl-sub-eq">Ties to even for floating-point rounding</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#fl-eq-self">Floating-point numbers round to themselves</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#fl-sub-eq">The rounding error at the scale of the last place</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#fl-sub-eq-sub">Floating-point subtraction is exact under Sterbenz&#x27;s condition</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-float-fl">Rounding gives a floating-point number</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-float-in-fl">In the normal range, rounding stays in the format</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/scaled-bounds">
+<h4 class="bp-thmheading" id="scaled-bounds">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Bounds on the scaled significand</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L179" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.scaled_bounds in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.scaled_bounds in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#scaled-bounds" aria-label="Link to Bounds on the scaled significand" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.scaled_bounds</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field with a floor
+function, let <span class="arithmatex">\(p \ge 1\)</span> be a natural number and let <span class="arithmatex">\(x \in K\)</span> be nonzero. Let
+<span class="arithmatex">\(e = \lfloor \log_2 |x| \rfloor - (p - 1)\)</span> be the exponent of the last place of <span class="arithmatex">\(x\)</span> for
+<span class="arithmatex">\(p\)</span>-bit significands. Then <span class="arithmatex">\(2^{p-1} \le |x / 2^e|\)</span> and <span class="arithmatex">\(|x / 2^e| &lt; 2^p\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> scaled_bounds (hp : 1 ≤ p) {x : K} (hx : x ≠ 0) :
+    (2 : K) ^ (p - 1) ≤ |x / 2 ^ <a class="bp-lean-ref" href="#ulp-exp" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.ulpExp">ulpExp</a> p x| ∧ |x / 2 ^ <a class="bp-lean-ref" href="#ulp-exp" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.ulpExp">ulpExp</a> p x| &lt; 2 ^ p</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.ulpExp">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> ulpExp (x : K) : ℤ := Int.log 2 |x| - ((p : ℤ) - 1)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:168</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ulp-exp">Exponent of the last place</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-fl-sub-le-of-is-float">Round to nearest for floating-point numbers</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-rne-le">Bound on the rounded significand</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/fl-sub-eq">
+<h4 class="bp-thmheading" id="fl-sub-eq">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The rounding error at the scale of the last place</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L203" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.fl_sub_eq in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.fl_sub_eq in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#fl-sub-eq" aria-label="Link to The rounding error at the scale of the last place" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.fl_sub_eq</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(x\)</span> be an element of a linearly
+ordered field with a floor function, let <span class="arithmatex">\(p\)</span> be a natural number, and let <span class="arithmatex">\(e\)</span> be the exponent of
+the last place of <span class="arithmatex">\(x\)</span> at precision <span class="arithmatex">\(p\)</span>. Writing <span class="arithmatex">\(\operatorname{rne}\)</span> for rounding to the nearest
+integer with ties to even, the rounding <span class="arithmatex">\(\mathrm{fl}_p(x)\)</span> of <span class="arithmatex">\(x\)</span> to nearest, ties to even, at
+precision <span class="arithmatex">\(p\)</span> has the error
+<span class="arithmatex">\(\mathrm{fl}_p(x) - x = (\operatorname{rne}(x / 2^e) - x / 2^e) \cdot 2^e\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> fl_sub_eq (x : K) :
+    <a class="bp-lean-ref" href="#fl" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.fl">fl</a> p x - x = ((<a class="bp-lean-ref" href="#rne" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">rne</a> (x / 2 ^ <a class="bp-lean-ref" href="#ulp-exp" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.ulpExp">ulpExp</a> p x) : K) - x / 2 ^ <a class="bp-lean-ref" href="#ulp-exp" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.ulpExp">ulpExp</a> p x) * 2 ^ <a class="bp-lean-ref" href="#ulp-exp" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.ulpExp">ulpExp</a> p x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.fl">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> fl (x : K) : K := rne (x / 2 ^ ulpExp p x) * 2 ^ ulpExp p x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:172</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rne (m : K) : ℤ :=
+  <span class="bp-lean-keyword">if</span> m - ⌊m⌋ &lt; 1 / 2 <span class="bp-lean-keyword">then</span> ⌊m⌋
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> 1 / 2 &lt; m - ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ + 1
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> Even ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ <span class="bp-lean-keyword">else</span> ⌊m⌋ + 1</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:64</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.ulpExp">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> ulpExp (x : K) : ℤ := Int.log 2 |x| - ((p : ℤ) - 1)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:168</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#fl">Round to nearest, ties to even</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rne">Nearest-integer rounding with ties to even</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ulp-exp">Exponent of the last place</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-fl-sub-le">The relative error bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-fl-sub-le-of-is-float">Round to nearest for floating-point numbers</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#even-of-abs-fl-sub-eq">Ties to even for floating-point rounding</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/abs-fl-sub-le">
+<h4 class="bp-thmheading" id="abs-fl-sub-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The relative error bound</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L217" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.abs_fl_sub_le in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.abs_fl_sub_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#abs-fl-sub-le" aria-label="Link to The relative error bound" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.abs_fl_sub_le</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field with a floor function and
+let <span class="arithmatex">\(p\)</span> be a natural number. For every <span class="arithmatex">\(x \in K\)</span>, the rounding <span class="arithmatex">\(\mathrm{fl}(x)\)</span> of <span class="arithmatex">\(x\)</span> to
+nearest, ties to even, with <span class="arithmatex">\(p\)</span>-bit significands satisfies
+<span class="arithmatex">\(|\mathrm{fl}(x) - x| \le u\,|x|\)</span>, where <span class="arithmatex">\(u = 2^{-p}\)</span> is the unit roundoff.</p>
+<p>The exponent is unbounded, so the bound holds for every <span class="arithmatex">\(x\)</span>, with no underflow or overflow.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> abs_fl_sub_le (x : K) : |<a class="bp-lean-ref" href="#fl" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.fl">fl</a> p x - x| ≤ 2 ^ (-(p : ℤ)) * |x|</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.fl">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> fl (x : K) : K := rne (x / 2 ^ ulpExp p x) * 2 ^ ulpExp p x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:172</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 6</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#fl">Round to nearest, ties to even</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-rne-sub-le">Round to nearest integer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-rne-sub-le-half">Rounding to the nearest integer is within one half</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#fl-sub-eq">The rounding error at the scale of the last place</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rne">Nearest-integer rounding with ties to even</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#ulp-exp">Exponent of the last place</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/abs-fl-sub-le-of-is-float">
+<h4 class="bp-thmheading" id="abs-fl-sub-le-of-is-float">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Round to nearest for floating-point numbers</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L236" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.abs_fl_sub_le_of_isFloat in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.abs_fl_sub_le_of_isFloat in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#abs-fl-sub-le-of-is-float" aria-label="Link to Round to nearest for floating-point numbers" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.abs_fl_sub_le_of_isFloat</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field with a
+floor function and let <span class="arithmatex">\(p \ge 1\)</span>. For every <span class="arithmatex">\(x \in K\)</span> and every binary floating-point number
+<span class="arithmatex">\(f \in K\)</span> with a <span class="arithmatex">\(p\)</span>-bit significand (and unbounded exponent), the rounding <span class="arithmatex">\(\mathrm{fl}(x)\)</span> of
+<span class="arithmatex">\(x\)</span> to nearest, ties to even, with <span class="arithmatex">\(p\)</span>-bit significands satisfies
+<span class="arithmatex">\(|\mathrm{fl}(x) - x| \le |f - x|\)</span>: no floating-point number is closer to <span class="arithmatex">\(x\)</span> than
+<span class="arithmatex">\(\mathrm{fl}(x)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> abs_fl_sub_le_of_isFloat (hp : 1 ≤ p) (x : K) {f : K} (hf : <a class="bp-lean-ref" href="#is-float" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.IsFloat">IsFloat</a> p f) :
+    |<a class="bp-lean-ref" href="#fl" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.fl">fl</a> p x - x| ≤ |f - x|</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.IsFloat">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsFloat (x : K) : <span class="bp-lean-keyword">Prop</span> := ∃ m e : ℤ, |m| &lt; 2 ^ p ∧ x = m * 2 ^ e</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:152</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.fl">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> fl (x : K) : K := rne (x / 2 ^ ulpExp p x) * 2 ^ ulpExp p x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:172</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 7 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-float">Binary floating-point numbers</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#fl">Round to nearest, ties to even</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-rne-sub-le">Round to nearest integer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#fl-sub-eq">The rounding error at the scale of the last place</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rne">Nearest-integer rounding with ties to even</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#scaled-bounds">Bounds on the scaled significand</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#ulp-exp">Exponent of the last place</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-fl-sub-le-of-is-float-in">Round to nearest in a bounded format</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#fl-eq-self">Floating-point numbers round to themselves</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/fl-eq-self">
+<h4 class="bp-thmheading" id="fl-eq-self">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Floating-point numbers round to themselves</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L296" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.fl_eq_self in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.fl_eq_self in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#fl-eq-self" aria-label="Link to Floating-point numbers round to themselves" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.fl_eq_self</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(p \ge 1\)</span> and let <span class="arithmatex">\(x\)</span> be an element of a
+linearly ordered field with a floor function. If <span class="arithmatex">\(x\)</span> is a binary floating-point number with a
+<span class="arithmatex">\(p\)</span>-bit significand, that is, <span class="arithmatex">\(x = m \cdot 2^e\)</span> for some integers <span class="arithmatex">\(m\)</span> and <span class="arithmatex">\(e\)</span> with <span class="arithmatex">\(|m| &lt; 2^p\)</span>,
+then rounding <span class="arithmatex">\(x\)</span> to nearest, ties to even, at precision <span class="arithmatex">\(p\)</span> returns <span class="arithmatex">\(x\)</span>: <span class="arithmatex">\(\mathrm{fl}_p(x) = x\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> fl_eq_self (hp : 1 ≤ p) {x : K} (hx : <a class="bp-lean-ref" href="#is-float" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.IsFloat">IsFloat</a> p x) : <a class="bp-lean-ref" href="#fl" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.fl">fl</a> p x = x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.IsFloat">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsFloat (x : K) : <span class="bp-lean-keyword">Prop</span> := ∃ m e : ℤ, |m| &lt; 2 ^ p ∧ x = m * 2 ^ e</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:152</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.fl">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> fl (x : K) : K := rne (x / 2 ^ ulpExp p x) * 2 ^ ulpExp p x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:172</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-float">Binary floating-point numbers</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#fl">Round to nearest, ties to even</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-fl-sub-le-of-is-float">Round to nearest for floating-point numbers</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#fl-sub-eq-sub">Floating-point subtraction is exact under Sterbenz&#x27;s condition</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/even-of-abs-fl-sub-eq">
+<h4 class="bp-thmheading" id="even-of-abs-fl-sub-eq">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Ties to even for floating-point rounding</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L303" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.even_of_abs_fl_sub_eq in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.even_of_abs_fl_sub_eq in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#even-of-abs-fl-sub-eq" aria-label="Link to Ties to even for floating-point rounding" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.even_of_abs_fl_sub_eq</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field with a floor
+function, let <span class="arithmatex">\(p\)</span> be a natural number, let <span class="arithmatex">\(x \in K\)</span>, and let <span class="arithmatex">\(e\)</span> be the exponent of the last
+place of <span class="arithmatex">\(x\)</span>, which is <span class="arithmatex">\(\lfloor \log_2 |x| \rfloor - (p - 1)\)</span> for <span class="arithmatex">\(x \ne 0\)</span>. If the rounding
+<span class="arithmatex">\(\mathrm{fl}(x)\)</span> of <span class="arithmatex">\(x\)</span> to nearest, ties to even, with <span class="arithmatex">\(p\)</span>-bit significands satisfies
+<span class="arithmatex">\(|\mathrm{fl}(x) - x| = 2^e / 2\)</span>, then the integer <span class="arithmatex">\(\operatorname{rne}(x / 2^e)\)</span>, the significand
+of <span class="arithmatex">\(\mathrm{fl}(x)\)</span> at the last place of <span class="arithmatex">\(x\)</span>, is even.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> even_of_abs_fl_sub_eq {x : K} (h : |<a class="bp-lean-ref" href="#fl" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.fl">fl</a> p x - x| = 2 ^ <a class="bp-lean-ref" href="#ulp-exp" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.ulpExp">ulpExp</a> p x / 2) :
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Even#doc" title="Even">Even</a> (<a class="bp-lean-ref" href="#rne" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">rne</a> (x / 2 ^ <a class="bp-lean-ref" href="#ulp-exp" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.ulpExp">ulpExp</a> p x))</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.fl">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> fl (x : K) : K := rne (x / 2 ^ ulpExp p x) * 2 ^ ulpExp p x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:172</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.ulpExp">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> ulpExp (x : K) : ℤ := Int.log 2 |x| - ((p : ℤ) - 1)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:168</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rne (m : K) : ℤ :=
+  <span class="bp-lean-keyword">if</span> m - ⌊m⌋ &lt; 1 / 2 <span class="bp-lean-keyword">then</span> ⌊m⌋
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> 1 / 2 &lt; m - ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ + 1
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> Even ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ <span class="bp-lean-keyword">else</span> ⌊m⌋ + 1</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:64</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#fl">Round to nearest, ties to even</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rne">Nearest-integer rounding with ties to even</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ulp-exp">Exponent of the last place</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#even-rne-of-abs-sub-eq-half">Ties to even for the nearest integer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#fl-sub-eq">The rounding error at the scale of the last place</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/abs-rne-le">
+<h4 class="bp-thmheading" id="abs-rne-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Bound on the rounded significand</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L314" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.abs_rne_le in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.abs_rne_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#abs-rne-le" aria-label="Link to Bound on the rounded significand" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.abs_rne_le</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field with a floor
+function, let <span class="arithmatex">\(p \ge 1\)</span>, let <span class="arithmatex">\(x \in K\)</span> be nonzero, and let
+<span class="arithmatex">\(e = \lfloor \log_2 |x| \rfloor - (p - 1)\)</span> be the exponent of the last place of <span class="arithmatex">\(x\)</span>. Then
+<span class="arithmatex">\(|\operatorname{rne}(x / 2^e)| \le 2^p\)</span>, where <span class="arithmatex">\(\operatorname{rne}\)</span> rounds to the nearest
+integer, ties to even.</p>
+<p>Since <span class="arithmatex">\(|x / 2^e| &lt; 2^p\)</span>, the value <span class="arithmatex">\(2^p\)</span> occurs only when rounding carries into the next
+binade.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> abs_rne_le (hp : 1 ≤ p) {x : K} (hx : x ≠ 0) :
+    |<a class="bp-lean-ref" href="#rne" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">rne</a> (x / 2 ^ <a class="bp-lean-ref" href="#ulp-exp" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.ulpExp">ulpExp</a> p x)| ≤ 2 ^ p</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.rne">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rne (m : K) : ℤ :=
+  <span class="bp-lean-keyword">if</span> m - ⌊m⌋ &lt; 1 / 2 <span class="bp-lean-keyword">then</span> ⌊m⌋
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> 1 / 2 &lt; m - ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ + 1
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> Even ⌊m⌋ <span class="bp-lean-keyword">then</span> ⌊m⌋ <span class="bp-lean-keyword">else</span> ⌊m⌋ + 1</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:64</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.ulpExp">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> ulpExp (x : K) : ℤ := Int.log 2 |x| - ((p : ℤ) - 1)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:168</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rne">Nearest-integer rounding with ties to even</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ulp-exp">Exponent of the last place</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#le-rne-of-le">Rounding to nearest preserves integer lower bounds</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rne-le-of-le">Rounding to nearest preserves integer upper bounds</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#scaled-bounds">Bounds on the scaled significand</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-float-fl">Rounding gives a floating-point number</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-float-in-fl">In the normal range, rounding stays in the format</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/is-float-fl">
+<h4 class="bp-thmheading" id="is-float-fl">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Rounding gives a floating-point number</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L324" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.isFloat_fl in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.isFloat_fl in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#is-float-fl" aria-label="Link to Rounding gives a floating-point number" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.isFloat_fl</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(p \ge 1\)</span>. For every element <span class="arithmatex">\(x\)</span> of a linearly
+ordered field with a floor function, the rounding <span class="arithmatex">\(\mathrm{fl}_p(x)\)</span> of <span class="arithmatex">\(x\)</span> to nearest, ties to
+even, is a binary floating-point number with a <span class="arithmatex">\(p\)</span>-bit significand: <span class="arithmatex">\(\mathrm{fl}_p(x) = m \cdot 2^e\)</span>
+for some integers <span class="arithmatex">\(m\)</span> and <span class="arithmatex">\(e\)</span> with <span class="arithmatex">\(|m| &lt; 2^p\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> isFloat_fl (hp : 1 ≤ p) (x : K) : <a class="bp-lean-ref" href="#is-float" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.IsFloat">IsFloat</a> p (<a class="bp-lean-ref" href="#fl" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.fl">fl</a> p x)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.IsFloat">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsFloat (x : K) : <span class="bp-lean-keyword">Prop</span> := ∃ m e : ℤ, |m| &lt; 2 ^ p ∧ x = m * 2 ^ e</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:152</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.fl">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> fl (x : K) : K := rne (x / 2 ^ ulpExp p x) * 2 ^ ulpExp p x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:172</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 6</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-float">Binary floating-point numbers</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#fl">Round to nearest, ties to even</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-rne-le">Bound on the rounded significand</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-rne-sub-le">Round to nearest integer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rne">Nearest-integer rounding with ties to even</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#ulp-exp">Exponent of the last place</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="the-normal-range-of-a-bounded-format">The normal range of a bounded format</h2>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/is-float-in-fl">
+<h4 class="bp-thmheading" id="is-float-in-fl">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">In the normal range, rounding stays in the format</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L353" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.isFloatIn_fl in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.isFloatIn_fl in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#is-float-in-fl" aria-label="Link to In the normal range, rounding stays in the format" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.isFloatIn_fl</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(p \ge 1\)</span>, let <span class="arithmatex">\(q_{\min}\)</span> and
+<span class="arithmatex">\(q_{\max}\)</span> be integers, and let <span class="arithmatex">\(x\)</span> be an element of a linearly ordered field with a floor
+function. If <span class="arithmatex">\(2^{q_{\min} + p - 1} \le |x|\)</span> (<span class="arithmatex">\(x\)</span> is at least the smallest normal number) and
+<span class="arithmatex">\(|x| \le (2^p - 1) \cdot 2^{q_{\max}}\)</span> (<span class="arithmatex">\(x\)</span> is at most the largest finite number), then the
+rounding <span class="arithmatex">\(\mathrm{fl}_p(x)\)</span> of <span class="arithmatex">\(x\)</span> to nearest, ties to even, is a number of the binary format
+with <span class="arithmatex">\(p\)</span>-bit significands whose last place has exponent in <span class="arithmatex">\([q_{\min}, q_{\max}]\)</span>.</p>
+<p>Since <span class="arithmatex">\(\mathrm{fl}_p(x)\)</span> is also a nearest number of the format to <span class="arithmatex">\(x\)</span>, with relative error at
+most <span class="arithmatex">\(2^{-p}\)</span>, rounding in the format in the normal range is the nearest-even rounding.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> isFloatIn_fl (hp : 1 ≤ p) {qmin qmax : ℤ} {x : K}
+    (hlo : (2 : K) ^ (qmin + ((p : ℤ) - 1)) ≤ |x|) (hhi : |x| ≤ (2 ^ p - 1) * 2 ^ qmax) :
+    <a class="bp-lean-ref" href="#is-float-in" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.IsFloatIn">IsFloatIn</a> p qmin qmax (<a class="bp-lean-ref" href="#fl" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.fl">fl</a> p x)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.IsFloatIn">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsFloatIn (qmin qmax : ℤ) (x : K) : <span class="bp-lean-keyword">Prop</span> :=
+  ∃ m e : ℤ, |m| &lt; 2 ^ p ∧ qmin ≤ e ∧ e ≤ qmax ∧ x = m * 2 ^ e</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:157</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.fl">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> fl (x : K) : K := rne (x / 2 ^ ulpExp p x) * 2 ^ ulpExp p x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:172</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 7</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-float-in">Floating-point numbers of a bounded format</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#fl">Round to nearest, ties to even</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-rne-le">Bound on the rounded significand</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#le-rne-of-le">Rounding to nearest preserves integer lower bounds</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rne">Nearest-integer rounding with ties to even</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rne-le-of-le">Rounding to nearest preserves integer upper bounds</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#ulp-exp">Exponent of the last place</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/abs-fl-sub-le-of-is-float-in">
+<h4 class="bp-thmheading" id="abs-fl-sub-le-of-is-float-in">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Round to nearest in a bounded format</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L402" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.abs_fl_sub_le_of_isFloatIn in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.abs_fl_sub_le_of_isFloatIn in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#abs-fl-sub-le-of-is-float-in" aria-label="Link to Round to nearest in a bounded format" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.abs_fl_sub_le_of_isFloatIn</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field with a floor
+function, let <span class="arithmatex">\(p \ge 1\)</span>, and let <span class="arithmatex">\(q_{\min}\)</span> and <span class="arithmatex">\(q_{\max}\)</span> be integers. For every <span class="arithmatex">\(x \in K\)</span> and
+every number <span class="arithmatex">\(f\)</span> of the binary format with <span class="arithmatex">\(p\)</span>-bit significands and last-place exponents in
+<span class="arithmatex">\([q_{\min}, q_{\max}]\)</span>, the rounding <span class="arithmatex">\(\mathrm{fl}(x)\)</span> of <span class="arithmatex">\(x\)</span> to nearest, ties to even, with
+<span class="arithmatex">\(p\)</span>-bit significands satisfies <span class="arithmatex">\(|\mathrm{fl}(x) - x| \le |f - x|\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> abs_fl_sub_le_of_isFloatIn (hp : 1 ≤ p) (x : K) {qmin qmax : ℤ} {f : K}
+    (hf : <a class="bp-lean-ref" href="#is-float-in" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.IsFloatIn">IsFloatIn</a> p qmin qmax f) : |<a class="bp-lean-ref" href="#fl" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.fl">fl</a> p x - x| ≤ |f - x|</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.IsFloatIn">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsFloatIn (qmin qmax : ℤ) (x : K) : <span class="bp-lean-keyword">Prop</span> :=
+  ∃ m e : ℤ, |m| &lt; 2 ^ p ∧ qmin ≤ e ∧ e ≤ qmax ∧ x = m * 2 ^ e</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:157</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.fl">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> fl (x : K) : K := rne (x / 2 ^ ulpExp p x) * 2 ^ ulpExp p x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:172</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-float-in">Floating-point numbers of a bounded format</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#fl">Round to nearest, ties to even</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-float">Binary floating-point numbers</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-fl-sub-le-of-is-float">Round to nearest for floating-point numbers</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="sterbenzs-lemma">Sterbenz's lemma</h2>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/exists-sub-eq-of-le">
+<h4 class="bp-thmheading" id="exists-sub-eq-of-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The difference of floating-point numbers within a factor of two</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L410" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.exists_sub_eq_of_le in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.exists_sub_eq_of_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#exists-sub-eq-of-le" aria-label="Link to The difference of floating-point numbers within a factor of two" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.exists_sub_eq_of_le</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly
+ordered field with a floor function and let <span class="arithmatex">\(p\)</span> be a natural number. Let <span class="arithmatex">\(x, y \in K\)</span> and let
+<span class="arithmatex">\(m_x, m_y, e_x, e_y\)</span> be integers with <span class="arithmatex">\(|m_x| &lt; 2^p\)</span>, <span class="arithmatex">\(|m_y| &lt; 2^p\)</span>, <span class="arithmatex">\(x = m_x 2^{e_x}\)</span> and
+<span class="arithmatex">\(y = m_y 2^{e_y}\)</span>. If <span class="arithmatex">\(y / 2 \le x \le 2y\)</span>, then there is an integer <span class="arithmatex">\(k\)</span> with <span class="arithmatex">\(|k| &lt; 2^p\)</span> and
+<span class="arithmatex">\(x - y = k \cdot 2^{\min(e_x, e_y)}\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> exists_sub_eq_of_le {x y : K} {mx my ex ey : ℤ} (hmx : |mx| &lt; 2 ^ p)
+    (hmy : |my| &lt; 2 ^ p) (hx : x = mx * 2 ^ ex) (hy : y = my * 2 ^ ey) (h₁ : y / 2 ≤ x)
+    (h₂ : x ≤ 2 * y) : ∃ k : ℤ, |k| &lt; 2 ^ p ∧ x - y = k * 2 ^ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Min.min#doc" title="Min.min">min</a> ex ey</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-float-in-sub">Sterbenz&#x27;s lemma in a bounded format</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-float-sub">Sterbenz&#x27;s lemma</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/is-float-sub">
+<h4 class="bp-thmheading" id="is-float-sub">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Sterbenz&#x27;s lemma</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L449" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.isFloat_sub in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.isFloat_sub in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#is-float-sub" aria-label="Link to Sterbenz&#x27;s lemma" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.isFloat_sub</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(p\)</span> be a natural number and let <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span> be binary floating-point
+numbers with <span class="arithmatex">\(p\)</span>-bit significands (and unbounded exponent) in a linearly ordered field with a
+floor function. If <span class="arithmatex">\(y / 2 \le x \le 2y\)</span>, then <span class="arithmatex">\(x - y\)</span> is also a binary floating-point number
+with a <span class="arithmatex">\(p\)</span>-bit significand.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> isFloat_sub {x y : K} (hx : <a class="bp-lean-ref" href="#is-float" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.IsFloat">IsFloat</a> p x) (hy : <a class="bp-lean-ref" href="#is-float" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.IsFloat">IsFloat</a> p y) (h₁ : y / 2 ≤ x)
+    (h₂ : x ≤ 2 * y) : <a class="bp-lean-ref" href="#is-float" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.IsFloat">IsFloat</a> p (x - y)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.IsFloat">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsFloat (x : K) : <span class="bp-lean-keyword">Prop</span> := ∃ m e : ℤ, |m| &lt; 2 ^ p ∧ x = m * 2 ^ e</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:152</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-float">Binary floating-point numbers</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#exists-sub-eq-of-le">The difference of floating-point numbers within a factor of two</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#fl-sub-eq-sub">Floating-point subtraction is exact under Sterbenz&#x27;s condition</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/is-float-in-sub">
+<h4 class="bp-thmheading" id="is-float-in-sub">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Sterbenz&#x27;s lemma in a bounded format</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L457" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.isFloatIn_sub in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.isFloatIn_sub in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#is-float-in-sub" aria-label="Link to Sterbenz&#x27;s lemma in a bounded format" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.isFloatIn_sub</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(p\)</span> be a natural number, let <span class="arithmatex">\(q_{\min}\)</span> and
+<span class="arithmatex">\(q_{\max}\)</span> be integers, and let <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span> be numbers of the binary format with <span class="arithmatex">\(p\)</span>-bit
+significands whose last place has exponent in <span class="arithmatex">\([q_{\min}, q_{\max}]\)</span> (subnormal numbers
+included), in a linearly ordered field with a floor function. If <span class="arithmatex">\(y / 2 \le x \le 2y\)</span>, then
+<span class="arithmatex">\(x - y\)</span> is also a number of this format.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> isFloatIn_sub {qmin qmax : ℤ} {x y : K} (hx : <a class="bp-lean-ref" href="#is-float-in" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.IsFloatIn">IsFloatIn</a> p qmin qmax x)
+    (hy : <a class="bp-lean-ref" href="#is-float-in" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.IsFloatIn">IsFloatIn</a> p qmin qmax y) (h₁ : y / 2 ≤ x) (h₂ : x ≤ 2 * y) :
+    <a class="bp-lean-ref" href="#is-float-in" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.IsFloatIn">IsFloatIn</a> p qmin qmax (x - y)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.IsFloatIn">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsFloatIn (qmin qmax : ℤ) (x : K) : <span class="bp-lean-keyword">Prop</span> :=
+  ∃ m e : ℤ, |m| &lt; 2 ^ p ∧ qmin ≤ e ∧ e ≤ qmax ∧ x = m * 2 ^ e</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:157</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-float-in">Floating-point numbers of a bounded format</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#exists-sub-eq-of-le">The difference of floating-point numbers within a factor of two</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding/fl-sub-eq-sub">
+<h4 class="bp-thmheading" id="fl-sub-eq-sub">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Floating-point subtraction is exact under Sterbenz&#x27;s condition</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean#L466" aria-label="View Cslib.Algorithms.Lean.FloatingPoint.fl_sub_eq_sub in Lean source" title="View Cslib.Algorithms.Lean.FloatingPoint.fl_sub_eq_sub in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#fl-sub-eq-sub" aria-label="Link to Floating-point subtraction is exact under Sterbenz&#x27;s condition" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.FloatingPoint.fl_sub_eq_sub</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(p \ge 1\)</span> and let <span class="arithmatex">\(x\)</span>
+and <span class="arithmatex">\(y\)</span> be binary floating-point numbers with <span class="arithmatex">\(p\)</span>-bit significands in a linearly ordered field
+with a floor function. If <span class="arithmatex">\(y / 2 \le x \le 2y\)</span>, then rounding <span class="arithmatex">\(x - y\)</span> to nearest, ties to even,
+at precision <span class="arithmatex">\(p\)</span> returns it exactly: <span class="arithmatex">\(\mathrm{fl}_p(x - y) = x - y\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> fl_sub_eq_sub (hp : 1 ≤ p) {x y : K} (hx : <a class="bp-lean-ref" href="#is-float" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.IsFloat">IsFloat</a> p x) (hy : <a class="bp-lean-ref" href="#is-float" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.IsFloat">IsFloat</a> p y)
+    (h₁ : y / 2 ≤ x) (h₂ : x ≤ 2 * y) : <a class="bp-lean-ref" href="#fl" data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.fl">fl</a> p (x - y) = x - y</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.IsFloat">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsFloat (x : K) : <span class="bp-lean-keyword">Prop</span> := ∃ m e : ℤ, |m| &lt; 2 ^ p ∧ x = m * 2 ^ e</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:152</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.FloatingPoint.fl">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> fl (x : K) : K := rne (x / 2 ^ ulpExp p x) * 2 ^ ulpExp p x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Numerical/FloatingPoint.lean:172</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-float">Binary floating-point numbers</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#fl">Round to nearest, ties to even</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#fl-eq-self">Floating-point numbers round to themselves</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-float-sub">Sterbenz&#x27;s lemma</a></span></div>
+</div>
+</details>
+</div>
+</div>
+<p><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../dependencies/index.json" data-graph-src="../../../../dependencies/scopes/ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding.json" data-page-href="index.html" data-scope-id="ComputerScience/algebraic-and-numerical-algorithms/floating-point-rounding">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,5805 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../modular-exponentiation/index.html">
+      
+      
+        <link rel="next" href="../solving-linear-congruences/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Miller–Rabin primality test - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Miller–Rabin primality test
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23" id="__nav_2_1_23_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_23_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Computer Science
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../data-structures/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data structures
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../graph-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../process-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Process calculi and behavioural equivalence
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../type-systems-and-lambda-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Type systems and lambda calculi
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../programming-language-semantics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programming language semantics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../machine-learning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Machine learning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../sorting-and-searching/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sorting and searching
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../dynamic-programming/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic programming
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../greedy-algorithms-and-matroids/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Greedy algorithms and matroids
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../approximation-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Approximation algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../online-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Online algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../randomized-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Randomized algorithms and probabilistic analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../parallel-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23_15" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic and numerical algorithms
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23_15" id="__nav_2_1_23_15_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_23_15_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23_15">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Algebraic and numerical algorithms
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bitvectors-and-boolean-lists/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bitvectors and Boolean lists
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../binary-polynomial-arithmetic-on-bitvectors/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Binary polynomial arithmetic on bitvectors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fast-fourier-transform/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fast Fourier transform
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../floating-point-rounding/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Floating-point rounding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../horner-s-method/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Horner&#39;s method
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../karatsuba-algorithm/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Karatsuba algorithm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../matrix-multiplication-algorithms/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Matrix multiplication algorithms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modular-exponentiation/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modular exponentiation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Miller–Rabin primality test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../solving-linear-congruences/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Solving linear congruences
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../strassen-algorithm/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Strassen algorithm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../computational-geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computational geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../string-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    String algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../heuristic-search-and-planning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heuristic search and planning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../cryptography/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cryptography
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../databases/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Databases
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../quantum-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../concurrent-systems-and-protocols/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concurrent systems and protocols
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../program-logics-and-verification/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Program logics and verification
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../index.html" tabindex="-1">Computer Science</a></li><li><a href="../index.html" tabindex="-1">Algebraic and numerical algorithms</a></li><li aria-current="page">Miller–Rabin primality test</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Miller–Rabin primality test</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test" data-page-title="Miller–Rabin primality test">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="millerrabin-primality-test">Miller–Rabin primality test</h1>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/two-adic-split">
+<h4 class="bp-thmheading" id="two-adic-split">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Splitting off the power of two</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean#L56" aria-label="View Cslib.Algorithms.Lean.MillerRabin.twoAdicSplit in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.twoAdicSplit in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#two-adic-split" aria-label="Link to Splitting off the power of two" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.twoAdicSplit</div>
+<div class="bp-thmcontent">
+<p>For a natural number <span class="arithmatex">\(m &gt; 0\)</span>, the two-adic split of <span class="arithmatex">\(m\)</span>
+is the pair <span class="arithmatex">\((t, u)\)</span> of natural numbers with <span class="arithmatex">\(m = 2^t u\)</span> and <span class="arithmatex">\(u\)</span> odd. For <span class="arithmatex">\(m = 0\)</span> it is
+<span class="arithmatex">\((0, 0)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> twoAdicSplit (m : ℕ) : ℕ × ℕ :=
+  <span class="bp-lean-keyword">if</span> m ≠ 0 ∧ m % 2 = 0 <span class="bp-lean-keyword">then</span>
+    <span class="bp-lean-keyword">let</span> r := twoAdicSplit (m / 2)
+    (r.1 + 1, r.2)
+  <span class="bp-lean-keyword">else</span> (0, m)
+<span class="bp-lean-keyword">termination_by</span> m
+<span class="bp-lean-keyword">decreasing_by</span> omega</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 8</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-of-carmichael">At most half the bases are non-witnesses for a Carmichael number</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-quarter-of-carmicha">At most a quarter of the bases are non-witnesses for a Carmichael number</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-quarter-of-pow-ne-o">At most a quarter of the bases are non-witnesses when some unit fails Fermat&#x27;s test and the modulus is not a prime power</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness">Miller–Rabin witness test</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness-eq-false-imp">What a non-witness satisfies</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-eq-false-of-prime">A prime has no Miller–Rabin witnesses in range</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-of-pow-ne-one">Fermat witnesses are Miller–Rabin witnesses</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness-time-le">Cost of the Miller–Rabin witness test</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/witness-loop">
+<h4 class="bp-thmheading" id="witness-loop">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">The Miller–Rabin squaring loop</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean#L79" aria-label="View Cslib.Algorithms.Lean.MillerRabin.witnessLoop in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.witnessLoop in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#witness-loop" aria-label="Link to The Miller–Rabin squaring loop" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.witnessLoop</div>
+<div class="bp-thmcontent">
+<p>Fix a modulus <span class="arithmatex">\(n\)</span>. With no squarings remaining, the loop
+at the current value <span class="arithmatex">\(x\)</span> reports a witness exactly when <span class="arithmatex">\(x \ne 1\)</span>, at no cost. With <span class="arithmatex">\(k + 1\)</span>
+squarings remaining, it costs one modular multiplication and computes <span class="arithmatex">\(y = x^2 \bmod n\)</span>; it
+reports a witness if <span class="arithmatex">\(y = 1\)</span>, <span class="arithmatex">\(x \ne 1\)</span> and <span class="arithmatex">\(x \ne n - 1\)</span>, and otherwise continues at <span class="arithmatex">\(y\)</span> with
+<span class="arithmatex">\(k\)</span> squarings remaining.</p>
+<p>Here <span class="arithmatex">\(x^2 \bmod 0 = x^2\)</span>, and <span class="arithmatex">\(n - 1\)</span> is <span class="arithmatex">\(0\)</span> when <span class="arithmatex">\(n = 0\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> witnessLoop (n : ℕ) : ℕ → ℕ → TimeM ℕ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>
+  | 0, x =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> (x != 1)
+  | k + 1, x =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      <span class="bp-lean-keyword">let</span> y := x * x % n
+      <span class="bp-lean-keyword">if</span> y = 1 ∧ x ≠ 1 ∧ x ≠ n - 1 <span class="bp-lean-keyword">then</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a> <span class="bp-lean-keyword">else</span> witnessLoop n k y</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 9</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness">Miller–Rabin witness test</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-eq-false-imp">What a non-witness satisfies</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-eq-false-of-prime">A prime has no Miller–Rabin witnesses in range</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness-loop-eq-false">The squaring loop modulo a prime finds no witness when it ends at 1</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness-loop-eq-false-imp">When the squaring loop finds no witness</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness-loop-eq-true">The squaring loop reports a witness when it does not end at 1</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness-loop-time-le">Cost bound for the Miller–Rabin squaring loop</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-of-pow-ne-one">Fermat witnesses are Miller–Rabin witnesses</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-time-le">Cost of the Miller–Rabin witness test</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/witness">
+<h4 class="bp-thmheading" id="witness">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Miller–Rabin witness test</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean#L89" aria-label="View Cslib.Algorithms.Lean.MillerRabin.witness in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.witness in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#witness" aria-label="Link to Miller–Rabin witness test" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.witness</div>
+<div class="bp-thmcontent">
+<p>For natural numbers <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(n\)</span>, write <span class="arithmatex">\(n - 1 = 2^t u\)</span> with <span class="arithmatex">\(u\)</span>
+odd (here <span class="arithmatex">\(n - 1\)</span> is truncated at <span class="arithmatex">\(0\)</span>, and <span class="arithmatex">\(t = u = 0\)</span> when <span class="arithmatex">\(n \le 1\)</span>). The test sets <span class="arithmatex">\(x_0\)</span> to the
+result of modular exponentiation of <span class="arithmatex">\(a\)</span> to the power <span class="arithmatex">\(u\)</span> modulo <span class="arithmatex">\(n\)</span>, which is <span class="arithmatex">\(a^u \bmod n\)</span> when
+<span class="arithmatex">\(u &gt; 0\)</span> and <span class="arithmatex">\(1\)</span> when <span class="arithmatex">\(u = 0\)</span>. For <span class="arithmatex">\(i = 1, \dots, t\)</span> it computes <span class="arithmatex">\(x_i = x_{i-1}^2 \bmod n\)</span> and
+returns true as soon as <span class="arithmatex">\(x_i = 1\)</span>, <span class="arithmatex">\(x_{i-1} \ne 1\)</span> and <span class="arithmatex">\(x_{i-1} \ne n - 1\)</span>. If no such step
+occurs, it returns true exactly when <span class="arithmatex">\(x_t \ne 1\)</span>. Its cost is the cost of the modular
+exponentiation plus one for each squaring performed.</p>
+<p>For a base with <span class="arithmatex">\(0 &lt; a &lt; n\)</span>, the answer true proves that <span class="arithmatex">\(n\)</span> is composite; outside that range the
+answer carries no such guarantee (for example, the test returns true for <span class="arithmatex">\(a = n = 2\)</span>), as in CLRS,
+whose bases are drawn from <span class="arithmatex">\(1, \dots, n - 1\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> witness (a n : ℕ) : TimeM ℕ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> tu := <a class="bp-lean-ref" href="#two-adic-split" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.twoAdicSplit">twoAdicSplit</a> (n - 1)
+  <span class="bp-lean-keyword">let</span> x ← <a class="bp-lean-ref" href="../modular-exponentiation/index.html#modular-exponentiation" data-lean-name="Cslib.Algorithms.Lean.ModularExponentiation.modularExponentiation">modularExponentiation</a> a tu.2 n
+  <a class="bp-lean-ref" href="#witness-loop" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witnessLoop">witnessLoop</a> n tu.1 x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.twoAdicSplit">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> twoAdicSplit (m : ℕ) : ℕ × ℕ :=
+  <span class="bp-lean-keyword">if</span> m ≠ 0 ∧ m % 2 = 0 <span class="bp-lean-keyword">then</span>
+    <span class="bp-lean-keyword">let</span> r := twoAdicSplit (m / 2)
+    (r.1 + 1, r.2)
+  <span class="bp-lean-keyword">else</span> (0, m)
+<span class="bp-lean-keyword">termination_by</span> m
+<span class="bp-lean-keyword">decreasing_by</span> omega</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:56</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.ModularExponentiation.modularExponentiation">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> modularExponentiation (a b n : Nat) : TimeM Nat Nat :=
+  <span class="bp-lean-keyword">if</span> _hzero : b = 0 <span class="bp-lean-keyword">then</span>
+    pure 1
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> _heven : b % 2 = 0 <span class="bp-lean-keyword">then</span>
+    <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> d ← modularExponentiation a (b / 2) n
+      TimeM.tick 1
+      pure ((d * d) % n)
+  <span class="bp-lean-keyword">else</span>
+    <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> d ← modularExponentiation a (b - 1) n
+      TimeM.tick 1
+  ⋯</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/ModularExponentiation.lean:41</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witnessLoop">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> witnessLoop (n : ℕ) : ℕ → ℕ → TimeM ℕ Bool
+  | 0, x =&gt; pure (x != 1)
+  | k + 1, x =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      <span class="bp-lean-keyword">let</span> y := x * x % n
+      <span class="bp-lean-keyword">if</span> y = 1 ∧ x ≠ 1 ∧ x ≠ n - 1 <span class="bp-lean-keyword">then</span> pure true <span class="bp-lean-keyword">else</span> witnessLoop n k y</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:79</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 17</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#two-adic-split">Splitting off the power of two</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness-loop">The Miller–Rabin squaring loop</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../modular-exponentiation/index.html#modular-exponentiation">Modular exponentiation</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-miller-rabin-errors-le">Half error bound for Miller–Rabin with several bases</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-miller-rabin-errors-le-quarter">Quarter error bound for Miller–Rabin with several bases</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-of-carmichael">At most half the bases are non-witnesses for a Carmichael number</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-of-pow-ne-one">At most half the bases are non-witnesses when some unit fails Fermat&#x27;s test</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-quarter-of-carmicha">At most a quarter of the bases are non-witnesses for a Carmichael number</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-quarter-of-pow-ne-o">At most a quarter of the bases are non-witnesses when some unit fails Fermat&#x27;s test and the modulus is not a prime power</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-quarter-of-prime-po">At most a quarter of the bases are non-witnesses for an odd prime power</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#coprime-of-witness-eq-false">Non-witnesses pass Fermat&#x27;s test and are units</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#miller-rabin">The Miller–Rabin test</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#miller-rabin-eq-true-iff">Miller–Rabin answers prime exactly when no base is a witness</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#miller-rabin-of-prime">The Miller–Rabin test never rejects a prime when its bases lie in range</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#nonwitnesses">Non-witnesses of a number</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#not-prime-of-witness">A Miller–Rabin witness in range proves compositeness</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness-eq-false-imp">What a non-witness satisfies</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness-eq-false-of-prime">A prime has no Miller–Rabin witnesses in range</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness-of-pow-ne-one">Fermat witnesses are Miller–Rabin witnesses</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness-time-le">Cost of the Miller–Rabin witness test</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/miller-rabin">
+<h4 class="bp-thmheading" id="miller-rabin">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">The Miller–Rabin test</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean#L98" aria-label="View Cslib.Algorithms.Lean.MillerRabin.millerRabin in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.millerRabin in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#miller-rabin" aria-label="Link to The Miller–Rabin test" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.millerRabin</div>
+<div class="bp-thmcontent">
+<p>Given a natural number <span class="arithmatex">\(n\)</span> and a list of bases
+<span class="arithmatex">\(a_1, \dots, a_s\)</span>, the test runs the witness test for <span class="arithmatex">\(n\)</span> on each base in turn. It answers
+<em>composite</em> as soon as some base <span class="arithmatex">\(a_i\)</span> is a witness to the compositeness of <span class="arithmatex">\(n\)</span>, and <em>prime</em> if
+none is (in particular on the empty list). Its cost is the sum of the costs of the witness tests
+it runs.</p>
+<p>This is CLRS <code>MILLER-RABIN(n, s)</code> with the bases given explicitly instead of drawn by
+<code>RANDOM(1, n - 1)</code>. A <em>composite</em> answer is guaranteed correct only when every base lies in
+<span class="arithmatex">\(1, \dots, n - 1\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> millerRabin (n : ℕ) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> ℕ → TimeM ℕ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>
+  | [] =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a>
+  | a :: as =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> w ← <a class="bp-lean-ref" href="#witness" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witness">witness</a> a n
+      <span class="bp-lean-keyword">if</span> w <span class="bp-lean-keyword">then</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a> <span class="bp-lean-keyword">else</span> millerRabin n as</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witness">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> witness (a n : ℕ) : TimeM ℕ Bool := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> tu := twoAdicSplit (n - 1)
+  <span class="bp-lean-keyword">let</span> x ← modularExponentiation a tu.2 n
+  witnessLoop n tu.1 x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:89</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness">Miller–Rabin witness test</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#card-miller-rabin-errors-le">Half error bound for Miller–Rabin with several bases</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#card-miller-rabin-errors-le-quarter">Quarter error bound for Miller–Rabin with several bases</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#miller-rabin-eq-true-iff">Miller–Rabin answers prime exactly when no base is a witness</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#miller-rabin-of-prime">The Miller–Rabin test never rejects a prime when its bases lie in range</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#not-prime-of-miller-rabin-eq-false">With bases in range, a composite answer of the Miller–Rabin test is correct</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/witness-loop-time-le">
+<h4 class="bp-thmheading" id="witness-loop-time-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Cost bound for the Miller–Rabin squaring loop</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean#L107" aria-label="View Cslib.Algorithms.Lean.MillerRabin.witnessLoop_time_le in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.witnessLoop_time_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#witness-loop-time-le" aria-label="Link to Cost bound for the Miller–Rabin squaring loop" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.witnessLoop_time_le</div>
+<div class="bp-thmcontent">
+<p>For all natural numbers <span class="arithmatex">\(n\)</span>, <span class="arithmatex">\(k\)</span> and <span class="arithmatex">\(x\)</span>,
+the cost of the squaring loop modulo <span class="arithmatex">\(n\)</span> started at <span class="arithmatex">\(x\)</span> with <span class="arithmatex">\(k\)</span> squarings remaining is at most
+<span class="arithmatex">\(k\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code>@[simp]
+<span class="bp-lean-keyword">theorem</span> witnessLoop_time_le (n k x : ℕ) : (<a class="bp-lean-ref" href="#witness-loop" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witnessLoop">witnessLoop</a> n k x).time ≤ k</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witnessLoop">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> witnessLoop (n : ℕ) : ℕ → ℕ → TimeM ℕ Bool
+  | 0, x =&gt; pure (x != 1)
+  | k + 1, x =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      <span class="bp-lean-keyword">let</span> y := x * x % n
+      <span class="bp-lean-keyword">if</span> y = 1 ∧ x ≠ 1 ∧ x ≠ n - 1 <span class="bp-lean-keyword">then</span> pure true <span class="bp-lean-keyword">else</span> witnessLoop n k y</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:79</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness-loop">The Miller–Rabin squaring loop</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-time-le">Cost of the Miller–Rabin witness test</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/witness-time-le">
+<h4 class="bp-thmheading" id="witness-time-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Cost of the Miller–Rabin witness test</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean#L119" aria-label="View Cslib.Algorithms.Lean.MillerRabin.witness_time_le in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.witness_time_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#witness-time-le" aria-label="Link to Cost of the Miller–Rabin witness test" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.witness_time_le</div>
+<div class="bp-thmcontent">
+<p>For natural numbers <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(n\)</span>, write
+<span class="arithmatex">\(n - 1 = 2^t u\)</span> with <span class="arithmatex">\(u\)</span> odd (here <span class="arithmatex">\(n - 1\)</span> is truncated at <span class="arithmatex">\(0\)</span>, and <span class="arithmatex">\(t = u = 0\)</span> when <span class="arithmatex">\(n \le 1\)</span>).
+The cost of the witness test on base <span class="arithmatex">\(a\)</span> and modulus <span class="arithmatex">\(n\)</span> is at most the cost of the modular
+exponentiation of <span class="arithmatex">\(a\)</span> to the power <span class="arithmatex">\(u\)</span> modulo <span class="arithmatex">\(n\)</span> plus <span class="arithmatex">\(t\)</span>: at most one multiplication for each
+of the <span class="arithmatex">\(t\)</span> squarings.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> witness_time_le (a n : ℕ) :
+    (<a class="bp-lean-ref" href="#witness" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witness">witness</a> a n).time ≤ (<a class="bp-lean-ref" href="../modular-exponentiation/index.html#modular-exponentiation" data-lean-name="Cslib.Algorithms.Lean.ModularExponentiation.modularExponentiation">modularExponentiation</a> a (<a class="bp-lean-ref" href="#two-adic-split" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.twoAdicSplit">twoAdicSplit</a> (n - 1)).2 n).time +
+      (<a class="bp-lean-ref" href="#two-adic-split" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.twoAdicSplit">twoAdicSplit</a> (n - 1)).1</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witness">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> witness (a n : ℕ) : TimeM ℕ Bool := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> tu := twoAdicSplit (n - 1)
+  <span class="bp-lean-keyword">let</span> x ← modularExponentiation a tu.2 n
+  witnessLoop n tu.1 x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:89</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.ModularExponentiation.modularExponentiation">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> modularExponentiation (a b n : Nat) : TimeM Nat Nat :=
+  <span class="bp-lean-keyword">if</span> _hzero : b = 0 <span class="bp-lean-keyword">then</span>
+    pure 1
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> _heven : b % 2 = 0 <span class="bp-lean-keyword">then</span>
+    <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> d ← modularExponentiation a (b / 2) n
+      TimeM.tick 1
+      pure ((d * d) % n)
+  <span class="bp-lean-keyword">else</span>
+    <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> d ← modularExponentiation a (b - 1) n
+      TimeM.tick 1
+  ⋯</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/ModularExponentiation.lean:41</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.twoAdicSplit">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> twoAdicSplit (m : ℕ) : ℕ × ℕ :=
+  <span class="bp-lean-keyword">if</span> m ≠ 0 ∧ m % 2 = 0 <span class="bp-lean-keyword">then</span>
+    <span class="bp-lean-keyword">let</span> r := twoAdicSplit (m / 2)
+    (r.1 + 1, r.2)
+  <span class="bp-lean-keyword">else</span> (0, m)
+<span class="bp-lean-keyword">termination_by</span> m
+<span class="bp-lean-keyword">decreasing_by</span> omega</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:56</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#two-adic-split">Splitting off the power of two</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness">Miller–Rabin witness test</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../modular-exponentiation/index.html#modular-exponentiation">Modular exponentiation</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-loop">The Miller–Rabin squaring loop</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-loop-time-le">Cost bound for the Miller–Rabin squaring loop</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/witness-loop-eq-false">
+<h4 class="bp-thmheading" id="witness-loop-eq-false">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The squaring loop modulo a prime finds no witness when it ends at 1</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean#L145" aria-label="View Cslib.Algorithms.Lean.MillerRabin.witnessLoop_eq_false in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.witnessLoop_eq_false in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#witness-loop-eq-false" aria-label="Link to The squaring loop modulo a prime finds no witness when it ends at 1" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.witnessLoop_eq_false</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(p\)</span> be a prime
+and let <span class="arithmatex">\(k\)</span> and <span class="arithmatex">\(x\)</span> be natural numbers with <span class="arithmatex">\(x &lt; p\)</span> and <span class="arithmatex">\(x^{2^k} \bmod p = 1\)</span>. Then the squaring
+loop modulo <span class="arithmatex">\(p\)</span> started at <span class="arithmatex">\(x\)</span> with <span class="arithmatex">\(k\)</span> squarings remaining reports no witness.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> witnessLoop_eq_false {p : ℕ} (hp : p.Prime) :
+    ∀ k x, x &lt; p → x ^ (2 ^ k) % p = 1 → (<a class="bp-lean-ref" href="#witness-loop" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witnessLoop">witnessLoop</a> p k x).ret = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a></code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witnessLoop">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> witnessLoop (n : ℕ) : ℕ → ℕ → TimeM ℕ Bool
+  | 0, x =&gt; pure (x != 1)
+  | k + 1, x =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      <span class="bp-lean-keyword">let</span> y := x * x % n
+      <span class="bp-lean-keyword">if</span> y = 1 ∧ x ≠ 1 ∧ x ≠ n - 1 <span class="bp-lean-keyword">then</span> pure true <span class="bp-lean-keyword">else</span> witnessLoop n k y</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:79</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness-loop">The Miller–Rabin squaring loop</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-eq-false-of-prime">A prime has no Miller–Rabin witnesses in range</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/witness-eq-false-of-prime">
+<h4 class="bp-thmheading" id="witness-eq-false-of-prime">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">A prime has no Miller–Rabin witnesses in range</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean#L168" aria-label="View Cslib.Algorithms.Lean.MillerRabin.witness_eq_false_of_prime in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.witness_eq_false_of_prime in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#witness-eq-false-of-prime" aria-label="Link to A prime has no Miller–Rabin witnesses in range" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.witness_eq_false_of_prime</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n\)</span> be a prime and <span class="arithmatex">\(a\)</span> a natural
+number with <span class="arithmatex">\(0 &lt; a &lt; n\)</span>. Then the witness test does not report <span class="arithmatex">\(a\)</span> as a witness to the
+compositeness of <span class="arithmatex">\(n\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> witness_eq_false_of_prime {n a : ℕ} (hn : n.Prime) (ha : 0 &lt; a) (han : a &lt; n) :
+    (<a class="bp-lean-ref" href="#witness" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witness">witness</a> a n).ret = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a></code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witness">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> witness (a n : ℕ) : TimeM ℕ Bool := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> tu := twoAdicSplit (n - 1)
+  <span class="bp-lean-keyword">let</span> x ← modularExponentiation a tu.2 n
+  witnessLoop n tu.1 x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:89</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>CLRS Section 31.8.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 6 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness">Miller–Rabin witness test</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#two-adic-split">Splitting off the power of two</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-loop">The Miller–Rabin squaring loop</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-loop-eq-false">The squaring loop modulo a prime finds no witness when it ends at 1</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../modular-exponentiation/index.html#modular-exponentiation">Modular exponentiation</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../modular-exponentiation/index.html#modular-exponentiation-correct">Correctness of modular exponentiation</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#miller-rabin-of-prime">The Miller–Rabin test never rejects a prime when its bases lie in range</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#not-prime-of-witness">A Miller–Rabin witness in range proves compositeness</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/not-prime-of-witness">
+<h4 class="bp-thmheading" id="not-prime-of-witness">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">A Miller–Rabin witness in range proves compositeness</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean#L189" aria-label="View Cslib.Algorithms.Lean.MillerRabin.not_prime_of_witness in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.not_prime_of_witness in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#not-prime-of-witness" aria-label="Link to A Miller–Rabin witness in range proves compositeness" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.not_prime_of_witness</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n\)</span> and <span class="arithmatex">\(a\)</span> be natural numbers
+with <span class="arithmatex">\(0 &lt; a &lt; n\)</span>. If the witness test reports <span class="arithmatex">\(a\)</span> as a witness to the compositeness of <span class="arithmatex">\(n\)</span>, then
+<span class="arithmatex">\(n\)</span> is not prime.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> not_prime_of_witness {n a : ℕ} (ha : 0 &lt; a) (han : a &lt; n)
+    (h : (<a class="bp-lean-ref" href="#witness" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witness">witness</a> a n).ret = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a>) : ¬ n.Prime</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witness">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> witness (a n : ℕ) : TimeM ℕ Bool := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> tu := twoAdicSplit (n - 1)
+  <span class="bp-lean-keyword">let</span> x ← modularExponentiation a tu.2 n
+  witnessLoop n tu.1 x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:89</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness">Miller–Rabin witness test</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-eq-false-of-prime">A prime has no Miller–Rabin witnesses in range</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/miller-rabin-of-prime">
+<h4 class="bp-thmheading" id="miller-rabin-of-prime">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The Miller–Rabin test never rejects a prime when its bases lie in range</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean#L194" aria-label="View Cslib.Algorithms.Lean.MillerRabin.millerRabin_of_prime in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.millerRabin_of_prime in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#miller-rabin-of-prime" aria-label="Link to The Miller–Rabin test never rejects a prime when its bases lie in range" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.millerRabin_of_prime</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n\)</span> be a
+prime. For every list of bases <span class="arithmatex">\(a_1, \dots, a_s\)</span> (possibly empty) with <span class="arithmatex">\(0 &lt; a_i &lt; n\)</span> for each
+<span class="arithmatex">\(i\)</span>, the Miller–Rabin test run on <span class="arithmatex">\(n\)</span> with these bases answers <em>prime</em>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> millerRabin_of_prime {n : ℕ} (hn : n.Prime) :
+    ∀ bases : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> ℕ, (∀ a ∈ bases, 0 &lt; a ∧ a &lt; n) → (<a class="bp-lean-ref" href="#miller-rabin" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.millerRabin">millerRabin</a> n bases).ret = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a></code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.millerRabin">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> millerRabin (n : ℕ) : List ℕ → TimeM ℕ Bool
+  | [] =&gt; pure true
+  | a :: as =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> w ← witness a n
+      <span class="bp-lean-keyword">if</span> w <span class="bp-lean-keyword">then</span> pure false <span class="bp-lean-keyword">else</span> millerRabin n as</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:98</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#miller-rabin">The Miller–Rabin test</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness">Miller–Rabin witness test</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-eq-false-of-prime">A prime has no Miller–Rabin witnesses in range</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#not-prime-of-miller-rabin-eq-false">With bases in range, a composite answer of the Miller–Rabin test is correct</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/not-prime-of-miller-rabin-eq-false">
+<h4 class="bp-thmheading" id="not-prime-of-miller-rabin-eq-false">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">With bases in range, a composite answer of the Miller–Rabin test is correct</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean#L204" aria-label="View Cslib.Algorithms.Lean.MillerRabin.not_prime_of_millerRabin_eq_false in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.not_prime_of_millerRabin_eq_false in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#not-prime-of-miller-rabin-eq-false" aria-label="Link to With bases in range, a composite answer of the Miller–Rabin test is correct" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.not_prime_of_millerRabin_eq_false</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n\)</span> be
+a natural number and <span class="arithmatex">\(a_1, \dots, a_s\)</span> a list of bases with <span class="arithmatex">\(0 &lt; a_i &lt; n\)</span> for each <span class="arithmatex">\(i\)</span>. If the
+Miller–Rabin test run on <span class="arithmatex">\(n\)</span> with these bases answers <em>composite</em>, then <span class="arithmatex">\(n\)</span> is not prime.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> not_prime_of_millerRabin_eq_false {n : ℕ} {bases : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> ℕ}
+    (hb : ∀ a ∈ bases, 0 &lt; a ∧ a &lt; n) (h : (<a class="bp-lean-ref" href="#miller-rabin" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.millerRabin">millerRabin</a> n bases).ret = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a>) : ¬ n.Prime</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.millerRabin">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> millerRabin (n : ℕ) : List ℕ → TimeM ℕ Bool
+  | [] =&gt; pure true
+  | a :: as =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> w ← witness a n
+      <span class="bp-lean-keyword">if</span> w <span class="bp-lean-keyword">then</span> pure false <span class="bp-lean-keyword">else</span> millerRabin n as</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:98</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#miller-rabin">The Miller–Rabin test</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#miller-rabin-of-prime">The Miller–Rabin test never rejects a prime when its bases lie in range</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/witness-loop-eq-true">
+<h4 class="bp-thmheading" id="witness-loop-eq-true">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The squaring loop reports a witness when it does not end at 1</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean#L209" aria-label="View Cslib.Algorithms.Lean.MillerRabin.witnessLoop_eq_true in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.witnessLoop_eq_true in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#witness-loop-eq-true" aria-label="Link to The squaring loop reports a witness when it does not end at 1" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.witnessLoop_eq_true</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n\)</span>, <span class="arithmatex">\(k\)</span> and <span class="arithmatex">\(x\)</span> be
+natural numbers with <span class="arithmatex">\(n &gt; 0\)</span>, <span class="arithmatex">\(x &lt; n\)</span> and <span class="arithmatex">\(x^{2^k} \bmod n \ne 1\)</span>. Then the squaring loop modulo
+<span class="arithmatex">\(n\)</span> started at <span class="arithmatex">\(x\)</span> with <span class="arithmatex">\(k\)</span> squarings remaining reports a witness.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> witnessLoop_eq_true {n : ℕ} (hn : 0 &lt; n) :
+    ∀ k x, x &lt; n → x ^ (2 ^ k) % n ≠ 1 → (<a class="bp-lean-ref" href="#witness-loop" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witnessLoop">witnessLoop</a> n k x).ret = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a></code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witnessLoop">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> witnessLoop (n : ℕ) : ℕ → ℕ → TimeM ℕ Bool
+  | 0, x =&gt; pure (x != 1)
+  | k + 1, x =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      <span class="bp-lean-keyword">let</span> y := x * x % n
+      <span class="bp-lean-keyword">if</span> y = 1 ∧ x ≠ 1 ∧ x ≠ n - 1 <span class="bp-lean-keyword">then</span> pure true <span class="bp-lean-keyword">else</span> witnessLoop n k y</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:79</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness-loop">The Miller–Rabin squaring loop</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-of-pow-ne-one">Fermat witnesses are Miller–Rabin witnesses</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/witness-of-pow-ne-one">
+<h4 class="bp-thmheading" id="witness-of-pow-ne-one">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Fermat witnesses are Miller–Rabin witnesses</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean#L229" aria-label="View Cslib.Algorithms.Lean.MillerRabin.witness_of_pow_ne_one in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.witness_of_pow_ne_one in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#witness-of-pow-ne-one" aria-label="Link to Fermat witnesses are Miller–Rabin witnesses" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.witness_of_pow_ne_one</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(n\)</span> be natural numbers with
+<span class="arithmatex">\(n &gt; 1\)</span>. If <span class="arithmatex">\(a^{n-1} \bmod n \ne 1\)</span>, that is, <span class="arithmatex">\(a^{n-1} \not\equiv 1 \pmod{n}\)</span>, then the Miller–Rabin
+witness test on base <span class="arithmatex">\(a\)</span> and modulus <span class="arithmatex">\(n\)</span> returns true.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> witness_of_pow_ne_one {n a : ℕ} (hn : 1 &lt; n) (h : a ^ (n - 1) % n ≠ 1) :
+    (<a class="bp-lean-ref" href="#witness" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witness">witness</a> a n).ret = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a></code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witness">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> witness (a n : ℕ) : TimeM ℕ Bool := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> tu := twoAdicSplit (n - 1)
+  <span class="bp-lean-keyword">let</span> x ← modularExponentiation a tu.2 n
+  witnessLoop n tu.1 x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:89</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 6 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness">Miller–Rabin witness test</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#two-adic-split">Splitting off the power of two</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-loop">The Miller–Rabin squaring loop</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-loop-eq-true">The squaring loop reports a witness when it does not end at 1</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../modular-exponentiation/index.html#modular-exponentiation">Modular exponentiation</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../modular-exponentiation/index.html#modular-exponentiation-correct">Correctness of modular exponentiation</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#coprime-of-witness-eq-false">Non-witnesses pass Fermat&#x27;s test and are units</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/witness-loop-eq-false-imp">
+<h4 class="bp-thmheading" id="witness-loop-eq-false-imp">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">When the squaring loop finds no witness</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabinErrorBound.lean#L132" aria-label="View Cslib.Algorithms.Lean.MillerRabin.witnessLoop_eq_false_imp in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.witnessLoop_eq_false_imp in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#witness-loop-eq-false-imp" aria-label="Link to When the squaring loop finds no witness" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.witnessLoop_eq_false_imp</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n\)</span>, <span class="arithmatex">\(k\)</span> and <span class="arithmatex">\(x\)</span> be natural numbers with
+<span class="arithmatex">\(x &lt; n\)</span>. If the Miller–Rabin squaring loop modulo <span class="arithmatex">\(n\)</span>, started at <span class="arithmatex">\(x\)</span> with <span class="arithmatex">\(k\)</span> squarings to
+perform, reports no witness, then <span class="arithmatex">\(x = 1\)</span> or <span class="arithmatex">\(x^{2^i} \equiv -1 \pmod n\)</span> for some <span class="arithmatex">\(i &lt; k\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> witnessLoop_eq_false_imp {n : ℕ} :
+    ∀ k x, x &lt; n → (<a class="bp-lean-ref" href="#witness-loop" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witnessLoop">witnessLoop</a> n k x).ret = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a> →
+      x = 1 ∨ ∃ i &lt; k, x ^ (2 ^ i) % n = n - 1</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witnessLoop">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> witnessLoop (n : ℕ) : ℕ → ℕ → TimeM ℕ Bool
+  | 0, x =&gt; pure (x != 1)
+  | k + 1, x =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      <span class="bp-lean-keyword">let</span> y := x * x % n
+      <span class="bp-lean-keyword">if</span> y = 1 ∧ x ≠ 1 ∧ x ≠ n - 1 <span class="bp-lean-keyword">then</span> pure true <span class="bp-lean-keyword">else</span> witnessLoop n k y</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:79</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness-loop">The Miller–Rabin squaring loop</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-eq-false-imp">What a non-witness satisfies</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/witness-eq-false-imp">
+<h4 class="bp-thmheading" id="witness-eq-false-imp">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">What a non-witness satisfies</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabinErrorBound.lean#L156" aria-label="View Cslib.Algorithms.Lean.MillerRabin.witness_eq_false_imp in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.witness_eq_false_imp in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#witness-eq-false-imp" aria-label="Link to What a non-witness satisfies" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.witness_eq_false_imp</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n &gt; 1\)</span> and write <span class="arithmatex">\(n - 1 = 2^t u\)</span> with <span class="arithmatex">\(u\)</span> odd. If <span class="arithmatex">\(a\)</span> is
+a natural number for which the Miller–Rabin witness test <span class="arithmatex">\(\mathrm{WITNESS}(a, n)\)</span> returns false,
+then <span class="arithmatex">\(a^u \equiv 1 \pmod n\)</span>, or <span class="arithmatex">\(a^{2^i u} \equiv -1 \pmod n\)</span> for some <span class="arithmatex">\(i &lt; t\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> witness_eq_false_imp {n a : ℕ} (hn : 1 &lt; n) (h : (<a class="bp-lean-ref" href="#witness" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witness">witness</a> a n).ret = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a>) :
+    a ^ (<a class="bp-lean-ref" href="#two-adic-split" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.twoAdicSplit">twoAdicSplit</a> (n - 1)).2 % n = 1 ∨
+      ∃ i &lt; (<a class="bp-lean-ref" href="#two-adic-split" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.twoAdicSplit">twoAdicSplit</a> (n - 1)).1, a ^ (2 ^ i * (<a class="bp-lean-ref" href="#two-adic-split" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.twoAdicSplit">twoAdicSplit</a> (n - 1)).2) % n = n - 1</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witness">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> witness (a n : ℕ) : TimeM ℕ Bool := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> tu := twoAdicSplit (n - 1)
+  <span class="bp-lean-keyword">let</span> x ← modularExponentiation a tu.2 n
+  witnessLoop n tu.1 x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:89</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.twoAdicSplit">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> twoAdicSplit (m : ℕ) : ℕ × ℕ :=
+  <span class="bp-lean-keyword">if</span> m ≠ 0 ∧ m % 2 = 0 <span class="bp-lean-keyword">then</span>
+    <span class="bp-lean-keyword">let</span> r := twoAdicSplit (m / 2)
+    (r.1 + 1, r.2)
+  <span class="bp-lean-keyword">else</span> (0, m)
+<span class="bp-lean-keyword">termination_by</span> m
+<span class="bp-lean-keyword">decreasing_by</span> omega</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:56</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 6 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#two-adic-split">Splitting off the power of two</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness">Miller–Rabin witness test</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-loop">The Miller–Rabin squaring loop</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-loop-eq-false-imp">When the squaring loop finds no witness</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../modular-exponentiation/index.html#modular-exponentiation">Modular exponentiation</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../modular-exponentiation/index.html#modular-exponentiation-correct">Correctness of modular exponentiation</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-of-carmichael">At most half the bases are non-witnesses for a Carmichael number</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-quarter-of-carmicha">At most a quarter of the bases are non-witnesses for a Carmichael number</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-quarter-of-pow-ne-o">At most a quarter of the bases are non-witnesses when some unit fails Fermat&#x27;s test and the modulus is not a prime power</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/coprime-of-witness-eq-false">
+<h4 class="bp-thmheading" id="coprime-of-witness-eq-false">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Non-witnesses pass Fermat&#x27;s test and are units</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabinErrorBound.lean#L169" aria-label="View Cslib.Algorithms.Lean.MillerRabin.coprime_of_witness_eq_false in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.coprime_of_witness_eq_false in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#coprime-of-witness-eq-false" aria-label="Link to Non-witnesses pass Fermat&#x27;s test and are units" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.coprime_of_witness_eq_false</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n &gt; 1\)</span> and let <span class="arithmatex">\(a\)</span> be a natural number
+such that the witness test <span class="arithmatex">\(\mathrm{WITNESS}(a, n)\)</span> returns false. Then <span class="arithmatex">\(a^{n-1} \equiv 1 \pmod n\)</span>
+and <span class="arithmatex">\(a\)</span> is coprime to <span class="arithmatex">\(n\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> coprime_of_witness_eq_false {n a : ℕ} (hn : 1 &lt; n) (h : (<a class="bp-lean-ref" href="#witness" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witness">witness</a> a n).ret = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a>) :
+    a ^ (n - 1) % n = 1 ∧ a.Coprime n</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witness">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> witness (a n : ℕ) : TimeM ℕ Bool := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> tu := twoAdicSplit (n - 1)
+  <span class="bp-lean-keyword">let</span> x ← modularExponentiation a tu.2 n
+  witnessLoop n tu.1 x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:89</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness">Miller–Rabin witness test</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-of-pow-ne-one">Fermat witnesses are Miller–Rabin witnesses</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-of-carmichael">At most half the bases are non-witnesses for a Carmichael number</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-of-pow-ne-one">At most half the bases are non-witnesses when some unit fails Fermat&#x27;s test</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-quarter-of-carmicha">At most a quarter of the bases are non-witnesses for a Carmichael number</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-quarter-of-pow-ne-o">At most a quarter of the bases are non-witnesses when some unit fails Fermat&#x27;s test and the modulus is not a prime power</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-quarter-of-prime-po">At most a quarter of the bases are non-witnesses for an odd prime power</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/nonwitnesses">
+<h4 class="bp-thmheading" id="nonwitnesses">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Non-witnesses of a number</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabinErrorBound.lean#L180" aria-label="View Cslib.Algorithms.Lean.MillerRabin.nonwitnesses in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.nonwitnesses in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#nonwitnesses" aria-label="Link to Non-witnesses of a number" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.nonwitnesses</div>
+<div class="bp-thmcontent">
+<p>For a natural number <span class="arithmatex">\(n\)</span>, the non-witnesses of <span class="arithmatex">\(n\)</span> form the
+finite set of bases <span class="arithmatex">\(a\)</span> with <span class="arithmatex">\(0 &lt; a &lt; n\)</span> for which the Miller–Rabin witness test
+<span class="arithmatex">\(\mathrm{WITNESS}(a, n)\)</span> returns false, that is, the bases that do not witness the compositeness
+of <span class="arithmatex">\(n\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> nonwitnesses (n : ℕ) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset#doc" title="Finset">Finset</a> ℕ := (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.Ioo#doc" title="Finset.Ioo">Finset.Ioo</a> 0 n).filter <span class="bp-lean-keyword">fun</span> a =&gt; (<a class="bp-lean-ref" href="#witness" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witness">witness</a> a n).ret = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a></code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witness">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> witness (a n : ℕ) : TimeM ℕ Bool := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> tu := twoAdicSplit (n - 1)
+  <span class="bp-lean-keyword">let</span> x ← modularExponentiation a tu.2 n
+  witnessLoop n tu.1 x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:89</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 9</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness">Miller–Rabin witness test</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-miller-rabin-errors-le">Half error bound for Miller–Rabin with several bases</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-miller-rabin-errors-le-quarter">Quarter error bound for Miller–Rabin with several bases</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#card-nonwitnesses-le">At most half the bases are non-witnesses</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#card-nonwitnesses-le-of-carmichael">At most half the bases are non-witnesses for a Carmichael number</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#card-nonwitnesses-le-of-pow-ne-one">At most half the bases are non-witnesses when some unit fails Fermat&#x27;s test</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#card-nonwitnesses-le-quarter">At most a quarter of the bases are non-witnesses</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#card-nonwitnesses-le-quarter-of-carmicha">At most a quarter of the bases are non-witnesses for a Carmichael number</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#card-nonwitnesses-le-quarter-of-pow-ne-o">At most a quarter of the bases are non-witnesses when some unit fails Fermat&#x27;s test and the modulus is not a prime power</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#card-nonwitnesses-le-quarter-of-prime-po">At most a quarter of the bases are non-witnesses for an odd prime power</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/card-nonwitnesses-le-of-pow-ne-one">
+<h4 class="bp-thmheading" id="card-nonwitnesses-le-of-pow-ne-one">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">At most half the bases are non-witnesses when some unit fails Fermat&#x27;s test</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabinErrorBound.lean#L186" aria-label="View Cslib.Algorithms.Lean.MillerRabin.card_nonwitnesses_le_of_pow_ne_one in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.card_nonwitnesses_le_of_pow_ne_one in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#card-nonwitnesses-le-of-pow-ne-one" aria-label="Link to At most half the bases are non-witnesses when some unit fails Fermat&#x27;s test" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.card_nonwitnesses_le_of_pow_ne_one</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n &gt; 1\)</span>,
+and suppose some <span class="arithmatex">\(x\)</span> coprime to <span class="arithmatex">\(n\)</span> has <span class="arithmatex">\(x^{n-1} \not\equiv 1 \pmod n\)</span>. Then at most <span class="arithmatex">\((n - 1)/2\)</span>
+of the bases <span class="arithmatex">\(1, \dots, n - 1\)</span> are non-witnesses for <span class="arithmatex">\(n\)</span>.</p>
+<p>The proof shows that the non-witnesses lie in the proper subgroup <span class="arithmatex">\(\{y : y^{n-1} = 1\}\)</span> of
+<span class="arithmatex">\((\mathbb{Z}/n\mathbb{Z})^\times\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> card_nonwitnesses_le_of_pow_ne_one {n x : ℕ} (hn : 1 &lt; n) (hx : x.Coprime n)
+    (hfx : x ^ (n - 1) % n ≠ 1) : (<a class="bp-lean-ref" href="#nonwitnesses" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.nonwitnesses">nonwitnesses</a> n).card ≤ (n - 1) / 2</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.nonwitnesses">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> nonwitnesses (n : ℕ) : Finset ℕ := (Finset.Ioo 0 n).filter <span class="bp-lean-keyword">fun</span> a =&gt; (witness a n).ret = false</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabinErrorBound.lean:180</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#nonwitnesses">Non-witnesses of a number</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#coprime-of-witness-eq-false">Non-witnesses pass Fermat&#x27;s test and are units</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness">Miller–Rabin witness test</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le">At most half the bases are non-witnesses</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/card-nonwitnesses-le-of-carmichael">
+<h4 class="bp-thmheading" id="card-nonwitnesses-le-of-carmichael">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">At most half the bases are non-witnesses for a Carmichael number</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabinErrorBound.lean#L336" aria-label="View Cslib.Algorithms.Lean.MillerRabin.card_nonwitnesses_le_of_carmichael in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.card_nonwitnesses_le_of_carmichael in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#card-nonwitnesses-le-of-carmichael" aria-label="Link to At most half the bases are non-witnesses for a Carmichael number" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.card_nonwitnesses_le_of_carmichael</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n\)</span> be a Carmichael
+number: <span class="arithmatex">\(n &gt; 2\)</span>, <span class="arithmatex">\(n\)</span> is not prime, and <span class="arithmatex">\(b^{n-1} \equiv 1 \pmod n\)</span> for every <span class="arithmatex">\(b\)</span> coprime to <span class="arithmatex">\(n\)</span>.
+Then at most <span class="arithmatex">\((n - 1)/2\)</span> of the bases <span class="arithmatex">\(1, \dots, n - 1\)</span> are non-witnesses for <span class="arithmatex">\(n\)</span>.</p>
+<p>The proof shows that the non-witnesses lie in a proper subgroup of
+<span class="arithmatex">\((\mathbb{Z}/n\mathbb{Z})^\times\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> card_nonwitnesses_le_of_carmichael {n : ℕ} (hC : n.IsCarmichael) :
+    (<a class="bp-lean-ref" href="#nonwitnesses" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.nonwitnesses">nonwitnesses</a> n).card ≤ (n - 1) / 2</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.nonwitnesses">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> nonwitnesses (n : ℕ) : Finset ℕ := (Finset.Ioo 0 n).filter <span class="bp-lean-keyword">fun</span> a =&gt; (witness a n).ret = false</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabinErrorBound.lean:180</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_1">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>CLRS, third edition, Theorem 31.38, case 2.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#nonwitnesses">Non-witnesses of a number</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#coprime-of-witness-eq-false">Non-witnesses pass Fermat&#x27;s test and are units</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#two-adic-split">Splitting off the power of two</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness">Miller–Rabin witness test</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-eq-false-imp">What a non-witness satisfies</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le">At most half the bases are non-witnesses</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/card-nonwitnesses-le">
+<h4 class="bp-thmheading" id="card-nonwitnesses-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">At most half the bases are non-witnesses</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabinErrorBound.lean#L380" aria-label="View Cslib.Algorithms.Lean.MillerRabin.card_nonwitnesses_le in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.card_nonwitnesses_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#card-nonwitnesses-le" aria-label="Link to At most half the bases are non-witnesses" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.card_nonwitnesses_le</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n &gt; 1\)</span> be odd and not prime. Then at most
+<span class="arithmatex">\((n - 1)/2\)</span> of the bases <span class="arithmatex">\(1, \dots, n - 1\)</span> are non-witnesses for <span class="arithmatex">\(n\)</span>; equivalently, at least
+<span class="arithmatex">\((n - 1)/2\)</span> of them are witnesses to the compositeness of <span class="arithmatex">\(n\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> card_nonwitnesses_le {n : ℕ} (hn : 1 &lt; n) (hodd : n % 2 = 1) (hcomp : ¬ n.Prime) :
+    (<a class="bp-lean-ref" href="#nonwitnesses" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.nonwitnesses">nonwitnesses</a> n).card ≤ (n - 1) / 2</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.nonwitnesses">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> nonwitnesses (n : ℕ) : Finset ℕ := (Finset.Ioo 0 n).filter <span class="bp-lean-keyword">fun</span> a =&gt; (witness a n).ret = false</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabinErrorBound.lean:180</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_2">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>CLRS, third edition, Theorem 31.38.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#nonwitnesses">Non-witnesses of a number</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-of-carmichael">At most half the bases are non-witnesses for a Carmichael number</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-of-pow-ne-one">At most half the bases are non-witnesses when some unit fails Fermat&#x27;s test</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-miller-rabin-errors-le">Half error bound for Miller–Rabin with several bases</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/miller-rabin-eq-true-iff">
+<h4 class="bp-thmheading" id="miller-rabin-eq-true-iff">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Miller–Rabin answers prime exactly when no base is a witness</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabinErrorBound.lean#L389" aria-label="View Cslib.Algorithms.Lean.MillerRabin.millerRabin_eq_true_iff in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.millerRabin_eq_true_iff in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#miller-rabin-eq-true-iff" aria-label="Link to Miller–Rabin answers prime exactly when no base is a witness" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.millerRabin_eq_true_iff</div>
+<div class="bp-thmcontent">
+<p>For every natural number
+<span class="arithmatex">\(n\)</span> and every list of bases, the Miller–Rabin test on <span class="arithmatex">\(n\)</span> with these bases answers <em>prime</em> if and
+only if, for every base <span class="arithmatex">\(a\)</span> in the list, the witness test <span class="arithmatex">\(\mathrm{WITNESS}(a, n)\)</span> returns false,
+that is, <span class="arithmatex">\(a\)</span> is not a witness to the compositeness of <span class="arithmatex">\(n\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> millerRabin_eq_true_iff (n : ℕ) :
+    ∀ bases : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> ℕ, (<a class="bp-lean-ref" href="#miller-rabin" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.millerRabin">millerRabin</a> n bases).ret = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a> ↔ ∀ a ∈ bases, (<a class="bp-lean-ref" href="#witness" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witness">witness</a> a n).ret = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a></code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.millerRabin">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> millerRabin (n : ℕ) : List ℕ → TimeM ℕ Bool
+  | [] =&gt; pure true
+  | a :: as =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> w ← witness a n
+      <span class="bp-lean-keyword">if</span> w <span class="bp-lean-keyword">then</span> pure false <span class="bp-lean-keyword">else</span> millerRabin n as</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:98</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.witness">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> witness (a n : ℕ) : TimeM ℕ Bool := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> tu := twoAdicSplit (n - 1)
+  <span class="bp-lean-keyword">let</span> x ← modularExponentiation a tu.2 n
+  witnessLoop n tu.1 x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:89</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#miller-rabin">The Miller–Rabin test</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#witness">Miller–Rabin witness test</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-miller-rabin-errors-le">Half error bound for Miller–Rabin with several bases</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-miller-rabin-errors-le-quarter">Quarter error bound for Miller–Rabin with several bases</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/card-miller-rabin-errors-le">
+<h4 class="bp-thmheading" id="card-miller-rabin-errors-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Half error bound for Miller–Rabin with several bases</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabinErrorBound.lean#L411" aria-label="View Cslib.Algorithms.Lean.MillerRabin.card_millerRabin_errors_le in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.card_millerRabin_errors_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#card-miller-rabin-errors-le" aria-label="Link to Half error bound for Miller–Rabin with several bases" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.card_millerRabin_errors_le</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n &gt; 1\)</span> be odd and not prime,
+and let <span class="arithmatex">\(s\)</span> be a natural number. Among the <span class="arithmatex">\((n - 1)^s\)</span> lists <span class="arithmatex">\((b_1, \dots, b_s)\)</span> of bases with
+<span class="arithmatex">\(0 &lt; b_i &lt; n\)</span>, at most <span class="arithmatex">\(((n - 1)/2)^s\)</span> make the Miller–Rabin test of <span class="arithmatex">\(n\)</span> with bases
+<span class="arithmatex">\(b_1, \dots, b_s\)</span> answer <em>prime</em>.</p>
+<p>With uniformly random bases the error probability is therefore at most <span class="arithmatex">\(2^{-s}\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> card_millerRabin_errors_le {n : ℕ} (hn : 1 &lt; n) (hodd : n % 2 = 1) (hcomp : ¬ n.Prime)
+    (s : ℕ) :
+    ((<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype.piFinset#doc" title="Fintype.piFinset">Fintype.piFinset</a> <span class="bp-lean-keyword">fun</span> _ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> s =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.Ioo#doc" title="Finset.Ioo">Finset.Ioo</a> 0 n).filter
+        <span class="bp-lean-keyword">fun</span> b =&gt; (<a class="bp-lean-ref" href="#miller-rabin" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.millerRabin">millerRabin</a> n (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List.ofFn#doc" title="List.ofFn">List.ofFn</a> b)).ret = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a>).card ≤ ((n - 1) / 2) ^ s</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.millerRabin">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> millerRabin (n : ℕ) : List ℕ → TimeM ℕ Bool
+  | [] =&gt; pure true
+  | a :: as =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> w ← witness a n
+      <span class="bp-lean-keyword">if</span> w <span class="bp-lean-keyword">then</span> pure false <span class="bp-lean-keyword">else</span> millerRabin n as</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:98</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_3">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>CLRS, third edition, Theorem 31.39, in counting form.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#miller-rabin">The Miller–Rabin test</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le">At most half the bases are non-witnesses</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#miller-rabin-eq-true-iff">Miller–Rabin answers prime exactly when no base is a witness</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#nonwitnesses">Non-witnesses of a number</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness">Miller–Rabin witness test</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/card-nonwitnesses-le-quarter-of-pow-ne-o">
+<h4 class="bp-thmheading" id="card-nonwitnesses-le-quarter-of-pow-ne-o">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">At most a quarter of the bases are non-witnesses when some unit fails Fermat&#x27;s test and the modulus is not a prime power</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabinErrorBound.lean#L463" aria-label="View Cslib.Algorithms.Lean.MillerRabin.card_nonwitnesses_le_quarter_of_pow_ne_one in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.card_nonwitnesses_le_quarter_of_pow_ne_one in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#card-nonwitnesses-le-quarter-of-pow-ne-o" aria-label="Link to At most a quarter of the bases are non-witnesses when some unit fails Fermat&#x27;s test and the modulus is not a prime power" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.card_nonwitnesses_le_quarter_of_pow_ne_one</div>
+<div class="bp-thmcontent">
+<p><strong>At most a quarter of the bases are non-witnesses when some unit fails Fermat's test and the
+modulus is not a prime power.</strong> Let <span class="arithmatex">\(n &gt; 1\)</span> be odd and not prime, and not of the form <span class="arithmatex">\(p^e\)</span> with
+<span class="arithmatex">\(p\)</span> prime and <span class="arithmatex">\(e \ge 2\)</span>. Suppose some <span class="arithmatex">\(z\)</span> coprime to <span class="arithmatex">\(n\)</span> has <span class="arithmatex">\(z^{n-1} \not\equiv 1 \pmod n\)</span>. Then
+at most <span class="arithmatex">\((n - 1)/4\)</span> of the bases <span class="arithmatex">\(1, \dots, n - 1\)</span> are non-witnesses for <span class="arithmatex">\(n\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> card_nonwitnesses_le_quarter_of_pow_ne_one {n z : ℕ} (hn : 1 &lt; n) (hodd : n % 2 = 1)
+    (hcomp : ¬ n.Prime) (hpow : ∀ p e, p.Prime → 2 ≤ e → n ≠ p ^ e) (hz : z.Coprime n)
+    (hfz : z ^ (n - 1) % n ≠ 1) : (<a class="bp-lean-ref" href="#nonwitnesses" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.nonwitnesses">nonwitnesses</a> n).card ≤ (n - 1) / 4</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.nonwitnesses">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> nonwitnesses (n : ℕ) : Finset ℕ := (Finset.Ioo 0 n).filter <span class="bp-lean-keyword">fun</span> a =&gt; (witness a n).ret = false</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabinErrorBound.lean:180</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#nonwitnesses">Non-witnesses of a number</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#coprime-of-witness-eq-false">Non-witnesses pass Fermat&#x27;s test and are units</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#two-adic-split">Splitting off the power of two</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness">Miller–Rabin witness test</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-eq-false-imp">What a non-witness satisfies</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-quarter">At most a quarter of the bases are non-witnesses</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/card-nonwitnesses-le-quarter-of-carmicha">
+<h4 class="bp-thmheading" id="card-nonwitnesses-le-quarter-of-carmicha">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">At most a quarter of the bases are non-witnesses for a Carmichael number</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabinErrorBound.lean#L567" aria-label="View Cslib.Algorithms.Lean.MillerRabin.card_nonwitnesses_le_quarter_of_carmichael in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.card_nonwitnesses_le_quarter_of_carmichael in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#card-nonwitnesses-le-quarter-of-carmicha" aria-label="Link to At most a quarter of the bases are non-witnesses for a Carmichael number" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.card_nonwitnesses_le_quarter_of_carmichael</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n\)</span> be a
+Carmichael number: <span class="arithmatex">\(n &gt; 2\)</span>, <span class="arithmatex">\(n\)</span> is not prime, and <span class="arithmatex">\(b^{n-1} \equiv 1 \pmod n\)</span> for every <span class="arithmatex">\(b\)</span>
+coprime to <span class="arithmatex">\(n\)</span>. Then at most <span class="arithmatex">\((n - 1)/4\)</span> of the bases <span class="arithmatex">\(1, \dots, n - 1\)</span> are non-witnesses for
+<span class="arithmatex">\(n\)</span>.</p>
+<p>The proof splits <span class="arithmatex">\(n\)</span> into three pairwise coprime factors greater than <span class="arithmatex">\(1\)</span> and finds four distinct
+cosets of a subgroup of <span class="arithmatex">\((\mathbb{Z}/n\mathbb{Z})^\times\)</span> that holds the non-witnesses.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> card_nonwitnesses_le_quarter_of_carmichael {n : ℕ} (hC : n.IsCarmichael) :
+    (<a class="bp-lean-ref" href="#nonwitnesses" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.nonwitnesses">nonwitnesses</a> n).card ≤ (n - 1) / 4</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.nonwitnesses">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> nonwitnesses (n : ℕ) : Finset ℕ := (Finset.Ioo 0 n).filter <span class="bp-lean-keyword">fun</span> a =&gt; (witness a n).ret = false</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabinErrorBound.lean:180</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#nonwitnesses">Non-witnesses of a number</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#coprime-of-witness-eq-false">Non-witnesses pass Fermat&#x27;s test and are units</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#two-adic-split">Splitting off the power of two</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness">Miller–Rabin witness test</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness-eq-false-imp">What a non-witness satisfies</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-quarter">At most a quarter of the bases are non-witnesses</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/card-nonwitnesses-le-quarter-of-prime-po">
+<h4 class="bp-thmheading" id="card-nonwitnesses-le-quarter-of-prime-po">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">At most a quarter of the bases are non-witnesses for an odd prime power</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabinErrorBound.lean#L655" aria-label="View Cslib.Algorithms.Lean.MillerRabin.card_nonwitnesses_le_quarter_of_prime_pow in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.card_nonwitnesses_le_quarter_of_prime_pow in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#card-nonwitnesses-le-quarter-of-prime-po" aria-label="Link to At most a quarter of the bases are non-witnesses for an odd prime power" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.card_nonwitnesses_le_quarter_of_prime_pow</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(p\)</span> be a prime
+and <span class="arithmatex">\(k \ge 2\)</span> with <span class="arithmatex">\(p^k\)</span> odd. Then at most <span class="arithmatex">\((p^k - 1)/4\)</span> of the bases <span class="arithmatex">\(1, \dots, p^k - 1\)</span> are
+non-witnesses for <span class="arithmatex">\(p^k\)</span>.</p>
+<p>The proof shows that there are at most <span class="arithmatex">\(p - 1\)</span> non-witnesses: they satisfy
+<span class="arithmatex">\(a^{p^k - 1} \equiv 1 \pmod{p^k}\)</span>, and two of them that agree modulo <span class="arithmatex">\(p\)</span> agree modulo <span class="arithmatex">\(p^k\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> card_nonwitnesses_le_quarter_of_prime_pow {p k : ℕ} (hp : p.Prime) (hk : 2 ≤ k)
+    (hodd : p ^ k % 2 = 1) : (<a class="bp-lean-ref" href="#nonwitnesses" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.nonwitnesses">nonwitnesses</a> (p ^ k)).card ≤ (p ^ k - 1) / 4</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.nonwitnesses">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> nonwitnesses (n : ℕ) : Finset ℕ := (Finset.Ioo 0 n).filter <span class="bp-lean-keyword">fun</span> a =&gt; (witness a n).ret = false</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabinErrorBound.lean:180</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#nonwitnesses">Non-witnesses of a number</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#coprime-of-witness-eq-false">Non-witnesses pass Fermat&#x27;s test and are units</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness">Miller–Rabin witness test</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-quarter">At most a quarter of the bases are non-witnesses</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/card-nonwitnesses-le-quarter">
+<h4 class="bp-thmheading" id="card-nonwitnesses-le-quarter">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">At most a quarter of the bases are non-witnesses</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabinErrorBound.lean#L728" aria-label="View Cslib.Algorithms.Lean.MillerRabin.card_nonwitnesses_le_quarter in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.card_nonwitnesses_le_quarter in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#card-nonwitnesses-le-quarter" aria-label="Link to At most a quarter of the bases are non-witnesses" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.card_nonwitnesses_le_quarter</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n &gt; 1\)</span> be odd and not prime. Then
+at most <span class="arithmatex">\((n - 1)/4\)</span> of the bases <span class="arithmatex">\(1, \dots, n - 1\)</span> are non-witnesses for <span class="arithmatex">\(n\)</span>, so one uniformly
+random base fails to expose <span class="arithmatex">\(n\)</span> as composite with probability at most <span class="arithmatex">\(1/4\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> card_nonwitnesses_le_quarter {n : ℕ} (hn : 1 &lt; n) (hodd : n % 2 = 1) (hcomp : ¬ n.Prime) :
+    (<a class="bp-lean-ref" href="#nonwitnesses" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.nonwitnesses">nonwitnesses</a> n).card ≤ (n - 1) / 4</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.nonwitnesses">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> nonwitnesses (n : ℕ) : Finset ℕ := (Finset.Ioo 0 n).filter <span class="bp-lean-keyword">fun</span> a =&gt; (witness a n).ret = false</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabinErrorBound.lean:180</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#nonwitnesses">Non-witnesses of a number</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-quarter-of-carmicha">At most a quarter of the bases are non-witnesses for a Carmichael number</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-quarter-of-pow-ne-o">At most a quarter of the bases are non-witnesses when some unit fails Fermat&#x27;s test and the modulus is not a prime power</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-quarter-of-prime-po">At most a quarter of the bases are non-witnesses for an odd prime power</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-miller-rabin-errors-le-quarter">Quarter error bound for Miller–Rabin with several bases</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test/card-miller-rabin-errors-le-quarter">
+<h4 class="bp-thmheading" id="card-miller-rabin-errors-le-quarter">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Quarter error bound for Miller–Rabin with several bases</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/NumberTheory/MillerRabinErrorBound.lean#L743" aria-label="View Cslib.Algorithms.Lean.MillerRabin.card_millerRabin_errors_le_quarter in Lean source" title="View Cslib.Algorithms.Lean.MillerRabin.card_millerRabin_errors_le_quarter in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#card-miller-rabin-errors-le-quarter" aria-label="Link to Quarter error bound for Miller–Rabin with several bases" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MillerRabin.card_millerRabin_errors_le_quarter</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n &gt; 1\)</span> be odd and not
+prime, and let <span class="arithmatex">\(s\)</span> be a natural number. Among the <span class="arithmatex">\((n - 1)^s\)</span> lists <span class="arithmatex">\((b_1, \dots, b_s)\)</span> of bases
+with <span class="arithmatex">\(0 &lt; b_i &lt; n\)</span>, at most <span class="arithmatex">\(\lfloor (n - 1)/4 \rfloor^s\)</span> make the Miller–Rabin test of <span class="arithmatex">\(n\)</span> with
+bases <span class="arithmatex">\(b_1, \dots, b_s\)</span> answer <em>prime</em>.</p>
+<p>With uniformly random bases the error probability is therefore at most <span class="arithmatex">\(4^{-s}\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> card_millerRabin_errors_le_quarter {n : ℕ} (hn : 1 &lt; n) (hodd : n % 2 = 1)
+    (hcomp : ¬ n.Prime) (s : ℕ) :
+    ((<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype.piFinset#doc" title="Fintype.piFinset">Fintype.piFinset</a> <span class="bp-lean-keyword">fun</span> _ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> s =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.Ioo#doc" title="Finset.Ioo">Finset.Ioo</a> 0 n).filter
+        <span class="bp-lean-keyword">fun</span> b =&gt; (<a class="bp-lean-ref" href="#miller-rabin" data-lean-name="Cslib.Algorithms.Lean.MillerRabin.millerRabin">millerRabin</a> n (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List.ofFn#doc" title="List.ofFn">List.ofFn</a> b)).ret = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a>).card ≤ ((n - 1) / 4) ^ s</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MillerRabin.millerRabin">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> millerRabin (n : ℕ) : List ℕ → TimeM ℕ Bool
+  | [] =&gt; pure true
+  | a :: as =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> w ← witness a n
+      <span class="bp-lean-keyword">if</span> w <span class="bp-lean-keyword">then</span> pure false <span class="bp-lean-keyword">else</span> millerRabin n as</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/NumberTheory/MillerRabin.lean:98</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#miller-rabin">The Miller–Rabin test</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-nonwitnesses-le-quarter">At most a quarter of the bases are non-witnesses</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#miller-rabin-eq-true-iff">Miller–Rabin answers prime exactly when no base is a witness</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#nonwitnesses">Non-witnesses of a number</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#witness">Miller–Rabin witness test</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>27</strong> fully proved</span></div>
+</div>
+</div>
+<p><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../dependencies/index.json" data-graph-src="../../../../dependencies/scopes/ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test.json" data-page-href="index.html" data-scope-id="ComputerScience/algebraic-and-numerical-algorithms/miller-rabin-primality-test">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>

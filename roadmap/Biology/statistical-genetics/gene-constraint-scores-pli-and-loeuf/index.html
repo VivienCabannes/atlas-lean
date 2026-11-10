@@ -1,0 +1,5217 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../bolt-lmm-mixed-model-association/index.html">
+      
+      
+        <link rel="next" href="../imputation-of-association-summary-statistics/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Gene constraint scores (pLI and LOEUF) - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Gene constraint scores (pLI and LOEUF)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../ComputerScience/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_27" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_27" id="__nav_2_1_27_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_27_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_27">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematical Biology
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../population-genetics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Population genetics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../coalescent-theory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coalescent theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../bioinformatics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bioinformatics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../phylogenetics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phylogenetics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_27_6" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical genetics
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_27_6" id="__nav_2_1_27_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_27_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_27_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Statistical genetics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bayesian-fine-mapping-and-colocalization/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bayesian fine-mapping and colocalization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bolt-lmm-mixed-model-association/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BOLT-LMM mixed-model association
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gene constraint scores (pLI and LOEUF)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../imputation-of-association-summary-statistics/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Imputation of association summary statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../latent-causal-variable-model/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Latent causal variable model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ld-score-regression/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LD-score regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../genomic-prediction-from-summary-statistics/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Genomic prediction from summary statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mendelian-randomization/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mendelian randomization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../posterior-of-the-heterozygous-selection-coeffici/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Posterior of the heterozygous selection coefficient
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../principal-component-correction-for-stratificatio/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Principal-component correction for stratification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proximal-contamination-in-mixed-model-associatio/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proximal contamination in mixed-model association
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../signed-ld-profile-regression/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Signed LD profile regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stratified-ld-score-regression/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stratified LD-score regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing-ld-consistency-of-association-statistics/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing LD consistency of association statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../population-structure/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Population structure and admixture
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../quantitative-genetics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantitative genetics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../systems-biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Systems biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../detecting-selection/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Detecting natural selection
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../cancer-genomics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cancer genomics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../population-dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Population and evolutionary dynamics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../pattern-formation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reaction–diffusion and pattern formation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../epidemiology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical epidemiology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../index.html" tabindex="-1">Mathematical Biology</a></li><li><a href="../index.html" tabindex="-1">Statistical genetics</a></li><li aria-current="page">Gene constraint scores (pLI and LOEUF)</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Gene constraint scores (pLI and LOEUF)</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf" data-page-title="Gene constraint scores (pLI and LOEUF)">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="gene-constraint-scores-pli-and-loeuf">Gene constraint scores (pLI and LOEUF)</h1>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/poisson-lik">
+<h4 class="bp-thmheading" id="poisson-lik">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Poisson likelihood of an observed count</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean#L67" aria-label="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.poissonLik in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.poissonLik in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#poisson-lik" aria-label="Link to Poisson likelihood of an observed count" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.GeneConstraint.poissonLik</div>
+<div class="bp-thmcontent">
+<p>The Poisson likelihood <code>e^{-μ} μ^o / (o!)</code> of an observed count <code>o</code> at mean <code>μ</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> poissonLik (μ : ℝ) (o : ℕ) : ℝ := <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.exp#doc" title="Real.exp">exp</a> (-μ) * μ ^ o / (o ! : ℝ)</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 10</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#class-posterior">Posterior class probability in the Poisson mixture</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#class-posterior-antitone">pLI is antitone in the observed count</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#class-posterior-strict-anti">Class posterior is strictly antitone in the observed count</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#em-q-le-em-step">The M-step maximizes <code>Q(· | w)</code></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#flat-posterior-density">Flat-prior posterior of <code>γ</code></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#joint">Joint likelihood of gene data and constraint class</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#joint-pos">Positivity of the Poisson mixture joint likelihood</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#poisson-lik-pos">Positivity of the Poisson likelihood</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#poisson-lik-succ">Recursion for the Poisson likelihood</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#sum-class-posterior">Class posteriors sum to one</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/poisson-lik-pos">
+<h4 class="bp-thmheading" id="poisson-lik-pos">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Positivity of the Poisson likelihood</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean#L70" aria-label="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.poissonLik_pos in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.poissonLik_pos in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#poisson-lik-pos" aria-label="Link to Positivity of the Poisson likelihood" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.GeneConstraint.poissonLik_pos</div>
+<div class="bp-thmcontent">
+<p>The likelihood is positive at a positive mean.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> poissonLik_pos {μ : ℝ} (hμ : 0 &lt; μ) (o : ℕ) : 0 &lt; <a class="bp-lean-ref" href="#poisson-lik" data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.poissonLik">poissonLik</a> μ o</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.poissonLik">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> poissonLik (μ : ℝ) (o : ℕ) : ℝ := exp (-μ) * μ ^ o / (o ! : ℝ)</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean:67</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#poisson-lik">Poisson likelihood of an observed count</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#class-posterior-antitone">pLI is antitone in the observed count</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#class-posterior-strict-anti">Class posterior is strictly antitone in the observed count</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#em-q-le-em-step">The M-step maximizes <code>Q(· | w)</code></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#joint-pos">Positivity of the Poisson mixture joint likelihood</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#sum-class-posterior">Class posteriors sum to one</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/flat-posterior-density">
+<h4 class="bp-thmheading" id="flat-posterior-density">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Flat-prior posterior of <code>γ</code></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean#L79" aria-label="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.flatPosterior_density in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.flatPosterior_density in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#flat-posterior-density" aria-label="Link to Flat-prior posterior of `γ`" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.GeneConstraint.flatPosterior_density</div>
+<div class="bp-thmcontent">
+<p>The likelihood <code>γ ↦ P(o | Poisson(γ E))</code> times <code>E</code> is the
+Gamma density of shape <code>o + 1</code> and rate <code>E</code>. For <code>E &gt; 0</code> that density integrates to one, so <code>E</code>
+is the normalizing constant of the flat-prior posterior (the identity itself is algebraic and
+holds for every real <code>E</code>).</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> flatPosterior_density (E : ℝ) {γ : ℝ} (hγ : 0 ≤ γ) (o : ℕ) :
+    E * <a class="bp-lean-ref" href="#poisson-lik" data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.poissonLik">poissonLik</a> (γ * E) o = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.gammaPDFReal#doc" title="ProbabilityTheory.gammaPDFReal">gammaPDFReal</a> (o + 1) E γ</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.poissonLik">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> poissonLik (μ : ℝ) (o : ℕ) : ℝ := exp (-μ) * μ ^ o / (o ! : ℝ)</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean:67</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#poisson-lik">Poisson likelihood of an observed count</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/oe-upper">
+<h4 class="bp-thmheading" id="oe-upper">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Upper confidence bound for the observed/expected ratio</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean#L90" aria-label="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#oe-upper" aria-label="Link to Upper confidence bound for the observed/expected ratio" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper</div>
+<div class="bp-thmcontent">
+<p>The upper confidence bound for the observed/expected ratio at level <code>α</code>:
+<code>u_α(o) / E</code>, with <code>u_α</code> Garwood's bound for the Poisson mean.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> oeUpper (α E : ℝ) (o : ℕ) : ℝ := <a class="bp-lean-ref" href="../../../Probability/distributions/poisson-gamma-duality/index.html#garwood-upper" data-lean-name="ProbabilityTheory.garwoodUpper">garwoodUpper</a> α o / E</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="ProbabilityTheory.garwoodUpper">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> garwoodUpper (α : ℝ) (k : ℕ) : ℝ :=
+  sSup {x : ℝ | 0 ≤ x ∧ α ≤ poissonCDF x k}</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Distributions/PoissonGamma.lean:174</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 7</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../Probability/distributions/poisson-gamma-duality/index.html#garwood-upper">Garwood&#x27;s exact upper confidence bound</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gamma-measure-real-iic-oe-upper">The flat-prior posterior quantile is Garwood&#x27;s bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#loeuf">LOEUF</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#loeuf-zero">LOEUF of a gene with no observed LoF variants</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#oe-upper-coverage">Exact coverage</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#oe-upper-strict-anti-on">Observed/expected upper bound decreases with the expected count</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#oe-upper-strict-mono">Observed/expected upper bound increases with the observed count</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#oe-upper-zero">Observed/expected upper bound with no observed variants</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/loeuf">
+<h4 class="bp-thmheading" id="loeuf">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">LOEUF</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean#L93" aria-label="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.loeuf in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.loeuf in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#loeuf" aria-label="Link to LOEUF" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.GeneConstraint.loeuf</div>
+<div class="bp-thmcontent">
+<p>The upper end of the 90% interval, <code>oeUpper (1/20)</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> loeuf (E : ℝ) (o : ℕ) : ℝ := <a class="bp-lean-ref" href="#oe-upper" data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper">oeUpper</a> (1 / 20) E o</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> oeUpper (α E : ℝ) (o : ℕ) : ℝ := garwoodUpper α o / E</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean:90</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#oe-upper">Upper confidence bound for the observed/expected ratio</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#loeuf-zero">LOEUF of a gene with no observed LoF variants</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/gamma-measure-real-iic-oe-upper">
+<h4 class="bp-thmheading" id="gamma-measure-real-iic-oe-upper">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The flat-prior posterior quantile is Garwood&#x27;s bound</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean#L97" aria-label="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.gammaMeasure_real_Iic_oeUpper in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.gammaMeasure_real_Iic_oeUpper in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#gamma-measure-real-iic-oe-upper" aria-label="Link to The flat-prior posterior quantile is Garwood&#x27;s bound" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.GeneConstraint.gammaMeasure_real_Iic_oeUpper</div>
+<div class="bp-thmcontent">
+<p>The Gamma(<code>o + 1</code>, <code>E</code>) posterior
+puts mass exactly <code>1 - α</code> below <code>oeUpper α E o</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> gammaMeasure_real_Iic_oeUpper {α E : ℝ} (hα0 : 0 &lt; α) (hα1 : α &lt; 1) (hE : 0 &lt; E)
+    (o : ℕ) : (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.gammaMeasure#doc" title="ProbabilityTheory.gammaMeasure">gammaMeasure</a> (o + 1) E).real (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Iic#doc" title="Set.Iic">Iic</a> (<a class="bp-lean-ref" href="#oe-upper" data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper">oeUpper</a> α E o)) = 1 - α</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> oeUpper (α E : ℝ) (o : ℕ) : ℝ := garwoodUpper α o / E</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean:90</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 6</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#oe-upper">Upper confidence bound for the observed/expected ratio</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../Probability/distributions/poisson-gamma-duality/index.html#gamma-measure-real-ioi-poisson-cdf">Poisson–Gamma duality</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../Probability/distributions/poisson-gamma-duality/index.html#garwood-upper">Garwood&#x27;s exact upper confidence bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../Probability/distributions/poisson-gamma-duality/index.html#garwood-upper-pos">Positivity of the Garwood upper bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../Probability/distributions/poisson-gamma-duality/index.html#poisson-cdf">Poisson distribution function as a function of the mean</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../Probability/distributions/poisson-gamma-duality/index.html#poisson-cdf-garwood-upper">Garwood upper bound solves the distribution function equation</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/oe-upper-coverage">
+<h4 class="bp-thmheading" id="oe-upper-coverage">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Exact coverage</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean#L107" aria-label="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper_coverage in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper_coverage in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#oe-upper-coverage" aria-label="Link to Exact coverage" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper_coverage</div>
+<div class="bp-thmcontent">
+<p>For every true ratio <code>γ ≥ 0</code> and <code>E &gt; 0</code>, when <code>o ~ Poisson(γ E)</code>,
+<code>P(γ ≤ oeUpper α E o) ≥ 1 - α</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> oeUpper_coverage {α E : ℝ} (hα0 : 0 &lt; α) (hα1 : α &lt; 1) (hE : 0 &lt; E) (γ : ℝ≥0) :
+    1 - α ≤ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.poissonMeasure#doc" title="ProbabilityTheory.poissonMeasure">poissonMeasure</a> (γ * ⟨E, hE.le⟩)).real {o | (γ : ℝ) ≤ <a class="bp-lean-ref" href="#oe-upper" data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper">oeUpper</a> α E o}</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> oeUpper (α E : ℝ) (o : ℕ) : ℝ := garwoodUpper α o / E</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean:90</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#oe-upper">Upper confidence bound for the observed/expected ratio</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../Probability/distributions/poisson-gamma-duality/index.html#garwood-upper">Garwood&#x27;s exact upper confidence bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../Probability/distributions/poisson-gamma-duality/index.html#garwood-upper-coverage">Exact coverage of Garwood&#x27;s bound</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/oe-upper-zero">
+<h4 class="bp-thmheading" id="oe-upper-zero">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Observed/expected upper bound with no observed variants</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean#L118" aria-label="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper_zero in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper_zero in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#oe-upper-zero" aria-label="Link to Observed/expected upper bound with no observed variants" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper_zero</div>
+<div class="bp-thmcontent">
+<p>With no observed variants the bound is <code>log (1 / α) / E</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> oeUpper_zero {α E : ℝ} (hα0 : 0 &lt; α) (hα1 : α &lt; 1) :
+    <a class="bp-lean-ref" href="#oe-upper" data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper">oeUpper</a> α E 0 = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.log#doc" title="Real.log">log</a> (1 / α) / E</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> oeUpper (α E : ℝ) (o : ℕ) : ℝ := garwoodUpper α o / E</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean:90</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#oe-upper">Upper confidence bound for the observed/expected ratio</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../Probability/distributions/poisson-gamma-duality/index.html#garwood-upper">Garwood&#x27;s exact upper confidence bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../Probability/distributions/poisson-gamma-duality/index.html#garwood-upper-zero">Garwood upper bound after observing zero</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#loeuf-zero">LOEUF of a gene with no observed LoF variants</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/loeuf-zero">
+<h4 class="bp-thmheading" id="loeuf-zero">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">LOEUF of a gene with no observed LoF variants</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean#L123" aria-label="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.loeuf_zero in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.loeuf_zero in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#loeuf-zero" aria-label="Link to LOEUF of a gene with no observed LoF variants" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.GeneConstraint.loeuf_zero</div>
+<div class="bp-thmcontent">
+<p><strong>LOEUF of a gene with no observed LoF variants</strong> is <code>log 20 / E</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> loeuf_zero (E : ℝ) : <a class="bp-lean-ref" href="#loeuf" data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.loeuf">loeuf</a> E 0 = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.log#doc" title="Real.log">log</a> 20 / E</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.loeuf">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> loeuf (E : ℝ) (o : ℕ) : ℝ := oeUpper (1 / 20) E o</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean:93</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#loeuf">LOEUF</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#oe-upper">Upper confidence bound for the observed/expected ratio</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#oe-upper-zero">Observed/expected upper bound with no observed variants</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/oe-upper-strict-mono">
+<h4 class="bp-thmheading" id="oe-upper-strict-mono">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Observed/expected upper bound increases with the observed count</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean#L128" aria-label="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper_strictMono in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper_strictMono in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#oe-upper-strict-mono" aria-label="Link to Observed/expected upper bound increases with the observed count" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper_strictMono</div>
+<div class="bp-thmcontent">
+<p>The bound is strictly increasing in the observed count.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> oeUpper_strictMono {α E : ℝ} (hα0 : 0 &lt; α) (hα1 : α &lt; 1) (hE : 0 &lt; E) :
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=StrictMono#doc" title="StrictMono">StrictMono</a> (<a class="bp-lean-ref" href="#oe-upper" data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper">oeUpper</a> α E)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> oeUpper (α E : ℝ) (o : ℕ) : ℝ := garwoodUpper α o / E</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean:90</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#oe-upper">Upper confidence bound for the observed/expected ratio</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../Probability/distributions/poisson-gamma-duality/index.html#garwood-upper">Garwood&#x27;s exact upper confidence bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../Probability/distributions/poisson-gamma-duality/index.html#garwood-upper-strict-mono">Garwood upper bound is strictly increasing in the count</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/oe-upper-strict-anti-on">
+<h4 class="bp-thmheading" id="oe-upper-strict-anti-on">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Observed/expected upper bound decreases with the expected count</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean#L133" aria-label="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper_strictAntiOn in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper_strictAntiOn in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#oe-upper-strict-anti-on" aria-label="Link to Observed/expected upper bound decreases with the expected count" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper_strictAntiOn</div>
+<div class="bp-thmcontent">
+<p>The bound is strictly decreasing in the expected count <code>E &gt; 0</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> oeUpper_strictAntiOn {α : ℝ} (hα0 : 0 &lt; α) (hα1 : α &lt; 1) (o : ℕ) :
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=StrictAntiOn#doc" title="StrictAntiOn">StrictAntiOn</a> (<span class="bp-lean-keyword">fun</span> E =&gt; <a class="bp-lean-ref" href="#oe-upper" data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper">oeUpper</a> α E o) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ioi#doc" title="Set.Ioi">Ioi</a> 0)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.oeUpper">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> oeUpper (α E : ℝ) (o : ℕ) : ℝ := garwoodUpper α o / E</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean:90</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#oe-upper">Upper confidence bound for the observed/expected ratio</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../Probability/distributions/poisson-gamma-duality/index.html#garwood-upper">Garwood&#x27;s exact upper confidence bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../Probability/distributions/poisson-gamma-duality/index.html#garwood-upper-pos">Positivity of the Garwood upper bound</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/class-posterior">
+<h4 class="bp-thmheading" id="class-posterior">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Posterior class probability in the Poisson mixture</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean#L145" aria-label="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.classPosterior in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.classPosterior in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#class-posterior" aria-label="Link to Posterior class probability in the Poisson mixture" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.GeneConstraint.classPosterior</div>
+<div class="bp-thmcontent">
+<p>The posterior probability of class <code>c</code> for a gene with <code>o</code> observed and <code>E</code> expected LoF
+variants, in the Poisson mixture with prior weights <code>w</code> and class rates <code>rate</code>:
+<code>w_c P(o | rate_c E) / ∑_{c'} w_{c'} P(o | rate_{c'} E)</code>. pLI is this at the class with the smallest
+rate.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> classPosterior (w rate : ι → ℝ) (E : ℝ) (o : ℕ) (c : ι) : ℝ :=
+  w c * <a class="bp-lean-ref" href="#poisson-lik" data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.poissonLik">poissonLik</a> (rate c * E) o / ∑ c&#x27;, w c&#x27; * <a class="bp-lean-ref" href="#poisson-lik" data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.poissonLik">poissonLik</a> (rate c&#x27; * E) o</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.poissonLik">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> poissonLik (μ : ℝ) (o : ℕ) : ℝ := exp (-μ) * μ ^ o / (o ! : ℝ)</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean:67</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#poisson-lik">Poisson likelihood of an observed count</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#class-posterior-antitone">pLI is antitone in the observed count</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#class-posterior-strict-anti">Class posterior is strictly antitone in the observed count</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sum-class-posterior">Class posteriors sum to one</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/sum-class-posterior">
+<h4 class="bp-thmheading" id="sum-class-posterior">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Class posteriors sum to one</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean#L149" aria-label="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.sum_classPosterior in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.sum_classPosterior in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#sum-class-posterior" aria-label="Link to Class posteriors sum to one" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.GeneConstraint.sum_classPosterior</div>
+<div class="bp-thmcontent">
+<p>The class posteriors sum to one.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> sum_classPosterior {w rate : ι → ℝ} {E : ℝ} (hw : ∀ c, 0 &lt; w c) (hrate : ∀ c, 0 &lt; rate c)
+    (hE : 0 &lt; E) [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nonempty#doc" title="Nonempty">Nonempty</a> ι] (o : ℕ) : ∑ c, <a class="bp-lean-ref" href="#class-posterior" data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.classPosterior">classPosterior</a> w rate E o c = 1</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.classPosterior">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> classPosterior (w rate : ι → ℝ) (E : ℝ) (o : ℕ) (c : ι) : ℝ :=
+  w c * poissonLik (rate c * E) o / ∑ c&#x27;, w c&#x27; * poissonLik (rate c&#x27; * E) o</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean:145</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#class-posterior">Posterior class probability in the Poisson mixture</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#poisson-lik">Poisson likelihood of an observed count</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#poisson-lik-pos">Positivity of the Poisson likelihood</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/poisson-lik-succ">
+<h4 class="bp-thmheading" id="poisson-lik-succ">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Recursion for the Poisson likelihood</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean#L157" aria-label="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.poissonLik_succ in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.poissonLik_succ in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#poisson-lik-succ" aria-label="Link to Recursion for the Poisson likelihood" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.GeneConstraint.poissonLik_succ</div>
+<div class="bp-thmcontent">
+<p>The likelihood recursion <code>P(o + 1 | μ) = P(o | μ) μ / (o + 1)</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> poissonLik_succ (μ : ℝ) (o : ℕ) :
+    <a class="bp-lean-ref" href="#poisson-lik" data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.poissonLik">poissonLik</a> μ (o + 1) = <a class="bp-lean-ref" href="#poisson-lik" data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.poissonLik">poissonLik</a> μ o * μ / (o + 1)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.poissonLik">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> poissonLik (μ : ℝ) (o : ℕ) : ℝ := exp (-μ) * μ ^ o / (o ! : ℝ)</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean:67</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#poisson-lik">Poisson likelihood of an observed count</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#class-posterior-antitone">pLI is antitone in the observed count</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#class-posterior-strict-anti">Class posterior is strictly antitone in the observed count</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/class-posterior-antitone">
+<h4 class="bp-thmheading" id="class-posterior-antitone">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">pLI is antitone in the observed count</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean#L223" aria-label="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.classPosterior_antitone in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.classPosterior_antitone in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#class-posterior-antitone" aria-label="Link to pLI is antitone in the observed count" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.GeneConstraint.classPosterior_antitone</div>
+<div class="bp-thmcontent">
+<p>The posterior of a class <code>c₀</code> whose rate is the
+smallest is antitone in <code>o</code>, for every prior.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> classPosterior_antitone {w rate : ι → ℝ} {E : ℝ} (hw : ∀ c, 0 &lt; w c)
+    (hrate : ∀ c, 0 &lt; rate c) (hE : 0 &lt; E) {c₀ : ι} (hmin : ∀ c, rate c₀ ≤ rate c) :
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Antitone#doc" title="Antitone">Antitone</a> <span class="bp-lean-keyword">fun</span> o =&gt; <a class="bp-lean-ref" href="#class-posterior" data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.classPosterior">classPosterior</a> w rate E o c₀</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.classPosterior">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> classPosterior (w rate : ι → ℝ) (E : ℝ) (o : ℕ) (c : ι) : ℝ :=
+  w c * poissonLik (rate c * E) o / ∑ c&#x27;, w c&#x27; * poissonLik (rate c&#x27; * E) o</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean:145</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#class-posterior">Posterior class probability in the Poisson mixture</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#poisson-lik">Poisson likelihood of an observed count</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#poisson-lik-pos">Positivity of the Poisson likelihood</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#poisson-lik-succ">Recursion for the Poisson likelihood</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/class-posterior-strict-anti">
+<h4 class="bp-thmheading" id="class-posterior-strict-anti">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Class posterior is strictly antitone in the observed count</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean#L230" aria-label="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.classPosterior_strictAnti in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.GeneConstraint.classPosterior_strictAnti in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#class-posterior-strict-anti" aria-label="Link to Class posterior is strictly antitone in the observed count" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.GeneConstraint.classPosterior_strictAnti</div>
+<div class="bp-thmcontent">
+<p>Strictly antitone when some class has a strictly larger rate.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> classPosterior_strictAnti {w rate : ι → ℝ} {E : ℝ} (hw : ∀ c, 0 &lt; w c)
+    (hrate : ∀ c, 0 &lt; rate c) (hE : 0 &lt; E) {c₀ : ι} (hmin : ∀ c, rate c₀ ≤ rate c)
+    (hlt : ∃ c, rate c₀ &lt; rate c) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=StrictAnti#doc" title="StrictAnti">StrictAnti</a> <span class="bp-lean-keyword">fun</span> o =&gt; <a class="bp-lean-ref" href="#class-posterior" data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.classPosterior">classPosterior</a> w rate E o c₀</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.classPosterior">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> classPosterior (w rate : ι → ℝ) (E : ℝ) (o : ℕ) (c : ι) : ℝ :=
+  w c * poissonLik (rate c * E) o / ∑ c&#x27;, w c&#x27; * poissonLik (rate c&#x27; * E) o</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean:145</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#class-posterior">Posterior class probability in the Poisson mixture</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#poisson-lik">Poisson likelihood of an observed count</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#poisson-lik-pos">Positivity of the Poisson likelihood</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#poisson-lik-succ">Recursion for the Poisson likelihood</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/pos-weights">
+<h4 class="bp-thmheading" id="pos-weights">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Strictly positive class weights summing to one</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean#L56" aria-label="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights in Lean source" title="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#pos-weights" aria-label="Link to Strictly positive class weights summing to one" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights</div>
+<div class="bp-thmcontent">
+<p>Strictly positive class weights summing to one.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> PosWeights (ι : <span class="bp-lean-keyword">Type</span>*) [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype#doc" title="Fintype">Fintype</a> ι] : <span class="bp-lean-keyword">Type</span> _ :=
+  {w : ι → ℝ // (∀ c, 0 &lt; w c) ∧ ∑ c, w c = 1}</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 9</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#em-q-le-em-step">The M-step maximizes <code>Q(· | w)</code></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#em-step">EM update of the Poisson mixture class weights</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#joint">Joint likelihood of gene data and constraint class</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#joint-pos">Positivity of the Poisson mixture joint likelihood</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#log-lik-iterate-em-step-monotone">Monotonicity of the log-likelihood along the class-weight EM iterates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#log-lik-le-log-lik-em-step">EM does not decrease the likelihood</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mass">Expected number of genes in a constraint class</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mass-pos">Positivity of the class masses</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sum-mass">Class masses sum to the number of genes</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/gene-data">
+<h4 class="bp-thmheading" id="gene-data">
+<span class="bp-thmcaption" data-search-exclude>Structure</span><span class="bp-thmtitle">Loss-of-function count data for a gene</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean#L60" aria-label="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData in Lean source" title="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#gene-data" aria-label="Link to Loss-of-function count data for a gene" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData</div>
+<div class="bp-thmcontent">
+<p>A gene's data: observed LoF count <code>o</code> and positive expected count <code>E</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> GeneData <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- Observed LoF count. -/</span>
+  o : ℕ
+  <span class="bp-lean-comment">/-- Expected LoF count under neutrality. -/</span>
+  E : ℝ
+  E_pos : 0 &lt; <a class="bp-lean-ref" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean#L64" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData.E">E</a></code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData.E">
+<pre class="bp-lean"><code>  E : ℝ</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:64</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 9</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#em-q-le-em-step">The M-step maximizes <code>Q(· | w)</code></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#em-step">EM update of the Poisson mixture class weights</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#joint">Joint likelihood of gene data and constraint class</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#joint-pos">Positivity of the Poisson mixture joint likelihood</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#log-lik-iterate-em-step-monotone">Monotonicity of the log-likelihood along the class-weight EM iterates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#log-lik-le-log-lik-em-step">EM does not decrease the likelihood</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mass">Expected number of genes in a constraint class</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mass-pos">Positivity of the class masses</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sum-mass">Class masses sum to the number of genes</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/joint">
+<h4 class="bp-thmheading" id="joint">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Joint likelihood of gene data and constraint class</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean#L68" aria-label="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.joint in Lean source" title="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.joint in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#joint" aria-label="Link to Joint likelihood of gene data and constraint class" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.joint</div>
+<div class="bp-thmcontent">
+<p>The joint likelihood of a gene's data and class <code>z</code>: <code>w_z P(o | rate_z E)</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> joint (rate : ι → ℝ) (w : <a class="bp-lean-ref" href="#pos-weights" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights">PosWeights</a> ι) (x : <a class="bp-lean-ref" href="#gene-data" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData">GeneData</a>) (z : ι) : ℝ :=
+  w.1 z * <a class="bp-lean-ref" href="#poisson-lik" data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.poissonLik">poissonLik</a> (rate z * x.E) x.o</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> PosWeights (ι : <span class="bp-lean-keyword">Type</span>*) [Fintype ι] : <span class="bp-lean-keyword">Type</span> _ :=
+  {w : ι → ℝ // (∀ c, 0 &lt; w c) ∧ ∑ c, w c = 1}</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:56</p>
+</div>
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> GeneData <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- Observed LoF count. -/</span>
+  o : ℕ
+  <span class="bp-lean-comment">/-- Expected LoF count under neutrality. -/</span>
+  E : ℝ
+  E_pos : 0 &lt; E</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:60</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.GeneConstraint.poissonLik">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> poissonLik (μ : ℝ) (o : ℕ) : ℝ := exp (-μ) * μ ^ o / (o ! : ℝ)</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/GeneConstraint.lean:67</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 7</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gene-data">Loss-of-function count data for a gene</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#pos-weights">Strictly positive class weights summing to one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#poisson-lik">Poisson likelihood of an observed count</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#em-q-le-em-step">The M-step maximizes <code>Q(· | w)</code></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#joint-pos">Positivity of the Poisson mixture joint likelihood</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#log-lik-iterate-em-step-monotone">Monotonicity of the log-likelihood along the class-weight EM iterates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#log-lik-le-log-lik-em-step">EM does not decrease the likelihood</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mass">Expected number of genes in a constraint class</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mass-pos">Positivity of the class masses</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#sum-mass">Class masses sum to the number of genes</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/joint-pos">
+<h4 class="bp-thmheading" id="joint-pos">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Positivity of the Poisson mixture joint likelihood</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean#L72" aria-label="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.joint_pos in Lean source" title="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.joint_pos in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#joint-pos" aria-label="Link to Positivity of the Poisson mixture joint likelihood" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.joint_pos</div>
+<div class="bp-thmcontent">
+<p>The joint likelihood is positive for positive rates.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> joint_pos {rate : ι → ℝ} (hrate : ∀ c, 0 &lt; rate c) (w : <a class="bp-lean-ref" href="#pos-weights" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights">PosWeights</a> ι) (x : <a class="bp-lean-ref" href="#gene-data" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData">GeneData</a>)
+    (z : ι) : 0 &lt; <a class="bp-lean-ref" href="#joint" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.joint">joint</a> rate w x z</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> PosWeights (ι : <span class="bp-lean-keyword">Type</span>*) [Fintype ι] : <span class="bp-lean-keyword">Type</span> _ :=
+  {w : ι → ℝ // (∀ c, 0 &lt; w c) ∧ ∑ c, w c = 1}</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:56</p>
+</div>
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> GeneData <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- Observed LoF count. -/</span>
+  o : ℕ
+  <span class="bp-lean-comment">/-- Expected LoF count under neutrality. -/</span>
+  E : ℝ
+  E_pos : 0 &lt; E</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.joint">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> joint (rate : ι → ℝ) (w : PosWeights ι) (x : GeneData) (z : ι) : ℝ :=
+  w.1 z * poissonLik (rate z * x.E) x.o</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:68</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gene-data">Loss-of-function count data for a gene</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#pos-weights">Strictly positive class weights summing to one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#joint">Joint likelihood of gene data and constraint class</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#poisson-lik">Poisson likelihood of an observed count</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#poisson-lik-pos">Positivity of the Poisson likelihood</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#log-lik-iterate-em-step-monotone">Monotonicity of the log-likelihood along the class-weight EM iterates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#log-lik-le-log-lik-em-step">EM does not decrease the likelihood</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mass-pos">Positivity of the class masses</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#sum-mass">Class masses sum to the number of genes</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/mass">
+<h4 class="bp-thmheading" id="mass">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Expected number of genes in a constraint class</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean#L78" aria-label="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.mass in Lean source" title="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.mass in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#mass" aria-label="Link to Expected number of genes in a constraint class" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.mass</div>
+<div class="bp-thmcontent">
+<p>The expected number of genes in class <code>z</code> under the posteriors at weights <code>w</code>:
+<code>∑_n P_w(z | o_n)</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> mass (rate : ι → ℝ) (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N → <a class="bp-lean-ref" href="#gene-data" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData">GeneData</a>) (w : <a class="bp-lean-ref" href="#pos-weights" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights">PosWeights</a> ι) (z : ι) : ℝ :=
+  ∑ n, <a class="bp-lean-ref" href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/expectation-maximization-algorithm/index.html#posterior" data-lean-name="Cslib.MachineLearning.LatentVariable.ExpectationMaximization.posterior">posterior</a> (<a class="bp-lean-ref" href="#joint" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.joint">joint</a> rate) w (xs n) z</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> GeneData <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- Observed LoF count. -/</span>
+  o : ℕ
+  <span class="bp-lean-comment">/-- Expected LoF count under neutrality. -/</span>
+  E : ℝ
+  E_pos : 0 &lt; E</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> PosWeights (ι : <span class="bp-lean-keyword">Type</span>*) [Fintype ι] : <span class="bp-lean-keyword">Type</span> _ :=
+  {w : ι → ℝ // (∀ c, 0 &lt; w c) ∧ ∑ c, w c = 1}</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:56</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.LatentVariable.ExpectationMaximization.posterior">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> posterior (p : Θ → X → Z → ℝ) (θ : Θ) (x : X) (z : Z) : ℝ :=
+  p θ x z / marginal p θ x</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/LatentVariable/ExpectationMaximization.lean:112</p>
+</div>
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.joint">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> joint (rate : ι → ℝ) (w : PosWeights ι) (x : GeneData) (z : ι) : ℝ :=
+  w.1 z * poissonLik (rate z * x.E) x.o</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:68</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gene-data">Loss-of-function count data for a gene</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#pos-weights">Strictly positive class weights summing to one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#joint">Joint likelihood of gene data and constraint class</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/expectation-maximization-algorithm/index.html#posterior">Posterior of a latent-variable model</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#em-q-le-em-step">The M-step maximizes <code>Q(· | w)</code></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#em-step">EM update of the Poisson mixture class weights</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mass-pos">Positivity of the class masses</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sum-mass">Class masses sum to the number of genes</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/mass-pos">
+<h4 class="bp-thmheading" id="mass-pos">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Positivity of the class masses</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean#L87" aria-label="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.mass_pos in Lean source" title="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.mass_pos in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#mass-pos" aria-label="Link to Positivity of the class masses" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.mass_pos</div>
+<div class="bp-thmcontent">
+<p>The class masses are positive when there is at least one gene.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> mass_pos [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nonempty#doc" title="Nonempty">Nonempty</a> ι] {rate : ι → ℝ} (hrate : ∀ c, 0 &lt; rate c)
+    (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N → <a class="bp-lean-ref" href="#gene-data" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData">GeneData</a>) (hN : 0 &lt; N) (w : <a class="bp-lean-ref" href="#pos-weights" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights">PosWeights</a> ι) (z : ι) : 0 &lt; <a class="bp-lean-ref" href="#mass" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.mass">mass</a> rate xs w z</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> GeneData <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- Observed LoF count. -/</span>
+  o : ℕ
+  <span class="bp-lean-comment">/-- Expected LoF count under neutrality. -/</span>
+  E : ℝ
+  E_pos : 0 &lt; E</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> PosWeights (ι : <span class="bp-lean-keyword">Type</span>*) [Fintype ι] : <span class="bp-lean-keyword">Type</span> _ :=
+  {w : ι → ℝ // (∀ c, 0 &lt; w c) ∧ ∑ c, w c = 1}</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:56</p>
+</div>
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.mass">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> mass (rate : ι → ℝ) (xs : Fin N → GeneData) (w : PosWeights ι) (z : ι) : ℝ :=
+  ∑ n, posterior (joint rate) w (xs n) z</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:78</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 7 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gene-data">Loss-of-function count data for a gene</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#pos-weights">Strictly positive class weights summing to one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mass">Expected number of genes in a constraint class</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#joint">Joint likelihood of gene data and constraint class</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#joint-pos">Positivity of the Poisson mixture joint likelihood</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/expectation-maximization-algorithm/index.html#marginal">Marginal of a latent-variable model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/expectation-maximization-algorithm/index.html#posterior">Posterior of a latent-variable model</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#em-q-le-em-step">The M-step maximizes <code>Q(· | w)</code></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#em-step">EM update of the Poisson mixture class weights</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/sum-mass">
+<h4 class="bp-thmheading" id="sum-mass">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Class masses sum to the number of genes</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean#L93" aria-label="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.sum_mass in Lean source" title="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.sum_mass in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#sum-mass" aria-label="Link to Class masses sum to the number of genes" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.sum_mass</div>
+<div class="bp-thmcontent">
+<p>The class masses add up to the number of genes.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> sum_mass [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nonempty#doc" title="Nonempty">Nonempty</a> ι] {rate : ι → ℝ} (hrate : ∀ c, 0 &lt; rate c)
+    (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N → <a class="bp-lean-ref" href="#gene-data" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData">GeneData</a>) (w : <a class="bp-lean-ref" href="#pos-weights" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights">PosWeights</a> ι) : ∑ z, <a class="bp-lean-ref" href="#mass" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.mass">mass</a> rate xs w z = N</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> GeneData <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- Observed LoF count. -/</span>
+  o : ℕ
+  <span class="bp-lean-comment">/-- Expected LoF count under neutrality. -/</span>
+  E : ℝ
+  E_pos : 0 &lt; E</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> PosWeights (ι : <span class="bp-lean-keyword">Type</span>*) [Fintype ι] : <span class="bp-lean-keyword">Type</span> _ :=
+  {w : ι → ℝ // (∀ c, 0 &lt; w c) ∧ ∑ c, w c = 1}</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:56</p>
+</div>
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.mass">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> mass (rate : ι → ℝ) (xs : Fin N → GeneData) (w : PosWeights ι) (z : ι) : ℝ :=
+  ∑ n, posterior (joint rate) w (xs n) z</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:78</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 7 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gene-data">Loss-of-function count data for a gene</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#pos-weights">Strictly positive class weights summing to one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mass">Expected number of genes in a constraint class</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#joint">Joint likelihood of gene data and constraint class</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#joint-pos">Positivity of the Poisson mixture joint likelihood</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/expectation-maximization-algorithm/index.html#is-dist-posterior">Posteriors are probability distributions</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/expectation-maximization-algorithm/index.html#posterior">Posterior of a latent-variable model</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#em-q-le-em-step">The M-step maximizes <code>Q(· | w)</code></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#em-step">EM update of the Poisson mixture class weights</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/em-step">
+<h4 class="bp-thmheading" id="em-step">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">EM update of the Poisson mixture class weights</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean#L100" aria-label="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.emStep in Lean source" title="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.emStep in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#em-step" aria-label="Link to EM update of the Poisson mixture class weights" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.emStep</div>
+<div class="bp-thmcontent">
+<p>The EM update <code>w'_z = (1/N) ∑_n P_w(z | o_n)</code>, for <code>N &gt; 0</code> genes and positive rates.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> emStep [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nonempty#doc" title="Nonempty">Nonempty</a> ι] {rate : ι → ℝ} (hrate : ∀ c, 0 &lt; rate c)
+    (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N → <a class="bp-lean-ref" href="#gene-data" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData">GeneData</a>) (hN : 0 &lt; N) (w : <a class="bp-lean-ref" href="#pos-weights" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights">PosWeights</a> ι) : <a class="bp-lean-ref" href="#pos-weights" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights">PosWeights</a> ι :=
+  ⟨<span class="bp-lean-keyword">fun</span> z =&gt; <a class="bp-lean-ref" href="#mass" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.mass">mass</a> rate xs w z / N, <span class="bp-lean-keyword">fun</span> z =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=div_pos#doc" title="div_pos">div_pos</a> (<a class="bp-lean-ref" href="#mass-pos" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.mass_pos">mass_pos</a> hrate xs hN w z)
+    (<span class="bp-lean-keyword">by</span> exact_mod_cast hN), <span class="bp-lean-keyword">by</span>
+    rw [← Finset.sum_div, sum_mass hrate xs w]
+    exact div_self (<span class="bp-lean-keyword">by</span> exact_mod_cast hN.ne&#x27;)⟩</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> GeneData <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- Observed LoF count. -/</span>
+  o : ℕ
+  <span class="bp-lean-comment">/-- Expected LoF count under neutrality. -/</span>
+  E : ℝ
+  E_pos : 0 &lt; E</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> PosWeights (ι : <span class="bp-lean-keyword">Type</span>*) [Fintype ι] : <span class="bp-lean-keyword">Type</span> _ :=
+  {w : ι → ℝ // (∀ c, 0 &lt; w c) ∧ ∑ c, w c = 1}</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:56</p>
+</div>
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.mass">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> mass (rate : ι → ℝ) (xs : Fin N → GeneData) (w : PosWeights ι) (z : ι) : ℝ :=
+  ∑ n, posterior (joint rate) w (xs n) z</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:78</p>
+</div>
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.mass_pos">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> mass_pos [Nonempty ι] {rate : ι → ℝ} (hrate : ∀ c, 0 &lt; rate c)
+    (xs : Fin N → GeneData) (hN : 0 &lt; N) (w : PosWeights ι) (z : ι) : 0 &lt; mass rate xs w z</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:87</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gene-data">Loss-of-function count data for a gene</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#pos-weights">Strictly positive class weights summing to one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mass">Expected number of genes in a constraint class</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mass-pos">Positivity of the class masses</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sum-mass">Class masses sum to the number of genes</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#em-q-le-em-step">The M-step maximizes <code>Q(· | w)</code></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#log-lik-iterate-em-step-monotone">Monotonicity of the log-likelihood along the class-weight EM iterates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#log-lik-le-log-lik-em-step">EM does not decrease the likelihood</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/em-q-le-em-step">
+<h4 class="bp-thmheading" id="em-q-le-em-step">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The M-step maximizes <code>Q(· | w)</code></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean#L120" aria-label="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.emQ_le_emStep in Lean source" title="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.emQ_le_emStep in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#em-q-le-em-step" aria-label="Link to The M-step maximizes `Q(· | w)`" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.emQ_le_emStep</div>
+<div class="bp-thmcontent">
+<p><strong>The M-step maximizes <code>Q(· | w)</code></strong> over admissible weights.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> emQ_le_emStep [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nonempty#doc" title="Nonempty">Nonempty</a> ι] {rate : ι → ℝ} (hrate : ∀ c, 0 &lt; rate c)
+    (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N → <a class="bp-lean-ref" href="#gene-data" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData">GeneData</a>) (hN : 0 &lt; N) (w&#x27; w : <a class="bp-lean-ref" href="#pos-weights" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights">PosWeights</a> ι) :
+    <a class="bp-lean-ref" href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/expectation-maximization-algorithm/index.html#em-q" data-lean-name="Cslib.MachineLearning.LatentVariable.ExpectationMaximization.emQ">emQ</a> (<a class="bp-lean-ref" href="#joint" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.joint">joint</a> rate) xs w&#x27; w ≤ <a class="bp-lean-ref" href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/expectation-maximization-algorithm/index.html#em-q" data-lean-name="Cslib.MachineLearning.LatentVariable.ExpectationMaximization.emQ">emQ</a> (<a class="bp-lean-ref" href="#joint" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.joint">joint</a> rate) xs (<a class="bp-lean-ref" href="#em-step" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.emStep">emStep</a> hrate xs hN w) w</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> GeneData <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- Observed LoF count. -/</span>
+  o : ℕ
+  <span class="bp-lean-comment">/-- Expected LoF count under neutrality. -/</span>
+  E : ℝ
+  E_pos : 0 &lt; E</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> PosWeights (ι : <span class="bp-lean-keyword">Type</span>*) [Fintype ι] : <span class="bp-lean-keyword">Type</span> _ :=
+  {w : ι → ℝ // (∀ c, 0 &lt; w c) ∧ ∑ c, w c = 1}</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:56</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.LatentVariable.ExpectationMaximization.emQ">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> emQ (p : Θ → X → Z → ℝ) (xs : Fin N → X) (θ&#x27; θ : Θ) : ℝ :=
+  ∑ n, ∑ z, posterior p θ (xs n) z * log (p θ&#x27; (xs n) z)</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/LatentVariable/ExpectationMaximization.lean:122</p>
+</div>
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.joint">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> joint (rate : ι → ℝ) (w : PosWeights ι) (x : GeneData) (z : ι) : ℝ :=
+  w.1 z * poissonLik (rate z * x.E) x.o</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:68</p>
+</div>
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.emStep">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> emStep [Nonempty ι] {rate : ι → ℝ} (hrate : ∀ c, 0 &lt; rate c)
+    (xs : Fin N → GeneData) (hN : 0 &lt; N) (w : PosWeights ι) : PosWeights ι :=
+  ⟨<span class="bp-lean-keyword">fun</span> z =&gt; mass rate xs w z / N, <span class="bp-lean-keyword">fun</span> z =&gt; div_pos (mass_pos hrate xs hN w z)
+    (<span class="bp-lean-keyword">by</span> exact_mod_cast hN), <span class="bp-lean-keyword">by</span>
+    rw [← Finset.sum_div, sum_mass hrate xs w]
+    exact div_self (<span class="bp-lean-keyword">by</span> exact_mod_cast hN.ne&#x27;)⟩</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:100</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 12 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gene-data">Loss-of-function count data for a gene</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#pos-weights">Strictly positive class weights summing to one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#em-step">EM update of the Poisson mixture class weights</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#joint">Joint likelihood of gene data and constraint class</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/expectation-maximization-algorithm/index.html#em-q">The EM objective</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mass">Expected number of genes in a constraint class</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mass-pos">Positivity of the class masses</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#sum-mass">Class masses sum to the number of genes</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/mixture-models/index.html#sum-mul-log-le-sum-mul-log-div">The weighted log-likelihood is bounded by its value at the normalized counts</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/expectation-maximization-algorithm/index.html#posterior">Posterior of a latent-variable model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#poisson-lik">Poisson likelihood of an observed count</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#poisson-lik-pos">Positivity of the Poisson likelihood</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#log-lik-iterate-em-step-monotone">Monotonicity of the log-likelihood along the class-weight EM iterates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#log-lik-le-log-lik-em-step">EM does not decrease the likelihood</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/log-lik-le-log-lik-em-step">
+<h4 class="bp-thmheading" id="log-lik-le-log-lik-em-step">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">EM does not decrease the likelihood</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean#L134" aria-label="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.logLik_le_logLik_emStep in Lean source" title="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.logLik_le_logLik_emStep in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#log-lik-le-log-lik-em-step" aria-label="Link to EM does not decrease the likelihood" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.logLik_le_logLik_emStep</div>
+<div class="bp-thmcontent">
+<p><strong>EM does not decrease the likelihood</strong> of the class weights.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> logLik_le_logLik_emStep [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nonempty#doc" title="Nonempty">Nonempty</a> ι] {rate : ι → ℝ} (hrate : ∀ c, 0 &lt; rate c)
+    (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N → <a class="bp-lean-ref" href="#gene-data" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData">GeneData</a>) (hN : 0 &lt; N) (w : <a class="bp-lean-ref" href="#pos-weights" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights">PosWeights</a> ι) :
+    <a class="bp-lean-ref" href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/expectation-maximization-algorithm/index.html#log-lik" data-lean-name="Cslib.MachineLearning.LatentVariable.ExpectationMaximization.logLik">logLik</a> (<a class="bp-lean-ref" href="#joint" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.joint">joint</a> rate) xs w ≤ <a class="bp-lean-ref" href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/expectation-maximization-algorithm/index.html#log-lik" data-lean-name="Cslib.MachineLearning.LatentVariable.ExpectationMaximization.logLik">logLik</a> (<a class="bp-lean-ref" href="#joint" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.joint">joint</a> rate) xs (<a class="bp-lean-ref" href="#em-step" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.emStep">emStep</a> hrate xs hN w)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> GeneData <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- Observed LoF count. -/</span>
+  o : ℕ
+  <span class="bp-lean-comment">/-- Expected LoF count under neutrality. -/</span>
+  E : ℝ
+  E_pos : 0 &lt; E</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> PosWeights (ι : <span class="bp-lean-keyword">Type</span>*) [Fintype ι] : <span class="bp-lean-keyword">Type</span> _ :=
+  {w : ι → ℝ // (∀ c, 0 &lt; w c) ∧ ∑ c, w c = 1}</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:56</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.LatentVariable.ExpectationMaximization.logLik">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> logLik (p : Θ → X → Z → ℝ) (xs : Fin N → X) (θ : Θ) : ℝ :=
+  ∑ n, log (marginal p θ (xs n))</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/LatentVariable/ExpectationMaximization.lean:108</p>
+</div>
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.joint">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> joint (rate : ι → ℝ) (w : PosWeights ι) (x : GeneData) (z : ι) : ℝ :=
+  w.1 z * poissonLik (rate z * x.E) x.o</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:68</p>
+</div>
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.emStep">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> emStep [Nonempty ι] {rate : ι → ℝ} (hrate : ∀ c, 0 &lt; rate c)
+    (xs : Fin N → GeneData) (hN : 0 &lt; N) (w : PosWeights ι) : PosWeights ι :=
+  ⟨<span class="bp-lean-keyword">fun</span> z =&gt; mass rate xs w z / N, <span class="bp-lean-keyword">fun</span> z =&gt; div_pos (mass_pos hrate xs hN w z)
+    (<span class="bp-lean-keyword">by</span> exact_mod_cast hN), <span class="bp-lean-keyword">by</span>
+    rw [← Finset.sum_div, sum_mass hrate xs w]
+    exact div_self (<span class="bp-lean-keyword">by</span> exact_mod_cast hN.ne&#x27;)⟩</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:100</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 8</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gene-data">Loss-of-function count data for a gene</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#pos-weights">Strictly positive class weights summing to one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#em-step">EM update of the Poisson mixture class weights</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#joint">Joint likelihood of gene data and constraint class</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/expectation-maximization-algorithm/index.html#log-lik">Log-likelihood of a latent-variable model</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#em-q-le-em-step">The M-step maximizes <code>Q(· | w)</code></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#joint-pos">Positivity of the Poisson mixture joint likelihood</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/expectation-maximization-algorithm/index.html#log-lik-le-of-em-q-le">The EM theorem</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf/log-lik-iterate-em-step-monotone">
+<h4 class="bp-thmheading" id="log-lik-iterate-em-step-monotone">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Monotonicity of the log-likelihood along the class-weight EM iterates</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean#L140" aria-label="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.logLik_iterate_emStep_monotone in Lean source" title="View Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.logLik_iterate_emStep_monotone in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#log-lik-iterate-em-step-monotone" aria-label="Link to Monotonicity of the log-likelihood along the class-weight EM iterates" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.logLik_iterate_emStep_monotone</div>
+<div class="bp-thmcontent">
+<p>The log-likelihood is monotone along the EM iterates.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> logLik_iterate_emStep_monotone [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nonempty#doc" title="Nonempty">Nonempty</a> ι] {rate : ι → ℝ} (hrate : ∀ c, 0 &lt; rate c)
+    (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N → <a class="bp-lean-ref" href="#gene-data" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData">GeneData</a>) (hN : 0 &lt; N) (w₀ : <a class="bp-lean-ref" href="#pos-weights" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights">PosWeights</a> ι) :
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Monotone#doc" title="Monotone">Monotone</a> <span class="bp-lean-keyword">fun</span> k =&gt; <a class="bp-lean-ref" href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/expectation-maximization-algorithm/index.html#log-lik" data-lean-name="Cslib.MachineLearning.LatentVariable.ExpectationMaximization.logLik">logLik</a> (<a class="bp-lean-ref" href="#joint" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.joint">joint</a> rate) xs ((<a class="bp-lean-ref" href="#em-step" data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.emStep">emStep</a> hrate xs hN)^[k] w₀)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.GeneData">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> GeneData <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- Observed LoF count. -/</span>
+  o : ℕ
+  <span class="bp-lean-comment">/-- Expected LoF count under neutrality. -/</span>
+  E : ℝ
+  E_pos : 0 &lt; E</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.PosWeights">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> PosWeights (ι : <span class="bp-lean-keyword">Type</span>*) [Fintype ι] : <span class="bp-lean-keyword">Type</span> _ :=
+  {w : ι → ℝ // (∀ c, 0 &lt; w c) ∧ ∑ c, w c = 1}</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:56</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.LatentVariable.ExpectationMaximization.logLik">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> logLik (p : Θ → X → Z → ℝ) (xs : Fin N → X) (θ : Θ) : ℝ :=
+  ∑ n, log (marginal p θ (xs n))</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/LatentVariable/ExpectationMaximization.lean:108</p>
+</div>
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.joint">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> joint (rate : ι → ℝ) (w : PosWeights ι) (x : GeneData) (z : ι) : ℝ :=
+  w.1 z * poissonLik (rate z * x.E) x.o</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:68</p>
+</div>
+<div data-lean-name="Cslib.Bioinformatics.StatisticalGenetics.PoissonClassEM.emStep">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> emStep [Nonempty ι] {rate : ι → ℝ} (hrate : ∀ c, 0 &lt; rate c)
+    (xs : Fin N → GeneData) (hN : 0 &lt; N) (w : PosWeights ι) : PosWeights ι :=
+  ⟨<span class="bp-lean-keyword">fun</span> z =&gt; mass rate xs w z / N, <span class="bp-lean-keyword">fun</span> z =&gt; div_pos (mass_pos hrate xs hN w z)
+    (<span class="bp-lean-keyword">by</span> exact_mod_cast hN), <span class="bp-lean-keyword">by</span>
+    rw [← Finset.sum_div, sum_mass hrate xs w]
+    exact div_self (<span class="bp-lean-keyword">by</span> exact_mod_cast hN.ne&#x27;)⟩</code></pre>
+<p class="bp-lean-where">CSLibExt/Bioinformatics/StatisticalGenetics/PoissonClassEM.lean:100</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 8</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gene-data">Loss-of-function count data for a gene</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#pos-weights">Strictly positive class weights summing to one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#em-step">EM update of the Poisson mixture class weights</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#joint">Joint likelihood of gene data and constraint class</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/expectation-maximization-algorithm/index.html#log-lik">Log-likelihood of a latent-variable model</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#em-q-le-em-step">The M-step maximizes <code>Q(· | w)</code></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#joint-pos">Positivity of the Poisson mixture joint likelihood</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/expectation-maximization-algorithm/index.html#log-lik-iterate-monotone">EM iterates have monotone likelihood</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>27</strong> fully proved</span></div>
+</div>
+</div>
+<p><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../dependencies/index.json" data-graph-src="../../../../dependencies/scopes/Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf.json" data-page-href="index.html" data-scope-id="Biology/statistical-genetics/gene-constraint-scores-pli-and-loeuf">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>

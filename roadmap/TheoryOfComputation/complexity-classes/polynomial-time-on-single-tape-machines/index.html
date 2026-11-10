@@ -1,0 +1,5537 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../polynomial-time-in-a-cost-annotated-programming/index.html">
+      
+      
+        <link rel="next" href="../time-and-space-classes-on-multi-tape-machines/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Polynomial time on single-tape machines - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rev-tail" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Polynomial time on single-tape machines
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_22" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_22" id="__nav_2_1_22_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_22_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_22">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Theory of Computation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../np-completeness/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NP-completeness
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_22_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Complexity classes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_22_3" id="__nav_2_1_22_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_22_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_22_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Complexity classes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../blum-complexity-measures/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blum complexity measures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../polynomially-bounded-functions/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polynomially bounded functions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quadratic-overhead-of-single-tape-simulation/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quadratic overhead of single-tape simulation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../the-classes-p-np-and-conp/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The classes P, NP and coNP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mahaney-s-theorem/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mahaney&#39;s theorem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../polynomial-time-in-a-cost-annotated-programming/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polynomial time in a cost-annotated programming model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polynomial time on single-tape machines
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polynomial time on single-tape machines
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rev-tail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rev Tail
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#of-tm2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Of TM2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complexity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complexity
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../time-and-space-classes-on-multi-tape-machines/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time and space classes on multi-tape machines
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../time-and-space-complexity-classes/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time and space complexity classes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../containments-between-time-and-space-classes/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Containments between time and space classes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../parameterized-complexity/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parameterized complexity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../polynomial-hierarchy/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polynomial hierarchy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../time-and-resource-bounded-runs-of-abstract-machi/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time- and resource-bounded runs of abstract machines
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../hierarchy-theorems-and-barriers/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hierarchy theorems and proof barriers
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../regular-languages/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Finite automata and regular languages
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../context-free-languages/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Context-free languages
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../decision-procedures/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Decision procedures for automata, grammars and strings
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../turing-machines/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Turing machines
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../equivalence-of-models/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Equivalence of models of computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../computability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computability and undecidability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../undecidable-problems/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Undecidable problems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../degrees-and-hierarchies/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Degrees of unsolvability and the arithmetical hierarchy
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../omega-automata-and-games/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Automata on infinite words and infinite games
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../context-sensitive-languages/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Context-sensitive languages
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../randomized-and-quantum-complexity/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Randomized, interactive and quantum complexity
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../counting-complexity/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Counting complexity
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../pseudorandomness-and-one-way-functions/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pseudorandomness and one-way functions
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../circuit-complexity/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Boolean circuit complexity
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../algebraic-complexity/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic complexity
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../descriptive-complexity/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Descriptive complexity
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../kolmogorov-complexity/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kolmogorov complexity
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../pcp-and-inapproximability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probabilistically checkable proofs and inapproximability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../completeness-other-classes/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Completeness for other complexity classes
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../polynomial-time-problems/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problems solvable in polynomial time
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../fine-grained-complexity/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fine-grained and exponential-time complexity
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../ComputerScience/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rev-tail" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rev Tail
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#of-tm2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Of TM2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complexity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complexity
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../index.html" tabindex="-1">Theory of Computation</a></li><li><a href="../index.html" tabindex="-1">Complexity classes</a></li><li aria-current="page">Polynomial time on single-tape machines</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Polynomial time on single-tape machines</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-on-single-tape-machines" data-page-title="Polynomial time on single-tape machines">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="polynomial-time-on-single-tape-machines">Polynomial time on single-tape machines</h1>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>10</strong> fully proved</span></div>
+</div>
+<h2 id="rev-tail">Rev Tail</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-on-single-tape-machines/k">
+<h4 class="bp-thmheading" id="k">
+<span class="bp-thmcaption" data-search-exclude>Inductive</span><span class="bp-thmtitle">Stacks of the reversal component</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Machines/Turing/SingleTape/PolyTime.lean#L67" aria-label="View Cslib.Turing.RevTail.K in Lean source" title="View Cslib.Turing.RevTail.K in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#k" aria-label="Link to Stacks of the reversal component" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Turing.RevTail.K</div>
+<div class="bp-thmcontent">
+<p>The two stack indices of the reversal component: the
+input stack <span class="arithmatex">\(X\)</span> and the output stack <span class="arithmatex">\(O\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> K | X | O
+  <span class="bp-lean-keyword">deriving</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=DecidableEq#doc" title="DecidableEq">DecidableEq</a></code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#comp">The reversal component</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#computable">Reversing and dropping the first bit is polynomial-time</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#prog">Program of the reversal component</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#run">Running the reversal component</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-on-single-tape-machines/l">
+<h4 class="bp-thmheading" id="l">
+<span class="bp-thmcaption" data-search-exclude>Inductive</span><span class="bp-thmtitle">Labels of the reversal component</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Machines/Turing/SingleTape/PolyTime.lean#L74" aria-label="View Cslib.Turing.RevTail.L in Lean source" title="View Cslib.Turing.RevTail.L in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#l" aria-label="Link to Labels of the reversal component" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Turing.RevTail.L</div>
+<div class="bp-thmcontent">
+<p>The three labels of the reversal component: mv (move
+the input onto the output), drop (drop one symbol) and done.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> L | mv | drop | done
+  <span class="bp-lean-keyword">deriving</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=DecidableEq#doc" title="DecidableEq">DecidableEq</a></code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#comp">The reversal component</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#computable">Reversing and dropping the first bit is polynomial-time</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#prog">Program of the reversal component</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#run">Running the reversal component</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-on-single-tape-machines/prog">
+<h4 class="bp-thmheading" id="prog">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Program of the reversal component</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Machines/Turing/SingleTape/PolyTime.lean#L81" aria-label="View Cslib.Turing.RevTail.prog in Lean source" title="View Cslib.Turing.RevTail.prog in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#prog" aria-label="Link to Program of the reversal component" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Turing.RevTail.prog</div>
+<div class="bp-thmcontent">
+<p>The multi-stack program over the stacks <span class="arithmatex">\(X\)</span> and <span class="arithmatex">\(O\)</span>,
+both with alphabet <span class="arithmatex">\(\mathrm{Bool}\)</span>, with a Boolean internal state: at label mv it moves the bits
+of <span class="arithmatex">\(X\)</span> one at a time onto <span class="arithmatex">\(O\)</span> (reversing them) and then goes to drop; at drop it pops <span class="arithmatex">\(O\)</span> once
+and goes to done; at done it halts.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> prog : <a class="bp-lean-ref" href="#l" data-lean-name="Cslib.Turing.RevTail.L">L</a> → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Turing.TM2.Stmt#doc" title="Turing.TM2.Stmt">TM2.Stmt</a> (<span class="bp-lean-keyword">fun</span> _ : <a class="bp-lean-ref" href="#k" data-lean-name="Cslib.Turing.RevTail.K">K</a> ↦ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) <a class="bp-lean-ref" href="#l" data-lean-name="Cslib.Turing.RevTail.L">L</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>
+  | .mv =&gt; <a class="bp-lean-ref" href="../../turing-machines/multi-tape-and-multi-stack/programming-multi-stack-machines/index.html#move-b" data-lean-name="MetaMathlibExt.TM2Program.moveB">moveB</a> .X .O <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=id#doc" title="id">id</a> .mv .drop
+  | .drop =&gt; .pop .O (<span class="bp-lean-keyword">fun</span> s _ ↦ s) (.goto <span class="bp-lean-keyword">fun</span> _ ↦ .done)
+  | .done =&gt; .halt</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Turing.RevTail.L">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> L | mv | drop | done
+  <span class="bp-lean-keyword">deriving</span> DecidableEq</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Machines/Turing/SingleTape/PolyTime.lean:74</p>
+</div>
+<div data-lean-name="Cslib.Turing.RevTail.K">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> K | X | O
+  <span class="bp-lean-keyword">deriving</span> DecidableEq</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Machines/Turing/SingleTape/PolyTime.lean:67</p>
+</div>
+<div data-lean-name="MetaMathlibExt.TM2Program.moveB">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> moveB (a b : K) (d : Γ a → Option Bool) (g : Bool → Γ b) (self next : Λ) :
+    TM2.Stmt Γ Λ σ :=
+  .peek a (<span class="bp-lean-keyword">fun</span> _ o =&gt; Flag.tag (isBit d o))
+    (.branch Flag.untag
+      (.pop a (<span class="bp-lean-keyword">fun</span> _ o =&gt; Flag.tag (bitOf d o))
+        (.branch Flag.untag
+          (.push b (<span class="bp-lean-keyword">fun</span> _ =&gt; g true) (.goto <span class="bp-lean-keyword">fun</span> _ =&gt; self))
+          (.push b (<span class="bp-lean-keyword">fun</span> _ =&gt; g false) (.goto <span class="bp-lean-keyword">fun</span> _ =&gt; self))))
+      (.goto <span class="bp-lean-keyword">fun</span> _ =&gt; next))</code></pre>
+<p class="bp-lean-where">MathlibExt/Computability/TuringMachine/BitOps.lean:86</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#k">Stacks of the reversal component</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#l">Labels of the reversal component</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../turing-machines/multi-tape-and-multi-stack/programming-multi-stack-machines/index.html#flag">Flag bit of a machine state</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../turing-machines/multi-tape-and-multi-stack/programming-multi-stack-machines/index.html#move-b">Bit-moving loop</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#comp">The reversal component</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#computable">Reversing and dropping the first bit is polynomial-time</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-on-single-tape-machines/comp">
+<h4 class="bp-thmheading" id="comp">
+<span class="bp-thmcaption" data-search-exclude>Abbreviation</span><span class="bp-thmtitle">The reversal component</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Machines/Turing/SingleTape/PolyTime.lean#L87" aria-label="View Cslib.Turing.RevTail.comp in Lean source" title="View Cslib.Turing.RevTail.comp in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#comp" aria-label="Link to The reversal component" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Turing.RevTail.comp</div>
+<div class="bp-thmcontent">
+<p>The component machine with two stacks, the input stack <span class="arithmatex">\(X\)</span> and
+the output stack <span class="arithmatex">\(O\)</span>, both over the alphabet <span class="arithmatex">\(\mathrm{Bool}\)</span>; the three labels mv, drop and done;
+the program that moves the bits of <span class="arithmatex">\(X\)</span> onto <span class="arithmatex">\(O\)</span> (reversing them), pops <span class="arithmatex">\(O\)</span> once and halts; and
+the stack list <span class="arithmatex">\([X, O]\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">abbrev</span> comp : <a class="bp-lean-ref" href="../../turing-machines/multi-tape-and-multi-stack/simulating-component-machines-in-a-host-machine/index.html#comp" data-lean-name="Cslib.Complexity.Host.Comp">Cslib.Complexity.Host.Comp</a> <span class="bp-lean-keyword">where</span>
+  K := <a class="bp-lean-ref" href="#k" data-lean-name="Cslib.Turing.RevTail.K">K</a>
+  Γ := <span class="bp-lean-keyword">fun</span> _ ↦ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>
+  L := <a class="bp-lean-ref" href="#l" data-lean-name="Cslib.Turing.RevTail.L">L</a>
+  prog := <a class="bp-lean-ref" href="#prog" data-lean-name="Cslib.Turing.RevTail.prog">prog</a>
+  ks := [.X, .O]
+  ks_nodup := <span class="bp-lean-keyword">by</span> decide
+  mem_ks k := <span class="bp-lean-keyword">by</span> cases k &lt;;&gt; decide</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Complexity.Host.Comp">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Comp <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- Stack indices. -/</span>
+  K : <span class="bp-lean-keyword">Type</span>
+  <span class="bp-lean-comment">/-- Decidable equality of stack indices. -/</span>
+  [decK : DecidableEq K]
+  <span class="bp-lean-comment">/-- Finitely many stacks. -/</span>
+  [finK : Fintype K]
+  <span class="bp-lean-comment">/-- Stack alphabets. -/</span>
+  Γ : K → <span class="bp-lean-keyword">Type</span>
+  <span class="bp-lean-comment">/-- Finite alphabets. -/</span>
+  [finΓ : ∀ k, Fintype (Γ k)]
+  <span class="bp-lean-comment">/-- Labels. -/</span>
+  ⋯</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Complexity/Host.lean:53</p>
+</div>
+<div data-lean-name="Cslib.Turing.RevTail.K">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> K | X | O
+  <span class="bp-lean-keyword">deriving</span> DecidableEq</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Machines/Turing/SingleTape/PolyTime.lean:67</p>
+</div>
+<div data-lean-name="Cslib.Turing.RevTail.L">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> L | mv | drop | done
+  <span class="bp-lean-keyword">deriving</span> DecidableEq</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Machines/Turing/SingleTape/PolyTime.lean:74</p>
+</div>
+<div data-lean-name="Cslib.Turing.RevTail.prog">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> prog : L → TM2.Stmt (<span class="bp-lean-keyword">fun</span> _ : K ↦ Bool) L Bool
+  | .mv =&gt; moveB .X .O some id .mv .drop
+  | .drop =&gt; .pop .O (<span class="bp-lean-keyword">fun</span> s _ ↦ s) (.goto <span class="bp-lean-keyword">fun</span> _ ↦ .done)
+  | .done =&gt; .halt</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Machines/Turing/SingleTape/PolyTime.lean:81</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../turing-machines/multi-tape-and-multi-stack/simulating-component-machines-in-a-host-machine/index.html#comp">Component machine</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#k">Stacks of the reversal component</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#l">Labels of the reversal component</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#prog">Program of the reversal component</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#computable">Reversing and dropping the first bit is polynomial-time</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#run">Running the reversal component</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-on-single-tape-machines/run">
+<h4 class="bp-thmheading" id="run">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Running the reversal component</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Machines/Turing/SingleTape/PolyTime.lean#L97" aria-label="View Cslib.Turing.RevTail.run in Lean source" title="View Cslib.Turing.RevTail.run in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#run" aria-label="Link to Running the reversal component" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Turing.RevTail.run</div>
+<div class="bp-thmcontent">
+<p>For every bit list <span class="arithmatex">\(x\)</span>, the program of the reversal
+component, started at label mv with internal state false, with the bits of <span class="arithmatex">\(x\)</span> on the input stack
+<span class="arithmatex">\(X\)</span> and every other stack empty, reaches label done within at most <span class="arithmatex">\(|x| + 2\)</span> steps, with some
+internal state and some stacks whose output stack <span class="arithmatex">\(O\)</span> holds the reversal of <span class="arithmatex">\(x\)</span> with its first
+entry removed.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> run (x : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) : ∃ v S&#x27;, <a class="bp-lean-ref" href="../../turing-machines/multi-tape-and-multi-stack/programming-multi-stack-machines/index.html#run-le" data-lean-name="MetaMathlibExt.TM2Program.RunLe">RunLe</a> <a class="bp-lean-ref" href="#comp" data-lean-name="Cslib.Turing.RevTail.comp">comp</a>.prog (x.length + 2)
+    ⟨<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> L.mv, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a>, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Function.update#doc" title="Function.update">Function.update</a> (<span class="bp-lean-keyword">fun</span> _ ↦ []) K.X (x.map <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=id#doc" title="id">id</a>)⟩ ⟨<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> L.done, v, S&#x27;⟩ ∧
+      S&#x27; K.O = x.reverse.tail.map (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Equiv.refl#doc" title="Equiv.refl">Equiv.refl</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>).symm</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.TM2Program.RunLe">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> RunLe (M : Λ → TM2.Stmt Γ Λ σ) (B : ℕ) (c d : TM2.Cfg Γ Λ σ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∃ n, n ≤ B ∧ Run M n c d</code></pre>
+<p class="bp-lean-where">MathlibExt/Computability/TuringMachine/Program.lean:901</p>
+</div>
+<div data-lean-name="Cslib.Turing.RevTail.comp">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">abbrev</span> comp : Cslib.Complexity.Host.Comp <span class="bp-lean-keyword">where</span>
+  K := K
+  Γ := <span class="bp-lean-keyword">fun</span> _ ↦ Bool
+  L := L
+  prog := prog
+  ks := [.X, .O]
+  ks_nodup := <span class="bp-lean-keyword">by</span> decide
+  mem_ks k := <span class="bp-lean-keyword">by</span> cases k &lt;;&gt; decide</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Machines/Turing/SingleTape/PolyTime.lean:87</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 9 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../turing-machines/multi-tape-and-multi-stack/simulating-component-machines-in-a-host-machine/index.html#comp">Component machine</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#k">Stacks of the reversal component</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#l">Labels of the reversal component</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#comp">The reversal component</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../turing-machines/multi-tape-and-multi-stack/programming-multi-stack-machines/index.html#run-le">Runs within a step budget</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../turing-machines/multi-tape-and-multi-stack/programming-multi-stack-machines/index.html#flag">Flag bit of a machine state</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../turing-machines/multi-tape-and-multi-stack/programming-multi-stack-machines/index.html#run">Exact-length runs of a TM2 machine</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../turing-machines/multi-tape-and-multi-stack/programming-multi-stack-machines/index.html#single">A single step executes the statement at the current label</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../turing-machines/multi-tape-and-multi-stack/programming-multi-stack-machines/index.html#move-b-run">Running the bit-moving loop</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#computable">Reversing and dropping the first bit is polynomial-time</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-on-single-tape-machines/computable">
+<h4 class="bp-thmheading" id="computable">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Reversing and dropping the first bit is polynomial-time</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Machines/Turing/SingleTape/PolyTime.lean#L110" aria-label="View Cslib.Turing.RevTail.computable in Lean source" title="View Cslib.Turing.RevTail.computable in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#computable" aria-label="Link to Reversing and dropping the first bit is polynomial-time" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Turing.RevTail.computable</div>
+<div class="bp-thmcontent">
+<p>A finite multi-stack Turing
+machine whose input and output alphabets are both identified with the bits, together with a
+polynomial <span class="arithmatex">\(p\)</span> with natural-number coefficients, such that for every bit list <span class="arithmatex">\(x\)</span>, given bit by
+bit as its own encoding, the machine outputs the reversal of <span class="arithmatex">\(x\)</span> with its first entry removed
+(that is, <span class="arithmatex">\(x\)</span> without its last bit, in reverse order) within <span class="arithmatex">\(p(|x|)\)</span> steps.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> computable :
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Turing.TM2ComputableInPolyTime#doc" title="Turing.TM2ComputableInPolyTime">TM2ComputableInPolyTime</a> (<span class="bp-lean-keyword">fun</span> l : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> ↦ l) (<span class="bp-lean-keyword">fun</span> l : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> ↦ l)
+      (<span class="bp-lean-keyword">fun</span> x : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> ↦ x.reverse.tail) :=
+  <a class="bp-lean-ref" href="../../turing-machines/multi-tape-and-multi-stack/simulating-component-machines-in-a-host-machine/index.html#reduction" data-lean-name="Cslib.Complexity.Host.reduction">Cslib.Complexity.Host.reduction</a> (c := <a class="bp-lean-ref" href="#comp" data-lean-name="Cslib.Turing.RevTail.comp">comp</a>) (cX := K.X) (cO := K.O) (gX := <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=id#doc" title="id">id</a>)
+    (start := L.mv) (done := L.done) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Equiv.refl#doc" title="Equiv.refl">Equiv.refl</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) _ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial.X#doc" title="Polynomial.X">Polynomial.X</a> + <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial.C#doc" title="Polynomial.C">Polynomial.C</a> 2) <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=rfl#doc" title="rfl">rfl</a>
+    <span class="bp-lean-keyword">fun</span> x ↦ <span class="bp-lean-keyword">by</span> simpa using run x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Complexity.Host.reduction">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> reduction (eO : c.Γ cO ≃ Bool) (f : List Bool → List Bool) (p : Polynomial ℕ)
+    (hdone : c.prog done = .halt)
+    (hrun : ∀ x, ∃ v S&#x27;, RunLe c.prog (p.eval x.length)
+      ⟨some start, false, update (<span class="bp-lean-keyword">fun</span> _ =&gt; []) cX (x.map gX)⟩ ⟨some done, v, S&#x27;⟩ ∧
+        S&#x27; cO = (f x).map eO.symm) :
+    TM2ComputableInPolyTime (<span class="bp-lean-keyword">fun</span> l : List Bool =&gt; l) (<span class="bp-lean-keyword">fun</span> l : List Bool =&gt; l) f <span class="bp-lean-keyword">where</span>
+  tm := rtm c cX cO gX start done
+  inputAlphabet := Equiv.refl Bool
+  outputAlphabet := eO
+  time := rtime c cX cO gX start done p
+  outputsFun := <span class="bp-lean-keyword">fun</span> x =&gt; <span class="bp-lean-keyword">by</span>
+    <span class="bp-lean-keyword">have</span> h := rprog_run eO f p hdone hrun x
+  ⋯</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Complexity/Host.lean:348</p>
+</div>
+<div data-lean-name="Cslib.Turing.RevTail.comp">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">abbrev</span> comp : Cslib.Complexity.Host.Comp <span class="bp-lean-keyword">where</span>
+  K := K
+  Γ := <span class="bp-lean-keyword">fun</span> _ ↦ Bool
+  L := L
+  prog := prog
+  ks := [.X, .O]
+  ks_nodup := <span class="bp-lean-keyword">by</span> decide
+  mem_ks k := <span class="bp-lean-keyword">by</span> cases k &lt;;&gt; decide</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Machines/Turing/SingleTape/PolyTime.lean:87</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 8 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../turing-machines/multi-tape-and-multi-stack/simulating-component-machines-in-a-host-machine/index.html#comp">Component machine</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../turing-machines/multi-tape-and-multi-stack/simulating-component-machines-in-a-host-machine/index.html#reduction">Reduction host</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#k">Stacks of the reversal component</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#l">Labels of the reversal component</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#comp">The reversal component</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#prog">Program of the reversal component</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#run">Running the reversal component</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../turing-machines/multi-tape-and-multi-stack/programming-multi-stack-machines/index.html#run-le">Runs within a step budget</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#p-subset-single-tape-p">Problems in P are decided in polynomial time by single-tape machines</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="of-tm2">Of TM2</h2>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-on-single-tape-machines/answer-tm-outputs-within-time">
+<h4 class="bp-thmheading" id="answer-tm-outputs-within-time">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The answer machine runs in one step</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Machines/Turing/SingleTape/PolyTime.lean#L131" aria-label="View Cslib.Turing.SingleTapeTM.OfTM2.answerTM_outputsWithinTime in Lean source" title="View Cslib.Turing.SingleTapeTM.OfTM2.answerTM_outputsWithinTime in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#answer-tm-outputs-within-time" aria-label="Link to The answer machine runs in one step" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Turing.SingleTapeTM.OfTM2.answerTM_outputsWithinTime</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(M\)</span> be a finite multi-stack machine with finite
+stack alphabets, whose input alphabet is identified with the bits by <span class="arithmatex">\(e\)</span> and whose output alphabet
+by <span class="arithmatex">\(e_1\)</span>. For every non-blank cell <span class="arithmatex">\(x\)</span> of the single-tape emulation alphabet of <span class="arithmatex">\(M\)</span>, the answer
+machine of <span class="arithmatex">\(M\)</span>, started on the one-cell tape <span class="arithmatex">\(x\)</span>, halts within at most one step on the one-cell
+tape holding the input-bit cell of the answer of <span class="arithmatex">\(x\)</span> (the bit telling whether <span class="arithmatex">\(x\)</span> holds
+<span class="arithmatex">\(e_1^{-1}(\mathrm{true})\)</span> on the output stack).</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> answerTM_outputsWithinTime (x : <a class="bp-lean-ref" href="../../turing-machines/single-tape/equivalent-tape-representations/index.html#non-blank" data-lean-name="Cslib.Turing.SingleTapeTM.NonBlank">NonBlank</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Turing.TM2to1.%CE%93%27#doc" title="Turing.TM2to1.Γ&#x27;">TM2to1.Γ&#x27;</a> tm.K tm.Γ)) :
+    (<a class="bp-lean-ref" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#answer-tm" data-lean-name="Cslib.Turing.SingleTapeTM.OfTM2.answerTM">answerTM</a> tm e e₁).OutputsWithinTime [x] [<a class="bp-lean-ref" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#in-cell" data-lean-name="Cslib.Turing.SingleTapeTM.OfTM2.inCell">inCell</a> tm e (<a class="bp-lean-ref" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#cell-answer" data-lean-name="Cslib.Turing.SingleTapeTM.OfTM2.cellAnswer">cellAnswer</a> tm e₁ x)] 1</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Turing.SingleTapeTM.NonBlank">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> NonBlank (Γ₀ : <span class="bp-lean-keyword">Type</span>) [Inhabited Γ₀] : <span class="bp-lean-keyword">Type</span> := {x : Γ₀ // x ≠ default}</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Machines/Turing/SingleTape/OfTM0.lean:61</p>
+</div>
+<div data-lean-name="Cslib.Turing.SingleTapeTM.OfTM2.answerTM">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> answerTM : SingleTapeTM (NonBlank (TM2to1.Γ&#x27; tm.K tm.Γ)) <span class="bp-lean-keyword">where</span>
+  State := Unit
+  q₀ := ()
+  tr _ s := (⟨some (inCell tm e (s.elim false (cellAnswer tm e₁))), none⟩, none)</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Machines/Turing/SingleTape/OfRecursive.lean:283</p>
+</div>
+<div data-lean-name="Cslib.Turing.SingleTapeTM.OfTM2.inCell">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> inCell (b : Bool) : NonBlank (TM2to1.Γ&#x27; tm.K tm.Γ) :=
+  ⟨(false, Function.update (<span class="bp-lean-keyword">fun</span> _ ↦ none) tm.k₀ (some (e.symm b))), <span class="bp-lean-keyword">fun</span> h ↦ <span class="bp-lean-keyword">by</span>
+    <span class="bp-lean-keyword">have</span> := congrFun (congrArg Prod.snd h) tm.k₀
+    simp only [Function.update_self] <span class="bp-lean-keyword">at</span> this
+    cases this⟩</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Machines/Turing/SingleTape/OfRecursive.lean:163</p>
+</div>
+<div data-lean-name="Cslib.Turing.SingleTapeTM.OfTM2.cellAnswer">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> cellAnswer (x : NonBlank (TM2to1.Γ&#x27; tm.K tm.Γ)) : Bool :=
+  decide (x.1.2 tm.k₁ = some (e₁.symm true))</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Machines/Turing/SingleTape/OfRecursive.lean:278</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../turing-machines/single-tape/equivalent-tape-representations/index.html#non-blank">Non-blank symbols</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#answer-tm">The answer machine</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#cell-answer">The answer bit of a cell</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#in-cell">Input cell of a bit</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#decider-tm-outputs-within-time">The decider within time</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-on-single-tape-machines/decider-tm-outputs-within-time">
+<h4 class="bp-thmheading" id="decider-tm-outputs-within-time">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The decider within time</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Machines/Turing/SingleTape/PolyTime.lean#L139" aria-label="View Cslib.Turing.SingleTapeTM.OfTM2.deciderTM_outputsWithinTime in Lean source" title="View Cslib.Turing.SingleTapeTM.OfTM2.deciderTM_outputsWithinTime in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#decider-tm-outputs-within-time" aria-label="Link to The decider within time" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Turing.SingleTapeTM.OfTM2.deciderTM_outputsWithinTime</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(M\)</span> be a finite multi-stack machine with finite stack
+alphabets, whose input alphabet is identified with the bits by <span class="arithmatex">\(e\)</span> and whose output alphabet by
+<span class="arithmatex">\(e_1\)</span>, and let <span class="arithmatex">\(C\)</span> be the emulation constant of <span class="arithmatex">\(M\)</span>. Let <span class="arithmatex">\(w\)</span> be a bit list, <span class="arithmatex">\(b\)</span> a bit and <span class="arithmatex">\(t\)</span> a
+natural number. Suppose <span class="arithmatex">\(M\)</span>, started with its input stack holding the bits of <span class="arithmatex">\(w\)</span> in reverse order
+followed by <span class="arithmatex">\(\mathrm{true}\)</span> (read through <span class="arithmatex">\(e^{-1}\)</span>), is after exactly <span class="arithmatex">\(t\)</span> steps in the halting
+configuration whose output stack holds just <span class="arithmatex">\(e_1^{-1}(b)\)</span>, whose other stacks are empty and whose
+internal state is the initial one. Then the single-tape decider of <span class="arithmatex">\(M\)</span>, started on the tape of
+input-bit cells of <span class="arithmatex">\(w\)</span>, halts on the one-cell tape holding the input-bit cell of <span class="arithmatex">\(b\)</span> within
+<span class="arithmatex">\(C t (|w| + 1 + C t + 1) + 4\)</span> steps.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> deciderTM_outputsWithinTime {w : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>} (b : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) {t : ℕ}
+    (h : (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=flip#doc" title="flip">flip</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bind.bind#doc" title="Bind.bind">bind</a> tm.step)^[t] (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Turing.initList#doc" title="Turing.initList">initList</a> tm ((w.reverse ++ [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a>]).map e.symm))) =
+      <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Turing.haltList#doc" title="Turing.haltList">haltList</a> tm [e₁.symm b])) :
+    (<a class="bp-lean-ref" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#decider-tm" data-lean-name="Cslib.Turing.SingleTapeTM.OfTM2.deciderTM">deciderTM</a> tm e e₁).OutputsWithinTime (w.map (<a class="bp-lean-ref" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#in-cell" data-lean-name="Cslib.Turing.SingleTapeTM.OfTM2.inCell">inCell</a> tm e)) [<a class="bp-lean-ref" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#in-cell" data-lean-name="Cslib.Turing.SingleTapeTM.OfTM2.inCell">inCell</a> tm e b]
+      (<a class="bp-lean-ref" href="../quadratic-overhead-of-single-tape-simulation/index.html#emulation-constant" data-lean-name="Cslib.Turing.TM2Time.emulationConstant">emulationConstant</a> tm * t * (w.length + 1 + <a class="bp-lean-ref" href="../quadratic-overhead-of-single-tape-simulation/index.html#emulation-constant" data-lean-name="Cslib.Turing.TM2Time.emulationConstant">emulationConstant</a> tm * t + 1) + 4)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Turing.SingleTapeTM.OfTM2.deciderTM">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> deciderTM : SingleTapeTM (NonBlank (TM2to1.Γ&#x27; tm.K tm.Γ)) :=
+  compComputer (recognizerTM tm e) (answerTM tm e e₁)</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Machines/Turing/SingleTape/OfRecursive.lean:294</p>
+</div>
+<div data-lean-name="Cslib.Turing.SingleTapeTM.OfTM2.inCell">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> inCell (b : Bool) : NonBlank (TM2to1.Γ&#x27; tm.K tm.Γ) :=
+  ⟨(false, Function.update (<span class="bp-lean-keyword">fun</span> _ ↦ none) tm.k₀ (some (e.symm b))), <span class="bp-lean-keyword">fun</span> h ↦ <span class="bp-lean-keyword">by</span>
+    <span class="bp-lean-keyword">have</span> := congrFun (congrArg Prod.snd h) tm.k₀
+    simp only [Function.update_self] <span class="bp-lean-keyword">at</span> this
+    cases this⟩</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Machines/Turing/SingleTape/OfRecursive.lean:163</p>
+</div>
+<div data-lean-name="Cslib.Turing.TM2Time.emulationConstant">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> emulationConstant (tm : FinTM2) : ℕ :=
+  3 * (2 * ∑ l, sizeOf (tm.m l) + 1) + MetaMathlibExt.TM2Composition.pushBound tm</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Machines/Turing/SingleTape/TM2Time.lean:370</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 20 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../turing-machines/single-tape/equivalent-tape-representations/index.html#non-blank">Non-blank symbols</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#decider-tm">The decider of a multi-stack machine</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#in-cell">Input cell of a bit</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../quadratic-overhead-of-single-tape-simulation/index.html#emulation-constant">Emulation constant</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#add-bottom-eq-of-length-le-one">Stacks of height at most one give a one-cell tape</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#answer-tm">The answer machine</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#answer-tm-outputs-within-time">The answer machine runs in one step</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#bot-cell">The bottom cell of the start tape</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#cell-answer">The answer bit of a cell</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#emu-support">States of the single-tape emulation</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#emu-tm">Finite single-tape emulation of a multi-stack machine</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#map-val-bot-cell-cons">The bottom cell followed by the input word is the emulation&#x27;s start tape</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../turing-machines/single-tape/running-two-single-tape-machines-one-after-the-o/index.html#comp-computer-2">Timed outputs compose</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#cons-computer">The machine that prepends a symbol</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#cons-computer-outputs-within-time">Prepending a symbol takes at most two steps</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../turing-machines/single-tape/equivalent-tape-representations/index.html#outputs-within-time-of-tm0">The single-tape simulation outputs within one extra step</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../quadratic-overhead-of-single-tape-simulation/index.html#exists-tm0-halt-of-tm2-halt">Single-tape emulation of halting multi-stack runs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../turing-machines/single-tape/simulating-multi-stack-machines-on-a-single-tape/index.html#supports-univ">A multi-stack machine is supported by all its labels</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../turing-machines/single-tape/simulating-multi-stack-machines-on-a-single-tape/index.html#tr">Two-step single-tape translation of a multi-stack machine</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../turing-machines/single-tape/simulating-multi-stack-machines-on-a-single-tape/index.html#tr-supports">The emulation visits finitely many states</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#p-subset-single-tape-p">Problems in P are decided in polynomial time by single-tape machines</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="complexity">Complexity</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-on-single-tape-machines/single-tape-p">
+<h4 class="bp-thmheading" id="single-tape-p">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Polynomial time on single-tape machines</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Machines/Turing/SingleTape/PolyTime.lean#L455" aria-label="View Cslib.Complexity.SingleTapeP in Lean source" title="View Cslib.Complexity.SingleTapeP in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#single-tape-p" aria-label="Link to Polynomial time on single-tape machines" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Complexity.SingleTapeP</div>
+<div class="bp-thmcontent">
+<p>The class of decision problems <span class="arithmatex">\(L\)</span> for which
+there are a finite alphabet <span class="arithmatex">\(\Sigma\)</span> with a designated default element, an injective map <span class="arithmatex">\(\iota\)</span>
+from the bits to <span class="arithmatex">\(\Sigma\)</span>, a single-tape Turing machine <span class="arithmatex">\(M\)</span> over <span class="arithmatex">\(\Sigma\)</span> and a polynomial <span class="arithmatex">\(p\)</span>
+with natural-number coefficients such that, for every bit list <span class="arithmatex">\(w\)</span>, the machine <span class="arithmatex">\(M\)</span> started on the
+word <span class="arithmatex">\(\iota(w)\)</span> (the bits of <span class="arithmatex">\(w\)</span> mapped by <span class="arithmatex">\(\iota\)</span>) halts on the one-cell tape <span class="arithmatex">\(\iota(L(w))\)</span>
+within <span class="arithmatex">\(p(|w|)\)</span> steps.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> SingleTapeP : <a class="bp-lean-ref" href="../the-classes-p-np-and-conp/index.html#decision-complexity-class" data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionComplexityClass">DecisionComplexityClass</a> :=
+  {L | ∃ (Symbol : <span class="bp-lean-keyword">Type</span>) (_ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Inhabited#doc" title="Inhabited">Inhabited</a> Symbol) (_ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype#doc" title="Fintype">Fintype</a> Symbol) (ι : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → Symbol),
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Function.Injective#doc" title="Function.Injective">Function.Injective</a> ι ∧ ∃ (tm : SingleTapeTM Symbol) (p : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial#doc" title="Polynomial">Polynomial</a> ℕ),
+      ∀ w : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>, tm.OutputsWithinTime (w.map ι) [ι (L w)] (p.eval w.length)}</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionComplexityClass">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> DecisionComplexityClass := Set DecisionProblem</code></pre>
+<p class="bp-lean-where">MathlibExt/Computability/Complexity.lean:174</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#decision-complexity-class">Complexity classes</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#decision-problem">Decision problems</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#p-subset-single-tape-p">Problems in P are decided in polynomial time by single-tape machines</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-on-single-tape-machines/p-subset-single-tape-p">
+<h4 class="bp-thmheading" id="p-subset-single-tape-p">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Problems in P are decided in polynomial time by single-tape machines</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Machines/Turing/SingleTape/PolyTime.lean#L463" aria-label="View Cslib.Complexity.P_subset_singleTapeP in Lean source" title="View Cslib.Complexity.P_subset_singleTapeP in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#p-subset-single-tape-p" aria-label="Link to Problems in P are decided in polynomial time by single-tape machines" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Complexity.P_subset_singleTapeP</div>
+<div class="bp-thmcontent">
+<p>Every decision
+problem in the class <span class="arithmatex">\(\mathrm{P}\)</span> (defined with multi-stack machines) belongs to the class of
+decision problems decided in polynomial time by single-tape machines.</p>
+<p>The proof reverses the input, restricts the multi-stack machine to finite alphabets and emulates
+it on a single tape within quadratic overhead.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> P_subset_singleTapeP : <a class="bp-lean-ref" href="../the-classes-p-np-and-conp/index.html#p" data-lean-name="MetaMathlibExt.ComplexityTheory.P">P</a> ⊆ <a class="bp-lean-ref" href="#single-tape-p" data-lean-name="Cslib.Complexity.SingleTapeP">SingleTapeP</a></code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.ComplexityTheory.P">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> P : DecisionComplexityClass :=
+  { L | IsPolyTime L }</code></pre>
+<p class="bp-lean-where">MathlibExt/Computability/Complexity.lean:194</p>
+</div>
+<div data-lean-name="Cslib.Complexity.SingleTapeP">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> SingleTapeP : DecisionComplexityClass :=
+  {L | ∃ (Symbol : <span class="bp-lean-keyword">Type</span>) (_ : Inhabited Symbol) (_ : Fintype Symbol) (ι : Bool → Symbol),
+    Function.Injective ι ∧ ∃ (tm : SingleTapeTM Symbol) (p : Polynomial ℕ),
+      ∀ w : List Bool, tm.OutputsWithinTime (w.map ι) [ι (L w)] (p.eval w.length)}</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Machines/Turing/SingleTape/PolyTime.lean:455</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 22</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#single-tape-p">Polynomial time on single-tape machines</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#decision-complexity-class">Complexity classes</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#decision-problem">Decision problems</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#p">The complexity class P</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../np-completeness/cook-levin/conversions-between-bit-string-encodings/encoding-converters-for-the-cook-levin-reduction/index.html#computable-3">Polynomial-time encoder to the canonical bit-list encoding</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#computable">Reversing and dropping the first bit is polynomial-time</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../turing-machines/single-tape/equivalent-tape-representations/index.html#non-blank">Non-blank symbols</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#decider-tm">The decider of a multi-stack machine</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#decider-tm-outputs-within-time">The decider within time</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../equivalence-of-models/single-tape-machines-decide-the-recursive-predic/index.html#in-cell">Input cell of a bit</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../quadratic-overhead-of-single-tape-simulation/index.html#emulation-constant">Emulation constant</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../the-classes-p-np-and-conp/index.html#bitstring-encoding">Bitstring encodings</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../the-classes-p-np-and-conp/index.html#bit-decode">Decoding function of a bitstring encoding</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../the-classes-p-np-and-conp/index.html#bit-decode-bit-encode">Decoding inverts bitstring encoding</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../the-classes-p-np-and-conp/index.html#bit-encode">Encoding function of a bitstring encoding</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../the-classes-p-np-and-conp/index.html#delimit">Self-delimiting form of a bitstring</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../the-classes-p-np-and-conp/index.html#undelimit">Parsing one self-delimiting block</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../the-classes-p-np-and-conp/index.html#undelimit-blocks">Parsing a list of booleans into self-delimiting blocks</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../the-classes-p-np-and-conp/index.html#undelimit-blocks-aux">Bounded parsing of self-delimiting blocks</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../turing-machines/multi-tape-and-multi-stack/composition-of-multi-stack-machines/index.html#comp-computable">The composite polynomial-time TM2 computation</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../equivalence-of-models/equivalence-of-turing-machines-and-recursive-fun/index.html#pushes">Symbols a statement may push</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../equivalence-of-models/equivalence-of-turing-machines-and-recursive-fun/index.html#relevant">Relevant symbols of a stack</a></span></div>
+</div>
+</details>
+</div>
+</div>
+<p><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../dependencies/index.json" data-graph-src="../../../../dependencies/scopes/TheoryOfComputation/complexity-classes/polynomial-time-on-single-tape-machines.json" data-page-href="index.html" data-scope-id="TheoryOfComputation/complexity-classes/polynomial-time-on-single-tape-machines">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>

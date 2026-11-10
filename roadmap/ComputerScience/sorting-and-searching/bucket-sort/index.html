@@ -1,0 +1,5674 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../insertion-sort/index.html">
+      
+      
+        <link rel="next" href="../linear-search/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Bucket sort - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Bucket sort
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23" id="__nav_2_1_23_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_23_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Computer Science
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../data-structures/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data structures
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../graph-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../process-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Process calculi and behavioural equivalence
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../type-systems-and-lambda-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Type systems and lambda calculi
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../programming-language-semantics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programming language semantics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../machine-learning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Machine learning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23_8" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sorting and searching
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23_8" id="__nav_2_1_23_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_23_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Sorting and searching
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../sorting-networks/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sorting networks
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../binary-search/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Binary search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../counting-sort/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Counting sort
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../heapsort/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heapsort
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../insertion-sort/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Insertion sort
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bucket sort
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linear-search/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../radix-sort/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radix sort
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rearranging-a-permutation-into-unimodal-order/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rearranging a permutation into unimodal order
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../selection-sort/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Selection sort
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../simultaneous-minimum-and-maximum/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Simultaneous minimum and maximum
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../three-way-partitioning/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Three-way partitioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickselect/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickselect
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../median-of-medians/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Median of medians
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quicksort/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quicksort
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../dynamic-programming/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic programming
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../greedy-algorithms-and-matroids/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Greedy algorithms and matroids
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../approximation-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Approximation algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../online-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Online algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../randomized-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Randomized algorithms and probabilistic analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../parallel-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../algebraic-and-numerical-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic and numerical algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../computational-geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computational geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../string-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    String algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../heuristic-search-and-planning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heuristic search and planning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../cryptography/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cryptography
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../databases/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Databases
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../quantum-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../concurrent-systems-and-protocols/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concurrent systems and protocols
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../program-logics-and-verification/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Program logics and verification
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../index.html" tabindex="-1">Computer Science</a></li><li><a href="../index.html" tabindex="-1">Sorting and searching</a></li><li aria-current="page">Bucket sort</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Bucket sort</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="ComputerScience/sorting-and-searching/bucket-sort" data-page-title="Bucket sort">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="bucket-sort_1">Bucket sort</h1>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/bucket-sort/bucket-sort">
+<h4 class="bp-thmheading" id="bucket-sort">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Bucket sort</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean#L72" aria-label="View Cslib.Algorithms.Lean.TimeM.bucketSort in Lean source" title="View Cslib.Algorithms.Lean.TimeM.bucketSort in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#bucket-sort" aria-label="Link to Bucket sort" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.TimeM.bucketSort</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(R\)</span> be a linearly ordered field with a floor function and let
+<span class="arithmatex">\(x_1, \dots, x_n\)</span> be an array of elements of <span class="arithmatex">\(R\)</span> that all lie in <span class="arithmatex">\([0, 1)\)</span>. If <span class="arithmatex">\(n = 0\)</span>, bucket
+sort returns the empty array at zero cost. Otherwise it creates <span class="arithmatex">\(n\)</span> empty buckets indexed by
+<span class="arithmatex">\(0, \dots, n - 1\)</span>, visits the entries in order and prepends each entry <span class="arithmatex">\(x\)</span> to bucket
+<span class="arithmatex">\(\lfloor n x \rfloor\)</span>, sorts each bucket with insertion sort, and concatenates the sorted
+buckets in increasing order of index. The cost is <span class="arithmatex">\(n\)</span> for creating the buckets, plus one per
+entry placed, plus one per bucket sorted together with the comparisons insertion sort makes on
+it, plus one per bucket and one per entry during concatenation.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">def</span> bucketSort {R : <span class="bp-lean-keyword">Type</span>} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Field#doc" title="Field">Field</a> R] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LinearOrder#doc" title="LinearOrder">LinearOrder</a> R]
+    [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=IsStrictOrderedRing#doc" title="IsStrictOrderedRing">IsStrictOrderedRing</a> R] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=FloorRing#doc" title="FloorRing">FloorRing</a> R] (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array#doc" title="Array">Array</a> R)
+    (hx : ∀ x ∈ xs.toList, x ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> (0 : R) 1) : TimeM <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array#doc" title="Array">Array</a> R) :=
+  <span class="bp-lean-keyword">if</span> hn : 0 &lt; xs.size <span class="bp-lean-keyword">then</span> <span class="bp-lean-keyword">do</span>
+    <span class="bp-lean-keyword">let</span> initial : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Vector#doc" title="Vector">_root_.Vector</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> R) xs.size := <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Vector.replicate#doc" title="Vector.replicate">_root_.Vector.replicate</a> xs.size []
+    ✓[xs.size]
+    <span class="bp-lean-keyword">let</span> buckets ← <a class="bp-lean-ref" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean#L51" data-lean-name="Cslib.Algorithms.Lean.TimeM.placeBuckets">placeBuckets</a> xs hx hn initial
+    <span class="bp-lean-keyword">let</span> sorted ← buckets.mapM (m := TimeM <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a>) (<span class="bp-lean-keyword">fun</span> bucket =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      <a class="bp-lean-ref" href="../insertion-sort/index.html#insertion-sort" data-lean-name="Cslib.Algorithms.Lean.TimeM.insertionSort">TimeM.insertionSort</a> bucket)
+    <a class="bp-lean-ref" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean#L63" data-lean-name="Cslib.Algorithms.Lean.TimeM.flattenBuckets">flattenBuckets</a> sorted
+  <span class="bp-lean-keyword">else</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> #[]</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.TimeM.placeBuckets">
+<pre class="bp-lean"><code>@[no_expose] <span class="bp-lean-keyword">private</span> <span class="bp-lean-keyword">def</span> placeBuckets {R : <span class="bp-lean-keyword">Type</span>} [Field R] [LinearOrder R]
+    [IsStrictOrderedRing R] [FloorRing R] (xs : Array R)
+    (hx : ∀ x ∈ xs.toList, x ∈ Ico (0 : R) 1) (hn : 0 &lt; xs.size)
+    (initial : _root_.Vector (List R) xs.size) :
+    TimeM Nat (_root_.Vector (List R) xs.size) :=
+  xs.attach.foldlM (m := TimeM Nat)
+    (<span class="bp-lean-keyword">fun</span> (buckets : _root_.Vector (List R) xs.size) x =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      <span class="bp-lean-keyword">let</span> i : Fin xs.size := ⟨Nat.floor ((xs.size : R) * x.val),
+        classifier_lt_generic hn (hx x.val (Array.mem_toList_iff.mpr x.property))⟩
+      <span class="bp-lean-keyword">return</span> buckets.set i.val (x.val :: buckets.get i) i.isLt) initial</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean:51</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.TimeM.insertionSort">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> insertionSort : List α → TimeM Nat (List α)
+  | [] =&gt; pure []
+  | a :: xs =&gt; TimeM.bind (insertionSort xs) (insertionSortInsert a)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Sort/InsertionCost.lean:48</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.TimeM.flattenBuckets">
+<pre class="bp-lean"><code>@[no_expose] <span class="bp-lean-keyword">private</span> <span class="bp-lean-keyword">def</span> flattenBuckets {R : <span class="bp-lean-keyword">Type</span>} {n : Nat}
+    (buckets : _root_.Vector (List R) n) : TimeM Nat (Array R) :=
+  buckets.foldlM (m := TimeM Nat) (<span class="bp-lean-keyword">fun</span> (output : Array R) bucket =&gt; <span class="bp-lean-keyword">do</span>
+    ✓
+    bucket.foldlM (m := TimeM Nat) (<span class="bp-lean-keyword">fun</span> (output : Array R) x =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      <span class="bp-lean-keyword">return</span> output.push x) output) #[]</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean:63</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 13</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../insertion-sort/index.html#insertion-sort">Insertion sort with comparison cost</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort-empty">Bucket sort on the empty array</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort-perm">Bucket sort permutes its input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort-sorted">Bucket sort sorts</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort-time">Exact cost of bucket sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort-time-expected-is-theta">Bucket sort runs in expected linear time</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort-time-expected-lower">Lower bound on the expected time of bucket sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort-time-expected-one">Expected time of bucket sort on one input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort-time-expected-upper">Upper bound on the expected time of bucket sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort-time-expected-zero">Bucket sort on the empty input has expected time zero</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort-time-integrable">The running time of bucket sort is integrable</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort-time-le-sum-sq">Bound on the cost of bucket sort via squared bucket sizes</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort-time-lower">Linear lower bound on the cost of bucket sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort-time-measurable">The running time of bucket sort is measurable</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/bucket-sort/bucket-sort-time">
+<h4 class="bp-thmheading" id="bucket-sort-time">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Exact cost of bucket sort</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean#L441" aria-label="View Cslib.Algorithms.Lean.TimeM.bucketSort_time in Lean source" title="View Cslib.Algorithms.Lean.TimeM.bucketSort_time in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#bucket-sort-time" aria-label="Link to Exact cost of bucket sort" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.TimeM.bucketSort_time</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(R\)</span> be a linearly ordered field with a floor function
+and let <span class="arithmatex">\(x_1, \dots, x_n\)</span> be an array of elements of <span class="arithmatex">\(R\)</span> that all lie in <span class="arithmatex">\([0, 1)\)</span>. For
+<span class="arithmatex">\(0 \le i &lt; n\)</span> let <span class="arithmatex">\(B_i\)</span> be the list of the entries <span class="arithmatex">\(x_j\)</span> with <span class="arithmatex">\(\lfloor n x_j \rfloor = i\)</span>,
+in decreasing order of <span class="arithmatex">\(j\)</span>, and let <span class="arithmatex">\(T(B_i)\)</span> be the number of comparisons insertion sort makes
+on <span class="arithmatex">\(B_i\)</span>. Then the cost of bucket sort on this array equals <span class="arithmatex">\(5n + \sum_{i=0}^{n-1} T(B_i)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem</span> bucketSort_time {R : <span class="bp-lean-keyword">Type</span>} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Field#doc" title="Field">Field</a> R] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LinearOrder#doc" title="LinearOrder">LinearOrder</a> R]
+    [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=IsStrictOrderedRing#doc" title="IsStrictOrderedRing">IsStrictOrderedRing</a> R] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=FloorRing#doc" title="FloorRing">FloorRing</a> R] (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array#doc" title="Array">Array</a> R)
+    (hx : ∀ x ∈ xs.toList, x ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> (0 : R) 1) :
+    (<a class="bp-lean-ref" href="#bucket-sort" data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">bucketSort</a> xs hx).time = 5 * xs.size +
+      ∑ i : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> xs.size, (<a class="bp-lean-ref" href="../insertion-sort/index.html#insertion-sort" data-lean-name="Cslib.Algorithms.Lean.TimeM.insertionSort">insertionSort</a>
+        ((xs.toList.filter
+          (<span class="bp-lean-keyword">fun</span> x =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Decidable.decide#doc" title="Decidable.decide">decide</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat.floor#doc" title="Nat.floor">Nat.floor</a> ((xs.size : R) * x) = i.val))).reverse)).time</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">def</span> bucketSort {R : <span class="bp-lean-keyword">Type</span>} [Field R] [LinearOrder R]
+    [IsStrictOrderedRing R] [FloorRing R] (xs : Array R)
+    (hx : ∀ x ∈ xs.toList, x ∈ Ico (0 : R) 1) : TimeM Nat (Array R) :=
+  <span class="bp-lean-keyword">if</span> hn : 0 &lt; xs.size <span class="bp-lean-keyword">then</span> <span class="bp-lean-keyword">do</span>
+    <span class="bp-lean-keyword">let</span> initial : _root_.Vector (List R) xs.size := _root_.Vector.replicate xs.size []
+    ✓[xs.size]
+    <span class="bp-lean-keyword">let</span> buckets ← placeBuckets xs hx hn initial
+    <span class="bp-lean-keyword">let</span> sorted ← buckets.mapM (m := TimeM Nat) (<span class="bp-lean-keyword">fun</span> bucket =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      TimeM.insertionSort bucket)
+    flattenBuckets sorted
+  <span class="bp-lean-keyword">else</span> pure #[]</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean:72</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.TimeM.insertionSort">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> insertionSort : List α → TimeM Nat (List α)
+  | [] =&gt; pure []
+  | a :: xs =&gt; TimeM.bind (insertionSort xs) (insertionSortInsert a)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Sort/InsertionCost.lean:48</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 7</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort">Bucket sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../insertion-sort/index.html#insertion-sort">Insertion sort with comparison cost</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#compare-le">Charged comparison</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort-eq-insertion-sort-m">Agreement with CSLib&#x27;s monadic insertion sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort-perm">Insertion sort permutes its input</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time-expected-lower">Lower bound on the expected time of bucket sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time-expected-one">Expected time of bucket sort on one input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time-expected-upper">Upper bound on the expected time of bucket sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time-integrable">The running time of bucket sort is integrable</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time-le-sum-sq">Bound on the cost of bucket sort via squared bucket sizes</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time-lower">Linear lower bound on the cost of bucket sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time-measurable">The running time of bucket sort is measurable</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/bucket-sort/bucket-sort-time-lower">
+<h4 class="bp-thmheading" id="bucket-sort-time-lower">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Linear lower bound on the cost of bucket sort</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean#L465" aria-label="View Cslib.Algorithms.Lean.TimeM.bucketSort_time_lower in Lean source" title="View Cslib.Algorithms.Lean.TimeM.bucketSort_time_lower in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#bucket-sort-time-lower" aria-label="Link to Linear lower bound on the cost of bucket sort" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.TimeM.bucketSort_time_lower</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(R\)</span> be a linearly ordered field with
+a floor function. For every array of <span class="arithmatex">\(n\)</span> elements of <span class="arithmatex">\(R\)</span> that all lie in <span class="arithmatex">\([0, 1)\)</span>, the cost
+of bucket sort on this array is at least <span class="arithmatex">\(5n\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem</span> bucketSort_time_lower {R : <span class="bp-lean-keyword">Type</span>} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Field#doc" title="Field">Field</a> R] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LinearOrder#doc" title="LinearOrder">LinearOrder</a> R]
+    [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=IsStrictOrderedRing#doc" title="IsStrictOrderedRing">IsStrictOrderedRing</a> R] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=FloorRing#doc" title="FloorRing">FloorRing</a> R] (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array#doc" title="Array">Array</a> R)
+    (hx : ∀ x ∈ xs.toList, x ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> (0 : R) 1) :
+    5 * xs.size ≤ (<a class="bp-lean-ref" href="#bucket-sort" data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">bucketSort</a> xs hx).time</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">def</span> bucketSort {R : <span class="bp-lean-keyword">Type</span>} [Field R] [LinearOrder R]
+    [IsStrictOrderedRing R] [FloorRing R] (xs : Array R)
+    (hx : ∀ x ∈ xs.toList, x ∈ Ico (0 : R) 1) : TimeM Nat (Array R) :=
+  <span class="bp-lean-keyword">if</span> hn : 0 &lt; xs.size <span class="bp-lean-keyword">then</span> <span class="bp-lean-keyword">do</span>
+    <span class="bp-lean-keyword">let</span> initial : _root_.Vector (List R) xs.size := _root_.Vector.replicate xs.size []
+    ✓[xs.size]
+    <span class="bp-lean-keyword">let</span> buckets ← placeBuckets xs hx hn initial
+    <span class="bp-lean-keyword">let</span> sorted ← buckets.mapM (m := TimeM Nat) (<span class="bp-lean-keyword">fun</span> bucket =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      TimeM.insertionSort bucket)
+    flattenBuckets sorted
+  <span class="bp-lean-keyword">else</span> pure #[]</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean:72</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort">Bucket sort</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time">Exact cost of bucket sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort">Insertion sort with comparison cost</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/bucket-sort/bucket-sort-time-le-sum-sq">
+<h4 class="bp-thmheading" id="bucket-sort-time-le-sum-sq">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Bound on the cost of bucket sort via squared bucket sizes</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean#L473" aria-label="View Cslib.Algorithms.Lean.TimeM.bucketSort_time_le_sum_sq in Lean source" title="View Cslib.Algorithms.Lean.TimeM.bucketSort_time_le_sum_sq in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#bucket-sort-time-le-sum-sq" aria-label="Link to Bound on the cost of bucket sort via squared bucket sizes" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.TimeM.bucketSort_time_le_sum_sq</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(R\)</span> be a linearly
+ordered field with a floor function and let <span class="arithmatex">\(x_1, \dots, x_n\)</span> be an array of elements of <span class="arithmatex">\(R\)</span>
+that all lie in <span class="arithmatex">\([0, 1)\)</span>. For <span class="arithmatex">\(0 \le i &lt; n\)</span> let <span class="arithmatex">\(c_i\)</span> be the number of indices <span class="arithmatex">\(j\)</span> with
+<span class="arithmatex">\(\lfloor n x_j \rfloor = i\)</span>. Then the cost of bucket sort on this array is at most
+<span class="arithmatex">\(5n + \sum_{i=0}^{n-1} c_i^2\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem</span> bucketSort_time_le_sum_sq {R : <span class="bp-lean-keyword">Type</span>} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Field#doc" title="Field">Field</a> R] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LinearOrder#doc" title="LinearOrder">LinearOrder</a> R]
+    [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=IsStrictOrderedRing#doc" title="IsStrictOrderedRing">IsStrictOrderedRing</a> R] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=FloorRing#doc" title="FloorRing">FloorRing</a> R] (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array#doc" title="Array">Array</a> R)
+    (hx : ∀ x ∈ xs.toList, x ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> (0 : R) 1) :
+    (<a class="bp-lean-ref" href="#bucket-sort" data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">bucketSort</a> xs hx).time ≤ 5 * xs.size +
+      ∑ i : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> xs.size, (xs.toList.countP
+        (<span class="bp-lean-keyword">fun</span> x =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Decidable.decide#doc" title="Decidable.decide">decide</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat.floor#doc" title="Nat.floor">Nat.floor</a> ((xs.size : R) * x) = i.val))) ^ 2</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">def</span> bucketSort {R : <span class="bp-lean-keyword">Type</span>} [Field R] [LinearOrder R]
+    [IsStrictOrderedRing R] [FloorRing R] (xs : Array R)
+    (hx : ∀ x ∈ xs.toList, x ∈ Ico (0 : R) 1) : TimeM Nat (Array R) :=
+  <span class="bp-lean-keyword">if</span> hn : 0 &lt; xs.size <span class="bp-lean-keyword">then</span> <span class="bp-lean-keyword">do</span>
+    <span class="bp-lean-keyword">let</span> initial : _root_.Vector (List R) xs.size := _root_.Vector.replicate xs.size []
+    ✓[xs.size]
+    <span class="bp-lean-keyword">let</span> buckets ← placeBuckets xs hx hn initial
+    <span class="bp-lean-keyword">let</span> sorted ← buckets.mapM (m := TimeM Nat) (<span class="bp-lean-keyword">fun</span> bucket =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      TimeM.insertionSort bucket)
+    flattenBuckets sorted
+  <span class="bp-lean-keyword">else</span> pure #[]</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean:72</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort">Bucket sort</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time">Exact cost of bucket sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort">Insertion sort with comparison cost</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort-time">Comparison bound for insertion sort</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/bucket-sort/bucket-sort-empty">
+<h4 class="bp-thmheading" id="bucket-sort-empty">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Bucket sort on the empty array</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean#L492" aria-label="View Cslib.Algorithms.Lean.TimeM.bucketSort_empty in Lean source" title="View Cslib.Algorithms.Lean.TimeM.bucketSort_empty in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#bucket-sort-empty" aria-label="Link to Bucket sort on the empty array" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.TimeM.bucketSort_empty</div>
+<div class="bp-thmcontent">
+<p>For every linearly ordered field <span class="arithmatex">\(R\)</span> with a floor
+function, bucket sort applied to the empty array of elements of <span class="arithmatex">\(R\)</span> returns the empty array
+at zero cost.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem</span> bucketSort_empty {R : <span class="bp-lean-keyword">Type</span>} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Field#doc" title="Field">Field</a> R] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LinearOrder#doc" title="LinearOrder">LinearOrder</a> R]
+    [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=IsStrictOrderedRing#doc" title="IsStrictOrderedRing">IsStrictOrderedRing</a> R] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=FloorRing#doc" title="FloorRing">FloorRing</a> R]
+    (hx : ∀ x ∈ (#[] : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array#doc" title="Array">Array</a> R).toList, x ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> (0 : R) 1) :
+    <a class="bp-lean-ref" href="#bucket-sort" data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">bucketSort</a> #[] hx = (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> #[] : TimeM <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array#doc" title="Array">Array</a> R))</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">def</span> bucketSort {R : <span class="bp-lean-keyword">Type</span>} [Field R] [LinearOrder R]
+    [IsStrictOrderedRing R] [FloorRing R] (xs : Array R)
+    (hx : ∀ x ∈ xs.toList, x ∈ Ico (0 : R) 1) : TimeM Nat (Array R) :=
+  <span class="bp-lean-keyword">if</span> hn : 0 &lt; xs.size <span class="bp-lean-keyword">then</span> <span class="bp-lean-keyword">do</span>
+    <span class="bp-lean-keyword">let</span> initial : _root_.Vector (List R) xs.size := _root_.Vector.replicate xs.size []
+    ✓[xs.size]
+    <span class="bp-lean-keyword">let</span> buckets ← placeBuckets xs hx hn initial
+    <span class="bp-lean-keyword">let</span> sorted ← buckets.mapM (m := TimeM Nat) (<span class="bp-lean-keyword">fun</span> bucket =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      TimeM.insertionSort bucket)
+    flattenBuckets sorted
+  <span class="bp-lean-keyword">else</span> pure #[]</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean:72</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 6</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort">Bucket sort</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort">Insertion sort with comparison cost</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time-expected-lower">Lower bound on the expected time of bucket sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time-expected-one">Expected time of bucket sort on one input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time-expected-upper">Upper bound on the expected time of bucket sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time-expected-zero">Bucket sort on the empty input has expected time zero</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time-integrable">The running time of bucket sort is integrable</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time-measurable">The running time of bucket sort is measurable</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/bucket-sort/bucket-sort-perm">
+<h4 class="bp-thmheading" id="bucket-sort-perm">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Bucket sort permutes its input</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean#L499" aria-label="View Cslib.Algorithms.Lean.TimeM.bucketSort_perm in Lean source" title="View Cslib.Algorithms.Lean.TimeM.bucketSort_perm in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#bucket-sort-perm" aria-label="Link to Bucket sort permutes its input" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.TimeM.bucketSort_perm</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(R\)</span> be a linearly ordered field with a floor
+function. For every array of elements of <span class="arithmatex">\(R\)</span> that all lie in <span class="arithmatex">\([0, 1)\)</span>, the array returned by
+bucket sort is a permutation of the input: every element occurs in the output exactly as many
+times as in the input.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem</span> bucketSort_perm {R : <span class="bp-lean-keyword">Type</span>} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Field#doc" title="Field">Field</a> R] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LinearOrder#doc" title="LinearOrder">LinearOrder</a> R]
+    [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=IsStrictOrderedRing#doc" title="IsStrictOrderedRing">IsStrictOrderedRing</a> R] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=FloorRing#doc" title="FloorRing">FloorRing</a> R] (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array#doc" title="Array">Array</a> R)
+    (hx : ∀ x ∈ xs.toList, x ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> (0 : R) 1) :
+    (<a class="bp-lean-ref" href="#bucket-sort" data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">bucketSort</a> xs hx).ret.toList.Perm xs.toList</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">def</span> bucketSort {R : <span class="bp-lean-keyword">Type</span>} [Field R] [LinearOrder R]
+    [IsStrictOrderedRing R] [FloorRing R] (xs : Array R)
+    (hx : ∀ x ∈ xs.toList, x ∈ Ico (0 : R) 1) : TimeM Nat (Array R) :=
+  <span class="bp-lean-keyword">if</span> hn : 0 &lt; xs.size <span class="bp-lean-keyword">then</span> <span class="bp-lean-keyword">do</span>
+    <span class="bp-lean-keyword">let</span> initial : _root_.Vector (List R) xs.size := _root_.Vector.replicate xs.size []
+    ✓[xs.size]
+    <span class="bp-lean-keyword">let</span> buckets ← placeBuckets xs hx hn initial
+    <span class="bp-lean-keyword">let</span> sorted ← buckets.mapM (m := TimeM Nat) (<span class="bp-lean-keyword">fun</span> bucket =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      TimeM.insertionSort bucket)
+    flattenBuckets sorted
+  <span class="bp-lean-keyword">else</span> pure #[]</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean:72</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort">Bucket sort</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#compare-le">Charged comparison</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort">Insertion sort with comparison cost</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort-eq-insertion-sort-m">Agreement with CSLib&#x27;s monadic insertion sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort-perm">Insertion sort permutes its input</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/bucket-sort/bucket-sort-sorted">
+<h4 class="bp-thmheading" id="bucket-sort-sorted">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Bucket sort sorts</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean#L505" aria-label="View Cslib.Algorithms.Lean.TimeM.bucketSort_sorted in Lean source" title="View Cslib.Algorithms.Lean.TimeM.bucketSort_sorted in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#bucket-sort-sorted" aria-label="Link to Bucket sort sorts" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.TimeM.bucketSort_sorted</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(R\)</span> be a linearly ordered field with a floor function. For every
+array of elements of <span class="arithmatex">\(R\)</span> that all lie in <span class="arithmatex">\([0, 1)\)</span>, the array returned by bucket sort is
+nondecreasing: each entry is at most every entry after it.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem</span> bucketSort_sorted {R : <span class="bp-lean-keyword">Type</span>} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Field#doc" title="Field">Field</a> R] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LinearOrder#doc" title="LinearOrder">LinearOrder</a> R]
+    [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=IsStrictOrderedRing#doc" title="IsStrictOrderedRing">IsStrictOrderedRing</a> R] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=FloorRing#doc" title="FloorRing">FloorRing</a> R] (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array#doc" title="Array">Array</a> R)
+    (hx : ∀ x ∈ xs.toList, x ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> (0 : R) 1) :
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List.Pairwise#doc" title="List.Pairwise">List.Pairwise</a> (<span class="bp-lean-keyword">fun</span> x y =&gt; x ≤ y) (<a class="bp-lean-ref" href="#bucket-sort" data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">bucketSort</a> xs hx).ret.toList</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">def</span> bucketSort {R : <span class="bp-lean-keyword">Type</span>} [Field R] [LinearOrder R]
+    [IsStrictOrderedRing R] [FloorRing R] (xs : Array R)
+    (hx : ∀ x ∈ xs.toList, x ∈ Ico (0 : R) 1) : TimeM Nat (Array R) :=
+  <span class="bp-lean-keyword">if</span> hn : 0 &lt; xs.size <span class="bp-lean-keyword">then</span> <span class="bp-lean-keyword">do</span>
+    <span class="bp-lean-keyword">let</span> initial : _root_.Vector (List R) xs.size := _root_.Vector.replicate xs.size []
+    ✓[xs.size]
+    <span class="bp-lean-keyword">let</span> buckets ← placeBuckets xs hx hn initial
+    <span class="bp-lean-keyword">let</span> sorted ← buckets.mapM (m := TimeM Nat) (<span class="bp-lean-keyword">fun</span> bucket =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      TimeM.insertionSort bucket)
+    flattenBuckets sorted
+  <span class="bp-lean-keyword">else</span> pure #[]</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean:72</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort">Bucket sort</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort">Insertion sort with comparison cost</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort-perm">Insertion sort permutes its input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort-sorted">Insertion sort returns a sorted list</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/bucket-sort/bucket-sort-occupancy-mean">
+<h4 class="bp-thmheading" id="bucket-sort-occupancy-mean">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Expected occupancy of a bucket in bucket sort</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Sort/Bucket/ExpectedCost.lean#L664" aria-label="View Cslib.Algorithms.Lean.TimeM.bucketSort_occupancy_mean in Lean source" title="View Cslib.Algorithms.Lean.TimeM.bucketSort_occupancy_mean in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#bucket-sort-occupancy-mean" aria-label="Link to Expected occupancy of a bucket in bucket sort" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.TimeM.bucketSort_occupancy_mean</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n \ge 1\)</span> and let
+<span class="arithmatex">\(\omega_0, \dots, \omega_{n-1}\)</span> be independent random variables, each uniformly distributed on
+<span class="arithmatex">\([0, 1)\)</span>. For <span class="arithmatex">\(i &lt; n\)</span>, let <span class="arithmatex">\(N_i\)</span> be the number of indices <span class="arithmatex">\(j &lt; n\)</span> with
+<span class="arithmatex">\(\lfloor n \omega_j \rfloor = i\)</span>. Then <span class="arithmatex">\(\mathbb{E}[N_i] = 1\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem</span> bucketSort_occupancy_mean {n : ℕ} (hn : 0 &lt; n) (i : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n) :
+    (∫ ω : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → ℝ, ((<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array.ofFn#doc" title="Array.ofFn">Array.ofFn</a> ω).toList.countP
+      (<span class="bp-lean-keyword">fun</span> x =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Decidable.decide#doc" title="Decidable.decide">decide</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat.floor#doc" title="Nat.floor">Nat.floor</a> ((n : ℝ) * x) = i.val)) : ℝ)
+      ∂<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure.pi#doc" title="MeasureTheory.Measure.pi">Measure.pi</a> (<span class="bp-lean-keyword">fun</span> _ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.cond#doc" title="ProbabilityTheory.cond">cond</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.MeasureSpace.volume#doc" title="MeasureTheory.MeasureSpace.volume">volume</a> : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> 0 1))) = 1</code></pre>
+</div>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/bucket-sort/bucket-sort-occupancy-variance">
+<h4 class="bp-thmheading" id="bucket-sort-occupancy-variance">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Variance of a bucket&#x27;s occupancy in bucket sort</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Sort/Bucket/ExpectedCost.lean#L671" aria-label="View Cslib.Algorithms.Lean.TimeM.bucketSort_occupancy_variance in Lean source" title="View Cslib.Algorithms.Lean.TimeM.bucketSort_occupancy_variance in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#bucket-sort-occupancy-variance" aria-label="Link to Variance of a bucket&#x27;s occupancy in bucket sort" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.TimeM.bucketSort_occupancy_variance</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n \ge 1\)</span> and let
+<span class="arithmatex">\(\omega_0, \dots, \omega_{n-1}\)</span> be independent random variables, each uniformly distributed on
+<span class="arithmatex">\([0, 1)\)</span>. For <span class="arithmatex">\(i &lt; n\)</span>, let <span class="arithmatex">\(N_i\)</span> be the number of indices <span class="arithmatex">\(j &lt; n\)</span> with
+<span class="arithmatex">\(\lfloor n \omega_j \rfloor = i\)</span>. Then <span class="arithmatex">\(\operatorname{Var}(N_i) = 1 - 1/n\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem</span> bucketSort_occupancy_variance {n : ℕ} (hn : 0 &lt; n) (i : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n) :
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.variance#doc" title="ProbabilityTheory.variance">variance</a> (<span class="bp-lean-keyword">fun</span> ω : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → ℝ =&gt; ((<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array.ofFn#doc" title="Array.ofFn">Array.ofFn</a> ω).toList.countP
+      (<span class="bp-lean-keyword">fun</span> x =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Decidable.decide#doc" title="Decidable.decide">decide</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat.floor#doc" title="Nat.floor">Nat.floor</a> ((n : ℝ) * x) = i.val)) : ℝ))
+      (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure.pi#doc" title="MeasureTheory.Measure.pi">Measure.pi</a> (<span class="bp-lean-keyword">fun</span> _ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.cond#doc" title="ProbabilityTheory.cond">cond</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.MeasureSpace.volume#doc" title="MeasureTheory.MeasureSpace.volume">volume</a> : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> 0 1))) =
+      1 - 1 / (n : ℝ)</code></pre>
+</div>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/bucket-sort/bucket-sort-occupancy-second-moment">
+<h4 class="bp-thmheading" id="bucket-sort-occupancy-second-moment">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Second moment of a bucket&#x27;s occupancy in bucket sort</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Sort/Bucket/ExpectedCost.lean#L678" aria-label="View Cslib.Algorithms.Lean.TimeM.bucketSort_occupancy_secondMoment in Lean source" title="View Cslib.Algorithms.Lean.TimeM.bucketSort_occupancy_secondMoment in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#bucket-sort-occupancy-second-moment" aria-label="Link to Second moment of a bucket&#x27;s occupancy in bucket sort" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.TimeM.bucketSort_occupancy_secondMoment</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n \ge 1\)</span> and let
+<span class="arithmatex">\(\omega_0, \dots, \omega_{n-1}\)</span> be independent random variables, each uniformly distributed on
+<span class="arithmatex">\([0, 1)\)</span>. For <span class="arithmatex">\(i &lt; n\)</span>, let <span class="arithmatex">\(N_i\)</span> be the number of indices <span class="arithmatex">\(j &lt; n\)</span> with
+<span class="arithmatex">\(\lfloor n \omega_j \rfloor = i\)</span>. Then <span class="arithmatex">\(\mathbb{E}[N_i^2] = 2 - 1/n\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem</span> bucketSort_occupancy_secondMoment {n : ℕ} (hn : 0 &lt; n) (i : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n) :
+    (∫ ω : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → ℝ, ((<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array.ofFn#doc" title="Array.ofFn">Array.ofFn</a> ω).toList.countP
+      (<span class="bp-lean-keyword">fun</span> x =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Decidable.decide#doc" title="Decidable.decide">decide</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat.floor#doc" title="Nat.floor">Nat.floor</a> ((n : ℝ) * x) = i.val)) : ℝ) ^ 2
+      ∂<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure.pi#doc" title="MeasureTheory.Measure.pi">Measure.pi</a> (<span class="bp-lean-keyword">fun</span> _ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.cond#doc" title="ProbabilityTheory.cond">cond</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.MeasureSpace.volume#doc" title="MeasureTheory.MeasureSpace.volume">volume</a> : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> 0 1))) =
+      2 - 1 / (n : ℝ)</code></pre>
+</div>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/bucket-sort/bucket-sort-time-measurable">
+<h4 class="bp-thmheading" id="bucket-sort-time-measurable">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The running time of bucket sort is measurable</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Sort/Bucket/ExpectedCost.lean#L686" aria-label="View Cslib.Algorithms.Lean.TimeM.bucketSort_time_measurable in Lean source" title="View Cslib.Algorithms.Lean.TimeM.bucketSort_time_measurable in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#bucket-sort-time-measurable" aria-label="Link to The running time of bucket sort is measurable" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.TimeM.bucketSort_time_measurable</div>
+<div class="bp-thmcontent">
+<p>For every <span class="arithmatex">\(n\)</span>, the function
+<span class="arithmatex">\(T : \mathbb{R}^n \to \mathbb{R}\)</span> that maps <span class="arithmatex">\(\omega = (\omega_0, \dots, \omega_{n-1})\)</span> to the
+number of time steps that bucket sort charges on the array <span class="arithmatex">\((\omega_0, \dots, \omega_{n-1})\)</span> if
+every <span class="arithmatex">\(\omega_j\)</span> lies in <span class="arithmatex">\([0, 1)\)</span>, and to <span class="arithmatex">\(0\)</span> otherwise, is measurable.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem</span> bucketSort_time_measurable (n : ℕ) :
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Measurable#doc" title="Measurable">Measurable</a> (<span class="bp-lean-keyword">fun</span> ω : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → ℝ =&gt;
+      <span class="bp-lean-keyword">if</span> hx : ∀ x ∈ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array.ofFn#doc" title="Array.ofFn">Array.ofFn</a> ω).toList, x ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> 0 1 <span class="bp-lean-keyword">then</span>
+        ((<a class="bp-lean-ref" href="#bucket-sort" data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">bucketSort</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array.ofFn#doc" title="Array.ofFn">Array.ofFn</a> ω) hx).time : ℝ) <span class="bp-lean-keyword">else</span> 0)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">def</span> bucketSort {R : <span class="bp-lean-keyword">Type</span>} [Field R] [LinearOrder R]
+    [IsStrictOrderedRing R] [FloorRing R] (xs : Array R)
+    (hx : ∀ x ∈ xs.toList, x ∈ Ico (0 : R) 1) : TimeM Nat (Array R) :=
+  <span class="bp-lean-keyword">if</span> hn : 0 &lt; xs.size <span class="bp-lean-keyword">then</span> <span class="bp-lean-keyword">do</span>
+    <span class="bp-lean-keyword">let</span> initial : _root_.Vector (List R) xs.size := _root_.Vector.replicate xs.size []
+    ✓[xs.size]
+    <span class="bp-lean-keyword">let</span> buckets ← placeBuckets xs hx hn initial
+    <span class="bp-lean-keyword">let</span> sorted ← buckets.mapM (m := TimeM Nat) (<span class="bp-lean-keyword">fun</span> bucket =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      TimeM.insertionSort bucket)
+    flattenBuckets sorted
+  <span class="bp-lean-keyword">else</span> pure #[]</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean:72</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 7</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort">Bucket sort</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-empty">Bucket sort on the empty array</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time">Exact cost of bucket sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#compare-le">Charged comparison</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort">Insertion sort with comparison cost</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort-eq-insertion-sort-m">Agreement with CSLib&#x27;s monadic insertion sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort-perm">Insertion sort permutes its input</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/bucket-sort/bucket-sort-time-integrable">
+<h4 class="bp-thmheading" id="bucket-sort-time-integrable">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The running time of bucket sort is integrable</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Sort/Bucket/ExpectedCost.lean#L694" aria-label="View Cslib.Algorithms.Lean.TimeM.bucketSort_time_integrable in Lean source" title="View Cslib.Algorithms.Lean.TimeM.bucketSort_time_integrable in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#bucket-sort-time-integrable" aria-label="Link to The running time of bucket sort is integrable" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.TimeM.bucketSort_time_integrable</div>
+<div class="bp-thmcontent">
+<p>For every <span class="arithmatex">\(n\)</span>, let
+<span class="arithmatex">\(T : \mathbb{R}^n \to \mathbb{R}\)</span> map <span class="arithmatex">\(\omega = (\omega_0, \dots, \omega_{n-1})\)</span> to the number of
+time steps that bucket sort charges on the array <span class="arithmatex">\((\omega_0, \dots, \omega_{n-1})\)</span> if every
+<span class="arithmatex">\(\omega_j\)</span> lies in <span class="arithmatex">\([0, 1)\)</span>, and to <span class="arithmatex">\(0\)</span> otherwise. Then <span class="arithmatex">\(T\)</span> is integrable with respect to the
+product of <span class="arithmatex">\(n\)</span> copies of the uniform distribution on <span class="arithmatex">\([0, 1)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem</span> bucketSort_time_integrable (n : ℕ) :
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Integrable#doc" title="MeasureTheory.Integrable">Integrable</a> (<span class="bp-lean-keyword">fun</span> ω : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → ℝ =&gt;
+      <span class="bp-lean-keyword">if</span> hx : ∀ x ∈ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array.ofFn#doc" title="Array.ofFn">Array.ofFn</a> ω).toList, x ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> 0 1 <span class="bp-lean-keyword">then</span>
+        ((<a class="bp-lean-ref" href="#bucket-sort" data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">bucketSort</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array.ofFn#doc" title="Array.ofFn">Array.ofFn</a> ω) hx).time : ℝ) <span class="bp-lean-keyword">else</span> 0)
+      (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure.pi#doc" title="MeasureTheory.Measure.pi">Measure.pi</a> (<span class="bp-lean-keyword">fun</span> _ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.cond#doc" title="ProbabilityTheory.cond">cond</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.MeasureSpace.volume#doc" title="MeasureTheory.MeasureSpace.volume">volume</a> : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> 0 1)))</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">def</span> bucketSort {R : <span class="bp-lean-keyword">Type</span>} [Field R] [LinearOrder R]
+    [IsStrictOrderedRing R] [FloorRing R] (xs : Array R)
+    (hx : ∀ x ∈ xs.toList, x ∈ Ico (0 : R) 1) : TimeM Nat (Array R) :=
+  <span class="bp-lean-keyword">if</span> hn : 0 &lt; xs.size <span class="bp-lean-keyword">then</span> <span class="bp-lean-keyword">do</span>
+    <span class="bp-lean-keyword">let</span> initial : _root_.Vector (List R) xs.size := _root_.Vector.replicate xs.size []
+    ✓[xs.size]
+    <span class="bp-lean-keyword">let</span> buckets ← placeBuckets xs hx hn initial
+    <span class="bp-lean-keyword">let</span> sorted ← buckets.mapM (m := TimeM Nat) (<span class="bp-lean-keyword">fun</span> bucket =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      TimeM.insertionSort bucket)
+    flattenBuckets sorted
+  <span class="bp-lean-keyword">else</span> pure #[]</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean:72</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 8</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort">Bucket sort</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-empty">Bucket sort on the empty array</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time">Exact cost of bucket sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#compare-le">Charged comparison</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort">Insertion sort with comparison cost</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort-eq-insertion-sort-m">Agreement with CSLib&#x27;s monadic insertion sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort-perm">Insertion sort permutes its input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort-time">Comparison bound for insertion sort</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/bucket-sort/bucket-sort-time-expected-lower">
+<h4 class="bp-thmheading" id="bucket-sort-time-expected-lower">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Lower bound on the expected time of bucket sort</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Sort/Bucket/ExpectedCost.lean#L703" aria-label="View Cslib.Algorithms.Lean.TimeM.bucketSort_time_expected_lower in Lean source" title="View Cslib.Algorithms.Lean.TimeM.bucketSort_time_expected_lower in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#bucket-sort-time-expected-lower" aria-label="Link to Lower bound on the expected time of bucket sort" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.TimeM.bucketSort_time_expected_lower</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n \ge 1\)</span> and let
+<span class="arithmatex">\(\omega = (\omega_0, \dots, \omega_{n-1})\)</span> have independent coordinates, each uniformly
+distributed on <span class="arithmatex">\([0, 1)\)</span>. Let <span class="arithmatex">\(T(\omega)\)</span> be the number of time steps that bucket sort charges
+on the array <span class="arithmatex">\((\omega_0, \dots, \omega_{n-1})\)</span> if every <span class="arithmatex">\(\omega_j\)</span> lies in <span class="arithmatex">\([0, 1)\)</span>, and
+<span class="arithmatex">\(T(\omega) = 0\)</span> otherwise. Then <span class="arithmatex">\(5n \le \mathbb{E}[T]\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem</span> bucketSort_time_expected_lower {n : ℕ} (hn : 0 &lt; n) :
+    5 * (n : ℝ) ≤ (∫ ω : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → ℝ,
+      (<span class="bp-lean-keyword">if</span> hx : ∀ x ∈ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array.ofFn#doc" title="Array.ofFn">Array.ofFn</a> ω).toList, x ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> 0 1 <span class="bp-lean-keyword">then</span>
+        ((<a class="bp-lean-ref" href="#bucket-sort" data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">bucketSort</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array.ofFn#doc" title="Array.ofFn">Array.ofFn</a> ω) hx).time : ℝ) <span class="bp-lean-keyword">else</span> 0)
+      ∂<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure.pi#doc" title="MeasureTheory.Measure.pi">Measure.pi</a> (<span class="bp-lean-keyword">fun</span> _ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.cond#doc" title="ProbabilityTheory.cond">cond</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.MeasureSpace.volume#doc" title="MeasureTheory.MeasureSpace.volume">volume</a> : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> 0 1)))</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">def</span> bucketSort {R : <span class="bp-lean-keyword">Type</span>} [Field R] [LinearOrder R]
+    [IsStrictOrderedRing R] [FloorRing R] (xs : Array R)
+    (hx : ∀ x ∈ xs.toList, x ∈ Ico (0 : R) 1) : TimeM Nat (Array R) :=
+  <span class="bp-lean-keyword">if</span> hn : 0 &lt; xs.size <span class="bp-lean-keyword">then</span> <span class="bp-lean-keyword">do</span>
+    <span class="bp-lean-keyword">let</span> initial : _root_.Vector (List R) xs.size := _root_.Vector.replicate xs.size []
+    ✓[xs.size]
+    <span class="bp-lean-keyword">let</span> buckets ← placeBuckets xs hx hn initial
+    <span class="bp-lean-keyword">let</span> sorted ← buckets.mapM (m := TimeM Nat) (<span class="bp-lean-keyword">fun</span> bucket =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      TimeM.insertionSort bucket)
+    flattenBuckets sorted
+  <span class="bp-lean-keyword">else</span> pure #[]</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean:72</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 8 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort">Bucket sort</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-empty">Bucket sort on the empty array</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time">Exact cost of bucket sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#compare-le">Charged comparison</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort">Insertion sort with comparison cost</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort-eq-insertion-sort-m">Agreement with CSLib&#x27;s monadic insertion sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort-perm">Insertion sort permutes its input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort-time">Comparison bound for insertion sort</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time-expected-is-theta">Bucket sort runs in expected linear time</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/bucket-sort/bucket-sort-time-expected-upper">
+<h4 class="bp-thmheading" id="bucket-sort-time-expected-upper">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Upper bound on the expected time of bucket sort</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Sort/Bucket/ExpectedCost.lean#L712" aria-label="View Cslib.Algorithms.Lean.TimeM.bucketSort_time_expected_upper in Lean source" title="View Cslib.Algorithms.Lean.TimeM.bucketSort_time_expected_upper in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#bucket-sort-time-expected-upper" aria-label="Link to Upper bound on the expected time of bucket sort" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.TimeM.bucketSort_time_expected_upper</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n \ge 1\)</span> and let
+<span class="arithmatex">\(\omega = (\omega_0, \dots, \omega_{n-1})\)</span> have independent coordinates, each uniformly
+distributed on <span class="arithmatex">\([0, 1)\)</span>. Let <span class="arithmatex">\(T(\omega)\)</span> be the number of time steps that bucket sort charges
+on the array <span class="arithmatex">\((\omega_0, \dots, \omega_{n-1})\)</span> if every <span class="arithmatex">\(\omega_j\)</span> lies in <span class="arithmatex">\([0, 1)\)</span>, and
+<span class="arithmatex">\(T(\omega) = 0\)</span> otherwise. Then <span class="arithmatex">\(\mathbb{E}[T] \le 5n + (n - 1)/2\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem</span> bucketSort_time_expected_upper {n : ℕ} (hn : 0 &lt; n) :
+    (∫ ω : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → ℝ,
+      (<span class="bp-lean-keyword">if</span> hx : ∀ x ∈ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array.ofFn#doc" title="Array.ofFn">Array.ofFn</a> ω).toList, x ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> 0 1 <span class="bp-lean-keyword">then</span>
+        ((<a class="bp-lean-ref" href="#bucket-sort" data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">bucketSort</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array.ofFn#doc" title="Array.ofFn">Array.ofFn</a> ω) hx).time : ℝ) <span class="bp-lean-keyword">else</span> 0)
+      ∂<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure.pi#doc" title="MeasureTheory.Measure.pi">Measure.pi</a> (<span class="bp-lean-keyword">fun</span> _ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.cond#doc" title="ProbabilityTheory.cond">cond</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.MeasureSpace.volume#doc" title="MeasureTheory.MeasureSpace.volume">volume</a> : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> 0 1))) ≤
+      5 * n + ((n : ℝ) - 1) / 2</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">def</span> bucketSort {R : <span class="bp-lean-keyword">Type</span>} [Field R] [LinearOrder R]
+    [IsStrictOrderedRing R] [FloorRing R] (xs : Array R)
+    (hx : ∀ x ∈ xs.toList, x ∈ Ico (0 : R) 1) : TimeM Nat (Array R) :=
+  <span class="bp-lean-keyword">if</span> hn : 0 &lt; xs.size <span class="bp-lean-keyword">then</span> <span class="bp-lean-keyword">do</span>
+    <span class="bp-lean-keyword">let</span> initial : _root_.Vector (List R) xs.size := _root_.Vector.replicate xs.size []
+    ✓[xs.size]
+    <span class="bp-lean-keyword">let</span> buckets ← placeBuckets xs hx hn initial
+    <span class="bp-lean-keyword">let</span> sorted ← buckets.mapM (m := TimeM Nat) (<span class="bp-lean-keyword">fun</span> bucket =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      TimeM.insertionSort bucket)
+    flattenBuckets sorted
+  <span class="bp-lean-keyword">else</span> pure #[]</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean:72</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 8 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort">Bucket sort</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-empty">Bucket sort on the empty array</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time">Exact cost of bucket sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#compare-le">Charged comparison</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort">Insertion sort with comparison cost</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort-eq-insertion-sort-m">Agreement with CSLib&#x27;s monadic insertion sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort-perm">Insertion sort permutes its input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort-time">Comparison bound for insertion sort</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time-expected-is-theta">Bucket sort runs in expected linear time</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/bucket-sort/bucket-sort-time-expected-zero">
+<h4 class="bp-thmheading" id="bucket-sort-time-expected-zero">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Bucket sort on the empty input has expected time zero</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Sort/Bucket/ExpectedCost.lean#L721" aria-label="View Cslib.Algorithms.Lean.TimeM.bucketSort_time_expected_zero in Lean source" title="View Cslib.Algorithms.Lean.TimeM.bucketSort_time_expected_zero in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#bucket-sort-time-expected-zero" aria-label="Link to Bucket sort on the empty input has expected time zero" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.TimeM.bucketSort_time_expected_zero</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(T\)</span> be the number of time
+steps that bucket sort charges on the empty array, the only input of length <span class="arithmatex">\(n = 0\)</span>. Its
+expectation under the product of zero copies of the uniform distribution on <span class="arithmatex">\([0, 1)\)</span> is <span class="arithmatex">\(0\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem</span> bucketSort_time_expected_zero :
+    (∫ ω : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> 0 → ℝ,
+      (<span class="bp-lean-keyword">if</span> hx : ∀ x ∈ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array.ofFn#doc" title="Array.ofFn">Array.ofFn</a> ω).toList, x ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> 0 1 <span class="bp-lean-keyword">then</span>
+        ((<a class="bp-lean-ref" href="#bucket-sort" data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">bucketSort</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array.ofFn#doc" title="Array.ofFn">Array.ofFn</a> ω) hx).time : ℝ) <span class="bp-lean-keyword">else</span> 0)
+      ∂<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure.pi#doc" title="MeasureTheory.Measure.pi">Measure.pi</a> (<span class="bp-lean-keyword">fun</span> _ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> 0 =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.cond#doc" title="ProbabilityTheory.cond">cond</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.MeasureSpace.volume#doc" title="MeasureTheory.MeasureSpace.volume">volume</a> : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> 0 1))) = 0</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">def</span> bucketSort {R : <span class="bp-lean-keyword">Type</span>} [Field R] [LinearOrder R]
+    [IsStrictOrderedRing R] [FloorRing R] (xs : Array R)
+    (hx : ∀ x ∈ xs.toList, x ∈ Ico (0 : R) 1) : TimeM Nat (Array R) :=
+  <span class="bp-lean-keyword">if</span> hn : 0 &lt; xs.size <span class="bp-lean-keyword">then</span> <span class="bp-lean-keyword">do</span>
+    <span class="bp-lean-keyword">let</span> initial : _root_.Vector (List R) xs.size := _root_.Vector.replicate xs.size []
+    ✓[xs.size]
+    <span class="bp-lean-keyword">let</span> buckets ← placeBuckets xs hx hn initial
+    <span class="bp-lean-keyword">let</span> sorted ← buckets.mapM (m := TimeM Nat) (<span class="bp-lean-keyword">fun</span> bucket =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      TimeM.insertionSort bucket)
+    flattenBuckets sorted
+  <span class="bp-lean-keyword">else</span> pure #[]</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean:72</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort">Bucket sort</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-empty">Bucket sort on the empty array</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/bucket-sort/bucket-sort-time-expected-one">
+<h4 class="bp-thmheading" id="bucket-sort-time-expected-one">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Expected time of bucket sort on one input</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Sort/Bucket/ExpectedCost.lean#L730" aria-label="View Cslib.Algorithms.Lean.TimeM.bucketSort_time_expected_one in Lean source" title="View Cslib.Algorithms.Lean.TimeM.bucketSort_time_expected_one in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#bucket-sort-time-expected-one" aria-label="Link to Expected time of bucket sort on one input" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.TimeM.bucketSort_time_expected_one</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\omega_0\)</span> be uniformly distributed on
+<span class="arithmatex">\([0, 1)\)</span>, and let <span class="arithmatex">\(T(\omega_0)\)</span> be the number of time steps that bucket sort charges on the
+one-element array <span class="arithmatex">\((\omega_0)\)</span> if <span class="arithmatex">\(\omega_0 \in [0, 1)\)</span>, and <span class="arithmatex">\(T(\omega_0) = 0\)</span> otherwise.
+Then <span class="arithmatex">\(\mathbb{E}[T] = 5\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem</span> bucketSort_time_expected_one :
+    (∫ ω : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> 1 → ℝ,
+      (<span class="bp-lean-keyword">if</span> hx : ∀ x ∈ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array.ofFn#doc" title="Array.ofFn">Array.ofFn</a> ω).toList, x ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> 0 1 <span class="bp-lean-keyword">then</span>
+        ((<a class="bp-lean-ref" href="#bucket-sort" data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">bucketSort</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array.ofFn#doc" title="Array.ofFn">Array.ofFn</a> ω) hx).time : ℝ) <span class="bp-lean-keyword">else</span> 0)
+      ∂<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure.pi#doc" title="MeasureTheory.Measure.pi">Measure.pi</a> (<span class="bp-lean-keyword">fun</span> _ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> 1 =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.cond#doc" title="ProbabilityTheory.cond">cond</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.MeasureSpace.volume#doc" title="MeasureTheory.MeasureSpace.volume">volume</a> : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> 0 1))) = 5</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">def</span> bucketSort {R : <span class="bp-lean-keyword">Type</span>} [Field R] [LinearOrder R]
+    [IsStrictOrderedRing R] [FloorRing R] (xs : Array R)
+    (hx : ∀ x ∈ xs.toList, x ∈ Ico (0 : R) 1) : TimeM Nat (Array R) :=
+  <span class="bp-lean-keyword">if</span> hn : 0 &lt; xs.size <span class="bp-lean-keyword">then</span> <span class="bp-lean-keyword">do</span>
+    <span class="bp-lean-keyword">let</span> initial : _root_.Vector (List R) xs.size := _root_.Vector.replicate xs.size []
+    ✓[xs.size]
+    <span class="bp-lean-keyword">let</span> buckets ← placeBuckets xs hx hn initial
+    <span class="bp-lean-keyword">let</span> sorted ← buckets.mapM (m := TimeM Nat) (<span class="bp-lean-keyword">fun</span> bucket =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      TimeM.insertionSort bucket)
+    flattenBuckets sorted
+  <span class="bp-lean-keyword">else</span> pure #[]</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean:72</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 8</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort">Bucket sort</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-empty">Bucket sort on the empty array</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time">Exact cost of bucket sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#compare-le">Charged comparison</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort">Insertion sort with comparison cost</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort-eq-insertion-sort-m">Agreement with CSLib&#x27;s monadic insertion sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort-perm">Insertion sort permutes its input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../insertion-sort/index.html#insertion-sort-time">Comparison bound for insertion sort</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/bucket-sort/bucket-sort-time-expected-is-theta">
+<h4 class="bp-thmheading" id="bucket-sort-time-expected-is-theta">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Bucket sort runs in expected linear time</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Sort/Bucket/ExpectedCost.lean#L741" aria-label="View Cslib.Algorithms.Lean.TimeM.bucketSort_time_expected_isTheta in Lean source" title="View Cslib.Algorithms.Lean.TimeM.bucketSort_time_expected_isTheta in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#bucket-sort-time-expected-is-theta" aria-label="Link to Bucket sort runs in expected linear time" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.TimeM.bucketSort_time_expected_isTheta</div>
+<div class="bp-thmcontent">
+<p>For each <span class="arithmatex">\(n\)</span>, let
+<span class="arithmatex">\(\omega = (\omega_0, \dots, \omega_{n-1})\)</span> have independent coordinates, each uniformly
+distributed on <span class="arithmatex">\([0, 1)\)</span>. Let <span class="arithmatex">\(T_n(\omega)\)</span> be the number of time steps that bucket sort charges
+on the array <span class="arithmatex">\((\omega_0, \dots, \omega_{n-1})\)</span> if every <span class="arithmatex">\(\omega_j\)</span> lies in <span class="arithmatex">\([0, 1)\)</span>, and
+<span class="arithmatex">\(T_n(\omega) = 0\)</span> otherwise. Then <span class="arithmatex">\(\mathbb{E}[T_n] = \Theta(n)\)</span> as <span class="arithmatex">\(n \to \infty\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem</span> bucketSort_time_expected_isTheta :
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Asymptotics.IsTheta#doc" title="Asymptotics.IsTheta">Asymptotics.IsTheta</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Filter.atTop#doc" title="Filter.atTop">atTop</a>
+      (<span class="bp-lean-keyword">fun</span> n : ℕ =&gt; ∫ ω : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → ℝ,
+        (<span class="bp-lean-keyword">if</span> hx : ∀ x ∈ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array.ofFn#doc" title="Array.ofFn">Array.ofFn</a> ω).toList, x ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> 0 1 <span class="bp-lean-keyword">then</span>
+          ((<a class="bp-lean-ref" href="#bucket-sort" data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">bucketSort</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Array.ofFn#doc" title="Array.ofFn">Array.ofFn</a> ω) hx).time : ℝ) <span class="bp-lean-keyword">else</span> 0)
+        ∂<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure.pi#doc" title="MeasureTheory.Measure.pi">Measure.pi</a> (<span class="bp-lean-keyword">fun</span> _ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.cond#doc" title="ProbabilityTheory.cond">cond</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.MeasureSpace.volume#doc" title="MeasureTheory.MeasureSpace.volume">volume</a> : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Ico#doc" title="Set.Ico">Ico</a> 0 1)))
+      (<span class="bp-lean-keyword">fun</span> n : ℕ =&gt; (n : ℝ))</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.TimeM.bucketSort">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">def</span> bucketSort {R : <span class="bp-lean-keyword">Type</span>} [Field R] [LinearOrder R]
+    [IsStrictOrderedRing R] [FloorRing R] (xs : Array R)
+    (hx : ∀ x ∈ xs.toList, x ∈ Ico (0 : R) 1) : TimeM Nat (Array R) :=
+  <span class="bp-lean-keyword">if</span> hn : 0 &lt; xs.size <span class="bp-lean-keyword">then</span> <span class="bp-lean-keyword">do</span>
+    <span class="bp-lean-keyword">let</span> initial : _root_.Vector (List R) xs.size := _root_.Vector.replicate xs.size []
+    ✓[xs.size]
+    <span class="bp-lean-keyword">let</span> buckets ← placeBuckets xs hx hn initial
+    <span class="bp-lean-keyword">let</span> sorted ← buckets.mapM (m := TimeM Nat) (<span class="bp-lean-keyword">fun</span> bucket =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      TimeM.insertionSort bucket)
+    flattenBuckets sorted
+  <span class="bp-lean-keyword">else</span> pure #[]</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Sort/Bucket/Basic.lean:72</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bucket-sort">Bucket sort</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time-expected-lower">Lower bound on the expected time of bucket sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bucket-sort-time-expected-upper">Upper bound on the expected time of bucket sort</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>17</strong> fully proved</span></div>
+</div>
+</div>
+<p><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../dependencies/index.json" data-graph-src="../../../../dependencies/scopes/ComputerScience/sorting-and-searching/bucket-sort.json" data-page-href="index.html" data-scope-id="ComputerScience/sorting-and-searching/bucket-sort">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>

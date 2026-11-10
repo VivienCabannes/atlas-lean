@@ -1,0 +1,6275 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../least-recently-used-cache/index.html">
+      
+      
+        <link rel="next" href="../singly-linked-list/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>List operations - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              List operations
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23" id="__nav_2_1_23_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_23_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Computer Science
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data structures
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23_2" id="__nav_2_1_23_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_23_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Data structures
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../search-trees/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Search trees and skip lists
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../heaps/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heaps and priority queues
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../hashing/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hashing
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23_2_5" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lists, stacks, queues and dynamic arrays
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23_2_5" id="__nav_2_1_23_2_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_2_1_23_2_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Lists, stacks, queues and dynamic arrays
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../binary-counter/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Binary counter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../double-ended-queue/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Double-ended queue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../doubly-linked-list/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Doubly linked list
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dynamic-table/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic table
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../join-list-catenable-heap/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Join list (catenable heap)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../least-recently-used-cache/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Least-recently-used cache
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    List operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../singly-linked-list/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Singly linked list
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stack-with-multipop/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stack with multipop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../two-list-queue/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Two-list queue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../range-query-structures/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Range-query and spatial structures
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../tries-and-integer-dictionaries/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tries, suffix structures and integer dictionaries
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../disjoint-sets-and-dynamic-trees/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Disjoint sets and dynamic trees
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../graph-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../process-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Process calculi and behavioural equivalence
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../type-systems-and-lambda-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Type systems and lambda calculi
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../programming-language-semantics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programming language semantics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../machine-learning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Machine learning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../sorting-and-searching/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sorting and searching
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../dynamic-programming/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic programming
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../greedy-algorithms-and-matroids/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Greedy algorithms and matroids
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../approximation-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Approximation algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../online-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Online algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../randomized-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Randomized algorithms and probabilistic analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../parallel-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../algebraic-and-numerical-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic and numerical algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../computational-geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computational geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../string-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    String algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../heuristic-search-and-planning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heuristic search and planning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../cryptography/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cryptography
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../databases/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Databases
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../quantum-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../concurrent-systems-and-protocols/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concurrent systems and protocols
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../program-logics-and-verification/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Program logics and verification
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../../index.html" tabindex="-1">Computer Science</a></li><li><a href="../../index.html" tabindex="-1">Data structures</a></li><li><a href="../index.html" tabindex="-1">Lists, stacks, queues and dynamic arrays</a></li><li aria-current="page">List operations</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← List operations</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations" data-page-title="List operations">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="list-operations">List operations</h1>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/idx-of-lt-iff">
+<h4 class="bp-thmheading" id="idx-of-lt-iff">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">List positions agree with values of an increasing map</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/PairwiseIdxOf.lean#L31" aria-label="View List.Pairwise.idxOf_lt_iff in Lean source" title="View List.Pairwise.idxOf_lt_iff in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#idx-of-lt-iff" aria-label="Link to List positions agree with values of an increasing map" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.Pairwise.idxOf_lt_iff</div>
+<div class="bp-thmcontent">
+<p>In a list along which <code>f</code> increases, position order agrees with value order.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> idxOf_lt_iff {α : <span class="bp-lean-keyword">Type</span>*} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=BEq#doc" title="BEq">BEq</a> α] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LawfulBEq#doc" title="LawfulBEq">LawfulBEq</a> α] {f : α → ℕ} {l : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α}
+    (hl : l.Pairwise <span class="bp-lean-keyword">fun</span> x y =&gt; f x &lt; f y) {x y : α} (hx : x ∈ l) (hy : y ∈ l) :
+    l.idxOf x &lt; l.idxOf y ↔ f x &lt; f y</code></pre>
+</div>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/product-lex">
+<h4 class="bp-thmheading" id="product-lex">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Pairwise relations on list products in lexicographic order</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/PairwiseProduct.lean#L30" aria-label="View List.Pairwise.product_lex in Lean source" title="View List.Pairwise.product_lex in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#product-lex" aria-label="Link to Pairwise relations on list products in lexicographic order" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.Pairwise.product_lex</div>
+<div class="bp-thmcontent">
+<p>The Cartesian product of two pairwise-related lists is pairwise-related in lexicographic
+order.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> Pairwise.product_lex {α β : <span class="bp-lean-keyword">Type</span>*} {r₁ : α → α → <span class="bp-lean-keyword">Prop</span>} {r₂ : β → β → <span class="bp-lean-keyword">Prop</span>}
+    {l₁ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α} {l₂ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> β} (h₁ : l₁.Pairwise r₁) (h₂ : l₂.Pairwise r₂) :
+    (l₁ ×ˢ l₂).Pairwise (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Prod.Lex#doc" title="Prod.Lex">Prod.Lex</a> r₁ r₂)</code></pre>
+</div>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/get-d-split-lengths">
+<h4 class="bp-thmheading" id="get-d-split-lengths">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Start position of a chunk in a split list</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/SplitLengths.lean#L29" aria-label="View List.getD_splitLengths in Lean source" title="View List.getD_splitLengths in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#get-d-split-lengths" aria-label="Link to Start position of a chunk in a split list" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.getD_splitLengths</div>
+<div class="bp-thmcontent">
+<p>A valid indexed chunk begins after the total length of the preceding chunks.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> getD_splitLengths {α : <span class="bp-lean-keyword">Type</span>*} (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α) (lengths : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> ℕ) (fallback : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α)
+    {i : ℕ} (hi : i &lt; lengths.length) :
+    (lengths.splitLengths xs).getD i fallback =
+      (xs.drop (lengths.take i).sum).take lengths[i]</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#get-d-split-lengths-map">Named chunk lookup uses the first occurrence</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#get-d-split-lengths-replicate">Splitting a list at a repeated width</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/get-d-split-lengths-map">
+<h4 class="bp-thmheading" id="get-d-split-lengths-map">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Named chunk lookup uses the first occurrence</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/SplitLengths.lean#L44" aria-label="View List.getD_splitLengths_map in Lean source" title="View List.getD_splitLengths_map in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#get-d-split-lengths-map" aria-label="Link to Named chunk lookup uses the first occurrence" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.getD_splitLengths_map</div>
+<div class="bp-thmcontent">
+<p>Looking up a named chunk uses the first occurrence of its name.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> getD_splitLengths_map {ι α : <span class="bp-lean-keyword">Type</span>*} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=BEq#doc" title="BEq">BEq</a> ι] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LawfulBEq#doc" title="LawfulBEq">LawfulBEq</a> ι]
+    (length : ι → ℕ) (names : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> ι) (xs fallback : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α) {i : ι} (hi : i ∈ names) :
+    ((names.map length).splitLengths xs).getD (names.idxOf i) fallback =
+      (xs.drop ((names.map length).take (names.idxOf i)).sum).take (length i)</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#get-d-split-lengths">Start position of a chunk in a split list</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/get-d-split-lengths-replicate">
+<h4 class="bp-thmheading" id="get-d-split-lengths-replicate">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Splitting a list at a repeated width</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/SplitLengths.lean#L53" aria-label="View List.getD_splitLengths_replicate in Lean source" title="View List.getD_splitLengths_replicate in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#get-d-split-lengths-replicate" aria-label="Link to Splitting a list at a repeated width" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.getD_splitLengths_replicate</div>
+<div class="bp-thmcontent">
+<p>Splitting at a repeated width recovers the corresponding uniform chunk.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> getD_splitLengths_replicate {α : <span class="bp-lean-keyword">Type</span>*} (width count i : ℕ)
+    (xs fallback : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α) (hi : i &lt; count) :
+    ((<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List.replicate#doc" title="List.replicate">List.replicate</a> count width).splitLengths xs).getD i fallback =
+      (xs.drop (i * width)).take width</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#get-d-split-lengths">Start position of a chunk in a split list</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/eq-of-extract-mul-eq">
+<h4 class="bp-thmheading" id="eq-of-extract-mul-eq">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Equality of uniformly split lists from equal block extracts</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/SplitLengths.lean#L61" aria-label="View List.eq_of_extract_mul_eq in Lean source" title="View List.eq_of_extract_mul_eq in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#eq-of-extract-mul-eq" aria-label="Link to Equality of uniformly split lists from equal block extracts" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.eq_of_extract_mul_eq</div>
+<div class="bp-thmcontent">
+<p>Lists of the same uniform-block length are equal when every block extract agrees.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> eq_of_extract_mul_eq {α : <span class="bp-lean-keyword">Type</span>*} (width count : ℕ) (xs ys : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α)
+    (hxs : xs.length = count * width) (hys : ys.length = count * width)
+    (h : ∀ i &lt; count,
+      xs.extract (i * width) (i * width + width) =
+        ys.extract (i * width) (i * width + width)) :
+    xs = ys</code></pre>
+</div>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/length-flat-map-range">
+<h4 class="bp-thmheading" id="length-flat-map-range">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Length of a concatenation of equal-length lists</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/SplitLengths.lean#L86" aria-label="View List.length_flatMap_range in Lean source" title="View List.length_flatMap_range in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#length-flat-map-range" aria-label="Link to Length of a concatenation of equal-length lists" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.length_flatMap_range</div>
+<div class="bp-thmcontent">
+<p>Concatenating <code>count</code> lists of length <code>width</code> has length <code>count * width</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> length_flatMap_range {α : <span class="bp-lean-keyword">Type</span>*} (count width : ℕ) (blocks : ℕ → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α)
+    (hblocks : ∀ i &lt; count, (blocks i).length = width) :
+    ((<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List.range#doc" title="List.range">List.range</a> count).flatMap blocks).length = count * width</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#exists-length-eq-and-extract-eq">Every equal-length list family is realized by its concatenation</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/extract-flat-map-range">
+<h4 class="bp-thmheading" id="extract-flat-map-range">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Extracting a member from a uniform-width concatenation</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/SplitLengths.lean#L118" aria-label="View List.extract_flatMap_range in Lean source" title="View List.extract_flatMap_range in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#extract-flat-map-range" aria-label="Link to Extracting a member from a uniform-width concatenation" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.extract_flatMap_range</div>
+<div class="bp-thmcontent">
+<p>A uniform-width extract of a concatenated family recovers that family member.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> extract_flatMap_range {α : <span class="bp-lean-keyword">Type</span>*} (count width : ℕ) (blocks : ℕ → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α)
+    (hblocks : ∀ i &lt; count, (blocks i).length = width) {i : ℕ} (hi : i &lt; count) :
+    ((<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List.range#doc" title="List.range">List.range</a> count).flatMap blocks).extract (i * width) (i * width + width) =
+      blocks i</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#exists-length-eq-and-extract-eq">Every equal-length list family is realized by its concatenation</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/exists-length-eq-and-extract-eq">
+<h4 class="bp-thmheading" id="exists-length-eq-and-extract-eq">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Every equal-length list family is realized by its concatenation</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/SplitLengths.lean#L127" aria-label="View List.exists_length_eq_and_extract_eq in Lean source" title="View List.exists_length_eq_and_extract_eq in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#exists-length-eq-and-extract-eq" aria-label="Link to Every equal-length list family is realized by its concatenation" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.exists_length_eq_and_extract_eq</div>
+<div class="bp-thmcontent">
+<p>Every finite family of equal-length lists is realized by their concatenation.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> exists_length_eq_and_extract_eq {α : <span class="bp-lean-keyword">Type</span>*} (width count : ℕ)
+    (blocks : ℕ → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α) (hblocks : ∀ i &lt; count, (blocks i).length = width) :
+    ∃ xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α,
+      xs.length = count * width ∧
+        ∀ i &lt; count, xs.extract (i * width) (i * width + width) = blocks i</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#extract-flat-map-range">Extracting a member from a uniform-width concatenation</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#length-flat-map-range">Length of a concatenation of equal-length lists</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/take-through">
+<h4 class="bp-thmheading" id="take-through">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Inclusive first-hit prefix of a list</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThrough.lean#L29" aria-label="View List.takeThrough in Lean source" title="View List.takeThrough in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#take-through" aria-label="Link to Inclusive first-hit prefix of a list" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.takeThrough</div>
+<div class="bp-thmcontent">
+<p>The prefix through the first element satisfying <code>p</code>, including that element. If no element
+satisfies <code>p</code>, this is the whole list.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThrough {α : <span class="bp-lean-keyword">Type</span>*} (p : α → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α :=
+  xs.take (xs.findIdx p + 1)</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 15</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#any-take-through">Inclusive first-hit prefix has a hit iff the list does</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#filter-map-take-through">Inclusive first-hit prefix commutes with filter-map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#foldl-first-take-through">First-witness fold over the inclusive first-hit prefix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mem-of-mem-take-through">Members of an inclusive first-hit prefix lie in the list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-acc-eq-map-take-through-sca">Accumulator-stopped prefix as a first-hit prefix of a scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-acc-first">First-witness accumulator gives the inclusive first-hit prefix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-acc-or">Disjunction accumulator gives the inclusive first-hit prefix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-append-of-any-eq-false">Inclusive first-hit prefix of an append with no hit on the left</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-append-of-any-eq-true">Inclusive first-hit prefix of an append with a hit on the left</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-cons-of-neg">Inclusive first-hit prefix when the head is not a hit</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-cons-of-pos">Inclusive first-hit prefix when the head is a hit</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-eq-self-of-any-eq-false">Inclusive first-hit prefix of a list with no hit</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-nil">Inclusive first-hit prefix of the empty list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-range">Inclusive first-hit prefix of a range of naturals</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-singleton">Inclusive first-hit prefix of a singleton</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/take-through-nil">
+<h4 class="bp-thmheading" id="take-through-nil">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Inclusive first-hit prefix of the empty list</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThrough.lean#L33" aria-label="View List.takeThrough_nil in Lean source" title="View List.takeThrough_nil in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#take-through-nil" aria-label="Link to Inclusive first-hit prefix of the empty list" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.takeThrough_nil</div>
+<div class="bp-thmcontent">
+<p>The inclusive first-hit prefix of an empty list is empty.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code>@[simp] <span class="bp-lean-keyword">theorem</span> takeThrough_nil {α : <span class="bp-lean-keyword">Type</span>*} (p : α → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) : <a class="bp-lean-ref" href="#take-through" data-lean-name="List.takeThrough">takeThrough</a> p [] = []</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="List.takeThrough">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThrough {α : <span class="bp-lean-keyword">Type</span>*} (p : α → Bool) (xs : List α) : List α :=
+  xs.take (xs.findIdx p + 1)</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThrough.lean:29</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through">Inclusive first-hit prefix of a list</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#any-take-through">Inclusive first-hit prefix has a hit iff the list does</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#filter-map-take-through">Inclusive first-hit prefix commutes with filter-map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-acc-eq-map-take-through-sca">Accumulator-stopped prefix as a first-hit prefix of a scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-eq-self-of-any-eq-false">Inclusive first-hit prefix of a list with no hit</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-singleton">Inclusive first-hit prefix of a singleton</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/take-through-cons-of-pos">
+<h4 class="bp-thmheading" id="take-through-cons-of-pos">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Inclusive first-hit prefix when the head is a hit</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThrough.lean#L37" aria-label="View List.takeThrough_cons_of_pos in Lean source" title="View List.takeThrough_cons_of_pos in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#take-through-cons-of-pos" aria-label="Link to Inclusive first-hit prefix when the head is a hit" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.takeThrough_cons_of_pos</div>
+<div class="bp-thmcontent">
+<p>If the head satisfies the predicate, it is the whole inclusive first-hit prefix.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code>@[simp] <span class="bp-lean-keyword">theorem</span> takeThrough_cons_of_pos {α : <span class="bp-lean-keyword">Type</span>*} {p : α → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>} {x : α}
+    (h : p x = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a>) (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α) : <a class="bp-lean-ref" href="#take-through" data-lean-name="List.takeThrough">takeThrough</a> p (x :: xs) = [x]</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="List.takeThrough">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThrough {α : <span class="bp-lean-keyword">Type</span>*} (p : α → Bool) (xs : List α) : List α :=
+  xs.take (xs.findIdx p + 1)</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThrough.lean:29</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 8</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through">Inclusive first-hit prefix of a list</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#any-take-through">Inclusive first-hit prefix has a hit iff the list does</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#filter-map-take-through">Inclusive first-hit prefix commutes with filter-map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#foldl-first-take-through">First-witness fold over the inclusive first-hit prefix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-acc-eq-map-take-through-sca">Accumulator-stopped prefix as a first-hit prefix of a scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-acc-first">First-witness accumulator gives the inclusive first-hit prefix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-acc-or">Disjunction accumulator gives the inclusive first-hit prefix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-append-of-any-eq-true">Inclusive first-hit prefix of an append with a hit on the left</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-singleton">Inclusive first-hit prefix of a singleton</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/take-through-cons-of-neg">
+<h4 class="bp-thmheading" id="take-through-cons-of-neg">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Inclusive first-hit prefix when the head is not a hit</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThrough.lean#L42" aria-label="View List.takeThrough_cons_of_neg in Lean source" title="View List.takeThrough_cons_of_neg in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#take-through-cons-of-neg" aria-label="Link to Inclusive first-hit prefix when the head is not a hit" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.takeThrough_cons_of_neg</div>
+<div class="bp-thmcontent">
+<p>If the head does not satisfy the predicate, the search continues through the tail.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code>@[simp] <span class="bp-lean-keyword">theorem</span> takeThrough_cons_of_neg {α : <span class="bp-lean-keyword">Type</span>*} {p : α → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>} {x : α}
+    (h : p x = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a>) (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α) :
+    <a class="bp-lean-ref" href="#take-through" data-lean-name="List.takeThrough">takeThrough</a> p (x :: xs) = x :: <a class="bp-lean-ref" href="#take-through" data-lean-name="List.takeThrough">takeThrough</a> p xs</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="List.takeThrough">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThrough {α : <span class="bp-lean-keyword">Type</span>*} (p : α → Bool) (xs : List α) : List α :=
+  xs.take (xs.findIdx p + 1)</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThrough.lean:29</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 10</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through">Inclusive first-hit prefix of a list</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#any-take-through">Inclusive first-hit prefix has a hit iff the list does</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#filter-map-take-through">Inclusive first-hit prefix commutes with filter-map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#foldl-first-take-through">First-witness fold over the inclusive first-hit prefix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-acc-eq-map-take-through-sca">Accumulator-stopped prefix as a first-hit prefix of a scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-acc-first">First-witness accumulator gives the inclusive first-hit prefix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-acc-or">Disjunction accumulator gives the inclusive first-hit prefix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-append-of-any-eq-false">Inclusive first-hit prefix of an append with no hit on the left</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-append-of-any-eq-true">Inclusive first-hit prefix of an append with a hit on the left</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-eq-self-of-any-eq-false">Inclusive first-hit prefix of a list with no hit</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-singleton">Inclusive first-hit prefix of a singleton</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/take-through-singleton">
+<h4 class="bp-thmheading" id="take-through-singleton">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Inclusive first-hit prefix of a singleton</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThrough.lean#L48" aria-label="View List.takeThrough_singleton in Lean source" title="View List.takeThrough_singleton in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#take-through-singleton" aria-label="Link to Inclusive first-hit prefix of a singleton" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.takeThrough_singleton</div>
+<div class="bp-thmcontent">
+<p>A singleton is its own inclusive first-hit prefix.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code>@[simp] <span class="bp-lean-keyword">theorem</span> takeThrough_singleton {α : <span class="bp-lean-keyword">Type</span>*} (p : α → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) (x : α) :
+    <a class="bp-lean-ref" href="#take-through" data-lean-name="List.takeThrough">takeThrough</a> p [x] = [x]</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="List.takeThrough">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThrough {α : <span class="bp-lean-keyword">Type</span>*} (p : α → Bool) (xs : List α) : List α :=
+  xs.take (xs.findIdx p + 1)</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThrough.lean:29</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through">Inclusive first-hit prefix of a list</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-cons-of-neg">Inclusive first-hit prefix when the head is not a hit</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-cons-of-pos">Inclusive first-hit prefix when the head is a hit</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-nil">Inclusive first-hit prefix of the empty list</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/mem-of-mem-take-through">
+<h4 class="bp-thmheading" id="mem-of-mem-take-through">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Members of an inclusive first-hit prefix lie in the list</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThrough.lean#L53" aria-label="View List.mem_of_mem_takeThrough in Lean source" title="View List.mem_of_mem_takeThrough in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#mem-of-mem-take-through" aria-label="Link to Members of an inclusive first-hit prefix lie in the list" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.mem_of_mem_takeThrough</div>
+<div class="bp-thmcontent">
+<p>Every member of an inclusive first-hit prefix belongs to the source list.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> mem_of_mem_takeThrough {α : <span class="bp-lean-keyword">Type</span>*} {p : α → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>} {xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α} {x : α}
+    (h : x ∈ <a class="bp-lean-ref" href="#take-through" data-lean-name="List.takeThrough">takeThrough</a> p xs) : x ∈ xs</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="List.takeThrough">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThrough {α : <span class="bp-lean-keyword">Type</span>*} (p : α → Bool) (xs : List α) : List α :=
+  xs.take (xs.findIdx p + 1)</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThrough.lean:29</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through">Inclusive first-hit prefix of a list</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/take-through-eq-self-of-any-eq-false">
+<h4 class="bp-thmheading" id="take-through-eq-self-of-any-eq-false">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Inclusive first-hit prefix of a list with no hit</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThrough.lean#L58" aria-label="View List.takeThrough_eq_self_of_any_eq_false in Lean source" title="View List.takeThrough_eq_self_of_any_eq_false in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#take-through-eq-self-of-any-eq-false" aria-label="Link to Inclusive first-hit prefix of a list with no hit" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.takeThrough_eq_self_of_any_eq_false</div>
+<div class="bp-thmcontent">
+<p>If no element satisfies the predicate, the inclusive first-hit prefix is the whole list.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> takeThrough_eq_self_of_any_eq_false {α : <span class="bp-lean-keyword">Type</span>*} {p : α → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>} {xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α}
+    (h : xs.any p = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a>) : <a class="bp-lean-ref" href="#take-through" data-lean-name="List.takeThrough">takeThrough</a> p xs = xs</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="List.takeThrough">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThrough {α : <span class="bp-lean-keyword">Type</span>*} (p : α → Bool) (xs : List α) : List α :=
+  xs.take (xs.findIdx p + 1)</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThrough.lean:29</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through">Inclusive first-hit prefix of a list</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-cons-of-neg">Inclusive first-hit prefix when the head is not a hit</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-nil">Inclusive first-hit prefix of the empty list</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/take-through-append-of-any-eq-true">
+<h4 class="bp-thmheading" id="take-through-append-of-any-eq-true">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Inclusive first-hit prefix of an append with a hit on the left</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThrough.lean#L67" aria-label="View List.takeThrough_append_of_any_eq_true in Lean source" title="View List.takeThrough_append_of_any_eq_true in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#take-through-append-of-any-eq-true" aria-label="Link to Inclusive first-hit prefix of an append with a hit on the left" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.takeThrough_append_of_any_eq_true</div>
+<div class="bp-thmcontent">
+<p>Once the left list has a hit, appending another list does not change the prefix.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> takeThrough_append_of_any_eq_true {α : <span class="bp-lean-keyword">Type</span>*} {p : α → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>} {xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α}
+    (h : xs.any p = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a>) (ys : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α) : <a class="bp-lean-ref" href="#take-through" data-lean-name="List.takeThrough">takeThrough</a> p (xs ++ ys) = <a class="bp-lean-ref" href="#take-through" data-lean-name="List.takeThrough">takeThrough</a> p xs</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="List.takeThrough">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThrough {α : <span class="bp-lean-keyword">Type</span>*} (p : α → Bool) (xs : List α) : List α :=
+  xs.take (xs.findIdx p + 1)</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThrough.lean:29</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through">Inclusive first-hit prefix of a list</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-cons-of-neg">Inclusive first-hit prefix when the head is not a hit</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-cons-of-pos">Inclusive first-hit prefix when the head is a hit</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/take-through-append-of-any-eq-false">
+<h4 class="bp-thmheading" id="take-through-append-of-any-eq-false">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Inclusive first-hit prefix of an append with no hit on the left</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThrough.lean#L79" aria-label="View List.takeThrough_append_of_any_eq_false in Lean source" title="View List.takeThrough_append_of_any_eq_false in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#take-through-append-of-any-eq-false" aria-label="Link to Inclusive first-hit prefix of an append with no hit on the left" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.takeThrough_append_of_any_eq_false</div>
+<div class="bp-thmcontent">
+<p>If the left list has no hit, the prefix contains all of it and continues into the right list.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> takeThrough_append_of_any_eq_false {α : <span class="bp-lean-keyword">Type</span>*} {p : α → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>} {xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α}
+    (h : xs.any p = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a>) (ys : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α) :
+    <a class="bp-lean-ref" href="#take-through" data-lean-name="List.takeThrough">takeThrough</a> p (xs ++ ys) = xs ++ <a class="bp-lean-ref" href="#take-through" data-lean-name="List.takeThrough">takeThrough</a> p ys</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="List.takeThrough">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThrough {α : <span class="bp-lean-keyword">Type</span>*} (p : α → Bool) (xs : List α) : List α :=
+  xs.take (xs.findIdx p + 1)</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThrough.lean:29</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through">Inclusive first-hit prefix of a list</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-cons-of-neg">Inclusive first-hit prefix when the head is not a hit</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/any-take-through">
+<h4 class="bp-thmheading" id="any-take-through">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Inclusive first-hit prefix has a hit iff the list does</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThrough.lean#L89" aria-label="View List.any_takeThrough in Lean source" title="View List.any_takeThrough in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#any-take-through" aria-label="Link to Inclusive first-hit prefix has a hit iff the list does" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.any_takeThrough</div>
+<div class="bp-thmcontent">
+<p>The inclusive first-hit prefix has a hit exactly when the source list has one.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> any_takeThrough {α : <span class="bp-lean-keyword">Type</span>*} (p : α → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α) :
+    (<a class="bp-lean-ref" href="#take-through" data-lean-name="List.takeThrough">takeThrough</a> p xs).any p = xs.any p</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="List.takeThrough">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThrough {α : <span class="bp-lean-keyword">Type</span>*} (p : α → Bool) (xs : List α) : List α :=
+  xs.take (xs.findIdx p + 1)</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThrough.lean:29</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through">Inclusive first-hit prefix of a list</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-cons-of-neg">Inclusive first-hit prefix when the head is not a hit</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-cons-of-pos">Inclusive first-hit prefix when the head is a hit</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-nil">Inclusive first-hit prefix of the empty list</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/take-through-range">
+<h4 class="bp-thmheading" id="take-through-range">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Inclusive first-hit prefix of a range of naturals</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThrough.lean#L99" aria-label="View List.takeThrough_range in Lean source" title="View List.takeThrough_range in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#take-through-range" aria-label="Link to Inclusive first-hit prefix of a range of naturals" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.takeThrough_range</div>
+<div class="bp-thmcontent">
+<p>On <code>range n</code>, the prefix ends one past the first hit, or at <code>n</code> if there is no hit.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> takeThrough_range (q : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) (n : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a>) :
+    <a class="bp-lean-ref" href="#take-through" data-lean-name="List.takeThrough">takeThrough</a> q (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List.range#doc" title="List.range">range</a> n) =
+      <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List.range#doc" title="List.range">range</a> (<span class="bp-lean-keyword">match</span> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List.range#doc" title="List.range">range</a> n).find? q <span class="bp-lean-keyword">with</span> | <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> i =&gt; i + 1 | <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.none#doc" title="Option.none">none</a> =&gt; n)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="List.takeThrough">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThrough {α : <span class="bp-lean-keyword">Type</span>*} (p : α → Bool) (xs : List α) : List α :=
+  xs.take (xs.findIdx p + 1)</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThrough.lean:29</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through">Inclusive first-hit prefix of a list</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/filter-map-take-through">
+<h4 class="bp-thmheading" id="filter-map-take-through">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Inclusive first-hit prefix commutes with filter-map</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThrough.lean#L122" aria-label="View List.filterMap_takeThrough in Lean source" title="View List.filterMap_takeThrough in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#filter-map-take-through" aria-label="Link to Inclusive first-hit prefix commutes with filter-map" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.filterMap_takeThrough</div>
+<div class="bp-thmcontent">
+<p>Filtering selected elements from an inclusive prefix commutes with taking the corresponding
+inclusive prefix of the selected elements.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> filterMap_takeThrough {α β : <span class="bp-lean-keyword">Type</span>*} (sel : α → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option#doc" title="Option">Option</a> β) (p : β → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>)
+    (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α) :
+    (<a class="bp-lean-ref" href="#take-through" data-lean-name="List.takeThrough">takeThrough</a> (<span class="bp-lean-keyword">fun</span> x =&gt; (sel x).any p) xs).filterMap sel =
+      <a class="bp-lean-ref" href="#take-through" data-lean-name="List.takeThrough">takeThrough</a> p (xs.filterMap sel)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="List.takeThrough">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThrough {α : <span class="bp-lean-keyword">Type</span>*} (p : α → Bool) (xs : List α) : List α :=
+  xs.take (xs.findIdx p + 1)</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThrough.lean:29</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through">Inclusive first-hit prefix of a list</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-cons-of-neg">Inclusive first-hit prefix when the head is not a hit</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-cons-of-pos">Inclusive first-hit prefix when the head is a hit</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-nil">Inclusive first-hit prefix of the empty list</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/take-through-acc">
+<h4 class="bp-thmheading" id="take-through-acc">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Accumulator-stopped inclusive prefix of a list</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThroughAcc.lean#L34" aria-label="View List.takeThroughAcc in Lean source" title="View List.takeThroughAcc in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#take-through-acc" aria-label="Link to Accumulator-stopped inclusive prefix of a list" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.takeThroughAcc</div>
+<div class="bp-thmcontent">
+<p>The prefix through the first element after whose update the accumulator satisfies <code>stop</code>,
+including that element. The initial accumulator is not tested. If no updated accumulator satisfies
+<code>stop</code>, this is the whole list.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThroughAcc {α γ : <span class="bp-lean-keyword">Type</span>*} (f : γ → α → γ) (stop : γ → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) :
+    γ → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α
+  | _, [] =&gt; []
+  | c, x :: xs =&gt;
+    <span class="bp-lean-keyword">let</span> c&#x27; := f c x
+    <span class="bp-lean-keyword">if</span> stop c&#x27; <span class="bp-lean-keyword">then</span> [x] <span class="bp-lean-keyword">else</span> x :: takeThroughAcc f stop c&#x27; xs</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 8</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mem-of-mem-take-through-acc">Members of an accumulator-stopped prefix lie in the list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-acc-cons-of-continue">Accumulator-stopped prefix when the head update continues</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-acc-cons-of-stop">Accumulator-stopped prefix when the head update stops</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-acc-eq-map-take-through-sca">Accumulator-stopped prefix as a first-hit prefix of a scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-acc-first">First-witness accumulator gives the inclusive first-hit prefix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-acc-nil">Accumulator-stopped prefix of the empty list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-acc-or">Disjunction accumulator gives the inclusive first-hit prefix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-acc-prefix">Accumulator-stopped list is a prefix of its source</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/take-through-acc-nil">
+<h4 class="bp-thmheading" id="take-through-acc-nil">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Accumulator-stopped prefix of the empty list</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThroughAcc.lean#L42" aria-label="View List.takeThroughAcc_nil in Lean source" title="View List.takeThroughAcc_nil in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#take-through-acc-nil" aria-label="Link to Accumulator-stopped prefix of the empty list" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.takeThroughAcc_nil</div>
+<div class="bp-thmcontent">
+<p>An empty list has an empty accumulator-stopped prefix.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code>@[simp] <span class="bp-lean-keyword">theorem</span> takeThroughAcc_nil {α γ : <span class="bp-lean-keyword">Type</span>*} (f : γ → α → γ) (stop : γ → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>)
+    (c : γ) : <a class="bp-lean-ref" href="#take-through-acc" data-lean-name="List.takeThroughAcc">takeThroughAcc</a> f stop c [] = []</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="List.takeThroughAcc">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThroughAcc {α γ : <span class="bp-lean-keyword">Type</span>*} (f : γ → α → γ) (stop : γ → Bool) :
+    γ → List α → List α
+  | _, [] =&gt; []
+  | c, x :: xs =&gt;
+    <span class="bp-lean-keyword">let</span> c&#x27; := f c x
+    <span class="bp-lean-keyword">if</span> stop c&#x27; <span class="bp-lean-keyword">then</span> [x] <span class="bp-lean-keyword">else</span> x :: takeThroughAcc f stop c&#x27; xs</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThroughAcc.lean:34</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-acc">Accumulator-stopped inclusive prefix of a list</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/take-through-acc-cons-of-stop">
+<h4 class="bp-thmheading" id="take-through-acc-cons-of-stop">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Accumulator-stopped prefix when the head update stops</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThroughAcc.lean#L46" aria-label="View List.takeThroughAcc_cons_of_stop in Lean source" title="View List.takeThroughAcc_cons_of_stop in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#take-through-acc-cons-of-stop" aria-label="Link to Accumulator-stopped prefix when the head update stops" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.takeThroughAcc_cons_of_stop</div>
+<div class="bp-thmcontent">
+<p>If the accumulator stops after the head update, the prefix contains only the head.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code>@[simp] <span class="bp-lean-keyword">theorem</span> takeThroughAcc_cons_of_stop {α γ : <span class="bp-lean-keyword">Type</span>*} {f : γ → α → γ}
+    {stop : γ → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>} {c : γ} {x : α} (h : stop (f c x) = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a>) (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α) :
+    <a class="bp-lean-ref" href="#take-through-acc" data-lean-name="List.takeThroughAcc">takeThroughAcc</a> f stop c (x :: xs) = [x]</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="List.takeThroughAcc">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThroughAcc {α γ : <span class="bp-lean-keyword">Type</span>*} (f : γ → α → γ) (stop : γ → Bool) :
+    γ → List α → List α
+  | _, [] =&gt; []
+  | c, x :: xs =&gt;
+    <span class="bp-lean-keyword">let</span> c&#x27; := f c x
+    <span class="bp-lean-keyword">if</span> stop c&#x27; <span class="bp-lean-keyword">then</span> [x] <span class="bp-lean-keyword">else</span> x :: takeThroughAcc f stop c&#x27; xs</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThroughAcc.lean:34</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-acc">Accumulator-stopped inclusive prefix of a list</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/take-through-acc-cons-of-continue">
+<h4 class="bp-thmheading" id="take-through-acc-cons-of-continue">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Accumulator-stopped prefix when the head update continues</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThroughAcc.lean#L53" aria-label="View List.takeThroughAcc_cons_of_continue in Lean source" title="View List.takeThroughAcc_cons_of_continue in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#take-through-acc-cons-of-continue" aria-label="Link to Accumulator-stopped prefix when the head update continues" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.takeThroughAcc_cons_of_continue</div>
+<div class="bp-thmcontent">
+<p>If the accumulator continues after the head update, the same updated accumulator processes the
+tail.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code>@[simp] <span class="bp-lean-keyword">theorem</span> takeThroughAcc_cons_of_continue {α γ : <span class="bp-lean-keyword">Type</span>*} {f : γ → α → γ}
+    {stop : γ → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>} {c : γ} {x : α} (h : stop (f c x) = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a>) (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α) :
+    <a class="bp-lean-ref" href="#take-through-acc" data-lean-name="List.takeThroughAcc">takeThroughAcc</a> f stop c (x :: xs) = x :: <a class="bp-lean-ref" href="#take-through-acc" data-lean-name="List.takeThroughAcc">takeThroughAcc</a> f stop (f c x) xs</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="List.takeThroughAcc">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThroughAcc {α γ : <span class="bp-lean-keyword">Type</span>*} (f : γ → α → γ) (stop : γ → Bool) :
+    γ → List α → List α
+  | _, [] =&gt; []
+  | c, x :: xs =&gt;
+    <span class="bp-lean-keyword">let</span> c&#x27; := f c x
+    <span class="bp-lean-keyword">if</span> stop c&#x27; <span class="bp-lean-keyword">then</span> [x] <span class="bp-lean-keyword">else</span> x :: takeThroughAcc f stop c&#x27; xs</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThroughAcc.lean:34</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-acc">Accumulator-stopped inclusive prefix of a list</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/take-through-acc-prefix">
+<h4 class="bp-thmheading" id="take-through-acc-prefix">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Accumulator-stopped list is a prefix of its source</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThroughAcc.lean#L59" aria-label="View List.takeThroughAcc_prefix in Lean source" title="View List.takeThroughAcc_prefix in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#take-through-acc-prefix" aria-label="Link to Accumulator-stopped list is a prefix of its source" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.takeThroughAcc_prefix</div>
+<div class="bp-thmcontent">
+<p>The accumulator-stopped list is a prefix of its source list.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> takeThroughAcc_prefix {α γ : <span class="bp-lean-keyword">Type</span>*} (f : γ → α → γ) (stop : γ → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>)
+    (c : γ) (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α) : <a class="bp-lean-ref" href="#take-through-acc" data-lean-name="List.takeThroughAcc">takeThroughAcc</a> f stop c xs &lt;+: xs</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="List.takeThroughAcc">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThroughAcc {α γ : <span class="bp-lean-keyword">Type</span>*} (f : γ → α → γ) (stop : γ → Bool) :
+    γ → List α → List α
+  | _, [] =&gt; []
+  | c, x :: xs =&gt;
+    <span class="bp-lean-keyword">let</span> c&#x27; := f c x
+    <span class="bp-lean-keyword">if</span> stop c&#x27; <span class="bp-lean-keyword">then</span> [x] <span class="bp-lean-keyword">else</span> x :: takeThroughAcc f stop c&#x27; xs</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThroughAcc.lean:34</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-acc">Accumulator-stopped inclusive prefix of a list</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mem-of-mem-take-through-acc">Members of an accumulator-stopped prefix lie in the list</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/mem-of-mem-take-through-acc">
+<h4 class="bp-thmheading" id="mem-of-mem-take-through-acc">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Members of an accumulator-stopped prefix lie in the list</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThroughAcc.lean#L67" aria-label="View List.mem_of_mem_takeThroughAcc in Lean source" title="View List.mem_of_mem_takeThroughAcc in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#mem-of-mem-take-through-acc" aria-label="Link to Members of an accumulator-stopped prefix lie in the list" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.mem_of_mem_takeThroughAcc</div>
+<div class="bp-thmcontent">
+<p>Every member of an accumulator-stopped prefix belongs to the source list.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> mem_of_mem_takeThroughAcc {α γ : <span class="bp-lean-keyword">Type</span>*} {f : γ → α → γ} {stop : γ → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>}
+    {c : γ} {xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α} {x : α} (h : x ∈ <a class="bp-lean-ref" href="#take-through-acc" data-lean-name="List.takeThroughAcc">takeThroughAcc</a> f stop c xs) : x ∈ xs</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="List.takeThroughAcc">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThroughAcc {α γ : <span class="bp-lean-keyword">Type</span>*} (f : γ → α → γ) (stop : γ → Bool) :
+    γ → List α → List α
+  | _, [] =&gt; []
+  | c, x :: xs =&gt;
+    <span class="bp-lean-keyword">let</span> c&#x27; := f c x
+    <span class="bp-lean-keyword">if</span> stop c&#x27; <span class="bp-lean-keyword">then</span> [x] <span class="bp-lean-keyword">else</span> x :: takeThroughAcc f stop c&#x27; xs</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThroughAcc.lean:34</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-acc">Accumulator-stopped inclusive prefix of a list</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-acc-prefix">Accumulator-stopped list is a prefix of its source</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/take-through-acc-or">
+<h4 class="bp-thmheading" id="take-through-acc-or">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Disjunction accumulator gives the inclusive first-hit prefix</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThroughAcc.lean#L72" aria-label="View List.takeThroughAcc_or in Lean source" title="View List.takeThroughAcc_or in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#take-through-acc-or" aria-label="Link to Disjunction accumulator gives the inclusive first-hit prefix" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.takeThroughAcc_or</div>
+<div class="bp-thmcontent">
+<p>Accumulating disjunction from <code>false</code> gives the ordinary inclusive first-hit prefix.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> takeThroughAcc_or {α : <span class="bp-lean-keyword">Type</span>*} (p : α → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α) :
+    <a class="bp-lean-ref" href="#take-through-acc" data-lean-name="List.takeThroughAcc">takeThroughAcc</a> (<span class="bp-lean-keyword">fun</span> found x =&gt; found || p x) <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=id#doc" title="id">id</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a> xs = <a class="bp-lean-ref" href="#take-through" data-lean-name="List.takeThrough">takeThrough</a> p xs</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="List.takeThroughAcc">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThroughAcc {α γ : <span class="bp-lean-keyword">Type</span>*} (f : γ → α → γ) (stop : γ → Bool) :
+    γ → List α → List α
+  | _, [] =&gt; []
+  | c, x :: xs =&gt;
+    <span class="bp-lean-keyword">let</span> c&#x27; := f c x
+    <span class="bp-lean-keyword">if</span> stop c&#x27; <span class="bp-lean-keyword">then</span> [x] <span class="bp-lean-keyword">else</span> x :: takeThroughAcc f stop c&#x27; xs</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThroughAcc.lean:34</p>
+</div>
+<div data-lean-name="List.takeThrough">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThrough {α : <span class="bp-lean-keyword">Type</span>*} (p : α → Bool) (xs : List α) : List α :=
+  xs.take (xs.findIdx p + 1)</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThrough.lean:29</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through">Inclusive first-hit prefix of a list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-acc">Accumulator-stopped inclusive prefix of a list</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-cons-of-neg">Inclusive first-hit prefix when the head is not a hit</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-cons-of-pos">Inclusive first-hit prefix when the head is a hit</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/take-through-acc-first">
+<h4 class="bp-thmheading" id="take-through-acc-first">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">First-witness accumulator gives the inclusive first-hit prefix</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThroughAcc.lean#L81" aria-label="View List.takeThroughAcc_first in Lean source" title="View List.takeThroughAcc_first in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#take-through-acc-first" aria-label="Link to First-witness accumulator gives the inclusive first-hit prefix" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.takeThroughAcc_first</div>
+<div class="bp-thmcontent">
+<p>Accumulating a projection of the first witness in an <code>Option</code> gives the ordinary inclusive
+first-hit prefix.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> takeThroughAcc_first {α β δ : <span class="bp-lean-keyword">Type</span>*} (p : β → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) (v : α → β) (w : α → δ)
+    (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α) :
+    <a class="bp-lean-ref" href="#take-through-acc" data-lean-name="List.takeThroughAcc">takeThroughAcc</a> (<span class="bp-lean-keyword">fun</span> found x =&gt;
+        <span class="bp-lean-keyword">match</span> found <span class="bp-lean-keyword">with</span>
+        | <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> old =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> old
+        | <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.none#doc" title="Option.none">none</a> =&gt; <span class="bp-lean-keyword">if</span> p (v x) <span class="bp-lean-keyword">then</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> (w x) <span class="bp-lean-keyword">else</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.none#doc" title="Option.none">none</a>)
+        <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.isSome#doc" title="Option.isSome">Option.isSome</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.none#doc" title="Option.none">none</a> xs = <a class="bp-lean-ref" href="#take-through" data-lean-name="List.takeThrough">takeThrough</a> (<span class="bp-lean-keyword">fun</span> x =&gt; p (v x)) xs</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="List.takeThroughAcc">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThroughAcc {α γ : <span class="bp-lean-keyword">Type</span>*} (f : γ → α → γ) (stop : γ → Bool) :
+    γ → List α → List α
+  | _, [] =&gt; []
+  | c, x :: xs =&gt;
+    <span class="bp-lean-keyword">let</span> c&#x27; := f c x
+    <span class="bp-lean-keyword">if</span> stop c&#x27; <span class="bp-lean-keyword">then</span> [x] <span class="bp-lean-keyword">else</span> x :: takeThroughAcc f stop c&#x27; xs</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThroughAcc.lean:34</p>
+</div>
+<div data-lean-name="List.takeThrough">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThrough {α : <span class="bp-lean-keyword">Type</span>*} (p : α → Bool) (xs : List α) : List α :=
+  xs.take (xs.findIdx p + 1)</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThrough.lean:29</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through">Inclusive first-hit prefix of a list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-acc">Accumulator-stopped inclusive prefix of a list</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-cons-of-neg">Inclusive first-hit prefix when the head is not a hit</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-cons-of-pos">Inclusive first-hit prefix when the head is a hit</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/foldl-first-take-through">
+<h4 class="bp-thmheading" id="foldl-first-take-through">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">First-witness fold over the inclusive first-hit prefix</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThroughAcc.lean#L95" aria-label="View List.foldl_first_takeThrough in Lean source" title="View List.foldl_first_takeThrough in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#foldl-first-take-through" aria-label="Link to First-witness fold over the inclusive first-hit prefix" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.foldl_first_takeThrough</div>
+<div class="bp-thmcontent">
+<p>Folding the first-witness update over the inclusive tested prefix returns the first witness in
+the whole source list.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> foldl_first_takeThrough {α β δ : <span class="bp-lean-keyword">Type</span>*} (p : β → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) (v : α → β) (w : α → δ)
+    (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α) :
+    (<a class="bp-lean-ref" href="#take-through" data-lean-name="List.takeThrough">takeThrough</a> (<span class="bp-lean-keyword">fun</span> x =&gt; p (v x)) xs).foldl
+        (<span class="bp-lean-keyword">fun</span> found x =&gt;
+          <span class="bp-lean-keyword">match</span> found <span class="bp-lean-keyword">with</span>
+          | <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> old =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> old
+          | <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.none#doc" title="Option.none">none</a> =&gt; <span class="bp-lean-keyword">if</span> p (v x) <span class="bp-lean-keyword">then</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> (w x) <span class="bp-lean-keyword">else</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.none#doc" title="Option.none">none</a>) <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.none#doc" title="Option.none">none</a> =
+      (xs.find? <span class="bp-lean-keyword">fun</span> x =&gt; p (v x)).map w</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="List.takeThrough">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThrough {α : <span class="bp-lean-keyword">Type</span>*} (p : α → Bool) (xs : List α) : List α :=
+  xs.take (xs.findIdx p + 1)</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThrough.lean:29</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through">Inclusive first-hit prefix of a list</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-cons-of-neg">Inclusive first-hit prefix when the head is not a hit</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-cons-of-pos">Inclusive first-hit prefix when the head is a hit</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/take-through-acc-eq-map-take-through-sca">
+<h4 class="bp-thmheading" id="take-through-acc-eq-map-take-through-sca">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Accumulator-stopped prefix as a first-hit prefix of a scan</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/TakeThroughAcc.lean#L110" aria-label="View List.takeThroughAcc_eq_map_takeThrough_scanl in Lean source" title="View List.takeThroughAcc_eq_map_takeThrough_scanl in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#take-through-acc-eq-map-take-through-sca" aria-label="Link to Accumulator-stopped prefix as a first-hit prefix of a scan" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.takeThroughAcc_eq_map_takeThrough_scanl</div>
+<div class="bp-thmcontent">
+<p>The recursive ETH operation is the ordinary inclusive first-hit prefix of the elements paired
+with their updated accumulators.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> takeThroughAcc_eq_map_takeThrough_scanl {α γ : <span class="bp-lean-keyword">Type</span>*} (f : γ → α → γ)
+    (stop : γ → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) (c : γ) (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α) :
+    <a class="bp-lean-ref" href="#take-through-acc" data-lean-name="List.takeThroughAcc">takeThroughAcc</a> f stop c xs =
+      ((xs.zip (xs.scanl f c).tail).takeThrough (<span class="bp-lean-keyword">fun</span> x =&gt; stop x.2)).map <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Prod.fst#doc" title="Prod.fst">Prod.fst</a></code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="List.takeThroughAcc">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> takeThroughAcc {α γ : <span class="bp-lean-keyword">Type</span>*} (f : γ → α → γ) (stop : γ → Bool) :
+    γ → List α → List α
+  | _, [] =&gt; []
+  | c, x :: xs =&gt;
+    <span class="bp-lean-keyword">let</span> c&#x27; := f c x
+    <span class="bp-lean-keyword">if</span> stop c&#x27; <span class="bp-lean-keyword">then</span> [x] <span class="bp-lean-keyword">else</span> x :: takeThroughAcc f stop c&#x27; xs</code></pre>
+<p class="bp-lean-where">MathlibExt/Data/List/TakeThroughAcc.lean:34</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through">Inclusive first-hit prefix of a list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#take-through-acc">Accumulator-stopped inclusive prefix of a list</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-cons-of-neg">Inclusive first-hit prefix when the head is not a hit</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-cons-of-pos">Inclusive first-hit prefix when the head is a hit</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#take-through-nil">Inclusive first-hit prefix of the empty list</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/length-le-of-mem-to-chunks">
+<h4 class="bp-thmheading" id="length-le-of-mem-to-chunks">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Chunks of a list have length at most the chunk size</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Data/List/ToChunks.lean#L76" aria-label="View List.length_le_of_mem_toChunks in Lean source" title="View List.length_le_of_mem_toChunks in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#length-le-of-mem-to-chunks" aria-label="Link to Chunks of a list have length at most the chunk size" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">List.length_le_of_mem_toChunks</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n &gt; 0\)</span> and let <span class="arithmatex">\(L\)</span> be a list.
+Split <span class="arithmatex">\(L\)</span> from left to right into consecutive chunks of size <span class="arithmatex">\(n\)</span>: elements go into the current
+chunk until it holds <span class="arithmatex">\(n\)</span> elements, then a new chunk is started. Every chunk produced has at most
+<span class="arithmatex">\(n\)</span> elements.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> length_le_of_mem_toChunks {α : <span class="bp-lean-keyword">Type</span> u} (n : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a>) (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α)
+    (hn : 0 &lt; n) (chunk : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α) (hchunk : chunk ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List.toChunks#doc" title="List.toChunks">toChunks</a> n xs) :
+    chunk.length ≤ n</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../sorting-and-searching/median-of-medians/index.html#median-of-medians-groups-time">Comparison cost of the group medians</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/ordered-insert">
+<h4 class="bp-thmheading" id="ordered-insert">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Ordered insertion into a list</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/DataStructures/OrderedInsert.lean#L44" aria-label="View Cslib.Algorithms.Lean.orderedInsert in Lean source" title="View Cslib.Algorithms.Lean.orderedInsert in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#ordered-insert" aria-label="Link to Ordered insertion into a list" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.orderedInsert</div>
+<div class="bp-thmcontent">
+<p>For an element <span class="arithmatex">\(x\)</span> of a linearly ordered type, the ordered
+insertion of <span class="arithmatex">\(x\)</span> into the empty list is <span class="arithmatex">\([x]\)</span>. For a list with head <span class="arithmatex">\(a\)</span> and tail <span class="arithmatex">\(\ell\)</span>, it is
+<span class="arithmatex">\(x\)</span> followed by the whole list if <span class="arithmatex">\(x &lt; a\)</span>; it is <span class="arithmatex">\(a\)</span> followed by the ordered insertion of <span class="arithmatex">\(x\)</span>
+into <span class="arithmatex">\(\ell\)</span> if <span class="arithmatex">\(a &lt; x\)</span>; and it is the list unchanged if <span class="arithmatex">\(a = x\)</span>.</p>
+<p>On a strictly increasing list a key that is already present is therefore ignored. On an unsorted
+list a later duplicate is not detected: inserting <span class="arithmatex">\(2\)</span> into <span class="arithmatex">\([3, 2]\)</span> gives <span class="arithmatex">\([2, 3, 2]\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">def</span> orderedInsert [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LinearOrder#doc" title="LinearOrder">LinearOrder</a> α] (x : α) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α
+  | [] =&gt; [x]
+  | a :: as =&gt;
+      <span class="bp-lean-keyword">if</span> x &lt; a <span class="bp-lean-keyword">then</span> x :: a :: as
+      <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> a &lt; x <span class="bp-lean-keyword">then</span> a :: orderedInsert x as
+      <span class="bp-lean-keyword">else</span> a :: as</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 13</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mem-ordered-insert">Members after ordered insertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ordered-insert-eq-of-mem">Inserting a present element into a strictly increasing list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../search-trees/2-3-tree/index.html#flatten-insert">Insertion into a 2-3 tree is ordered insertion into its traversal</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../search-trees/2-3-tree/index.html#ins-spec">Insertion specification for 2-3 trees</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../search-trees/2-3-tree/index.html#ins-spec-2">Correctness of 2-3 tree insertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../search-trees/2-3-tree/index.html#mem-flatten-insert">Keys after insertion into a 2-3 tree</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../search-trees/2-3-tree/index.html#ordered-insert">Insertion preserves the ordering of 2-3 trees</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../search-trees/b-tree/index.html#flatten-from-list-of-pairwise">Building a B-tree from a strictly increasing list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../search-trees/b-tree/index.html#flatten-insert">B-tree insertion as sorted list insertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../search-trees/b-tree/index.html#flatten-length-insert">Size of a B-tree after insertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../search-trees/b-tree/index.html#ins-leaf">Insertion into a B-tree leaf</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../search-trees/b-tree/index.html#insert-2">Insertion preserves the B-tree invariant</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../search-trees/b-tree/index.html#mem-insert">Membership after B-tree insertion</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/mem-ordered-insert">
+<h4 class="bp-thmheading" id="mem-ordered-insert">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Members after ordered insertion</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/DataStructures/OrderedInsert.lean#L52" aria-label="View Cslib.Algorithms.Lean.mem_orderedInsert in Lean source" title="View Cslib.Algorithms.Lean.mem_orderedInsert in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#mem-ordered-insert" aria-label="Link to Members after ordered insertion" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.mem_orderedInsert</div>
+<div class="bp-thmcontent">
+<p>Over a linearly ordered type, for all elements <span class="arithmatex">\(x\)</span>, <span class="arithmatex">\(y\)</span>
+and every list <span class="arithmatex">\(\ell\)</span>, the element <span class="arithmatex">\(y\)</span> belongs to the ordered insertion of <span class="arithmatex">\(x\)</span> into <span class="arithmatex">\(\ell\)</span> if and
+only if <span class="arithmatex">\(y = x\)</span> or <span class="arithmatex">\(y\)</span> belongs to <span class="arithmatex">\(\ell\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem</span> mem_orderedInsert [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LinearOrder#doc" title="LinearOrder">LinearOrder</a> α] {x y : α} {xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α} :
+    y ∈ <a class="bp-lean-ref" href="#ordered-insert" data-lean-name="Cslib.Algorithms.Lean.orderedInsert">orderedInsert</a> x xs ↔ y = x ∨ y ∈ xs</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.orderedInsert">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">def</span> orderedInsert [LinearOrder α] (x : α) : List α → List α
+  | [] =&gt; [x]
+  | a :: as =&gt;
+      <span class="bp-lean-keyword">if</span> x &lt; a <span class="bp-lean-keyword">then</span> x :: a :: as
+      <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> a &lt; x <span class="bp-lean-keyword">then</span> a :: orderedInsert x as
+      <span class="bp-lean-keyword">else</span> a :: as</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/DataStructures/OrderedInsert.lean:44</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ordered-insert">Ordered insertion into a list</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../search-trees/2-3-tree/index.html#mem-flatten-insert">Keys after insertion into a 2-3 tree</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../search-trees/b-tree/index.html#insert-2">Insertion preserves the B-tree invariant</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../search-trees/b-tree/index.html#mem-insert">Membership after B-tree insertion</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/data-structures/linear-structures/list-operations/ordered-insert-eq-of-mem">
+<h4 class="bp-thmheading" id="ordered-insert-eq-of-mem">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Inserting a present element into a strictly increasing list</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/DataStructures/OrderedInsert.lean#L68" aria-label="View Cslib.Algorithms.Lean.orderedInsert_eq_of_mem in Lean source" title="View Cslib.Algorithms.Lean.orderedInsert_eq_of_mem in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#ordered-insert-eq-of-mem" aria-label="Link to Inserting a present element into a strictly increasing list" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.orderedInsert_eq_of_mem</div>
+<div class="bp-thmcontent">
+<p>Over a linearly ordered
+type, if every element of a list <span class="arithmatex">\(\ell\)</span> is smaller than every later element of <span class="arithmatex">\(\ell\)</span> and <span class="arithmatex">\(x\)</span>
+belongs to <span class="arithmatex">\(\ell\)</span>, then the ordered insertion of <span class="arithmatex">\(x\)</span> into <span class="arithmatex">\(\ell\)</span> is <span class="arithmatex">\(\ell\)</span> itself.</p>
+<p>Without strict increase this fails: inserting <span class="arithmatex">\(2\)</span> into <span class="arithmatex">\([3, 2]\)</span> gives <span class="arithmatex">\([2, 3, 2]\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem</span> orderedInsert_eq_of_mem [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LinearOrder#doc" title="LinearOrder">LinearOrder</a> α] {x : α} {xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> α}
+    (hSorted : xs.Pairwise (· &lt; ·)) (hMem : x ∈ xs) :
+    <a class="bp-lean-ref" href="#ordered-insert" data-lean-name="Cslib.Algorithms.Lean.orderedInsert">orderedInsert</a> x xs = xs</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.orderedInsert">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">def</span> orderedInsert [LinearOrder α] (x : α) : List α → List α
+  | [] =&gt; [x]
+  | a :: as =&gt;
+      <span class="bp-lean-keyword">if</span> x &lt; a <span class="bp-lean-keyword">then</span> x :: a :: as
+      <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> a &lt; x <span class="bp-lean-keyword">then</span> a :: orderedInsert x as
+      <span class="bp-lean-keyword">else</span> a :: as</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/DataStructures/OrderedInsert.lean:44</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ordered-insert">Ordered insertion into a list</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../search-trees/b-tree/index.html#flatten-insert">B-tree insertion as sorted list insertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../search-trees/b-tree/index.html#flatten-length-insert">Size of a B-tree after insertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../search-trees/b-tree/index.html#insert-2">Insertion preserves the B-tree invariant</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>35</strong> fully proved</span></div>
+</div>
+</div>
+<p><link rel="stylesheet" href="../../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../../dependencies/index.json" data-graph-src="../../../../../dependencies/scopes/ComputerScience/data-structures/linear-structures/list-operations.json" data-page-href="index.html" data-scope-id="ComputerScience/data-structures/linear-structures/list-operations">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>

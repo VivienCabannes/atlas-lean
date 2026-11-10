@@ -1,0 +1,5516 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../parallel-complexity-class-nc/index.html">
+      
+      
+        <link rel="next" href="../kogge-stone-adder/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Ripple-carry adder - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#circuits" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Ripple-carry adder
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_22" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_22" id="__nav_2_1_22_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_22_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_22">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Theory of Computation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../np-completeness/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NP-completeness
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../complexity-classes/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Complexity classes
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../hierarchy-theorems-and-barriers/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hierarchy theorems and proof barriers
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../regular-languages/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Finite automata and regular languages
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../context-free-languages/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Context-free languages
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../decision-procedures/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Decision procedures for automata, grammars and strings
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../turing-machines/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Turing machines
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../equivalence-of-models/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Equivalence of models of computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../computability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computability and undecidability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../undecidable-problems/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Undecidable problems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../degrees-and-hierarchies/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Degrees of unsolvability and the arithmetical hierarchy
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../omega-automata-and-games/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Automata on infinite words and infinite games
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../context-sensitive-languages/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Context-sensitive languages
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../randomized-and-quantum-complexity/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Randomized, interactive and quantum complexity
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../counting-complexity/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Counting complexity
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../pseudorandomness-and-one-way-functions/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pseudorandomness and one-way functions
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_22_18" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Boolean circuit complexity
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_22_18" id="__nav_2_1_22_18_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_22_18_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_22_18">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Boolean circuit complexity
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../boolean-circuits/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Boolean circuits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lower-bounds-for-ac0-circuits/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lower bounds for AC0 circuits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../monotone-circuit-lower-bound-for-clique/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monotone circuit lower bound for clique
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../parallel-complexity-class-nc/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel complexity class NC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ripple-carry adder
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ripple-carry adder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#circuits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Circuits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ripple-carry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ripple Carry
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#circuits_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Circuits
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kogge-stone-adder/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kogge–Stone adder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../shannon-s-circuit-size-lower-bound/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Shannon&#39;s circuit-size lower bound
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../two-s-complement-subtraction-and-overflow/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Two&#39;s complement subtraction and overflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../algebraic-complexity/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic complexity
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../descriptive-complexity/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Descriptive complexity
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../kolmogorov-complexity/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kolmogorov complexity
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../pcp-and-inapproximability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probabilistically checkable proofs and inapproximability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../completeness-other-classes/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Completeness for other complexity classes
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../polynomial-time-problems/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problems solvable in polynomial time
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../fine-grained-complexity/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fine-grained and exponential-time complexity
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../ComputerScience/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#circuits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Circuits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ripple-carry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ripple Carry
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#circuits_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Circuits
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../index.html" tabindex="-1">Theory of Computation</a></li><li><a href="../index.html" tabindex="-1">Boolean circuit complexity</a></li><li aria-current="page">Ripple-carry adder</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Ripple-carry adder</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="TheoryOfComputation/circuit-complexity/ripple-carry-adder" data-page-title="Ripple-carry adder">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="ripple-carry-adder_1">Ripple-carry adder</h1>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>15</strong> fully proved</span></div>
+</div>
+<h2 id="circuits">Circuits</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="TheoryOfComputation/circuit-complexity/ripple-carry-adder/arith-gate">
+<h4 class="bp-thmheading" id="arith-gate">
+<span class="bp-thmcaption" data-search-exclude>Inductive</span><span class="bp-thmtitle">Arithmetic gate symbols</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean#L51" aria-label="View Cslib.Circuits.ArithGate in Lean source" title="View Cslib.Circuits.ArithGate in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#arith-gate" aria-label="Link to Arithmetic gate symbols" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Circuits.ArithGate</div>
+<div class="bp-thmcontent">
+<p>The gate symbols of arithmetic circuits are exactly three:
+XOR, AND and OR.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> ArithGate <span class="bp-lean-keyword">where</span>
+  | xor
+  | and
+  | or
+  <span class="bp-lean-keyword">deriving</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Repr#doc" title="Repr">Repr</a>, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=DecidableEq#doc" title="DecidableEq">DecidableEq</a></code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 20</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../kogge-stone-adder/index.html#cla-program-carry">The carry gates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../kogge-stone-adder/index.html#cla-program-carry-depth">Depth of the carry gates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../kogge-stone-adder/index.html#cla-program-sum">The sum gates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../kogge-stone-adder/index.html#cla-program-sum-depth">Depth of the sum gates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#depth-interpretation-arith">Depth of an arithmetic gate</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../kogge-stone-adder/index.html#levels-depth">Depths after each level</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../kogge-stone-adder/index.html#levels-eval">Each Kogge-Stone level is correct</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../kogge-stone-adder/index.html#levels-zero-eval">Level 0 computes generate and propagate</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#line-f">Gates of the final level</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#line-k">Gates of a Kogge-Stone level</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#line0">Gates of level 0</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../kogge-stone-adder/index.html#rca-program-depth">Gate depths of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#arith-interpretation">Boolean interpretation of the arithmetic gates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#arith-signature">Arithmetic basis</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bin-line">Binary gate line</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#line">Gates of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rca-program-eval">Gate values of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder">The overflow adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-eval-of-lt">The overflow adder extends the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-overflow">The overflow flag</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="TheoryOfComputation/circuit-complexity/ripple-carry-adder/arith-signature">
+<h4 class="bp-thmheading" id="arith-signature">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Arithmetic basis</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean#L58" aria-label="View Cslib.Circuits.arithSignature in Lean source" title="View Cslib.Circuits.arithSignature in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#arith-signature" aria-label="Link to Arithmetic basis" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Circuits.arithSignature</div>
+<div class="bp-thmcontent">
+<p>The circuit signature whose operation symbols are the three arithmetic
+gate symbols XOR, AND and OR, each of arity <span class="arithmatex">\(2\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> arithSignature : Signature <span class="bp-lean-keyword">where</span>
+  Op := <a class="bp-lean-ref" href="#arith-gate" data-lean-name="Cslib.Circuits.ArithGate">ArithGate</a>
+  Arity _ := 2</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Circuits.ArithGate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> ArithGate <span class="bp-lean-keyword">where</span>
+  | xor
+  | and
+  | or
+  <span class="bp-lean-keyword">deriving</span> Repr, DecidableEq</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:51</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 39</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#arith-gate">Arithmetic gate symbols</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#carry-lookahead-adder">Kogge–Stone carry-lookahead adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#carry-lookahead-adder-carry">Carry out of the carry-lookahead adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#carry-lookahead-adder-depth">Exact depth of the carry-lookahead adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#carry-lookahead-adder-depth-cla-levels">Depth of the carry-lookahead adder with logarithmically many levels</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#carry-lookahead-adder-size">Gate count of the carry-lookahead adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#carry-lookahead-adder-sum">Sum bits of the carry-lookahead adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#cla-program">Gates of the carry-lookahead adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#cla-program-carry">The carry gates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#cla-program-carry-depth">Depth of the carry gates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#cla-program-sum">The sum gates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#cla-program-sum-depth">Depth of the sum gates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#depth-interpretation-arith">Depth of an arithmetic gate</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#levels">The first Kogge-Stone levels</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#levels-depth">Depths after each level</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#levels-eval">Each Kogge-Stone level is correct</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#levels-eval-base">Level-0 gates are unchanged by later levels</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#levels-zero-eval">Level 0 computes generate and propagate</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#line-f">Gates of the final level</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#line-k">Gates of a Kogge-Stone level</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#line0">Gates of level 0</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#rca-program-depth">Gate depths of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#ripple-carry-adder-depth">The ripple-carry adder has linear depth</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#arith-interpretation">Boolean interpretation of the arithmetic gates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bin-line">Binary gate line</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#line">Gates of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rca-program">Gate program of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rca-program-eval">Gate values of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ripple-carry-adder">Ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ripple-carry-adder-carry">Carry out of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ripple-carry-adder-size">Size of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ripple-carry-adder-sum">Sum bits of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#carry-lookahead-adder-sub">The carry-lookahead adder subtracts</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder">The overflow adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-eval-of-lt">The overflow adder extends the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-overflow">The overflow flag</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-size">Size of the overflow adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-sum">Sum bits of the overflow adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#ripple-carry-adder-no-borrow">Carry out of ripple-carry subtraction</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#ripple-carry-adder-sub">The ripple-carry adder subtracts</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="TheoryOfComputation/circuit-complexity/ripple-carry-adder/arith-interpretation">
+<h4 class="bp-thmheading" id="arith-interpretation">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Boolean interpretation of the arithmetic gates</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean#L63" aria-label="View Cslib.Circuits.arithInterpretation in Lean source" title="View Cslib.Circuits.arithInterpretation in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#arith-interpretation" aria-label="Link to Boolean interpretation of the arithmetic gates" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Circuits.arithInterpretation</div>
+<div class="bp-thmcontent">
+<p>The interpretation of the arithmetic
+basis in the Booleans: on a first argument <span class="arithmatex">\(a\)</span> and a second argument <span class="arithmatex">\(b\)</span>, the XOR gate computes
+<span class="arithmatex">\(a \oplus b\)</span>, the AND gate computes <span class="arithmatex">\(a \wedge b\)</span>, and the OR gate computes <span class="arithmatex">\(a \vee b\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> arithInterpretation : Interpretation <a class="bp-lean-ref" href="#arith-signature" data-lean-name="Cslib.Circuits.arithSignature">arithSignature</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>
+  | .xor, f =&gt; f ⟨0, <span class="bp-lean-keyword">by</span> decide⟩ ^^ f ⟨1, <span class="bp-lean-keyword">by</span> decide⟩
+  | .and, f =&gt; f ⟨0, <span class="bp-lean-keyword">by</span> decide⟩ &amp;&amp; f ⟨1, <span class="bp-lean-keyword">by</span> decide⟩
+  | .or, f =&gt; f ⟨0, <span class="bp-lean-keyword">by</span> decide⟩ || f ⟨1, <span class="bp-lean-keyword">by</span> decide⟩</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Circuits.arithSignature">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> arithSignature : Signature <span class="bp-lean-keyword">where</span>
+  Op := ArithGate
+  Arity _ := 2</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:58</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 15</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#arith-gate">Arithmetic gate symbols</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#arith-signature">Arithmetic basis</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#carry-lookahead-adder-carry">Carry out of the carry-lookahead adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#carry-lookahead-adder-sum">Sum bits of the carry-lookahead adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#cla-program-carry">The carry gates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#cla-program-sum">The sum gates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#levels-eval">Each Kogge-Stone level is correct</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#levels-zero-eval">Level 0 computes generate and propagate</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rca-program-eval">Gate values of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ripple-carry-adder-carry">Carry out of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ripple-carry-adder-sum">Sum bits of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#carry-lookahead-adder-sub">The carry-lookahead adder subtracts</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-eval-of-lt">The overflow adder extends the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-overflow">The overflow flag</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-sum">Sum bits of the overflow adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#ripple-carry-adder-no-borrow">Carry out of ripple-carry subtraction</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#ripple-carry-adder-sub">The ripple-carry adder subtracts</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="TheoryOfComputation/circuit-complexity/ripple-carry-adder/bin-line">
+<h4 class="bp-thmheading" id="bin-line">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Binary gate line</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean#L78" aria-label="View Cslib.Circuits.binLine in Lean source" title="View Cslib.Circuits.binLine in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#bin-line" aria-label="Link to Binary gate line" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Circuits.binLine</div>
+<div class="bp-thmcontent">
+<p>For an arithmetic gate symbol <span class="arithmatex">\(\mathrm{op}\)</span> and wires <span class="arithmatex">\(u\)</span> and <span class="arithmatex">\(v\)</span> of a
+circuit with <span class="arithmatex">\(m\)</span> inputs (each wire is an input or one of the <span class="arithmatex">\(g\)</span> preceding gates), the gate that
+applies <span class="arithmatex">\(\mathrm{op}\)</span> to <span class="arithmatex">\(u\)</span> as its first argument and <span class="arithmatex">\(v\)</span> as its second.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> binLine {m g : ℕ} (op : <a class="bp-lean-ref" href="#arith-gate" data-lean-name="Cslib.Circuits.ArithGate">ArithGate</a>) (u v : Wire m g) : Line <a class="bp-lean-ref" href="#arith-signature" data-lean-name="Cslib.Circuits.arithSignature">arithSignature</a> m g :=
+  ⟨op, <span class="bp-lean-keyword">fun</span> k =&gt; <span class="bp-lean-keyword">if</span> k.val = 0 <span class="bp-lean-keyword">then</span> u <span class="bp-lean-keyword">else</span> v⟩</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Circuits.ArithGate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> ArithGate <span class="bp-lean-keyword">where</span>
+  | xor
+  | and
+  | or
+  <span class="bp-lean-keyword">deriving</span> Repr, DecidableEq</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:51</p>
+</div>
+<div data-lean-name="Cslib.Circuits.arithSignature">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> arithSignature : Signature <span class="bp-lean-keyword">where</span>
+  Op := ArithGate
+  Arity _ := 2</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:58</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 16</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#arith-gate">Arithmetic gate symbols</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#arith-signature">Arithmetic basis</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../kogge-stone-adder/index.html#cla-program-carry">The carry gates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../kogge-stone-adder/index.html#cla-program-carry-depth">Depth of the carry gates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../kogge-stone-adder/index.html#cla-program-sum">The sum gates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../kogge-stone-adder/index.html#cla-program-sum-depth">Depth of the sum gates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../kogge-stone-adder/index.html#levels-depth">Depths after each level</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../kogge-stone-adder/index.html#levels-eval">Each Kogge-Stone level is correct</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../kogge-stone-adder/index.html#levels-zero-eval">Level 0 computes generate and propagate</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#line-f">Gates of the final level</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#line-k">Gates of a Kogge-Stone level</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#line0">Gates of level 0</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../kogge-stone-adder/index.html#rca-program-depth">Gate depths of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#line">Gates of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rca-program-eval">Gate values of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder">The overflow adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-eval-of-lt">The overflow adder extends the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-overflow">The overflow flag</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="ripple-carry">Ripple Carry</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="TheoryOfComputation/circuit-complexity/ripple-carry-adder/carry-wire">
+<h4 class="bp-thmheading" id="carry-wire">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Carry wire</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean#L96" aria-label="View Cslib.Circuits.RippleCarry.carryWire in Lean source" title="View Cslib.Circuits.RippleCarry.carryWire in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#carry-wire" aria-label="Link to Carry wire" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Circuits.RippleCarry.carryWire</div>
+<div class="bp-thmcontent">
+<p>For natural numbers <span class="arithmatex">\(n\)</span>, <span class="arithmatex">\(g\)</span> and <span class="arithmatex">\(i\)</span> with <span class="arithmatex">\(5i \le g\)</span>, the wire carrying the
+carry into bit <span class="arithmatex">\(i\)</span> of the <span class="arithmatex">\(n\)</span>-bit adder, in a circuit with <span class="arithmatex">\(2n + 1\)</span> inputs and <span class="arithmatex">\(g\)</span> gates: for
+<span class="arithmatex">\(i = 0\)</span> it is the carry-in input (input <span class="arithmatex">\(2n\)</span>), and for <span class="arithmatex">\(i \ne 0\)</span> it is gate <span class="arithmatex">\(5i - 1\)</span>, the
+carry-out gate of bit <span class="arithmatex">\(i - 1\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> carryWire (n g i : ℕ) (hi : 5 * i ≤ g) : Wire (2 * n + 1) g :=
+  <span class="bp-lean-keyword">if</span> h : i = 0 <span class="bp-lean-keyword">then</span> Wire.input ⟨2 * n, <span class="bp-lean-keyword">by</span> omega⟩ <span class="bp-lean-keyword">else</span> Wire.gate ⟨5 * i - 1, <span class="bp-lean-keyword">by</span> omega⟩</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 11</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../kogge-stone-adder/index.html#rca-program-depth">Gate depths of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../kogge-stone-adder/index.html#ripple-carry-adder-depth">The ripple-carry adder has linear depth</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#carry-wire-value">Value of the carry wire</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#line">Gates of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rca-program-eval">Gate values of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ripple-carry-adder">Ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#ripple-carry-adder-carry">Carry out of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#ripple-carry-adder-sum">Sum bits of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder">The overflow adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-eval-of-lt">The overflow adder extends the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-overflow">The overflow flag</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="TheoryOfComputation/circuit-complexity/ripple-carry-adder/line">
+<h4 class="bp-thmheading" id="line">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Gates of the ripple-carry adder</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean#L100" aria-label="View Cslib.Circuits.RippleCarry.line in Lean source" title="View Cslib.Circuits.RippleCarry.line in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#line" aria-label="Link to Gates of the ripple-carry adder" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Circuits.RippleCarry.line</div>
+<div class="bp-thmcontent">
+<p>For natural numbers <span class="arithmatex">\(n\)</span> and <span class="arithmatex">\(g\)</span> with <span class="arithmatex">\(g &lt; 5n\)</span>, gate <span class="arithmatex">\(g\)</span> of
+the <span class="arithmatex">\(n\)</span>-bit ripple-carry adder is the following binary gate of the arithmetic basis, whose
+arguments are among the <span class="arithmatex">\(2n + 1\)</span> inputs and the <span class="arithmatex">\(g\)</span> gates before it. Write <span class="arithmatex">\(g = 5i + r\)</span> with
+<span class="arithmatex">\(0 \le r &lt; 5\)</span>, let <span class="arithmatex">\(a\)</span> be input <span class="arithmatex">\(i\)</span> and <span class="arithmatex">\(b\)</span> input <span class="arithmatex">\(n + i\)</span>, and let <span class="arithmatex">\(c\)</span> be the carry into bit <span class="arithmatex">\(i\)</span>:
+input <span class="arithmatex">\(2n\)</span> if <span class="arithmatex">\(i = 0\)</span> and gate <span class="arithmatex">\(5i - 1\)</span> otherwise. Gate <span class="arithmatex">\(g\)</span> is the XOR gate with first argument
+<span class="arithmatex">\(a\)</span> and second argument <span class="arithmatex">\(b\)</span> if <span class="arithmatex">\(r = 0\)</span>, the XOR gate with first argument gate <span class="arithmatex">\(g - 1\)</span> and second
+argument <span class="arithmatex">\(c\)</span> if <span class="arithmatex">\(r = 1\)</span>, the AND gate with first argument <span class="arithmatex">\(a\)</span> and second argument <span class="arithmatex">\(b\)</span> if <span class="arithmatex">\(r = 2\)</span>,
+the AND gate with first argument gate <span class="arithmatex">\(g - 3\)</span> and second argument <span class="arithmatex">\(c\)</span> if <span class="arithmatex">\(r = 3\)</span>, and the OR gate
+with first argument gate <span class="arithmatex">\(g - 2\)</span> and second argument gate <span class="arithmatex">\(g - 1\)</span> if <span class="arithmatex">\(r = 4\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> line (n g : ℕ) (hg : g &lt; 5 * n) : Line <a class="bp-lean-ref" href="#arith-signature" data-lean-name="Cslib.Circuits.arithSignature">arithSignature</a> (2 * n + 1) g :=
+  <span class="bp-lean-keyword">let</span> a : Wire (2 * n + 1) g := Wire.input ⟨g / 5, <span class="bp-lean-keyword">by</span> omega⟩
+  <span class="bp-lean-keyword">let</span> b : Wire (2 * n + 1) g := Wire.input ⟨n + g / 5, <span class="bp-lean-keyword">by</span> omega⟩
+  <span class="bp-lean-keyword">let</span> c := carryWire n g (g / 5) (Nat.mul_div_le g 5)
+  <span class="bp-lean-keyword">if</span> h0 : g % 5 = 0 <span class="bp-lean-keyword">then</span> binLine .xor a b
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> h1 : g % 5 = 1 <span class="bp-lean-keyword">then</span> binLine .xor (Wire.gate ⟨g - 1, <span class="bp-lean-keyword">by</span> omega⟩) c
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> h2 : g % 5 = 2 <span class="bp-lean-keyword">then</span> binLine .and a b
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> h3 : g % 5 = 3 <span class="bp-lean-keyword">then</span> binLine .and (Wire.gate ⟨g - 3, <span class="bp-lean-keyword">by</span> omega⟩) c
+  <span class="bp-lean-keyword">else</span> binLine .or (Wire.gate ⟨g - 2, <span class="bp-lean-keyword">by</span> omega⟩) (Wire.gate ⟨g - 1, <span class="bp-lean-keyword">by</span> omega⟩)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Circuits.arithSignature">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> arithSignature : Signature <span class="bp-lean-keyword">where</span>
+  Op := ArithGate
+  Arity _ := 2</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:58</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#arith-gate">Arithmetic gate symbols</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#carry-wire">Carry wire</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#arith-signature">Arithmetic basis</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bin-line">Binary gate line</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../kogge-stone-adder/index.html#rca-program-depth">Gate depths of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rca-program">Gate program of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rca-program-eval">Gate values of the ripple-carry adder</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="circuits_1">Circuits</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="TheoryOfComputation/circuit-complexity/ripple-carry-adder/rca-program">
+<h4 class="bp-thmheading" id="rca-program">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Gate program of the ripple-carry adder</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean#L115" aria-label="View Cslib.Circuits.rcaProgram in Lean source" title="View Cslib.Circuits.rcaProgram in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#rca-program" aria-label="Link to Gate program of the ripple-carry adder" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Circuits.rcaProgram</div>
+<div class="bp-thmcontent">
+<p>For <span class="arithmatex">\(g \le 5n\)</span>, the straight-line program over the
+arithmetic basis with <span class="arithmatex">\(2n + 1\)</span> inputs whose gates are, in order, gates <span class="arithmatex">\(0, 1, \dots, g - 1\)</span> of
+the <span class="arithmatex">\(n\)</span>-bit ripple-carry adder; for <span class="arithmatex">\(g = 0\)</span> it is the empty program.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rcaProgram (n : ℕ) : (g : ℕ) → g ≤ 5 * n → Program <a class="bp-lean-ref" href="#arith-signature" data-lean-name="Cslib.Circuits.arithSignature">arithSignature</a> (2 * n + 1) g
+  | 0, _ =&gt; .empty
+  | g + 1, h =&gt; (rcaProgram n g (<span class="bp-lean-keyword">by</span> omega)).gate (line n g (<span class="bp-lean-keyword">by</span> omega))</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Circuits.arithSignature">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> arithSignature : Signature <span class="bp-lean-keyword">where</span>
+  Op := ArithGate
+  Arity _ := 2</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:58</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 9</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#line">Gates of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#arith-signature">Arithmetic basis</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#rca-program-depth">Gate depths of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../kogge-stone-adder/index.html#ripple-carry-adder-depth">The ripple-carry adder has linear depth</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rca-program-eval">Gate values of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ripple-carry-adder">Ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#ripple-carry-adder-carry">Carry out of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#ripple-carry-adder-sum">Sum bits of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder">The overflow adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-eval-of-lt">The overflow adder extends the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-overflow">The overflow flag</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="TheoryOfComputation/circuit-complexity/ripple-carry-adder/ripple-carry-adder">
+<h4 class="bp-thmheading" id="ripple-carry-adder">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Ripple-carry adder</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean#L121" aria-label="View Cslib.Circuits.rippleCarryAdder in Lean source" title="View Cslib.Circuits.rippleCarryAdder in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#ripple-carry-adder" aria-label="Link to Ripple-carry adder" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Circuits.rippleCarryAdder</div>
+<div class="bp-thmcontent">
+<p>The <span class="arithmatex">\(n\)</span>-bit ripple-carry adder is the circuit with <span class="arithmatex">\(2n + 1\)</span> inputs,
+<span class="arithmatex">\(5n\)</span> binary gates, each an XOR, AND or OR gate, and <span class="arithmatex">\(n + 1\)</span> outputs, built as follows. Write <span class="arithmatex">\(a_i\)</span>
+for input <span class="arithmatex">\(i\)</span>, <span class="arithmatex">\(b_i\)</span> for input <span class="arithmatex">\(n + i\)</span> and <span class="arithmatex">\(c_0\)</span> for input <span class="arithmatex">\(2n\)</span>, where <span class="arithmatex">\(i &lt; n\)</span>. For each <span class="arithmatex">\(i &lt; n\)</span>,
+gates <span class="arithmatex">\(g_{5i}, \dots, g_{5i+4}\)</span> form a full adder for position <span class="arithmatex">\(i\)</span>: <span class="arithmatex">\(g_{5i} = a_i \oplus b_i\)</span>,
+<span class="arithmatex">\(g_{5i+1} = g_{5i} \oplus c_i\)</span>, <span class="arithmatex">\(g_{5i+2} = a_i \wedge b_i\)</span>, <span class="arithmatex">\(g_{5i+3} = g_{5i} \wedge c_i\)</span> and
+<span class="arithmatex">\(g_{5i+4} = g_{5i+2} \vee g_{5i+3}\)</span>, where the carry <span class="arithmatex">\(c_i\)</span> is input <span class="arithmatex">\(2n\)</span> when <span class="arithmatex">\(i = 0\)</span> and gate
+<span class="arithmatex">\(g_{5i-1}\)</span> otherwise. For <span class="arithmatex">\(i &lt; n\)</span>, output <span class="arithmatex">\(i\)</span> is gate <span class="arithmatex">\(g_{5i+1}\)</span>, and output <span class="arithmatex">\(n\)</span> is the carry out
+<span class="arithmatex">\(c_n\)</span>: input <span class="arithmatex">\(2n\)</span> when <span class="arithmatex">\(n = 0\)</span>, otherwise gate <span class="arithmatex">\(g_{5n-1}\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rippleCarryAdder (n : ℕ) : Circuit <a class="bp-lean-ref" href="#arith-signature" data-lean-name="Cslib.Circuits.arithSignature">arithSignature</a> (2 * n + 1) (n + 1) <span class="bp-lean-keyword">where</span>
+  size := 5 * n
+  program := <a class="bp-lean-ref" href="#rca-program" data-lean-name="Cslib.Circuits.rcaProgram">rcaProgram</a> n (5 * n) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat.le_refl#doc" title="Nat.le_refl">Nat.le_refl</a> _)
+  outputs o := <span class="bp-lean-keyword">if</span> h : o.val &lt; n <span class="bp-lean-keyword">then</span> Wire.gate ⟨5 * o.val + 1, <span class="bp-lean-keyword">by</span> omega⟩
+    <span class="bp-lean-keyword">else</span> carryWire n (5 * n) n (Nat.le_refl _)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Circuits.arithSignature">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> arithSignature : Signature <span class="bp-lean-keyword">where</span>
+  Op := ArithGate
+  Arity _ := 2</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:58</p>
+</div>
+<div data-lean-name="Cslib.Circuits.rcaProgram">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rcaProgram (n : ℕ) : (g : ℕ) → g ≤ 5 * n → Program arithSignature (2 * n + 1) g
+  | 0, _ =&gt; .empty
+  | g + 1, h =&gt; (rcaProgram n g (<span class="bp-lean-keyword">by</span> omega)).gate (line n g (<span class="bp-lean-keyword">by</span> omega))</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:115</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 10</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#carry-wire">Carry wire</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#arith-signature">Arithmetic basis</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rca-program">Gate program of the ripple-carry adder</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#ripple-carry-adder-depth">The ripple-carry adder has linear depth</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ripple-carry-adder-carry">Carry out of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ripple-carry-adder-size">Size of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ripple-carry-adder-sum">Sum bits of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder">The overflow adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-eval-of-lt">The overflow adder extends the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-overflow">The overflow flag</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-sum">Sum bits of the overflow adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#ripple-carry-adder-no-borrow">Carry out of ripple-carry subtraction</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#ripple-carry-adder-sub">The ripple-carry adder subtracts</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="TheoryOfComputation/circuit-complexity/ripple-carry-adder/rca-input">
+<h4 class="bp-thmheading" id="rca-input">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Input of the ripple-carry adder</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean#L128" aria-label="View Cslib.Circuits.rcaInput in Lean source" title="View Cslib.Circuits.rcaInput in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#rca-input" aria-label="Link to Input of the ripple-carry adder" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Circuits.rcaInput</div>
+<div class="bp-thmcontent">
+<p>For <span class="arithmatex">\(n\)</span>-bit vectors <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span> and a bit <span class="arithmatex">\(c\)</span>, the
+assignment to the <span class="arithmatex">\(2n + 1\)</span> inputs of the <span class="arithmatex">\(n\)</span>-bit adder: for <span class="arithmatex">\(j &lt; n\)</span>, input <span class="arithmatex">\(j\)</span> is bit <span class="arithmatex">\(j\)</span> of
+<span class="arithmatex">\(x\)</span>; for <span class="arithmatex">\(n \le j &lt; 2n\)</span>, input <span class="arithmatex">\(j\)</span> is bit <span class="arithmatex">\(j - n\)</span> of <span class="arithmatex">\(y\)</span>; and input <span class="arithmatex">\(2n\)</span> is <span class="arithmatex">\(c\)</span>. Bit <span class="arithmatex">\(0\)</span> is the
+least significant bit.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rcaInput {n : ℕ} (x y : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=BitVec#doc" title="BitVec">BitVec</a> n) (c : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (2 * n + 1) → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> := <span class="bp-lean-keyword">fun</span> j =&gt;
+  <span class="bp-lean-keyword">if</span> j.val &lt; n <span class="bp-lean-keyword">then</span> x.getLsbD j.val <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> j.val &lt; 2 * n <span class="bp-lean-keyword">then</span> y.getLsbD (j.val - n) <span class="bp-lean-keyword">else</span> c</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 16</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#carry-lookahead-adder-carry">Carry out of the carry-lookahead adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#carry-lookahead-adder-sum">Sum bits of the carry-lookahead adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#cla-program-carry">The carry gates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#cla-program-sum">The sum gates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#levels-eval">Each Kogge-Stone level is correct</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../kogge-stone-adder/index.html#levels-zero-eval">Level 0 computes generate and propagate</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#carry-wire-value">Value of the carry wire</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rca-program-eval">Gate values of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ripple-carry-adder-carry">Carry out of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ripple-carry-adder-sum">Sum bits of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#carry-lookahead-adder-sub">The carry-lookahead adder subtracts</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-eval-of-lt">The overflow adder extends the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-overflow">The overflow flag</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-sum">Sum bits of the overflow adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#ripple-carry-adder-no-borrow">Carry out of ripple-carry subtraction</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-s-complement-subtraction-and-overflow/index.html#ripple-carry-adder-sub">The ripple-carry adder subtracts</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="TheoryOfComputation/circuit-complexity/ripple-carry-adder/rca-spec">
+<h4 class="bp-thmheading" id="rca-spec">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Gate-value specification of the ripple-carry adder</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean#L132" aria-label="View Cslib.Circuits.rcaSpec in Lean source" title="View Cslib.Circuits.rcaSpec in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#rca-spec" aria-label="Link to Gate-value specification of the ripple-carry adder" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Circuits.rcaSpec</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(x, y\)</span> be <span class="arithmatex">\(n\)</span>-bit vectors, <span class="arithmatex">\(c\)</span> a
+bit and <span class="arithmatex">\(j\)</span> a natural number, and write <span class="arithmatex">\(j = 5i + r\)</span> with <span class="arithmatex">\(0 \le r &lt; 5\)</span>. Let <span class="arithmatex">\(x_i\)</span> and <span class="arithmatex">\(y_i\)</span> be
+bit <span class="arithmatex">\(i\)</span> of <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span> (bit <span class="arithmatex">\(0\)</span> is the least significant, and bits at positions <span class="arithmatex">\(i \ge n\)</span> are <span class="arithmatex">\(0\)</span>),
+and let <span class="arithmatex">\(c_i\)</span> be the carry into position <span class="arithmatex">\(i\)</span> when <span class="arithmatex">\(x\)</span>, <span class="arithmatex">\(y\)</span> and <span class="arithmatex">\(c\)</span> are added: reading <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span>
+as natural numbers, <span class="arithmatex">\(c_i = 1\)</span> exactly when <span class="arithmatex">\((x \bmod 2^i) + (y \bmod 2^i) + c \ge 2^i\)</span>. The
+specification assigns to <span class="arithmatex">\(j\)</span> the bit <span class="arithmatex">\(x_i \oplus y_i\)</span> if <span class="arithmatex">\(r = 0\)</span>, <span class="arithmatex">\((x_i \oplus y_i) \oplus c_i\)</span>
+if <span class="arithmatex">\(r = 1\)</span>, <span class="arithmatex">\(x_i \wedge y_i\)</span> if <span class="arithmatex">\(r = 2\)</span>, <span class="arithmatex">\((x_i \oplus y_i) \wedge c_i\)</span> if <span class="arithmatex">\(r = 3\)</span>, and <span class="arithmatex">\(c_{i+1}\)</span>
+if <span class="arithmatex">\(r = 4\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rcaSpec {n : ℕ} (x y : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=BitVec#doc" title="BitVec">BitVec</a> n) (c : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) (j : ℕ) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> :=
+  <span class="bp-lean-keyword">let</span> i := j / 5
+  <span class="bp-lean-keyword">if</span> j % 5 = 0 <span class="bp-lean-keyword">then</span> x.getLsbD i ^^ y.getLsbD i
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> j % 5 = 1 <span class="bp-lean-keyword">then</span> (x.getLsbD i ^^ y.getLsbD i) ^^ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=BitVec.carry#doc" title="BitVec.carry">BitVec.carry</a> i x y c
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> j % 5 = 2 <span class="bp-lean-keyword">then</span> x.getLsbD i &amp;&amp; y.getLsbD i
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> j % 5 = 3 <span class="bp-lean-keyword">then</span> (x.getLsbD i ^^ y.getLsbD i) &amp;&amp; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=BitVec.carry#doc" title="BitVec.carry">BitVec.carry</a> i x y c
+  <span class="bp-lean-keyword">else</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=BitVec.carry#doc" title="BitVec.carry">BitVec.carry</a> (i + 1) x y c</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#carry-wire-value">Value of the carry wire</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rca-program-eval">Gate values of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#ripple-carry-adder-sum">Sum bits of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-overflow">The overflow flag</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="TheoryOfComputation/circuit-complexity/ripple-carry-adder/carry-wire-value">
+<h4 class="bp-thmheading" id="carry-wire-value">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Value of the carry wire</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean#L166" aria-label="View Cslib.Circuits.carryWire_value in Lean source" title="View Cslib.Circuits.carryWire_value in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#carry-wire-value" aria-label="Link to Value of the carry wire" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Circuits.carryWire_value</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span> be <span class="arithmatex">\(n\)</span>-bit vectors, <span class="arithmatex">\(c\)</span> a bit, and <span class="arithmatex">\(i\)</span> and <span class="arithmatex">\(g\)</span>
+natural numbers with <span class="arithmatex">\(5i \le g\)</span>. Suppose the first <span class="arithmatex">\(g\)</span> gates are given values <span class="arithmatex">\(v_0, \dots, v_{g-1}\)</span>
+with each <span class="arithmatex">\(v_j\)</span> equal to the specified value of gate <span class="arithmatex">\(j\)</span> of the adder on <span class="arithmatex">\(x\)</span>, <span class="arithmatex">\(y\)</span>, <span class="arithmatex">\(c\)</span>. Then, on
+the adder input for <span class="arithmatex">\(x\)</span>, <span class="arithmatex">\(y\)</span>, <span class="arithmatex">\(c\)</span> and with these gate values, the carry wire into bit <span class="arithmatex">\(i\)</span> carries
+the carry into bit <span class="arithmatex">\(i\)</span> of <span class="arithmatex">\(x + y + c\)</span>: it is true exactly when
+<span class="arithmatex">\((x \bmod 2^i) + (y \bmod 2^i) + c \ge 2^i\)</span>, reading <span class="arithmatex">\(x\)</span>, <span class="arithmatex">\(y\)</span> and <span class="arithmatex">\(c\)</span> as natural numbers.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> carryWire_value {g i : ℕ} (hi : 5 * i ≤ g) (gates : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> g → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>)
+    (hgates : ∀ j (hj : j &lt; g), gates ⟨j, hj⟩ = <a class="bp-lean-ref" href="#rca-spec" data-lean-name="Cslib.Circuits.rcaSpec">rcaSpec</a> x y c j) :
+    Wire.elim (<a class="bp-lean-ref" href="#rca-input" data-lean-name="Cslib.Circuits.rcaInput">rcaInput</a> x y c) gates (<a class="bp-lean-ref" href="#carry-wire" data-lean-name="Cslib.Circuits.RippleCarry.carryWire">carryWire</a> n g i hi) = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=BitVec.carry#doc" title="BitVec.carry">BitVec.carry</a> i x y c</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Circuits.rcaSpec">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rcaSpec {n : ℕ} (x y : BitVec n) (c : Bool) (j : ℕ) : Bool :=
+  <span class="bp-lean-keyword">let</span> i := j / 5
+  <span class="bp-lean-keyword">if</span> j % 5 = 0 <span class="bp-lean-keyword">then</span> x.getLsbD i ^^ y.getLsbD i
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> j % 5 = 1 <span class="bp-lean-keyword">then</span> (x.getLsbD i ^^ y.getLsbD i) ^^ BitVec.carry i x y c
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> j % 5 = 2 <span class="bp-lean-keyword">then</span> x.getLsbD i &amp;&amp; y.getLsbD i
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> j % 5 = 3 <span class="bp-lean-keyword">then</span> (x.getLsbD i ^^ y.getLsbD i) &amp;&amp; BitVec.carry i x y c
+  <span class="bp-lean-keyword">else</span> BitVec.carry (i + 1) x y c</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:132</p>
+</div>
+<div data-lean-name="Cslib.Circuits.rcaInput">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rcaInput {n : ℕ} (x y : BitVec n) (c : Bool) : Fin (2 * n + 1) → Bool := <span class="bp-lean-keyword">fun</span> j =&gt;
+  <span class="bp-lean-keyword">if</span> j.val &lt; n <span class="bp-lean-keyword">then</span> x.getLsbD j.val <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> j.val &lt; 2 * n <span class="bp-lean-keyword">then</span> y.getLsbD (j.val - n) <span class="bp-lean-keyword">else</span> c</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:128</p>
+</div>
+<div data-lean-name="Cslib.Circuits.RippleCarry.carryWire">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> carryWire (n g i : ℕ) (hi : 5 * i ≤ g) : Wire (2 * n + 1) g :=
+  <span class="bp-lean-keyword">if</span> h : i = 0 <span class="bp-lean-keyword">then</span> Wire.input ⟨2 * n, <span class="bp-lean-keyword">by</span> omega⟩ <span class="bp-lean-keyword">else</span> Wire.gate ⟨5 * i - 1, <span class="bp-lean-keyword">by</span> omega⟩</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:96</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#carry-wire">Carry wire</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rca-input">Input of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rca-spec">Gate-value specification of the ripple-carry adder</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rca-program-eval">Gate values of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#ripple-carry-adder-carry">Carry out of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-overflow">The overflow flag</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="TheoryOfComputation/circuit-complexity/ripple-carry-adder/rca-program-eval">
+<h4 class="bp-thmheading" id="rca-program-eval">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Gate values of the ripple-carry adder</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean#L178" aria-label="View Cslib.Circuits.rcaProgram_eval in Lean source" title="View Cslib.Circuits.rcaProgram_eval in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#rca-program-eval" aria-label="Link to Gate values of the ripple-carry adder" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Circuits.rcaProgram_eval</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span> be <span class="arithmatex">\(n\)</span>-bit vectors and <span class="arithmatex">\(c\)</span> a bit.
+For every <span class="arithmatex">\(g \le 5n\)</span> and every <span class="arithmatex">\(j &lt; g\)</span>, evaluating the first <span class="arithmatex">\(g\)</span> gates of the <span class="arithmatex">\(n\)</span>-bit adder with
+the Boolean interpretation of the arithmetic gates on the adder input for <span class="arithmatex">\(x\)</span>, <span class="arithmatex">\(y\)</span>, <span class="arithmatex">\(c\)</span> gives
+gate <span class="arithmatex">\(j\)</span> its specified value on <span class="arithmatex">\(x\)</span>, <span class="arithmatex">\(y\)</span>, <span class="arithmatex">\(c\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> rcaProgram_eval : ∀ (g : ℕ) (hg : g ≤ 5 * n) (j : ℕ) (hj : j &lt; g),
+    (<a class="bp-lean-ref" href="#rca-program" data-lean-name="Cslib.Circuits.rcaProgram">rcaProgram</a> n g hg).eval <a class="bp-lean-ref" href="#arith-interpretation" data-lean-name="Cslib.Circuits.arithInterpretation">arithInterpretation</a> (<a class="bp-lean-ref" href="#rca-input" data-lean-name="Cslib.Circuits.rcaInput">rcaInput</a> x y c) ⟨j, hj⟩ = <a class="bp-lean-ref" href="#rca-spec" data-lean-name="Cslib.Circuits.rcaSpec">rcaSpec</a> x y c j</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Circuits.rcaProgram">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rcaProgram (n : ℕ) : (g : ℕ) → g ≤ 5 * n → Program arithSignature (2 * n + 1) g
+  | 0, _ =&gt; .empty
+  | g + 1, h =&gt; (rcaProgram n g (<span class="bp-lean-keyword">by</span> omega)).gate (line n g (<span class="bp-lean-keyword">by</span> omega))</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:115</p>
+</div>
+<div data-lean-name="Cslib.Circuits.arithInterpretation">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> arithInterpretation : Interpretation arithSignature Bool
+  | .xor, f =&gt; f ⟨0, <span class="bp-lean-keyword">by</span> decide⟩ ^^ f ⟨1, <span class="bp-lean-keyword">by</span> decide⟩
+  | .and, f =&gt; f ⟨0, <span class="bp-lean-keyword">by</span> decide⟩ &amp;&amp; f ⟨1, <span class="bp-lean-keyword">by</span> decide⟩
+  | .or, f =&gt; f ⟨0, <span class="bp-lean-keyword">by</span> decide⟩ || f ⟨1, <span class="bp-lean-keyword">by</span> decide⟩</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:63</p>
+</div>
+<div data-lean-name="Cslib.Circuits.rcaInput">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rcaInput {n : ℕ} (x y : BitVec n) (c : Bool) : Fin (2 * n + 1) → Bool := <span class="bp-lean-keyword">fun</span> j =&gt;
+  <span class="bp-lean-keyword">if</span> j.val &lt; n <span class="bp-lean-keyword">then</span> x.getLsbD j.val <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> j.val &lt; 2 * n <span class="bp-lean-keyword">then</span> y.getLsbD (j.val - n) <span class="bp-lean-keyword">else</span> c</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:128</p>
+</div>
+<div data-lean-name="Cslib.Circuits.rcaSpec">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rcaSpec {n : ℕ} (x y : BitVec n) (c : Bool) (j : ℕ) : Bool :=
+  <span class="bp-lean-keyword">let</span> i := j / 5
+  <span class="bp-lean-keyword">if</span> j % 5 = 0 <span class="bp-lean-keyword">then</span> x.getLsbD i ^^ y.getLsbD i
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> j % 5 = 1 <span class="bp-lean-keyword">then</span> (x.getLsbD i ^^ y.getLsbD i) ^^ BitVec.carry i x y c
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> j % 5 = 2 <span class="bp-lean-keyword">then</span> x.getLsbD i &amp;&amp; y.getLsbD i
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> j % 5 = 3 <span class="bp-lean-keyword">then</span> (x.getLsbD i ^^ y.getLsbD i) &amp;&amp; BitVec.carry i x y c
+  <span class="bp-lean-keyword">else</span> BitVec.carry (i + 1) x y c</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:132</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 10 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#arith-interpretation">Boolean interpretation of the arithmetic gates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#arith-signature">Arithmetic basis</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rca-input">Input of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rca-program">Gate program of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rca-spec">Gate-value specification of the ripple-carry adder</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#arith-gate">Arithmetic gate symbols</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#carry-wire">Carry wire</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#line">Gates of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bin-line">Binary gate line</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#carry-wire-value">Value of the carry wire</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#ripple-carry-adder-carry">Carry out of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#ripple-carry-adder-sum">Sum bits of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-overflow">The overflow flag</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="TheoryOfComputation/circuit-complexity/ripple-carry-adder/ripple-carry-adder-sum">
+<h4 class="bp-thmheading" id="ripple-carry-adder-sum">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Sum bits of the ripple-carry adder</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean#L228" aria-label="View Cslib.Circuits.rippleCarryAdder_sum in Lean source" title="View Cslib.Circuits.rippleCarryAdder_sum in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#ripple-carry-adder-sum" aria-label="Link to Sum bits of the ripple-carry adder" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Circuits.rippleCarryAdder_sum</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(x, y\)</span> be <span class="arithmatex">\(n\)</span>-bit vectors, <span class="arithmatex">\(c\)</span> a bit and <span class="arithmatex">\(i &lt; n\)</span>,
+and evaluate the <span class="arithmatex">\(n\)</span>-bit ripple-carry adder, with its gates read as Boolean XOR, AND and OR, on the
+input whose entry <span class="arithmatex">\(j\)</span> is bit <span class="arithmatex">\(j\)</span> of <span class="arithmatex">\(x\)</span> and entry <span class="arithmatex">\(n + j\)</span> is bit <span class="arithmatex">\(j\)</span> of <span class="arithmatex">\(y\)</span> for <span class="arithmatex">\(j &lt; n\)</span> (bit <span class="arithmatex">\(0\)</span>
+being the least significant), and whose entry <span class="arithmatex">\(2n\)</span> is <span class="arithmatex">\(c\)</span>. Its output number <span class="arithmatex">\(i\)</span> (outputs being
+numbered from <span class="arithmatex">\(0\)</span>) is bit <span class="arithmatex">\(i\)</span> of the <span class="arithmatex">\(n\)</span>-bit sum <span class="arithmatex">\((x + y + c) \bmod 2^n\)</span>, reading <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span> as
+natural numbers below <span class="arithmatex">\(2^n\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> rippleCarryAdder_sum (i : ℕ) (hi : i &lt; n) :
+    (<a class="bp-lean-ref" href="#ripple-carry-adder" data-lean-name="Cslib.Circuits.rippleCarryAdder">rippleCarryAdder</a> n).eval <a class="bp-lean-ref" href="#arith-interpretation" data-lean-name="Cslib.Circuits.arithInterpretation">arithInterpretation</a> (<a class="bp-lean-ref" href="#rca-input" data-lean-name="Cslib.Circuits.rcaInput">rcaInput</a> x y c) ⟨i, <span class="bp-lean-keyword">by</span> omega⟩ =
+      (BitVec.adc x y c).2.getLsbD i</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Circuits.rippleCarryAdder">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rippleCarryAdder (n : ℕ) : Circuit arithSignature (2 * n + 1) (n + 1) <span class="bp-lean-keyword">where</span>
+  size := 5 * n
+  program := rcaProgram n (5 * n) (Nat.le_refl _)
+  outputs o := <span class="bp-lean-keyword">if</span> h : o.val &lt; n <span class="bp-lean-keyword">then</span> Wire.gate ⟨5 * o.val + 1, <span class="bp-lean-keyword">by</span> omega⟩
+    <span class="bp-lean-keyword">else</span> carryWire n (5 * n) n (Nat.le_refl _)</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:121</p>
+</div>
+<div data-lean-name="Cslib.Circuits.arithInterpretation">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> arithInterpretation : Interpretation arithSignature Bool
+  | .xor, f =&gt; f ⟨0, <span class="bp-lean-keyword">by</span> decide⟩ ^^ f ⟨1, <span class="bp-lean-keyword">by</span> decide⟩
+  | .and, f =&gt; f ⟨0, <span class="bp-lean-keyword">by</span> decide⟩ &amp;&amp; f ⟨1, <span class="bp-lean-keyword">by</span> decide⟩
+  | .or, f =&gt; f ⟨0, <span class="bp-lean-keyword">by</span> decide⟩ || f ⟨1, <span class="bp-lean-keyword">by</span> decide⟩</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:63</p>
+</div>
+<div data-lean-name="Cslib.Circuits.rcaInput">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rcaInput {n : ℕ} (x y : BitVec n) (c : Bool) : Fin (2 * n + 1) → Bool := <span class="bp-lean-keyword">fun</span> j =&gt;
+  <span class="bp-lean-keyword">if</span> j.val &lt; n <span class="bp-lean-keyword">then</span> x.getLsbD j.val <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> j.val &lt; 2 * n <span class="bp-lean-keyword">then</span> y.getLsbD (j.val - n) <span class="bp-lean-keyword">else</span> c</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:128</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 8 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#arith-interpretation">Boolean interpretation of the arithmetic gates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#arith-signature">Arithmetic basis</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rca-input">Input of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ripple-carry-adder">Ripple-carry adder</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#carry-wire">Carry wire</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rca-program">Gate program of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rca-program-eval">Gate values of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rca-spec">Gate-value specification of the ripple-carry adder</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../two-s-complement-subtraction-and-overflow/index.html#overflow-adder-sum">Sum bits of the overflow adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../two-s-complement-subtraction-and-overflow/index.html#ripple-carry-adder-sub">The ripple-carry adder subtracts</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="TheoryOfComputation/circuit-complexity/ripple-carry-adder/ripple-carry-adder-carry">
+<h4 class="bp-thmheading" id="ripple-carry-adder-carry">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Carry out of the ripple-carry adder</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean#L240" aria-label="View Cslib.Circuits.rippleCarryAdder_carry in Lean source" title="View Cslib.Circuits.rippleCarryAdder_carry in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#ripple-carry-adder-carry" aria-label="Link to Carry out of the ripple-carry adder" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Circuits.rippleCarryAdder_carry</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(x, y\)</span> be <span class="arithmatex">\(n\)</span>-bit vectors and <span class="arithmatex">\(c\)</span> a bit, and
+evaluate the <span class="arithmatex">\(n\)</span>-bit ripple-carry adder, with its gates read as Boolean XOR, AND and OR, on the
+input whose entry <span class="arithmatex">\(j\)</span> is bit <span class="arithmatex">\(j\)</span> of <span class="arithmatex">\(x\)</span> and entry <span class="arithmatex">\(n + j\)</span> is bit <span class="arithmatex">\(j\)</span> of <span class="arithmatex">\(y\)</span> for <span class="arithmatex">\(j &lt; n\)</span> (bit <span class="arithmatex">\(0\)</span>
+being the least significant), and whose entry <span class="arithmatex">\(2n\)</span> is <span class="arithmatex">\(c\)</span>. Its output number <span class="arithmatex">\(n\)</span> (the last,
+outputs being numbered from <span class="arithmatex">\(0\)</span>) is the carry out of <span class="arithmatex">\(x + y + c\)</span>: reading <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span> as natural
+numbers below <span class="arithmatex">\(2^n\)</span>, it is <span class="arithmatex">\(1\)</span> exactly when <span class="arithmatex">\(x + y + c \ge 2^n\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> rippleCarryAdder_carry :
+    (<a class="bp-lean-ref" href="#ripple-carry-adder" data-lean-name="Cslib.Circuits.rippleCarryAdder">rippleCarryAdder</a> n).eval <a class="bp-lean-ref" href="#arith-interpretation" data-lean-name="Cslib.Circuits.arithInterpretation">arithInterpretation</a> (<a class="bp-lean-ref" href="#rca-input" data-lean-name="Cslib.Circuits.rcaInput">rcaInput</a> x y c) ⟨n, <span class="bp-lean-keyword">by</span> omega⟩ =
+      (BitVec.adc x y c).1</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Circuits.rippleCarryAdder">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rippleCarryAdder (n : ℕ) : Circuit arithSignature (2 * n + 1) (n + 1) <span class="bp-lean-keyword">where</span>
+  size := 5 * n
+  program := rcaProgram n (5 * n) (Nat.le_refl _)
+  outputs o := <span class="bp-lean-keyword">if</span> h : o.val &lt; n <span class="bp-lean-keyword">then</span> Wire.gate ⟨5 * o.val + 1, <span class="bp-lean-keyword">by</span> omega⟩
+    <span class="bp-lean-keyword">else</span> carryWire n (5 * n) n (Nat.le_refl _)</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:121</p>
+</div>
+<div data-lean-name="Cslib.Circuits.arithInterpretation">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> arithInterpretation : Interpretation arithSignature Bool
+  | .xor, f =&gt; f ⟨0, <span class="bp-lean-keyword">by</span> decide⟩ ^^ f ⟨1, <span class="bp-lean-keyword">by</span> decide⟩
+  | .and, f =&gt; f ⟨0, <span class="bp-lean-keyword">by</span> decide⟩ &amp;&amp; f ⟨1, <span class="bp-lean-keyword">by</span> decide⟩
+  | .or, f =&gt; f ⟨0, <span class="bp-lean-keyword">by</span> decide⟩ || f ⟨1, <span class="bp-lean-keyword">by</span> decide⟩</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:63</p>
+</div>
+<div data-lean-name="Cslib.Circuits.rcaInput">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rcaInput {n : ℕ} (x y : BitVec n) (c : Bool) : Fin (2 * n + 1) → Bool := <span class="bp-lean-keyword">fun</span> j =&gt;
+  <span class="bp-lean-keyword">if</span> j.val &lt; n <span class="bp-lean-keyword">then</span> x.getLsbD j.val <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> j.val &lt; 2 * n <span class="bp-lean-keyword">then</span> y.getLsbD (j.val - n) <span class="bp-lean-keyword">else</span> c</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:128</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 8 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#arith-interpretation">Boolean interpretation of the arithmetic gates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#arith-signature">Arithmetic basis</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rca-input">Input of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ripple-carry-adder">Ripple-carry adder</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#carry-wire">Carry wire</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#carry-wire-value">Value of the carry wire</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rca-program">Gate program of the ripple-carry adder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rca-program-eval">Gate values of the ripple-carry adder</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../two-s-complement-subtraction-and-overflow/index.html#ripple-carry-adder-no-borrow">Carry out of ripple-carry subtraction</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="TheoryOfComputation/circuit-complexity/ripple-carry-adder/ripple-carry-adder-size">
+<h4 class="bp-thmheading" id="ripple-carry-adder-size">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Size of the ripple-carry adder</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean#L250" aria-label="View Cslib.Circuits.rippleCarryAdder_size in Lean source" title="View Cslib.Circuits.rippleCarryAdder_size in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#ripple-carry-adder-size" aria-label="Link to Size of the ripple-carry adder" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Circuits.rippleCarryAdder_size</div>
+<div class="bp-thmcontent">
+<p>The <span class="arithmatex">\(n\)</span>-bit ripple-carry adder has exactly <span class="arithmatex">\(5n\)</span> gates.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> rippleCarryAdder_size : (<a class="bp-lean-ref" href="#ripple-carry-adder" data-lean-name="Cslib.Circuits.rippleCarryAdder">rippleCarryAdder</a> n).size = 5 * n</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Circuits.rippleCarryAdder">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> rippleCarryAdder (n : ℕ) : Circuit arithSignature (2 * n + 1) (n + 1) <span class="bp-lean-keyword">where</span>
+  size := 5 * n
+  program := rcaProgram n (5 * n) (Nat.le_refl _)
+  outputs o := <span class="bp-lean-keyword">if</span> h : o.val &lt; n <span class="bp-lean-keyword">then</span> Wire.gate ⟨5 * o.val + 1, <span class="bp-lean-keyword">by</span> omega⟩
+    <span class="bp-lean-keyword">else</span> carryWire n (5 * n) n (Nat.le_refl _)</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/Circuit/Arithmetic/RippleCarry.lean:121</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#arith-signature">Arithmetic basis</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ripple-carry-adder">Ripple-carry adder</a></span></div>
+</div>
+</details>
+</div>
+</div>
+<p><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../dependencies/index.json" data-graph-src="../../../../dependencies/scopes/TheoryOfComputation/circuit-complexity/ripple-carry-adder.json" data-page-href="index.html" data-scope-id="TheoryOfComputation/circuit-complexity/ripple-carry-adder">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>

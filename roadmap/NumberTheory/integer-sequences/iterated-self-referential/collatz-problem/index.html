@@ -1,0 +1,5942 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../index.html">
+      
+      
+        <link rel="next" href="../arithmetic-derivative-and-the-collatz-map/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Collatz problem - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Collatz problem
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_12" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_12" id="__nav_2_1_12_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Number Theory
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../congruences/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Congruences and power residues
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../algebraic-number-theory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic number theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../p-adic-numbers/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    p-adic numbers and local fields
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../arithmetic-geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arithmetic geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../linear-recurrences/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear recurrence sequences
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../primes-primality/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Primes and primality
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../distribution-of-primes/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Distribution of primes
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../arithmetic-functions/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arithmetic functions
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../zeta-l-functions/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Zeta and L-functions
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../exponential-sums/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exponential and character sums
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../diophantine-equations/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diophantine equations
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../quadratic-forms-sums-of-squares/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quadratic forms and sums of squares
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../diophantine-approximation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diophantine approximation and transcendence
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../continued-fractions-expansions/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Continued fractions and expansions of reals
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../heights-mahler-measure/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heights and Mahler measure
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../modular-forms-q-series/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modular forms, q-series and partitions
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../special-numbers/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Special numbers and polynomials
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../digits-numeration/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Digits and numeration systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_12_20" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integer sequences
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_12_20" id="__nav_2_1_12_20_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_12_20_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_12_20">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Integer sequences
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_12_20_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Iterated maps and self-referential sequences
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_12_20_2" id="__nav_2_1_12_20_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_2_1_12_20_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_12_20_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Iterated maps and self-referential sequences
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Collatz problem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arithmetic-derivative-and-the-collatz-map/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arithmetic derivative and the Collatz map
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../conway-hofstadter-sequences/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conway–Hofstadter sequences
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ducci-sequences/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ducci sequences
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../generalized-hofstadter-functions/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Generalized Hofstadter functions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integer-polynomial-maps-modulo-primes/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integer polynomial maps modulo primes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../josephus-problem/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Josephus problem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../klarner-s-theorem-on-iterated-affine-maps/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Klarner&#39;s theorem on iterated affine maps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../locally-nilpotent-polynomials/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Locally nilpotent polynomials
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stern-s-diatomic-sequence/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stern&#39;s diatomic sequence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../three-term-hofstadter-like-sequences/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Three-term Hofstadter-like sequences
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../arithmetic-of-sequences/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arithmetic properties of sequences
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../additive-number-theory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Additive number theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../numerical-semigroups/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Numerical semigroups and the Frobenius problem
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../function-fields/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arithmetic of function fields
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../ComputerScience/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../../index.html" tabindex="-1">Number Theory</a></li><li><a href="../../index.html" tabindex="-1">Integer sequences</a></li><li><a href="../index.html" tabindex="-1">Iterated maps and self-referential sequences</a></li><li aria-current="page">Collatz problem</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Collatz problem</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem" data-page-title="Collatz problem">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="collatz-problem">Collatz problem</h1>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/collatz-step">
+<h4 class="bp-thmheading" id="collatz-step">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">The Collatz map</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/NumberTheory/Collatz.lean#L26" aria-label="View Nat.collatzStep in Lean source" title="View Nat.collatzStep in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#collatz-step" aria-label="Link to The Collatz map" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Nat.collatzStep</div>
+<div class="bp-thmcontent">
+<p>The Collatz map <span class="arithmatex">\(T : \mathbb{N} \to \mathbb{N}\)</span> sends a natural number
+<span class="arithmatex">\(n\)</span> to <span class="arithmatex">\(n / 2\)</span> if <span class="arithmatex">\(n\)</span> is even and to <span class="arithmatex">\(3n + 1\)</span> if <span class="arithmatex">\(n\)</span> is odd.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> collatzStep (n : ℕ) : ℕ :=
+  <span class="bp-lean-keyword">if</span> n % 2 = 0 <span class="bp-lean-keyword">then</span> n / 2 <span class="bp-lean-keyword">else</span> 3 * n + 1</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../arithmetic-derivative-and-the-collatz-map/index.html#collatz-accelerated-of-even">The accelerated Collatz map on even numbers</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../arithmetic-derivative-and-the-collatz-map/index.html#collatz-accelerated-of-odd">The accelerated Collatz map on odd numbers</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#collatz-iterate">Iterates of the Collatz map</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/collatz-iterate">
+<h4 class="bp-thmheading" id="collatz-iterate">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Iterates of the Collatz map</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/NumberTheory/Collatz.lean#L30" aria-label="View Nat.collatzIterate in Lean source" title="View Nat.collatzIterate in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#collatz-iterate" aria-label="Link to Iterates of the Collatz map" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Nat.collatzIterate</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(T : \mathbb{N} \to \mathbb{N}\)</span> be the Collatz map, which
+sends <span class="arithmatex">\(n\)</span> to <span class="arithmatex">\(n / 2\)</span> if <span class="arithmatex">\(n\)</span> is even and to <span class="arithmatex">\(3n + 1\)</span> if <span class="arithmatex">\(n\)</span> is odd. For natural numbers <span class="arithmatex">\(k\)</span> and
+<span class="arithmatex">\(n\)</span>, the <span class="arithmatex">\(k\)</span>-th Collatz iterate of <span class="arithmatex">\(n\)</span> is <span class="arithmatex">\(T^k(n)\)</span>, the result of applying <span class="arithmatex">\(T\)</span> to <span class="arithmatex">\(n\)</span> exactly <span class="arithmatex">\(k\)</span>
+times: <span class="arithmatex">\(T^0(n) = n\)</span> and <span class="arithmatex">\(T^{k+1}(n) = T(T^k(n))\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> collatzIterate : ℕ → ℕ → ℕ
+  | 0, n =&gt; n
+  | k + 1, n =&gt; <a class="bp-lean-ref" href="#collatz-step" data-lean-name="Nat.collatzStep">collatzStep</a> (collatzIterate k n)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Nat.collatzStep">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> collatzStep (n : ℕ) : ℕ :=
+  <span class="bp-lean-keyword">if</span> n % 2 = 0 <span class="bp-lean-keyword">then</span> n / 2 <span class="bp-lean-keyword">else</span> 3 * n + 1</code></pre>
+<p class="bp-lean-where">MathlibExt/NumberTheory/Collatz.lean:26</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#collatz-step">The Collatz map</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#collatz-stopping-time">Collatz stopping time</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/collatz-stopping-time">
+<h4 class="bp-thmheading" id="collatz-stopping-time">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Collatz stopping time</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/NumberTheory/Collatz.lean#L37" aria-label="View Nat.collatzStoppingTime in Lean source" title="View Nat.collatzStoppingTime in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#collatz-stopping-time" aria-label="Link to Collatz stopping time" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Nat.collatzStoppingTime</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(T : \mathbb{N} \to \mathbb{N}\)</span> be the Collatz map, which sends
+<span class="arithmatex">\(n\)</span> to <span class="arithmatex">\(n / 2\)</span> if <span class="arithmatex">\(n\)</span> is even and to <span class="arithmatex">\(3n + 1\)</span> if <span class="arithmatex">\(n\)</span> is odd, and let <span class="arithmatex">\(T^k\)</span> denote its <span class="arithmatex">\(k\)</span>-fold
+iterate, with <span class="arithmatex">\(T^0(n) = n\)</span>. For a natural number <span class="arithmatex">\(n\)</span>, the Collatz stopping time of <span class="arithmatex">\(n\)</span> is
+undefined if <span class="arithmatex">\(n = 0\)</span> or if <span class="arithmatex">\(T^k(n) \ne 1\)</span> for every <span class="arithmatex">\(k \in \mathbb{N}\)</span>; otherwise it is the least
+<span class="arithmatex">\(k \in \mathbb{N}\)</span> with <span class="arithmatex">\(T^k(n) = 1\)</span>.</p>
+<p>In the Collatz literature this quantity is often called the total stopping time.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> collatzStoppingTime (n : ℕ) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option#doc" title="Option">Option</a> ℕ :=
+  <span class="bp-lean-keyword">if</span> n = 0 <span class="bp-lean-keyword">then</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.none#doc" title="Option.none">none</a>
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">if</span> ∃ k : ℕ, <a class="bp-lean-ref" href="#collatz-iterate" data-lean-name="Nat.collatzIterate">collatzIterate</a> k n = 1 <span class="bp-lean-keyword">then</span>
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=InfSet.sInf#doc" title="InfSet.sInf">sInf</a> {k : ℕ | <a class="bp-lean-ref" href="#collatz-iterate" data-lean-name="Nat.collatzIterate">collatzIterate</a> k n = 1})
+  <span class="bp-lean-keyword">else</span>
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.none#doc" title="Option.none">none</a></code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Nat.collatzIterate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> collatzIterate : ℕ → ℕ → ℕ
+  | 0, n =&gt; n
+  | k + 1, n =&gt; collatzStep (collatzIterate k n)</code></pre>
+<p class="bp-lean-where">MathlibExt/NumberTheory/Collatz.lean:30</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#collatz-iterate">Iterates of the Collatz map</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/q-shift">
+<h4 class="bp-thmheading" id="q-shift">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Division by <span class="arithmatex">\(q\)</span> in <span class="arithmatex">\(\mathbb{F}_2((q))\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L27" aria-label="View MetaMathlibExt.qShift in Lean source" title="View MetaMathlibExt.qShift in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#q-shift" aria-label="Link to Division by q in 𝔽₂((q))" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.qShift</div>
+<div class="bp-thmcontent">
+<p>For a power series
+<span class="arithmatex">\(x = \sum_n x_n q^n \in \mathbb{F}_2[[q]]\)</span>, its shift is the power series <span class="arithmatex">\(\sum_n x_{n+1} q^n\)</span>,
+obtained by discarding the constant term of <span class="arithmatex">\(x\)</span> and dividing by <span class="arithmatex">\(q\)</span>. In particular, the shift of
+<span class="arithmatex">\(qy\)</span> is <span class="arithmatex">\(y\)</span> for every <span class="arithmatex">\(y \in \mathbb{F}_2[[q]]\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> qShift (x : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2)) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2) :=
+  <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.mk#doc" title="PowerSeries.mk">PowerSeries.mk</a> <span class="bp-lean-keyword">fun</span> n =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.coeff#doc" title="PowerSeries.coeff">coeff</a> (n + 1) x</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Section 1 (the quotients <code>x/q</code> and <code>(Ax+B)/q</code> in the definition of <code>T_{A,B}</code>).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#q-collatz">The q-analog of the 3x+1 map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#q-collatz-x-mul">The q-analog 3x+1 map on multiples of <span class="arithmatex">\(q\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#q-shift-x-mul">Dividing a multiple of <span class="arithmatex">\(q\)</span> by <span class="arithmatex">\(q\)</span></a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/q-shift-x-mul">
+<h4 class="bp-thmheading" id="q-shift-x-mul">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Dividing a multiple of <span class="arithmatex">\(q\)</span> by <span class="arithmatex">\(q\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L34" aria-label="View MetaMathlibExt.qShift_X_mul in Lean source" title="View MetaMathlibExt.qShift_X_mul in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#q-shift-x-mul" aria-label="Link to Dividing a multiple of q by q" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.qShift_X_mul</div>
+<div class="bp-thmcontent">
+<p>For every power series <span class="arithmatex">\(y \in \mathbb{F}_2[[q]]\)</span>,
+applying the shift <span class="arithmatex">\(\sum_n x_n q^n \mapsto \sum_n x_{n+1} q^n\)</span> to <span class="arithmatex">\(qy\)</span> gives back <span class="arithmatex">\(y\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> qShift_X_mul (y : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2)) : <a class="bp-lean-ref" href="#q-shift" data-lean-name="MetaMathlibExt.qShift">qShift</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.X#doc" title="PowerSeries.X">X</a> * y) = y</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.qShift">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> qShift (x : PowerSeries (ZMod 2)) : PowerSeries (ZMod 2) :=
+  PowerSeries.mk <span class="bp-lean-keyword">fun</span> n =&gt; coeff (n + 1) x</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:27</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_1">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Section 1 (division by <code>q</code>).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#q-shift">Division by <span class="arithmatex">\(q\)</span> in <span class="arithmatex">\(\mathbb{F}_2((q))\)</span></a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#q-collatz-x-mul">The q-analog 3x+1 map on multiples of <span class="arithmatex">\(q\)</span></a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/q-collatz">
+<h4 class="bp-thmheading" id="q-collatz">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">The q-analog of the 3x+1 map</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L44" aria-label="View MetaMathlibExt.qCollatz in Lean source" title="View MetaMathlibExt.qCollatz in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#q-collatz" aria-label="Link to The q-analog of the 3x+1 map" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.qCollatz</div>
+<div class="bp-thmcontent">
+<p>For a power series <span class="arithmatex">\(y = \sum_n y_n q^n \in \mathbb{F}_2[[q]]\)</span>,
+write <span class="arithmatex">\(y/q\)</span> for the power series <span class="arithmatex">\(\sum_n y_{n+1} q^n\)</span>: the constant term of <span class="arithmatex">\(y\)</span> is discarded and the
+rest is divided by <span class="arithmatex">\(q\)</span>. For power series <span class="arithmatex">\(A, B \in \mathbb{F}_2[[q]]\)</span>, the map
+<span class="arithmatex">\(T_{A,B} : \mathbb{F}_2[[q]] \to \mathbb{F}_2[[q]]\)</span> is defined by <span class="arithmatex">\(T_{A,B}(x) = x/q\)</span> if the
+constant term of <span class="arithmatex">\(x\)</span> is <span class="arithmatex">\(0\)</span>, and <span class="arithmatex">\(T_{A,B}(x) = (Ax + B)/q\)</span> otherwise.</p>
+<p>When <span class="arithmatex">\(A\)</span> and <span class="arithmatex">\(B\)</span> have constant term <span class="arithmatex">\(1\)</span>, the numerator <span class="arithmatex">\(Ax + B\)</span> has constant term <span class="arithmatex">\(0\)</span> whenever
+<span class="arithmatex">\(x\)</span> has constant term <span class="arithmatex">\(1\)</span>, so in that case the division by <span class="arithmatex">\(q\)</span> is exact.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> qCollatz (A B x : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2)) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2) :=
+  <span class="bp-lean-keyword">if</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> x = 0 <span class="bp-lean-keyword">then</span> <a class="bp-lean-ref" href="#q-shift" data-lean-name="MetaMathlibExt.qShift">qShift</a> x <span class="bp-lean-keyword">else</span> <a class="bp-lean-ref" href="#q-shift" data-lean-name="MetaMathlibExt.qShift">qShift</a> (A * x + B)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.qShift">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> qShift (x : PowerSeries (ZMod 2)) : PowerSeries (ZMod 2) :=
+  PowerSeries.mk <span class="bp-lean-keyword">fun</span> n =&gt; coeff (n + 1) x</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:27</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_2">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Section 1 (definition of <code>T_{A,B}</code>).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 11</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#q-shift">Division by <span class="arithmatex">\(q\)</span> in <span class="arithmatex">\(\mathbb{F}_2((q))\)</span></a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-can_prove" title="1 statement dependency" href="#q-collatz-add-x-pow-mul">A perturbation at <span class="arithmatex">\(q^{n+1}\)</span> moves to <span class="arithmatex">\(q^n\)</span> under <span class="arithmatex">\(T_{A,B}\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-can_prove" title="1 statement dependency" href="#q-collatz-conjugate-two-adic-collatz">The <span class="arithmatex">\(q\)</span>-Collatz map is conjugate to the <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-can_prove" title="1 statement dependency" href="#q-collatz-fixed-points-and-two-cycle">Fixed points and the <span class="arithmatex">\(2\)</span>-cycle of the <span class="arithmatex">\(q\)</span>-Collatz map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-can_prove" title="1 statement dependency" href="#q-collatz-iterate-add-x-pow-mul">Iterates of <span class="arithmatex">\(T_{A,B}\)</span> move a perturbation at <span class="arithmatex">\(q^{n+1}\)</span> to <span class="arithmatex">\(q^{n+1-k}\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-can_prove" title="1 statement dependency" href="#q-collatz-iterate-parity-flip">A perturbation at <span class="arithmatex">\(q^n\)</span> flips the parity of the <span class="arithmatex">\(n\)</span>-th iterate</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-can_prove" title="1 statement dependency" href="#q-collatz-one-add-x-conjugate-two-adic-c">The map <span class="arithmatex">\(T_{1+q,1}\)</span> is conjugate to the <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-can_prove" title="1 statement dependency" href="#q-collatz-one-one-add-x-sq-polynomial">Polynomial orbits of <span class="arithmatex">\(T_{1,1+q^2}\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#q-collatz-parity-vector">The parity vector of the q-analog 3x+1 map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#q-collatz-parity-vector-zero">The parity vector of <span class="arithmatex">\(0\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#q-collatz-x-mul">The q-analog 3x+1 map on multiples of <span class="arithmatex">\(q\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#q-collatz-zero">Zero is a fixed point of the q-analog 3x+1 map</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/q-collatz-x-mul">
+<h4 class="bp-thmheading" id="q-collatz-x-mul">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The q-analog 3x+1 map on multiples of <span class="arithmatex">\(q\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L51" aria-label="View MetaMathlibExt.qCollatz_X_mul in Lean source" title="View MetaMathlibExt.qCollatz_X_mul in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#q-collatz-x-mul" aria-label="Link to The q-analog 3x+1 map on multiples of q" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.qCollatz_X_mul</div>
+<div class="bp-thmcontent">
+<p>For all power series
+<span class="arithmatex">\(A, B, y \in \mathbb{F}_2[[q]]\)</span>, the <span class="arithmatex">\(q\)</span>-analog <span class="arithmatex">\(3x+1\)</span> map satisfies <span class="arithmatex">\(T_{A,B}(qy) = y\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> qCollatz_X_mul (A B y : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2)) : <a class="bp-lean-ref" href="#q-collatz" data-lean-name="MetaMathlibExt.qCollatz">qCollatz</a> A B (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.X#doc" title="PowerSeries.X">X</a> * y) = y</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.qCollatz">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> qCollatz (A B x : PowerSeries (ZMod 2)) : PowerSeries (ZMod 2) :=
+  <span class="bp-lean-keyword">if</span> constantCoeff x = 0 <span class="bp-lean-keyword">then</span> qShift x <span class="bp-lean-keyword">else</span> qShift (A * x + B)</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:44</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_3">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Section 1 (definition of <code>T_{A,B}</code>).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#q-collatz">The q-analog of the 3x+1 map</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#q-shift">Division by <span class="arithmatex">\(q\)</span> in <span class="arithmatex">\(\mathbb{F}_2((q))\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#q-shift-x-mul">Dividing a multiple of <span class="arithmatex">\(q\)</span> by <span class="arithmatex">\(q\)</span></a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#q-collatz-zero">Zero is a fixed point of the q-analog 3x+1 map</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/q-collatz-zero">
+<h4 class="bp-thmheading" id="q-collatz-zero">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Zero is a fixed point of the q-analog 3x+1 map</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L58" aria-label="View MetaMathlibExt.qCollatz_zero in Lean source" title="View MetaMathlibExt.qCollatz_zero in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#q-collatz-zero" aria-label="Link to Zero is a fixed point of the q-analog 3x+1 map" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.qCollatz_zero</div>
+<div class="bp-thmcontent">
+<p>For all power series
+<span class="arithmatex">\(A, B \in \mathbb{F}_2[[q]]\)</span>, the <span class="arithmatex">\(q\)</span>-analog <span class="arithmatex">\(3x+1\)</span> map satisfies <span class="arithmatex">\(T_{A,B}(0) = 0\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> qCollatz_zero (A B : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2)) : <a class="bp-lean-ref" href="#q-collatz" data-lean-name="MetaMathlibExt.qCollatz">qCollatz</a> A B 0 = 0</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.qCollatz">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> qCollatz (A B x : PowerSeries (ZMod 2)) : PowerSeries (ZMod 2) :=
+  <span class="bp-lean-keyword">if</span> constantCoeff x = 0 <span class="bp-lean-keyword">then</span> qShift x <span class="bp-lean-keyword">else</span> qShift (A * x + B)</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:44</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_4">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Section 1 (definition of <code>T_{A,B}</code>).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#q-collatz">The q-analog of the 3x+1 map</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#q-collatz-x-mul">The q-analog 3x+1 map on multiples of <span class="arithmatex">\(q\)</span></a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#q-collatz-parity-vector-zero">The parity vector of <span class="arithmatex">\(0\)</span></a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/two-dvd-of-to-zmod-eq-zero">
+<h4 class="bp-thmheading" id="two-dvd-of-to-zmod-eq-zero">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Divisibility by <span class="arithmatex">\(2\)</span> from the residue modulo <span class="arithmatex">\(2\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L65" aria-label="View MetaMathlibExt.two_dvd_of_toZMod_eq_zero in Lean source" title="View MetaMathlibExt.two_dvd_of_toZMod_eq_zero in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#two-dvd-of-to-zmod-eq-zero" aria-label="Link to Divisibility by 2 from the residue modulo 2" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.two_dvd_of_toZMod_eq_zero</div>
+<div class="bp-thmcontent">
+<p>If the residue modulo <span class="arithmatex">\(2\)</span> of a <span class="arithmatex">\(2\)</span>-adic
+integer <span class="arithmatex">\(y \in \mathbb{Z}_2\)</span> is zero, then <span class="arithmatex">\(2\)</span> divides <span class="arithmatex">\(y\)</span> in <span class="arithmatex">\(\mathbb{Z}_2\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> two_dvd_of_toZMod_eq_zero {y : ℤ_[2]} (h : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PadicInt.toZMod#doc" title="PadicInt.toZMod">PadicInt.toZMod</a> y = 0) :
+    (2 : ℤ_[2]) ∣ y</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_5">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Section 1 (parity in <code>ℤ₂</code>, so that <code>T</code> is a self-map).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#two-adic-collatz">The <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#two-mul-two-adic-collatz-of-even">Even branch of the <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#two-mul-two-adic-collatz-of-odd">Odd branch of the <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/to-zmod-three-mul-add-one-of-odd">
+<h4 class="bp-thmheading" id="to-zmod-three-mul-add-one-of-odd">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle"><span class="arithmatex">\(3x + 1\)</span> is even for odd <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(x\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L75" aria-label="View MetaMathlibExt.toZMod_three_mul_add_one_of_odd in Lean source" title="View MetaMathlibExt.toZMod_three_mul_add_one_of_odd in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#to-zmod-three-mul-add-one-of-odd" aria-label="Link to 3x + 1 is even for odd 2-adic x" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.toZMod_three_mul_add_one_of_odd</div>
+<div class="bp-thmcontent">
+<p>For every <span class="arithmatex">\(2\)</span>-adic integer <span class="arithmatex">\(x \in \mathbb{Z}_2\)</span> whose
+residue modulo <span class="arithmatex">\(2\)</span> is nonzero, the residue of <span class="arithmatex">\(3x + 1\)</span> modulo <span class="arithmatex">\(2\)</span> is zero.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> toZMod_three_mul_add_one_of_odd {x : ℤ_[2]} (h : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PadicInt.toZMod#doc" title="PadicInt.toZMod">PadicInt.toZMod</a> x ≠ 0) :
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PadicInt.toZMod#doc" title="PadicInt.toZMod">PadicInt.toZMod</a> (3 * x + 1) = 0</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_6">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Section 1 (definition of <code>T</code>).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#two-adic-collatz">The <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#two-mul-two-adic-collatz-of-even">Even branch of the <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#two-mul-two-adic-collatz-of-odd">Odd branch of the <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/two-adic-collatz">
+<h4 class="bp-thmheading" id="two-adic-collatz">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">The <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L88" aria-label="View MetaMathlibExt.twoAdicCollatz in Lean source" title="View MetaMathlibExt.twoAdicCollatz in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#two-adic-collatz" aria-label="Link to The 2-adic 3x+1 map" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.twoAdicCollatz</div>
+<div class="bp-thmcontent">
+<p>The map <span class="arithmatex">\(T : \mathbb{Z}_2 \to \mathbb{Z}_2\)</span> is defined by
+<span class="arithmatex">\(T(x) = x/2\)</span> if <span class="arithmatex">\(x\)</span> is even and <span class="arithmatex">\(T(x) = (3x+1)/2\)</span> if <span class="arithmatex">\(x\)</span> is odd, where even and odd refer to the
+residue of <span class="arithmatex">\(x\)</span> modulo <span class="arithmatex">\(2\)</span>.</p>
+<p>In both cases the numerator is divisible by <span class="arithmatex">\(2\)</span> in <span class="arithmatex">\(\mathbb{Z}_2\)</span>, so the division is exact.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> twoAdicCollatz (x : ℤ_[2]) : ℤ_[2] :=
+  <span class="bp-lean-keyword">if</span> h : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PadicInt.toZMod#doc" title="PadicInt.toZMod">PadicInt.toZMod</a> x = 0 <span class="bp-lean-keyword">then</span> (<a class="bp-lean-ref" href="#two-dvd-of-to-zmod-eq-zero" data-lean-name="MetaMathlibExt.two_dvd_of_toZMod_eq_zero">two_dvd_of_toZMod_eq_zero</a> h).choose
+  <span class="bp-lean-keyword">else</span> (<a class="bp-lean-ref" href="#two-dvd-of-to-zmod-eq-zero" data-lean-name="MetaMathlibExt.two_dvd_of_toZMod_eq_zero">two_dvd_of_toZMod_eq_zero</a> (<a class="bp-lean-ref" href="#to-zmod-three-mul-add-one-of-odd" data-lean-name="MetaMathlibExt.toZMod_three_mul_add_one_of_odd">toZMod_three_mul_add_one_of_odd</a> h)).choose</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.two_dvd_of_toZMod_eq_zero">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> two_dvd_of_toZMod_eq_zero {y : ℤ_[2]} (h : PadicInt.toZMod y = 0) :
+    (2 : ℤ_[2]) ∣ y</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:65</p>
+</div>
+<div data-lean-name="MetaMathlibExt.toZMod_three_mul_add_one_of_odd">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> toZMod_three_mul_add_one_of_odd {x : ℤ_[2]} (h : PadicInt.toZMod x ≠ 0) :
+    PadicInt.toZMod (3 * x + 1) = 0</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:75</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_7">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Section 1 (definition of <code>T</code> extended to <code>ℤ₂</code>).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#to-zmod-three-mul-add-one-of-odd"><span class="arithmatex">\(3x + 1\)</span> is even for odd <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(x\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#two-dvd-of-to-zmod-eq-zero">Divisibility by <span class="arithmatex">\(2\)</span> from the residue modulo <span class="arithmatex">\(2\)</span></a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-can_prove" title="1 statement dependency" href="#q-collatz-conjugate-two-adic-collatz">The <span class="arithmatex">\(q\)</span>-Collatz map is conjugate to the <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-can_prove" title="1 statement dependency" href="#q-collatz-one-add-x-conjugate-two-adic-c">The map <span class="arithmatex">\(T_{1+q,1}\)</span> is conjugate to the <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#two-adic-collatz-one-two">The <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map swaps <span class="arithmatex">\(1\)</span> and <span class="arithmatex">\(2\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#two-mul-two-adic-collatz-of-even">Even branch of the <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#two-mul-two-adic-collatz-of-odd">Odd branch of the <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/two-mul-two-adic-collatz-of-even">
+<h4 class="bp-thmheading" id="two-mul-two-adic-collatz-of-even">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Even branch of the <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L96" aria-label="View MetaMathlibExt.two_mul_twoAdicCollatz_of_even in Lean source" title="View MetaMathlibExt.two_mul_twoAdicCollatz_of_even in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#two-mul-two-adic-collatz-of-even" aria-label="Link to Even branch of the 2-adic 3x+1 map" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.two_mul_twoAdicCollatz_of_even</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(T : \mathbb{Z}_2 \to \mathbb{Z}_2\)</span> be
+the <span class="arithmatex">\(3x+1\)</span> map on the <span class="arithmatex">\(2\)</span>-adic integers. For every <span class="arithmatex">\(x \in \mathbb{Z}_2\)</span> whose residue modulo <span class="arithmatex">\(2\)</span>
+is zero, <span class="arithmatex">\(2\,T(x) = x\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> two_mul_twoAdicCollatz_of_even {x : ℤ_[2]} (h : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PadicInt.toZMod#doc" title="PadicInt.toZMod">PadicInt.toZMod</a> x = 0) :
+    2 * <a class="bp-lean-ref" href="#two-adic-collatz" data-lean-name="MetaMathlibExt.twoAdicCollatz">twoAdicCollatz</a> x = x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.twoAdicCollatz">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> twoAdicCollatz (x : ℤ_[2]) : ℤ_[2] :=
+  <span class="bp-lean-keyword">if</span> h : PadicInt.toZMod x = 0 <span class="bp-lean-keyword">then</span> (two_dvd_of_toZMod_eq_zero h).choose
+  <span class="bp-lean-keyword">else</span> (two_dvd_of_toZMod_eq_zero (toZMod_three_mul_add_one_of_odd h)).choose</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:88</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_8">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Section 1 (definition of <code>T</code>).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#two-adic-collatz">The <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#to-zmod-three-mul-add-one-of-odd"><span class="arithmatex">\(3x + 1\)</span> is even for odd <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(x\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#two-dvd-of-to-zmod-eq-zero">Divisibility by <span class="arithmatex">\(2\)</span> from the residue modulo <span class="arithmatex">\(2\)</span></a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#two-adic-collatz-one-two">The <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map swaps <span class="arithmatex">\(1\)</span> and <span class="arithmatex">\(2\)</span></a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/two-mul-two-adic-collatz-of-odd">
+<h4 class="bp-thmheading" id="two-mul-two-adic-collatz-of-odd">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Odd branch of the <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L105" aria-label="View MetaMathlibExt.two_mul_twoAdicCollatz_of_odd in Lean source" title="View MetaMathlibExt.two_mul_twoAdicCollatz_of_odd in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#two-mul-two-adic-collatz-of-odd" aria-label="Link to Odd branch of the 2-adic 3x+1 map" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.two_mul_twoAdicCollatz_of_odd</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(T : \mathbb{Z}_2 \to \mathbb{Z}_2\)</span> be
+the <span class="arithmatex">\(3x+1\)</span> map on the <span class="arithmatex">\(2\)</span>-adic integers. For every <span class="arithmatex">\(x \in \mathbb{Z}_2\)</span> whose residue modulo <span class="arithmatex">\(2\)</span>
+is nonzero, <span class="arithmatex">\(2\,T(x) = 3x + 1\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> two_mul_twoAdicCollatz_of_odd {x : ℤ_[2]} (h : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PadicInt.toZMod#doc" title="PadicInt.toZMod">PadicInt.toZMod</a> x ≠ 0) :
+    2 * <a class="bp-lean-ref" href="#two-adic-collatz" data-lean-name="MetaMathlibExt.twoAdicCollatz">twoAdicCollatz</a> x = 3 * x + 1</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.twoAdicCollatz">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> twoAdicCollatz (x : ℤ_[2]) : ℤ_[2] :=
+  <span class="bp-lean-keyword">if</span> h : PadicInt.toZMod x = 0 <span class="bp-lean-keyword">then</span> (two_dvd_of_toZMod_eq_zero h).choose
+  <span class="bp-lean-keyword">else</span> (two_dvd_of_toZMod_eq_zero (toZMod_three_mul_add_one_of_odd h)).choose</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:88</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_9">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Section 1 (definition of <code>T</code>).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#two-adic-collatz">The <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#to-zmod-three-mul-add-one-of-odd"><span class="arithmatex">\(3x + 1\)</span> is even for odd <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(x\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#two-dvd-of-to-zmod-eq-zero">Divisibility by <span class="arithmatex">\(2\)</span> from the residue modulo <span class="arithmatex">\(2\)</span></a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#two-adic-collatz-one-two">The <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map swaps <span class="arithmatex">\(1\)</span> and <span class="arithmatex">\(2\)</span></a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/two-adic-collatz-one-two">
+<h4 class="bp-thmheading" id="two-adic-collatz-one-two">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map swaps <span class="arithmatex">\(1\)</span> and <span class="arithmatex">\(2\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L114" aria-label="View MetaMathlibExt.twoAdicCollatz_one_two in Lean source" title="View MetaMathlibExt.twoAdicCollatz_one_two in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#two-adic-collatz-one-two" aria-label="Link to The 2-adic 3x+1 map swaps 1 and 2" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.twoAdicCollatz_one_two</div>
+<div class="bp-thmcontent">
+<p>The <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map
+<span class="arithmatex">\(T : \mathbb{Z}_2 \to \mathbb{Z}_2\)</span> satisfies <span class="arithmatex">\(T(1) = 2\)</span> and <span class="arithmatex">\(T(2) = 1\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> twoAdicCollatz_one_two : <a class="bp-lean-ref" href="#two-adic-collatz" data-lean-name="MetaMathlibExt.twoAdicCollatz">twoAdicCollatz</a> 1 = 2 ∧ <a class="bp-lean-ref" href="#two-adic-collatz" data-lean-name="MetaMathlibExt.twoAdicCollatz">twoAdicCollatz</a> 2 = 1</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.twoAdicCollatz">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> twoAdicCollatz (x : ℤ_[2]) : ℤ_[2] :=
+  <span class="bp-lean-keyword">if</span> h : PadicInt.toZMod x = 0 <span class="bp-lean-keyword">then</span> (two_dvd_of_toZMod_eq_zero h).choose
+  <span class="bp-lean-keyword">else</span> (two_dvd_of_toZMod_eq_zero (toZMod_three_mul_add_one_of_odd h)).choose</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:88</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_10">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Section 1 (definition of <code>T</code>).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#two-adic-collatz">The <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#two-mul-two-adic-collatz-of-even">Even branch of the <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#two-mul-two-adic-collatz-of-odd">Odd branch of the <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/q-collatz-parity-vector">
+<h4 class="bp-thmheading" id="q-collatz-parity-vector">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">The parity vector of the q-analog 3x+1 map</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L128" aria-label="View MetaMathlibExt.qCollatzParityVector in Lean source" title="View MetaMathlibExt.qCollatzParityVector in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#q-collatz-parity-vector" aria-label="Link to The parity vector of the q-analog 3x+1 map" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.qCollatzParityVector</div>
+<div class="bp-thmcontent">
+<p>For power series
+<span class="arithmatex">\(A, B, x \in \mathbb{F}_2[[q]]\)</span>, the parity vector of <span class="arithmatex">\(x\)</span> is the <span class="arithmatex">\(2\)</span>-adic integer
+<span class="arithmatex">\(\mathrm{PV}_{A,B}(x) = \sum_{k \ge 0} x_k 2^k \in \mathbb{Z}_2\)</span>, where <span class="arithmatex">\(x_k \in \{0, 1\}\)</span> is the
+constant coefficient of the <span class="arithmatex">\(k\)</span>-th iterate <span class="arithmatex">\(T_{A,B}^k(x)\)</span> of the <span class="arithmatex">\(q\)</span>-analog <span class="arithmatex">\(3x+1\)</span> map <span class="arithmatex">\(T_{A,B}\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> qCollatzParityVector (A B x : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2)) : ℤ_[2] :=
+  ∑&#x27; k : ℕ, ((<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> ((<a class="bp-lean-ref" href="#q-collatz" data-lean-name="MetaMathlibExt.qCollatz">qCollatz</a> A B)^[k] x)).val : ℤ_[2]) * 2 ^ k</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.qCollatz">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> qCollatz (A B x : PowerSeries (ZMod 2)) : PowerSeries (ZMod 2) :=
+  <span class="bp-lean-keyword">if</span> constantCoeff x = 0 <span class="bp-lean-keyword">then</span> qShift x <span class="bp-lean-keyword">else</span> qShift (A * x + B)</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:44</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_11">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Definition 10.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#q-collatz">The q-analog of the 3x+1 map</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-can_prove" title="1 statement dependency" href="#q-collatz-parity-vector-mod-eq-iff">Parity vectors detect congruence modulo <span class="arithmatex">\(q^{n+1}\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-can_prove" title="1 statement dependency" href="#q-collatz-parity-vector-quotient-bijecti">Parity vectors induce bijections modulo <span class="arithmatex">\(q^n\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#q-collatz-parity-vector-zero">The parity vector of <span class="arithmatex">\(0\)</span></a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/q-collatz-parity-vector-zero">
+<h4 class="bp-thmheading" id="q-collatz-parity-vector-zero">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The parity vector of <span class="arithmatex">\(0\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L135" aria-label="View MetaMathlibExt.qCollatzParityVector_zero in Lean source" title="View MetaMathlibExt.qCollatzParityVector_zero in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#q-collatz-parity-vector-zero" aria-label="Link to The parity vector of 0" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.qCollatzParityVector_zero</div>
+<div class="bp-thmcontent">
+<p>For all <span class="arithmatex">\(A, B \in \mathbb{F}_2[[q]]\)</span>, the parity vector of <span class="arithmatex">\(0\)</span>
+under the <span class="arithmatex">\(q\)</span>-analog <span class="arithmatex">\(T_{A,B}\)</span> of the <span class="arithmatex">\(3x+1\)</span> map is <span class="arithmatex">\(0\)</span>, that is, <span class="arithmatex">\(\mathrm{PV}_{A,B}(0) = 0\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> qCollatzParityVector_zero (A B : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2)) :
+    <a class="bp-lean-ref" href="#q-collatz-parity-vector" data-lean-name="MetaMathlibExt.qCollatzParityVector">qCollatzParityVector</a> A B 0 = 0</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.qCollatzParityVector">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> qCollatzParityVector (A B x : PowerSeries (ZMod 2)) : ℤ_[2] :=
+  ∑&#x27; k : ℕ, ((constantCoeff ((qCollatz A B)^[k] x)).val : ℤ_[2]) * 2 ^ k</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:128</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_12">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Definition 10.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#q-collatz-parity-vector">The parity vector of the q-analog 3x+1 map</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#q-collatz">The q-analog of the 3x+1 map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#q-collatz-zero">Zero is a fixed point of the q-analog 3x+1 map</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-can_prove" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/q-collatz-conjugate-two-adic-collatz">
+<h4 class="bp-thmheading" id="q-collatz-conjugate-two-adic-collatz">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The <span class="arithmatex">\(q\)</span>-Collatz map is conjugate to the <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L146" aria-label="View MetaMathlibExt.qCollatz_conjugate_twoAdicCollatz in Lean source" title="View MetaMathlibExt.qCollatz_conjugate_twoAdicCollatz in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#q-collatz-conjugate-two-adic-collatz" aria-label="Link to The q-Collatz map is conjugate to the 2-adic 3x+1 map" data-search-exclude>#</a><span class="bp-mark" title="ready to prove" data-search-exclude>●<span class="bp-mark-label">ready to prove</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.qCollatz_conjugate_twoAdicCollatz</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(A\)</span> and <span class="arithmatex">\(B\)</span> be odd
+power series in <span class="arithmatex">\(\mathbb{F}_2[[q]]\)</span> (constant term <span class="arithmatex">\(1\)</span>), let <span class="arithmatex">\(T_{A,B}\)</span> be the <span class="arithmatex">\(q\)</span>-analog of the
+<span class="arithmatex">\(3x+1\)</span> map on <span class="arithmatex">\(\mathbb{F}_2[[q]]\)</span>, and let <span class="arithmatex">\(T\)</span> be the <span class="arithmatex">\(3x+1\)</span> map on the <span class="arithmatex">\(2\)</span>-adic integers
+<span class="arithmatex">\(\mathbb{Z}_2\)</span>. Then there is a bijection <span class="arithmatex">\(h : \mathbb{Z}_2 \to \mathbb{F}_2[[q]]\)</span> with
+<span class="arithmatex">\(h^{-1}(T_{A,B}(h(x))) = T(x)\)</span> for every <span class="arithmatex">\(x \in \mathbb{Z}_2\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem_wanted</span> qCollatz_conjugate_twoAdicCollatz (A B : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2))
+    (hA : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> A ≠ 0) (hB : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> B ≠ 0) :
+    ∃ h : ℤ_[2] ≃ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2),
+      ∀ x, h.symm (<a class="bp-lean-ref" href="#q-collatz" data-lean-name="MetaMathlibExt.qCollatz">qCollatz</a> A B (h x)) = <a class="bp-lean-ref" href="#two-adic-collatz" data-lean-name="MetaMathlibExt.twoAdicCollatz">twoAdicCollatz</a> x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.qCollatz">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> qCollatz (A B x : PowerSeries (ZMod 2)) : PowerSeries (ZMod 2) :=
+  <span class="bp-lean-keyword">if</span> constantCoeff x = 0 <span class="bp-lean-keyword">then</span> qShift x <span class="bp-lean-keyword">else</span> qShift (A * x + B)</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:44</p>
+</div>
+<div data-lean-name="MetaMathlibExt.twoAdicCollatz">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> twoAdicCollatz (x : ℤ_[2]) : ℤ_[2] :=
+  <span class="bp-lean-keyword">if</span> h : PadicInt.toZMod x = 0 <span class="bp-lean-keyword">then</span> (two_dvd_of_toZMod_eq_zero h).choose
+  <span class="bp-lean-keyword">else</span> (two_dvd_of_toZMod_eq_zero (toZMod_three_mul_add_one_of_odd h)).choose</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:88</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_13">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Theorem 2 (<code>jis-2025-25.6.8-thm-2</code>).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#q-collatz">The q-analog of the 3x+1 map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#two-adic-collatz">The <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-can_prove" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/q-collatz-one-add-x-conjugate-two-adic-c">
+<h4 class="bp-thmheading" id="q-collatz-one-add-x-conjugate-two-adic-c">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The map <span class="arithmatex">\(T_{1+q,1}\)</span> is conjugate to the <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L156" aria-label="View MetaMathlibExt.qCollatz_one_add_X_conjugate_twoAdicCollatz in Lean source" title="View MetaMathlibExt.qCollatz_one_add_X_conjugate_twoAdicCollatz in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#q-collatz-one-add-x-conjugate-two-adic-c" aria-label="Link to The map T_(1+q,1) is conjugate to the 2-adic 3x+1 map" data-search-exclude>#</a><span class="bp-mark" title="ready to prove" data-search-exclude>●<span class="bp-mark-label">ready to prove</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.qCollatz_one_add_X_conjugate_twoAdicCollatz</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(T_q = T_{1+q,1}\)</span>
+be the <span class="arithmatex">\(q\)</span>-analog of the <span class="arithmatex">\(3x+1\)</span> map with <span class="arithmatex">\(A = 1 + q\)</span> and <span class="arithmatex">\(B = 1\)</span>, so that <span class="arithmatex">\(T_q(x) = x/q\)</span> if <span class="arithmatex">\(q\)</span>
+divides <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(T_q(x) = ((1+q)x + 1)/q\)</span> otherwise, and let <span class="arithmatex">\(T\)</span> be the <span class="arithmatex">\(3x+1\)</span> map on the
+<span class="arithmatex">\(2\)</span>-adic integers <span class="arithmatex">\(\mathbb{Z}_2\)</span>. Then there is a bijection <span class="arithmatex">\(h : \mathbb{Z}_2 \to \mathbb{F}_2[[q]]\)</span>
+with <span class="arithmatex">\(h^{-1}(T_q(h(x))) = T(x)\)</span> for every <span class="arithmatex">\(x \in \mathbb{Z}_2\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem_wanted</span> qCollatz_one_add_X_conjugate_twoAdicCollatz :
+    ∃ h : ℤ_[2] ≃ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2),
+      ∀ x, h.symm (<a class="bp-lean-ref" href="#q-collatz" data-lean-name="MetaMathlibExt.qCollatz">qCollatz</a> (1 + <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.X#doc" title="PowerSeries.X">X</a>) 1 (h x)) = <a class="bp-lean-ref" href="#two-adic-collatz" data-lean-name="MetaMathlibExt.twoAdicCollatz">twoAdicCollatz</a> x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.qCollatz">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> qCollatz (A B x : PowerSeries (ZMod 2)) : PowerSeries (ZMod 2) :=
+  <span class="bp-lean-keyword">if</span> constantCoeff x = 0 <span class="bp-lean-keyword">then</span> qShift x <span class="bp-lean-keyword">else</span> qShift (A * x + B)</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:44</p>
+</div>
+<div data-lean-name="MetaMathlibExt.twoAdicCollatz">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> twoAdicCollatz (x : ℤ_[2]) : ℤ_[2] :=
+  <span class="bp-lean-keyword">if</span> h : PadicInt.toZMod x = 0 <span class="bp-lean-keyword">then</span> (two_dvd_of_toZMod_eq_zero h).choose
+  <span class="bp-lean-keyword">else</span> (two_dvd_of_toZMod_eq_zero (toZMod_three_mul_add_one_of_odd h)).choose</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:88</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_14">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Corollary 3 (<code>jis-2025-25.6.8-cor-3</code>).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#q-collatz">The q-analog of the 3x+1 map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#two-adic-collatz">The <span class="arithmatex">\(2\)</span>-adic <span class="arithmatex">\(3x+1\)</span> map</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-can_prove" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/q-collatz-one-one-add-x-sq-polynomial">
+<h4 class="bp-thmheading" id="q-collatz-one-one-add-x-sq-polynomial">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Polynomial orbits of <span class="arithmatex">\(T_{1,1+q^2}\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L165" aria-label="View MetaMathlibExt.qCollatz_one_one_add_X_sq_polynomial in Lean source" title="View MetaMathlibExt.qCollatz_one_one_add_X_sq_polynomial in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#q-collatz-one-one-add-x-sq-polynomial" aria-label="Link to Polynomial orbits of T_(1,1+q²)" data-search-exclude>#</a><span class="bp-mark" title="ready to prove" data-search-exclude>●<span class="bp-mark-label">ready to prove</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.qCollatz_one_one_add_X_sq_polynomial</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(T = T_{1,1+q^2}\)</span> be the <span class="arithmatex">\(q\)</span>-analog of the <span class="arithmatex">\(3x+1\)</span>
+map with <span class="arithmatex">\(A = 1\)</span> and <span class="arithmatex">\(B = 1 + q^2\)</span>. For every polynomial <span class="arithmatex">\(p\)</span> over <span class="arithmatex">\(\mathbb{F}_2\)</span>, some iterate
+<span class="arithmatex">\(T^k(p)\)</span> with <span class="arithmatex">\(k \ge 0\)</span> lies in <span class="arithmatex">\(\{0, 1 + q, 1, q\}\)</span>, the set formed by the fixed points <span class="arithmatex">\(0\)</span> and
+<span class="arithmatex">\(1 + q\)</span> of <span class="arithmatex">\(T\)</span> and its <span class="arithmatex">\(2\)</span>-cycle <span class="arithmatex">\(\{1, q\}\)</span>. Moreover, for every <span class="arithmatex">\(x \in \mathbb{F}_2[[q]]\)</span>, <span class="arithmatex">\(T(x)\)</span>
+is a polynomial if and only if <span class="arithmatex">\(x\)</span> is a polynomial.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem_wanted</span> qCollatz_one_one_add_X_sq_polynomial :
+    (∀ p : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial#doc" title="Polynomial">Polynomial</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2), ∃ k : ℕ,
+      (<a class="bp-lean-ref" href="#q-collatz" data-lean-name="MetaMathlibExt.qCollatz">qCollatz</a> 1 (1 + <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.X#doc" title="PowerSeries.X">X</a> ^ 2))^[k] (p : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2)) ∈
+        ({0, 1 + <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.X#doc" title="PowerSeries.X">X</a>, 1, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.X#doc" title="PowerSeries.X">X</a>} : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set#doc" title="Set">Set</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2)))) ∧
+    ∀ x : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2),
+      (∃ p : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial#doc" title="Polynomial">Polynomial</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2), <a class="bp-lean-ref" href="#q-collatz" data-lean-name="MetaMathlibExt.qCollatz">qCollatz</a> 1 (1 + <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.X#doc" title="PowerSeries.X">X</a> ^ 2) x = p) ↔
+        ∃ p : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial#doc" title="Polynomial">Polynomial</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2), x = p</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.qCollatz">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> qCollatz (A B x : PowerSeries (ZMod 2)) : PowerSeries (ZMod 2) :=
+  <span class="bp-lean-keyword">if</span> constantCoeff x = 0 <span class="bp-lean-keyword">then</span> qShift x <span class="bp-lean-keyword">else</span> qShift (A * x + B)</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:44</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_15">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Theorem 5 (<code>jis-2025-25.6.8-thm-5</code>).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#q-collatz">The q-analog of the 3x+1 map</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-can_prove" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/q-collatz-add-x-pow-mul">
+<h4 class="bp-thmheading" id="q-collatz-add-x-pow-mul">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">A perturbation at <span class="arithmatex">\(q^{n+1}\)</span> moves to <span class="arithmatex">\(q^n\)</span> under <span class="arithmatex">\(T_{A,B}\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L178" aria-label="View MetaMathlibExt.qCollatz_add_X_pow_mul in Lean source" title="View MetaMathlibExt.qCollatz_add_X_pow_mul in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#q-collatz-add-x-pow-mul" aria-label="Link to A perturbation at qⁿ⁺¹ moves to qⁿ under T_(A,B)" data-search-exclude>#</a><span class="bp-mark" title="ready to prove" data-search-exclude>●<span class="bp-mark-label">ready to prove</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.qCollatz_add_X_pow_mul</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(A, B, U, V\)</span> be power
+series in <span class="arithmatex">\(\mathbb{F}_2[[q]]\)</span> with <span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(B\)</span> and <span class="arithmatex">\(V\)</span> odd (constant term <span class="arithmatex">\(1\)</span>), let <span class="arithmatex">\(T_{A,B}\)</span> be the
+<span class="arithmatex">\(q\)</span>-analog of the <span class="arithmatex">\(3x+1\)</span> map, and let <span class="arithmatex">\(n \ge 0\)</span> be an integer. Then there is an odd power series
+<span class="arithmatex">\(W \in \mathbb{F}_2[[q]]\)</span> with <span class="arithmatex">\(T_{A,B}(U + q^{n+1} V) = T_{A,B}(U) + q^n W\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem_wanted</span> qCollatz_add_X_pow_mul (A B : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2))
+    (hA : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> A ≠ 0) (hB : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> B ≠ 0) (n : ℕ) (U V : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2))
+    (hV : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> V ≠ 0) :
+    ∃ W : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2), <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> W ≠ 0 ∧
+      <a class="bp-lean-ref" href="#q-collatz" data-lean-name="MetaMathlibExt.qCollatz">qCollatz</a> A B (U + <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.X#doc" title="PowerSeries.X">X</a> ^ (n + 1) * V) = <a class="bp-lean-ref" href="#q-collatz" data-lean-name="MetaMathlibExt.qCollatz">qCollatz</a> A B U + <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.X#doc" title="PowerSeries.X">X</a> ^ n * W</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.qCollatz">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> qCollatz (A B x : PowerSeries (ZMod 2)) : PowerSeries (ZMod 2) :=
+  <span class="bp-lean-keyword">if</span> constantCoeff x = 0 <span class="bp-lean-keyword">then</span> qShift x <span class="bp-lean-keyword">else</span> qShift (A * x + B)</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:44</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_16">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Lemma 7 (<code>jis-2025-25.6.8-lem-7</code>).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#q-collatz">The q-analog of the 3x+1 map</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-can_prove" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/q-collatz-iterate-add-x-pow-mul">
+<h4 class="bp-thmheading" id="q-collatz-iterate-add-x-pow-mul">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Iterates of <span class="arithmatex">\(T_{A,B}\)</span> move a perturbation at <span class="arithmatex">\(q^{n+1}\)</span> to <span class="arithmatex">\(q^{n+1-k}\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L189" aria-label="View MetaMathlibExt.qCollatz_iterate_add_X_pow_mul in Lean source" title="View MetaMathlibExt.qCollatz_iterate_add_X_pow_mul in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#q-collatz-iterate-add-x-pow-mul" aria-label="Link to Iterates of T_(A,B) move a perturbation at qⁿ⁺¹ to qⁿ⁺¹⁻ᵏ" data-search-exclude>#</a><span class="bp-mark" title="ready to prove" data-search-exclude>●<span class="bp-mark-label">ready to prove</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.qCollatz_iterate_add_X_pow_mul</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(A, B, U, V\)</span>
+be power series in <span class="arithmatex">\(\mathbb{F}_2[[q]]\)</span> with <span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(B\)</span> and <span class="arithmatex">\(V\)</span> odd (constant term <span class="arithmatex">\(1\)</span>), let
+<span class="arithmatex">\(T_{A,B}\)</span> be the <span class="arithmatex">\(q\)</span>-analog of the <span class="arithmatex">\(3x+1\)</span> map, and let <span class="arithmatex">\(n\)</span> and <span class="arithmatex">\(k\)</span> be natural numbers with
+<span class="arithmatex">\(k \le n + 1\)</span>. Write <span class="arithmatex">\(T_{A,B}^k\)</span> for the <span class="arithmatex">\(k\)</span>-th iterate of <span class="arithmatex">\(T_{A,B}\)</span>. Then there is an odd power
+series <span class="arithmatex">\(W \in \mathbb{F}_2[[q]]\)</span> with <span class="arithmatex">\(T_{A,B}^k(U + q^{n+1} V) = T_{A,B}^k(U) + q^{n+1-k} W\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem_wanted</span> qCollatz_iterate_add_X_pow_mul (A B : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2))
+    (hA : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> A ≠ 0) (hB : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> B ≠ 0) (n : ℕ) (U V : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2))
+    (hV : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> V ≠ 0) (k : ℕ) (hk : k ≤ n + 1) :
+    ∃ W : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2), <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> W ≠ 0 ∧
+      (<a class="bp-lean-ref" href="#q-collatz" data-lean-name="MetaMathlibExt.qCollatz">qCollatz</a> A B)^[k] (U + <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.X#doc" title="PowerSeries.X">X</a> ^ (n + 1) * V) =
+        (<a class="bp-lean-ref" href="#q-collatz" data-lean-name="MetaMathlibExt.qCollatz">qCollatz</a> A B)^[k] U + <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.X#doc" title="PowerSeries.X">X</a> ^ (n + 1 - k) * W</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.qCollatz">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> qCollatz (A B x : PowerSeries (ZMod 2)) : PowerSeries (ZMod 2) :=
+  <span class="bp-lean-keyword">if</span> constantCoeff x = 0 <span class="bp-lean-keyword">then</span> qShift x <span class="bp-lean-keyword">else</span> qShift (A * x + B)</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:44</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_17">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Corollary 8 (<code>jis-2025-25.6.8-cor-8</code>).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#q-collatz">The q-analog of the 3x+1 map</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-can_prove" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/q-collatz-iterate-parity-flip">
+<h4 class="bp-thmheading" id="q-collatz-iterate-parity-flip">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">A perturbation at <span class="arithmatex">\(q^n\)</span> flips the parity of the <span class="arithmatex">\(n\)</span>-th iterate</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L201" aria-label="View MetaMathlibExt.qCollatz_iterate_parity_flip in Lean source" title="View MetaMathlibExt.qCollatz_iterate_parity_flip in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#q-collatz-iterate-parity-flip" aria-label="Link to A perturbation at qⁿ flips the parity of the n-th iterate" data-search-exclude>#</a><span class="bp-mark" title="ready to prove" data-search-exclude>●<span class="bp-mark-label">ready to prove</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.qCollatz_iterate_parity_flip</div>
+<div class="bp-thmcontent">
+<p>Let
+<span class="arithmatex">\(A, B, U, V \in \mathbb{F}_2[[q]]\)</span> with <span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(B\)</span> and <span class="arithmatex">\(V\)</span> odd (constant term <span class="arithmatex">\(1\)</span>), let <span class="arithmatex">\(T_{A,B}\)</span> be
+the <span class="arithmatex">\(q\)</span>-analog of the <span class="arithmatex">\(3x+1\)</span> map, and let <span class="arithmatex">\(n \ge 0\)</span> be an integer. Then the <span class="arithmatex">\(n\)</span>-th iterates
+<span class="arithmatex">\(T_{A,B}^n(U + q^n V)\)</span> and <span class="arithmatex">\(T_{A,B}^n(U)\)</span> have different constant terms.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem_wanted</span> qCollatz_iterate_parity_flip (A B : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2))
+    (hA : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> A ≠ 0) (hB : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> B ≠ 0) (n : ℕ) (U V : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2))
+    (hV : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> V ≠ 0) :
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> ((<a class="bp-lean-ref" href="#q-collatz" data-lean-name="MetaMathlibExt.qCollatz">qCollatz</a> A B)^[n] (U + <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.X#doc" title="PowerSeries.X">X</a> ^ n * V)) ≠
+      <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> ((<a class="bp-lean-ref" href="#q-collatz" data-lean-name="MetaMathlibExt.qCollatz">qCollatz</a> A B)^[n] U)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.qCollatz">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> qCollatz (A B x : PowerSeries (ZMod 2)) : PowerSeries (ZMod 2) :=
+  <span class="bp-lean-keyword">if</span> constantCoeff x = 0 <span class="bp-lean-keyword">then</span> qShift x <span class="bp-lean-keyword">else</span> qShift (A * x + B)</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:44</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_18">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Corollary 9 (<code>jis-2025-25.6.8-cor-9</code>).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#q-collatz">The q-analog of the 3x+1 map</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-can_prove" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/q-collatz-parity-vector-mod-eq-iff">
+<h4 class="bp-thmheading" id="q-collatz-parity-vector-mod-eq-iff">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Parity vectors detect congruence modulo <span class="arithmatex">\(q^{n+1}\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L212" aria-label="View MetaMathlibExt.qCollatzParityVector_modEq_iff in Lean source" title="View MetaMathlibExt.qCollatzParityVector_modEq_iff in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#q-collatz-parity-vector-mod-eq-iff" aria-label="Link to Parity vectors detect congruence modulo qⁿ⁺¹" data-search-exclude>#</a><span class="bp-mark" title="ready to prove" data-search-exclude>●<span class="bp-mark-label">ready to prove</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.qCollatzParityVector_modEq_iff</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(A, B \in \mathbb{F}_2[[q]]\)</span> be odd
+(constant term <span class="arithmatex">\(1\)</span>), let <span class="arithmatex">\(\mathrm{PV}_{A,B}\)</span> be the parity vector map of the <span class="arithmatex">\(q\)</span>-analog <span class="arithmatex">\(T_{A,B}\)</span>
+of the <span class="arithmatex">\(3x+1\)</span> map, and let <span class="arithmatex">\(n \ge 0\)</span> be an integer. For all <span class="arithmatex">\(a, b \in \mathbb{F}_2[[q]]\)</span>, we have
+<span class="arithmatex">\(\mathrm{PV}_{A,B}(a) \equiv \mathrm{PV}_{A,B}(b) \pmod{2^{n+1}}\)</span> in <span class="arithmatex">\(\mathbb{Z}_2\)</span> if and only if
+<span class="arithmatex">\(q^{n+1}\)</span> divides <span class="arithmatex">\(a - b\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem_wanted</span> qCollatzParityVector_modEq_iff (A B : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2))
+    (hA : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> A ≠ 0) (hB : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> B ≠ 0) (n : ℕ) (a b : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2)) :
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PadicInt.toZModPow#doc" title="PadicInt.toZModPow">PadicInt.toZModPow</a> (n + 1) (<a class="bp-lean-ref" href="#q-collatz-parity-vector" data-lean-name="MetaMathlibExt.qCollatzParityVector">qCollatzParityVector</a> A B a) =
+        <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PadicInt.toZModPow#doc" title="PadicInt.toZModPow">PadicInt.toZModPow</a> (n + 1) (<a class="bp-lean-ref" href="#q-collatz-parity-vector" data-lean-name="MetaMathlibExt.qCollatzParityVector">qCollatzParityVector</a> A B b) ↔
+      <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.X#doc" title="PowerSeries.X">X</a> ^ (n + 1) ∣ a - b</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.qCollatzParityVector">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> qCollatzParityVector (A B x : PowerSeries (ZMod 2)) : ℤ_[2] :=
+  ∑&#x27; k : ℕ, ((constantCoeff ((qCollatz A B)^[k] x)).val : ℤ_[2]) * 2 ^ k</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:128</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_19">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Theorem 11 (<code>jis-2025-25.6.8-thm-11</code>).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#q-collatz-parity-vector">The parity vector of the q-analog 3x+1 map</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-can_prove" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/q-collatz-parity-vector-quotient-bijecti">
+<h4 class="bp-thmheading" id="q-collatz-parity-vector-quotient-bijecti">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Parity vectors induce bijections modulo <span class="arithmatex">\(q^n\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L223" aria-label="View MetaMathlibExt.qCollatzParityVector_quotient_bijection in Lean source" title="View MetaMathlibExt.qCollatzParityVector_quotient_bijection in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#q-collatz-parity-vector-quotient-bijecti" aria-label="Link to Parity vectors induce bijections modulo qⁿ" data-search-exclude>#</a><span class="bp-mark" title="ready to prove" data-search-exclude>●<span class="bp-mark-label">ready to prove</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.qCollatzParityVector_quotient_bijection</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(A, B \in \mathbb{F}_2[[q]]\)</span> be odd
+(constant term <span class="arithmatex">\(1\)</span>), let <span class="arithmatex">\(\mathrm{PV}_{A,B}\)</span> be the parity vector map of the <span class="arithmatex">\(q\)</span>-analog <span class="arithmatex">\(T_{A,B}\)</span>
+of the <span class="arithmatex">\(3x+1\)</span> map, and let <span class="arithmatex">\(n \ge 1\)</span> be an integer. Then there is a bijection
+<span class="arithmatex">\(e : \mathbb{F}_2[[q]]/(q^n) \to \mathbb{Z}/2^n\mathbb{Z}\)</span> such that, for every
+<span class="arithmatex">\(a \in \mathbb{F}_2[[q]]\)</span>, <span class="arithmatex">\(e\)</span> sends the class of <span class="arithmatex">\(a\)</span> to the residue of <span class="arithmatex">\(\mathrm{PV}_{A,B}(a)\)</span>
+modulo <span class="arithmatex">\(2^n\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem_wanted</span> qCollatzParityVector_quotient_bijection (A B : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2))
+    (hA : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> A ≠ 0) (hB : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> B ≠ 0) (n : ℕ) (hn : 1 ≤ n) :
+    ∃ e : (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2) ⧸ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Ideal.span#doc" title="Ideal.span">Ideal.span</a> {(<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.X#doc" title="PowerSeries.X">X</a> : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2)) ^ n}) ≃ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> (2 ^ n),
+      ∀ a, e (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Ideal.Quotient.mk#doc" title="Ideal.Quotient.mk">Ideal.Quotient.mk</a> _ a) = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PadicInt.toZModPow#doc" title="PadicInt.toZModPow">PadicInt.toZModPow</a> n (<a class="bp-lean-ref" href="#q-collatz-parity-vector" data-lean-name="MetaMathlibExt.qCollatzParityVector">qCollatzParityVector</a> A B a)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.qCollatzParityVector">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> qCollatzParityVector (A B x : PowerSeries (ZMod 2)) : ℤ_[2] :=
+  ∑&#x27; k : ℕ, ((constantCoeff ((qCollatz A B)^[k] x)).val : ℤ_[2]) * 2 ^ k</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:128</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_20">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Corollary 12 (<code>jis-2025-25.6.8-cor-12</code>).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#q-collatz-parity-vector">The parity vector of the q-analog 3x+1 map</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-can_prove" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/q-collatz-fixed-points-and-two-cycle">
+<h4 class="bp-thmheading" id="q-collatz-fixed-points-and-two-cycle">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Fixed points and the <span class="arithmatex">\(2\)</span>-cycle of the <span class="arithmatex">\(q\)</span>-Collatz map</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/QAnalogCollatzWanted.lean#L234" aria-label="View MetaMathlibExt.qCollatz_fixedPoints_and_twoCycle in Lean source" title="View MetaMathlibExt.qCollatz_fixedPoints_and_twoCycle in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#q-collatz-fixed-points-and-two-cycle" aria-label="Link to Fixed points and the 2-cycle of the q-Collatz map" data-search-exclude>#</a><span class="bp-mark" title="ready to prove" data-search-exclude>●<span class="bp-mark-label">ready to prove</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.qCollatz_fixedPoints_and_twoCycle</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(A, B \in \mathbb{F}_2[[q]]\)</span> be
+odd (constant term <span class="arithmatex">\(1\)</span>) and let <span class="arithmatex">\(T_{A,B}\)</span> be the <span class="arithmatex">\(q\)</span>-analog of the <span class="arithmatex">\(3x+1\)</span> map. For every
+<span class="arithmatex">\(x \in \mathbb{F}_2[[q]]\)</span>, <span class="arithmatex">\(T_{A,B}(x) = x\)</span> holds exactly when <span class="arithmatex">\(x = 0\)</span> or <span class="arithmatex">\(x = B/(A+q)\)</span>. Moreover,
+for every <span class="arithmatex">\(x \in \mathbb{F}_2[[q]]\)</span>, <span class="arithmatex">\(T_{A,B}(T_{A,B}(x)) = x\)</span> and <span class="arithmatex">\(T_{A,B}(x) \ne x\)</span> hold together
+exactly when <span class="arithmatex">\(x = B/(A+q^2)\)</span> or <span class="arithmatex">\(x = qB/(A+q^2)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem_wanted</span> qCollatz_fixedPoints_and_twoCycle (A B : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries#doc" title="PowerSeries">PowerSeries</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ZMod#doc" title="ZMod">ZMod</a> 2))
+    (hA : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> A ≠ 0) (hB : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.constantCoeff#doc" title="PowerSeries.constantCoeff">constantCoeff</a> B ≠ 0) :
+    (∀ x, <a class="bp-lean-ref" href="#q-collatz" data-lean-name="MetaMathlibExt.qCollatz">qCollatz</a> A B x = x ↔ x = 0 ∨ x = B * (A + <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.X#doc" title="PowerSeries.X">X</a>)⁻¹) ∧
+    ∀ x, (<a class="bp-lean-ref" href="#q-collatz" data-lean-name="MetaMathlibExt.qCollatz">qCollatz</a> A B (<a class="bp-lean-ref" href="#q-collatz" data-lean-name="MetaMathlibExt.qCollatz">qCollatz</a> A B x) = x ∧ <a class="bp-lean-ref" href="#q-collatz" data-lean-name="MetaMathlibExt.qCollatz">qCollatz</a> A B x ≠ x) ↔
+      x = B * (A + <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.X#doc" title="PowerSeries.X">X</a> ^ 2)⁻¹ ∨ x = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.X#doc" title="PowerSeries.X">X</a> * (B * (A + <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=PowerSeries.X#doc" title="PowerSeries.X">X</a> ^ 2)⁻¹)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.qCollatz">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> qCollatz (A B x : PowerSeries (ZMod 2)) : PowerSeries (ZMod 2) :=
+  <span class="bp-lean-keyword">if</span> constantCoeff x = 0 <span class="bp-lean-keyword">then</span> qShift x <span class="bp-lean-keyword">else</span> qShift (A * x + B)</code></pre>
+<p class="bp-lean-where">WantedExt/NumberTheory/QAnalogCollatzWanted.lean:44</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_21">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Kenneth G. Monks, <em>On q-Analogs of the 3x+1 Dynamical System</em>, Journal of Integer Sequences 28 (2025), Article 25.6.8, Lemma 13 (<code>jis-2025-25.6.8-lem-13</code>).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#q-collatz">The q-analog of the 3x+1 map</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-can_prove" data-autoform-node-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem/no-collatz-m-cycle-le-ninety-one">
+<h4 class="bp-thmheading" id="no-collatz-m-cycle-le-ninety-one">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">No Collatz <span class="arithmatex">\(m\)</span>-cycles with <span class="arithmatex">\(m \le 91\)</span> (Hercher)</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/WantedExt/NumberTheory/Sequences/NoCollatzMCycleWanted.lean#L34" aria-label="View MetaMathlibExt.no_collatz_m_cycle_le_ninety_one in Lean source" title="View MetaMathlibExt.no_collatz_m_cycle_le_ninety_one in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#no-collatz-m-cycle-le-ninety-one" aria-label="Link to No Collatz m-cycles with m ≤ 91 (Hercher)" data-search-exclude>#</a><span class="bp-mark" title="ready to prove" data-search-exclude>●<span class="bp-mark-label">ready to prove</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MetaMathlibExt.no_collatz_m_cycle_le_ninety_one</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(T\)</span> be the shortcut Collatz map on
+the natural numbers, <span class="arithmatex">\(T(c) = c/2\)</span> for even <span class="arithmatex">\(c\)</span> and <span class="arithmatex">\(T(c) = (3c+1)/2\)</span> for odd <span class="arithmatex">\(c\)</span>, and let <span class="arithmatex">\(m\)</span> be
+a natural number with <span class="arithmatex">\(m \le 91\)</span>. There are no natural numbers <span class="arithmatex">\(n\)</span> and <span class="arithmatex">\(p &gt; 0\)</span> such that
+<span class="arithmatex">\(T^i(n) &gt; 2\)</span> for all <span class="arithmatex">\(i &lt; p\)</span>, <span class="arithmatex">\(T^p(n) = n\)</span>, <span class="arithmatex">\(T^k(n) \ne n\)</span> for all <span class="arithmatex">\(k\)</span> with <span class="arithmatex">\(0 &lt; k &lt; p\)</span>, and
+exactly <span class="arithmatex">\(m\)</span> indices <span class="arithmatex">\(i &lt; p\)</span> satisfy both <span class="arithmatex">\(T^i(n) &lt; T^{(i+1) \bmod p}(n)\)</span> and
+<span class="arithmatex">\(T^i(n) &lt; T^{(i+p-1) \bmod p}(n)\)</span>.</p>
+<p>In words: no cycle of <span class="arithmatex">\(T\)</span> all of whose entries exceed <span class="arithmatex">\(2\)</span> (which excludes the trivial cycle
+<span class="arithmatex">\(1, 2, 1, 2, \dots\)</span>), taken with its minimal period <span class="arithmatex">\(p\)</span>, has exactly <span class="arithmatex">\(m\)</span> entries lying cyclically
+strictly below both neighbours.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem_wanted</span> no_collatz_m_cycle_le_ninety_one
+    (m : ℕ) (hm : m ≤ 91) :
+    ¬ ∃ n p : ℕ, 0 &lt; p ∧
+      (∀ i : ℕ, i &lt; p →
+        2 &lt; (<span class="bp-lean-keyword">fun</span> c : ℕ =&gt; <span class="bp-lean-keyword">if</span> c % 2 = 0 <span class="bp-lean-keyword">then</span> c / 2 <span class="bp-lean-keyword">else</span> (3 * c + 1) / 2)^[i] n) ∧
+      (<span class="bp-lean-keyword">fun</span> c : ℕ =&gt; <span class="bp-lean-keyword">if</span> c % 2 = 0 <span class="bp-lean-keyword">then</span> c / 2 <span class="bp-lean-keyword">else</span> (3 * c + 1) / 2)^[p] n = n ∧
+      (∀ k : ℕ, 0 &lt; k → k &lt; p →
+        (<span class="bp-lean-keyword">fun</span> c : ℕ =&gt; <span class="bp-lean-keyword">if</span> c % 2 = 0 <span class="bp-lean-keyword">then</span> c / 2 <span class="bp-lean-keyword">else</span> (3 * c + 1) / 2)^[k] n ≠ n) ∧
+      (((<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">Finset.range</a> p).filter (<span class="bp-lean-keyword">fun</span> i =&gt;
+        (<span class="bp-lean-keyword">fun</span> c : ℕ =&gt; <span class="bp-lean-keyword">if</span> c % 2 = 0 <span class="bp-lean-keyword">then</span> c / 2 <span class="bp-lean-keyword">else</span> (3 * c + 1) / 2)^[i] n &lt;
+          (<span class="bp-lean-keyword">fun</span> c : ℕ =&gt; <span class="bp-lean-keyword">if</span> c % 2 = 0 <span class="bp-lean-keyword">then</span> c / 2 <span class="bp-lean-keyword">else</span> (3 * c + 1) / 2)^[(i + 1) % p] n ∧
+        (<span class="bp-lean-keyword">fun</span> c : ℕ =&gt; <span class="bp-lean-keyword">if</span> c % 2 = 0 <span class="bp-lean-keyword">then</span> c / 2 <span class="bp-lean-keyword">else</span> (3 * c + 1) / 2)^[i] n &lt;
+          (<span class="bp-lean-keyword">fun</span> c : ℕ =&gt; <span class="bp-lean-keyword">if</span> c % 2 = 0 <span class="bp-lean-keyword">then</span> c / 2 <span class="bp-lean-keyword">else</span>
+            (3 * c + 1) / 2)^[(i + p - 1) % p] n)).card = m)</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_22">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Christian Hercher, "There are no Collatz m-Cycles with m ≤ 91," Journal of Integer Sequences 26 (2023), Article 23.3.5, Main Theorem, lines 541–543, https://cs.uwaterloo.ca/journals/JIS/VOL26/Hercher/hercher5.tex with the operator at lines 104–111 and the m-cycle definition at lines 149–151.</li>
+</ul>
+</div>
+</div>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>16</strong> fully proved</span><span class="bp-progress-state" title="Statement is in Lean and nothing it needs is blocked, so the proof can start."><span class="bp-swatch bp-swatch-can_prove"></span><strong>10</strong> ready to prove</span></div>
+</div>
+</div>
+<p><link rel="stylesheet" href="../../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../../dependencies/index.json" data-graph-src="../../../../../dependencies/scopes/NumberTheory/integer-sequences/iterated-self-referential/collatz-problem.json" data-page-href="index.html" data-scope-id="NumberTheory/integer-sequences/iterated-self-referential/collatz-problem">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>

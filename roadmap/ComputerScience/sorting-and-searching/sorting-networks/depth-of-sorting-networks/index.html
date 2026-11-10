@@ -1,0 +1,6101 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../bubble-sorting-network/index.html">
+      
+      
+        <link rel="next" href="../batcher-odd-even-mergesort/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Depth of sorting networks - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#levels_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Depth of sorting networks
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23" id="__nav_2_1_23_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_23_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Computer Science
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../data-structures/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data structures
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../graph-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../process-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Process calculi and behavioural equivalence
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../type-systems-and-lambda-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Type systems and lambda calculi
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../programming-language-semantics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programming language semantics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../machine-learning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Machine learning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23_8" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sorting and searching
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23_8" id="__nav_2_1_23_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_23_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Sorting and searching
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23_8_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sorting networks
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23_8_2" id="__nav_2_1_23_8_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_2_1_23_8_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23_8_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Sorting networks
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sorting-networks-and-the-zero-one-principle/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sorting networks and the zero-one principle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bitonic-sorter/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bitonic sorter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bubble-sorting-network/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bubble sorting network
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Depth of sorting networks
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Depth of sorting networks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#levels_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Levels
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tabulated-levels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tabulated levels
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-bitonic-networks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The bitonic networks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#every-sorting-network-on-n-wires-has-depth-at-least-log2-n" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Every sorting network on n wires has depth at least log₂ n
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#depth-of-networks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Depth of Networks
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../batcher-odd-even-mergesort/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Batcher odd–even mergesort
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../binary-search/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Binary search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../counting-sort/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Counting sort
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../heapsort/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heapsort
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insertion-sort/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Insertion sort
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../bucket-sort/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bucket sort
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../linear-search/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear search
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../radix-sort/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Radix sort
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rearranging-a-permutation-into-unimodal-order/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rearranging a permutation into unimodal order
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../selection-sort/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Selection sort
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../simultaneous-minimum-and-maximum/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Simultaneous minimum and maximum
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../three-way-partitioning/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Three-way partitioning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quickselect/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quickselect
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../median-of-medians/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Median of medians
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quicksort/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quicksort
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../dynamic-programming/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic programming
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../greedy-algorithms-and-matroids/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Greedy algorithms and matroids
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../approximation-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Approximation algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../online-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Online algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../randomized-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Randomized algorithms and probabilistic analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../parallel-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../algebraic-and-numerical-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic and numerical algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../computational-geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computational geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../string-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    String algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../heuristic-search-and-planning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heuristic search and planning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../cryptography/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cryptography
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../databases/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Databases
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../quantum-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../concurrent-systems-and-protocols/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concurrent systems and protocols
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../program-logics-and-verification/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Program logics and verification
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#levels_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Levels
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tabulated-levels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tabulated levels
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-bitonic-networks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The bitonic networks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#every-sorting-network-on-n-wires-has-depth-at-least-log2-n" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Every sorting network on n wires has depth at least log₂ n
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#depth-of-networks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Depth of Networks
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../../index.html" tabindex="-1">Computer Science</a></li><li><a href="../../index.html" tabindex="-1">Sorting and searching</a></li><li><a href="../index.html" tabindex="-1">Sorting networks</a></li><li aria-current="page">Depth of sorting networks</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Depth of sorting networks</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks" data-page-title="Depth of sorting networks">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="depth-of-sorting-networks">Depth of sorting networks</h1>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>23</strong> fully proved</span></div>
+</div>
+<h2 id="levels_1">Levels</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/levels">
+<h4 class="bp-thmheading" id="levels">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Comparator levels under earliest scheduling</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L51" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#levels" aria-label="Link to Comparator levels under earliest scheduling" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels</div>
+<div class="bp-thmcontent">
+<p>Given a list of comparators on
+<span class="arithmatex">\(\mathbb{N}\)</span>-indexed wires, each a pair <span class="arithmatex">\((i, j)\)</span> of wires, and a starting level <span class="arithmatex">\(\ell(x)\)</span> for
+every wire <span class="arithmatex">\(x\)</span>, process the comparators in order, keeping a current level for each wire, initially
+<span class="arithmatex">\(\ell\)</span>: a comparator <span class="arithmatex">\((i, j)\)</span> whose wires currently have levels <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span> sets the current levels
+of both wires <span class="arithmatex">\(i\)</span> and <span class="arithmatex">\(j\)</span> to <span class="arithmatex">\(\max(a, b) + 1\)</span> and leaves every other level unchanged. The result
+is the level of each wire after all the comparators, that is, when each comparator runs as early
+as possible, one level after the later of its two wires.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> levels : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (ℕ × ℕ) → (ℕ → ℕ) → ℕ → ℕ
+  | [], lv =&gt; lv
+  | c :: ps, lv =&gt; levels ps <span class="bp-lean-keyword">fun</span> x =&gt;
+      <span class="bp-lean-keyword">if</span> x = c.1 ∨ x = c.2 <span class="bp-lean-keyword">then</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Max.max#doc" title="Max.max">max</a> (lv c.1) (lv c.2) + 1 <span class="bp-lean-keyword">else</span> lv x</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 20</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../batcher-odd-even-mergesort/index.html#depth-le-append-relabel">Parallel composition of relabeled comparator lists</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../batcher-odd-even-mergesort/index.html#depth-le-final-layer">The final layer of the odd-even merger has depth at most one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../batcher-odd-even-mergesort/index.html#depth-le-odd-even-merge">Depth bound for Batcher&#x27;s odd-even merger</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../batcher-odd-even-mergesort/index.html#depth-le-odd-even-sort-n">Depth bound for Batcher&#x27;s odd-even merge sort as a comparator list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../batcher-odd-even-mergesort/index.html#depth-le-relabel">Relabeling wires preserves a depth bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../batcher-odd-even-mergesort/index.html#levels-relabel">Levels of a relabeled comparator list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../batcher-odd-even-mergesort/index.html#levels-relabel-congr">Levels of a relabeled comparator list on the image wires</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../batcher-odd-even-mergesort/index.html#levels-relabel-of-not-mem">Relabeled comparator lists leave the other wires alone</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#append">Depth of sequential composition of comparator lists</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#append-disjoint">Parallel composition of comparator lists on adjacent blocks</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#card-influence-le">Influence sets grow at most exponentially with the level</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#depth-le">Depth bound for a comparator list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#depth-le-bitonic-merge">The bitonic merger has depth at most <span class="arithmatex">\(k\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#depth-le-bitonic-sort-n">Depth of the bitonic sorter&#x27;s comparator list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#depth-le-half-cleaner">The half-cleaner has depth at most <span class="arithmatex">\(1\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#get-d-levels-tab">Tabulated levels agree with levels</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#le-two-pow-of-sorts">Sorting comparator lists on <span class="arithmatex">\(n\)</span> wires have depth at least <span class="arithmatex">\(\log_2 n\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#levels-congr">Levels inside a block depend only on initial levels inside it</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#levels-of-not-mem">Comparators inside a block leave levels outside it unchanged</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#levels-swap">Swapping the wires of every comparator does not change levels</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/depth-le">
+<h4 class="bp-thmheading" id="depth-le">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Depth bound for a comparator list</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L57" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#depth-le" aria-label="Link to Depth bound for a comparator list" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE</div>
+<div class="bp-thmcontent">
+<p>A list of comparators on wires indexed by <span class="arithmatex">\(\mathbb{N}\)</span>
+has depth at most <span class="arithmatex">\(d\)</span> when, starting with every wire at level <span class="arithmatex">\(0\)</span> and scheduling each comparator
+one level after the later of its two wires, every wire ends at level at most <span class="arithmatex">\(d\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DepthLE (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (ℕ × ℕ)) (d : ℕ) : <span class="bp-lean-keyword">Prop</span> := ∀ x, <a class="bp-lean-ref" href="#levels" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels">levels</a> ps (<span class="bp-lean-keyword">fun</span> _ =&gt; 0) x ≤ d</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> levels : List (ℕ × ℕ) → (ℕ → ℕ) → ℕ → ℕ
+  | [], lv =&gt; lv
+  | c :: ps, lv =&gt; levels ps <span class="bp-lean-keyword">fun</span> x =&gt;
+      <span class="bp-lean-keyword">if</span> x = c.1 ∨ x = c.2 <span class="bp-lean-keyword">then</span> max (lv c.1) (lv c.2) + 1 <span class="bp-lean-keyword">else</span> lv x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean:51</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 15</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#levels">Comparator levels under earliest scheduling</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../batcher-odd-even-mergesort/index.html#depth-le-append-relabel">Parallel composition of relabeled comparator lists</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../batcher-odd-even-mergesort/index.html#depth-le-final-layer">The final layer of the odd-even merger has depth at most one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../batcher-odd-even-mergesort/index.html#depth-le-odd-even-merge">Depth bound for Batcher&#x27;s odd-even merger</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../batcher-odd-even-mergesort/index.html#depth-le-odd-even-sort-n">Depth bound for Batcher&#x27;s odd-even merge sort as a comparator list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../batcher-odd-even-mergesort/index.html#depth-le-relabel">Relabeling wires preserves a depth bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../batcher-odd-even-mergesort/index.html#odd-even-sorter-depth-le">Depth bound for Batcher&#x27;s odd-even merge sorting network</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#append">Depth of sequential composition of comparator lists</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#append-disjoint">Parallel composition of comparator lists on adjacent blocks</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bitonic-sorter-depth-le">Batcher&#x27;s bitonic sorting network has depth at most <span class="arithmatex">\(k(k+1)/2\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#depth-le-2">Depth bound for a comparator network</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#depth-le-bitonic-merge">The bitonic merger has depth at most <span class="arithmatex">\(k\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#depth-le-bitonic-sort-n">Depth of the bitonic sorter&#x27;s comparator list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#depth-le-half-cleaner">The half-cleaner has depth at most <span class="arithmatex">\(1\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#le-of-depth-le-bitonic-sort-n">The bitonic sorting comparator list on <span class="arithmatex">\(2^k\)</span> wires has depth at least <span class="arithmatex">\(k\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#le-two-pow-of-sorts">Sorting comparator lists on <span class="arithmatex">\(n\)</span> wires have depth at least <span class="arithmatex">\(\log_2 n\)</span></a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/append">
+<h4 class="bp-thmheading" id="append">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Depth of sequential composition of comparator lists</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L84" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE.append in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE.append in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#append" aria-label="Link to Depth of sequential composition of comparator lists" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE.append</div>
+<div class="bp-thmcontent">
+<p>If a list <span class="arithmatex">\(p\)</span> of comparators on wires
+indexed by <span class="arithmatex">\(\mathbb{N}\)</span> has depth at most <span class="arithmatex">\(d\)</span> and a list <span class="arithmatex">\(q\)</span> of comparators has depth at most
+<span class="arithmatex">\(e\)</span>, then the concatenation of <span class="arithmatex">\(p\)</span> followed by <span class="arithmatex">\(q\)</span> has depth at most <span class="arithmatex">\(d + e\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> DepthLE.append {ps qs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (ℕ × ℕ)} {d e : ℕ} (hp : <a class="bp-lean-ref" href="#depth-le" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE">DepthLE</a> ps d) (hq : <a class="bp-lean-ref" href="#depth-le" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE">DepthLE</a> qs e) :
+    <a class="bp-lean-ref" href="#depth-le" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE">DepthLE</a> (ps ++ qs) (d + e)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DepthLE (ps : List (ℕ × ℕ)) (d : ℕ) : <span class="bp-lean-keyword">Prop</span> := ∀ x, levels ps (<span class="bp-lean-keyword">fun</span> _ =&gt; 0) x ≤ d</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean:57</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#depth-le">Depth bound for a comparator list</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#levels">Comparator levels under earliest scheduling</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../batcher-odd-even-mergesort/index.html#depth-le-odd-even-merge">Depth bound for Batcher&#x27;s odd-even merger</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../batcher-odd-even-mergesort/index.html#depth-le-odd-even-sort-n">Depth bound for Batcher&#x27;s odd-even merge sort as a comparator list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#depth-le-bitonic-merge">The bitonic merger has depth at most <span class="arithmatex">\(k\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#depth-le-bitonic-sort-n">Depth of the bitonic sorter&#x27;s comparator list</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/levels-of-not-mem">
+<h4 class="bp-thmheading" id="levels-of-not-mem">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Comparators inside a block leave levels outside it unchanged</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L97" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels_of_not_mem in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels_of_not_mem in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#levels-of-not-mem" aria-label="Link to Comparators inside a block leave levels outside it unchanged" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels_of_not_mem</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(ps\)</span> be a list of
+comparators all of whose wires lie in <span class="arithmatex">\([a, b)\)</span>. Then for all initial levels
+<span class="arithmatex">\(\ell : \mathbb{N} \to \mathbb{N}\)</span> and every wire <span class="arithmatex">\(x\)</span> with <span class="arithmatex">\(x &lt; a\)</span> or <span class="arithmatex">\(b \le x\)</span>, the level of <span class="arithmatex">\(x\)</span>
+after <span class="arithmatex">\(ps\)</span> starting from <span class="arithmatex">\(\ell\)</span> is <span class="arithmatex">\(\ell(x)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> levels_of_not_mem : ∀ {ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (ℕ × ℕ)} {lo hi : ℕ}, <a class="bp-lean-ref" href="../bitonic-sorter/index.html#within" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.Within">Within</a> ps lo hi →
+    ∀ (lv : ℕ → ℕ) (x : ℕ), (x &lt; lo ∨ hi ≤ x) → <a class="bp-lean-ref" href="#levels" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels">levels</a> ps lv x = lv x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.Within">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Within (ps : List (ℕ × ℕ)) (lo hi : ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ p ∈ ps, lo ≤ p.1 ∧ p.1 &lt; hi ∧ lo ≤ p.2 ∧ p.2 &lt; hi</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Bitonic.lean:88</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> levels : List (ℕ × ℕ) → (ℕ → ℕ) → ℕ → ℕ
+  | [], lv =&gt; lv
+  | c :: ps, lv =&gt; levels ps <span class="bp-lean-keyword">fun</span> x =&gt;
+      <span class="bp-lean-keyword">if</span> x = c.1 ∨ x = c.2 <span class="bp-lean-keyword">then</span> max (lv c.1) (lv c.2) + 1 <span class="bp-lean-keyword">else</span> lv x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean:51</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../bitonic-sorter/index.html#within">Comparators within an interval</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#levels">Comparator levels under earliest scheduling</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#append-disjoint">Parallel composition of comparator lists on adjacent blocks</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/levels-congr">
+<h4 class="bp-thmheading" id="levels-congr">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Levels inside a block depend only on initial levels inside it</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L108" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels_congr in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels_congr in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#levels-congr" aria-label="Link to Levels inside a block depend only on initial levels inside it" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels_congr</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(ps\)</span> be a list of
+comparators all of whose wires lie in <span class="arithmatex">\([a, b)\)</span>, and let <span class="arithmatex">\(\ell, \ell' : \mathbb{N} \to \mathbb{N}\)</span>
+be initial levels that agree on every wire in <span class="arithmatex">\([a, b)\)</span>. Then for every wire <span class="arithmatex">\(x\)</span> in <span class="arithmatex">\([a, b)\)</span>, the
+level of <span class="arithmatex">\(x\)</span> after <span class="arithmatex">\(ps\)</span> starting from <span class="arithmatex">\(\ell\)</span> equals the level of <span class="arithmatex">\(x\)</span> after <span class="arithmatex">\(ps\)</span> starting from
+<span class="arithmatex">\(\ell'\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> levels_congr : ∀ {ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (ℕ × ℕ)} {lo hi : ℕ}, <a class="bp-lean-ref" href="../bitonic-sorter/index.html#within" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.Within">Within</a> ps lo hi →
+    ∀ (lv lv&#x27; : ℕ → ℕ), (∀ y, lo ≤ y → y &lt; hi → lv y = lv&#x27; y) →
+    ∀ x, lo ≤ x → x &lt; hi → <a class="bp-lean-ref" href="#levels" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels">levels</a> ps lv x = <a class="bp-lean-ref" href="#levels" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels">levels</a> ps lv&#x27; x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.Within">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Within (ps : List (ℕ × ℕ)) (lo hi : ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ p ∈ ps, lo ≤ p.1 ∧ p.1 &lt; hi ∧ lo ≤ p.2 ∧ p.2 &lt; hi</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Bitonic.lean:88</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> levels : List (ℕ × ℕ) → (ℕ → ℕ) → ℕ → ℕ
+  | [], lv =&gt; lv
+  | c :: ps, lv =&gt; levels ps <span class="bp-lean-keyword">fun</span> x =&gt;
+      <span class="bp-lean-keyword">if</span> x = c.1 ∨ x = c.2 <span class="bp-lean-keyword">then</span> max (lv c.1) (lv c.2) + 1 <span class="bp-lean-keyword">else</span> lv x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean:51</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../bitonic-sorter/index.html#within">Comparators within an interval</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#levels">Comparator levels under earliest scheduling</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#append-disjoint">Parallel composition of comparator lists on adjacent blocks</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/append-disjoint">
+<h4 class="bp-thmheading" id="append-disjoint">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Parallel composition of comparator lists on adjacent blocks</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L118" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE.append_disjoint in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE.append_disjoint in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#append-disjoint" aria-label="Link to Parallel composition of comparator lists on adjacent blocks" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE.append_disjoint</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(a\)</span>, <span class="arithmatex">\(m\)</span>, <span class="arithmatex">\(b\)</span>, <span class="arithmatex">\(d\)</span> be
+natural numbers, and let <span class="arithmatex">\(p\)</span> and <span class="arithmatex">\(q\)</span> be lists of comparators on wires indexed by <span class="arithmatex">\(\mathbb{N}\)</span>, where
+every comparator of <span class="arithmatex">\(p\)</span> joins two wires in <span class="arithmatex">\([a, m)\)</span> and every comparator of <span class="arithmatex">\(q\)</span> joins two wires in
+<span class="arithmatex">\([m, b)\)</span>. If <span class="arithmatex">\(p\)</span> and <span class="arithmatex">\(q\)</span> both have depth at most <span class="arithmatex">\(d\)</span>, then the concatenation of <span class="arithmatex">\(p\)</span> followed by
+<span class="arithmatex">\(q\)</span> also has depth at most <span class="arithmatex">\(d\)</span>: the two lists run in parallel.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> DepthLE.append_disjoint {ps qs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (ℕ × ℕ)} {lo mid hi d : ℕ}
+    (hpw : <a class="bp-lean-ref" href="../bitonic-sorter/index.html#within" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.Within">Within</a> ps lo mid) (hqw : <a class="bp-lean-ref" href="../bitonic-sorter/index.html#within" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.Within">Within</a> qs mid hi) (hp : <a class="bp-lean-ref" href="#depth-le" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE">DepthLE</a> ps d) (hq : <a class="bp-lean-ref" href="#depth-le" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE">DepthLE</a> qs d) :
+    <a class="bp-lean-ref" href="#depth-le" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE">DepthLE</a> (ps ++ qs) d</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.Within">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Within (ps : List (ℕ × ℕ)) (lo hi : ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ p ∈ ps, lo ≤ p.1 ∧ p.1 &lt; hi ∧ lo ≤ p.2 ∧ p.2 &lt; hi</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Bitonic.lean:88</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DepthLE (ps : List (ℕ × ℕ)) (d : ℕ) : <span class="bp-lean-keyword">Prop</span> := ∀ x, levels ps (<span class="bp-lean-keyword">fun</span> _ =&gt; 0) x ≤ d</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean:57</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#depth-le">Depth bound for a comparator list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../bitonic-sorter/index.html#within">Comparators within an interval</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#levels">Comparator levels under earliest scheduling</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#levels-congr">Levels inside a block depend only on initial levels inside it</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#levels-of-not-mem">Comparators inside a block leave levels outside it unchanged</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../batcher-odd-even-mergesort/index.html#depth-le-odd-even-sort-n">Depth bound for Batcher&#x27;s odd-even merge sort as a comparator list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#depth-le-bitonic-merge">The bitonic merger has depth at most <span class="arithmatex">\(k\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#depth-le-bitonic-sort-n">Depth of the bitonic sorter&#x27;s comparator list</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/levels-swap">
+<h4 class="bp-thmheading" id="levels-swap">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Swapping the wires of every comparator does not change levels</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L130" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels_swap in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels_swap in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#levels-swap" aria-label="Link to Swapping the wires of every comparator does not change levels" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels_swap</div>
+<div class="bp-thmcontent">
+<p>For every list <span class="arithmatex">\(ps\)</span> of
+comparators and all initial levels <span class="arithmatex">\(\ell : \mathbb{N} \to \mathbb{N}\)</span>, the levels after the list
+obtained from <span class="arithmatex">\(ps\)</span> by replacing each comparator <span class="arithmatex">\((i, j)\)</span> with <span class="arithmatex">\((j, i)\)</span>, starting from <span class="arithmatex">\(\ell\)</span>, equal
+the levels after <span class="arithmatex">\(ps\)</span> starting from <span class="arithmatex">\(\ell\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> levels_swap : ∀ (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (ℕ × ℕ)) (lv : ℕ → ℕ),
+    <a class="bp-lean-ref" href="#levels" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels">levels</a> (ps.map <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Prod.swap#doc" title="Prod.swap">Prod.swap</a>) lv = <a class="bp-lean-ref" href="#levels" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels">levels</a> ps lv</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> levels : List (ℕ × ℕ) → (ℕ → ℕ) → ℕ → ℕ
+  | [], lv =&gt; lv
+  | c :: ps, lv =&gt; levels ps <span class="bp-lean-keyword">fun</span> x =&gt;
+      <span class="bp-lean-keyword">if</span> x = c.1 ∨ x = c.2 <span class="bp-lean-keyword">then</span> max (lv c.1) (lv c.2) + 1 <span class="bp-lean-keyword">else</span> lv x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean:51</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#levels">Comparator levels under earliest scheduling</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#depth-le-bitonic-sort-n">Depth of the bitonic sorter&#x27;s comparator list</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="tabulated-levels">Tabulated levels</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/levels-tab">
+<h4 class="bp-thmheading" id="levels-tab">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Tabulated levels</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L145" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levelsTab in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levelsTab in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#levels-tab" aria-label="Link to Tabulated levels" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levelsTab</div>
+<div class="bp-thmcontent">
+<p>Given a list <span class="arithmatex">\(ps\)</span> of comparators and a table <span class="arithmatex">\(t\)</span> of natural numbers
+<span class="arithmatex">\(t_0, \dots, t_{N-1}\)</span>, the tabulated levels are computed by processing the comparators in order:
+a comparator <span class="arithmatex">\((i, j)\)</span> sets both entries <span class="arithmatex">\(t_i\)</span> and <span class="arithmatex">\(t_j\)</span> to <span class="arithmatex">\(\max(t_i, t_j) + 1\)</span>, where an entry
+outside the table reads as <span class="arithmatex">\(0\)</span> and a write outside the table is ignored.</p>
+<p>Evaluating the levels directly re-reads both wires' earlier levels at every comparator, a cost
+exponential in the depth; this computes the same values in time proportional to the network size
+times <span class="arithmatex">\(N\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> levelsTab : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (ℕ × ℕ) → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> ℕ → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> ℕ
+  | [], t =&gt; t
+  | c :: ps, t =&gt;
+      levelsTab ps ((t.set c.1 (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Max.max#doc" title="Max.max">max</a> (t.getD c.1 0) (t.getD c.2 0) + 1)).set c.2
+        (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Max.max#doc" title="Max.max">max</a> (t.getD c.1 0) (t.getD c.2 0) + 1))</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#get-d-levels-tab">Tabulated levels agree with levels</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/get-d-levels-tab">
+<h4 class="bp-thmheading" id="get-d-levels-tab">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Tabulated levels agree with levels</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L156" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.getD_levelsTab in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.getD_levelsTab in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#get-d-levels-tab" aria-label="Link to Tabulated levels agree with levels" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.Bitonic.getD_levelsTab</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(t\)</span> be a list of natural numbers of length <span class="arithmatex">\(N\)</span> and
+let <span class="arithmatex">\(ps\)</span> be a list of comparators all of whose wires lie in <span class="arithmatex">\([0, N)\)</span>. Extend <span class="arithmatex">\(t\)</span> to all wires by
+setting <span class="arithmatex">\(t_y = 0\)</span> for <span class="arithmatex">\(y \ge N\)</span>. Then for every wire <span class="arithmatex">\(x\)</span>, the entry at position <span class="arithmatex">\(x\)</span> of the
+tabulated levels of <span class="arithmatex">\(ps\)</span> starting from the table <span class="arithmatex">\(t\)</span> (read as <span class="arithmatex">\(0\)</span> when <span class="arithmatex">\(x \ge N\)</span>) equals the level
+of wire <span class="arithmatex">\(x\)</span> after <span class="arithmatex">\(ps\)</span>, starting from the initial levels <span class="arithmatex">\(y \mapsto t_y\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> getD_levelsTab : ∀ (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (ℕ × ℕ)) (t : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> ℕ), <a class="bp-lean-ref" href="../bitonic-sorter/index.html#within" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.Within">Within</a> ps 0 t.length →
+    ∀ x, (<a class="bp-lean-ref" href="#levels-tab" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levelsTab">levelsTab</a> ps t).getD x 0 = <a class="bp-lean-ref" href="#levels" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels">levels</a> ps (<span class="bp-lean-keyword">fun</span> y =&gt; t.getD y 0) x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.Within">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Within (ps : List (ℕ × ℕ)) (lo hi : ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ p ∈ ps, lo ≤ p.1 ∧ p.1 &lt; hi ∧ lo ≤ p.2 ∧ p.2 &lt; hi</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Bitonic.lean:88</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levelsTab">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> levelsTab : List (ℕ × ℕ) → List ℕ → List ℕ
+  | [], t =&gt; t
+  | c :: ps, t =&gt;
+      levelsTab ps ((t.set c.1 (max (t.getD c.1 0) (t.getD c.2 0) + 1)).set c.2
+        (max (t.getD c.1 0) (t.getD c.2 0) + 1))</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean:145</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> levels : List (ℕ × ℕ) → (ℕ → ℕ) → ℕ → ℕ
+  | [], lv =&gt; lv
+  | c :: ps, lv =&gt; levels ps <span class="bp-lean-keyword">fun</span> x =&gt;
+      <span class="bp-lean-keyword">if</span> x = c.1 ∨ x = c.2 <span class="bp-lean-keyword">then</span> max (lv c.1) (lv c.2) + 1 <span class="bp-lean-keyword">else</span> lv x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean:51</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../bitonic-sorter/index.html#within">Comparators within an interval</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#levels">Comparator levels under earliest scheduling</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#levels-tab">Tabulated levels</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="the-bitonic-networks">The bitonic networks</h2>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/depth-le-half-cleaner">
+<h4 class="bp-thmheading" id="depth-le-half-cleaner">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The half-cleaner has depth at most <span class="arithmatex">\(1\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L189" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.depthLE_halfCleaner in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.depthLE_halfCleaner in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#depth-le-half-cleaner" aria-label="Link to The half-cleaner has depth at most 1" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.Bitonic.depthLE_halfCleaner</div>
+<div class="bp-thmcontent">
+<p>For all natural numbers <span class="arithmatex">\(m\)</span> and <span class="arithmatex">\(b\)</span>, the
+half-cleaner on the block of <span class="arithmatex">\(2m\)</span> wires <span class="arithmatex">\(b, \dots, b + 2m - 1\)</span> has depth at most <span class="arithmatex">\(1\)</span>: its
+comparators join pairwise disjoint pairs of wires.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> depthLE_halfCleaner (m b : ℕ) : <a class="bp-lean-ref" href="#depth-le" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE">DepthLE</a> (<a class="bp-lean-ref" href="../bitonic-sorter/index.html#half-cleaner" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.halfCleaner">halfCleaner</a> m b) 1</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DepthLE (ps : List (ℕ × ℕ)) (d : ℕ) : <span class="bp-lean-keyword">Prop</span> := ∀ x, levels ps (<span class="bp-lean-keyword">fun</span> _ =&gt; 0) x ≤ d</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean:57</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.halfCleaner">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> halfCleaner (m b : ℕ) : List (ℕ × ℕ) := (List.range m).map <span class="bp-lean-keyword">fun</span> i =&gt; (b + i, b + m + i)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Bitonic.lean:137</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#depth-le">Depth bound for a comparator list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../bitonic-sorter/index.html#half-cleaner">Half-cleaner</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#levels">Comparator levels under earliest scheduling</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#depth-le-bitonic-merge">The bitonic merger has depth at most <span class="arithmatex">\(k\)</span></a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/depth-le-bitonic-merge">
+<h4 class="bp-thmheading" id="depth-le-bitonic-merge">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The bitonic merger has depth at most <span class="arithmatex">\(k\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L194" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.depthLE_bitonicMerge in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.depthLE_bitonicMerge in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#depth-le-bitonic-merge" aria-label="Link to The bitonic merger has depth at most k" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.Bitonic.depthLE_bitonicMerge</div>
+<div class="bp-thmcontent">
+<p>For all natural numbers <span class="arithmatex">\(k\)</span> and <span class="arithmatex">\(b\)</span>, the bitonic
+merger on the block of <span class="arithmatex">\(2^k\)</span> wires <span class="arithmatex">\(b, b + 1, \dots, b + 2^k - 1\)</span> has depth at most <span class="arithmatex">\(k\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> depthLE_bitonicMerge : ∀ k b, <a class="bp-lean-ref" href="#depth-le" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE">DepthLE</a> (<a class="bp-lean-ref" href="../bitonic-sorter/index.html#bitonic-merge" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.bitonicMerge">bitonicMerge</a> k b) k</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DepthLE (ps : List (ℕ × ℕ)) (d : ℕ) : <span class="bp-lean-keyword">Prop</span> := ∀ x, levels ps (<span class="bp-lean-keyword">fun</span> _ =&gt; 0) x ≤ d</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean:57</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.bitonicMerge">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> bitonicMerge : ℕ → ℕ → List (ℕ × ℕ)
+  | 0, _ =&gt; []
+  | k + 1, b =&gt; halfCleaner (2 ^ k) b ++ bitonicMerge k b ++ bitonicMerge k (b + 2 ^ k)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Bitonic.lean:269</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 8 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#depth-le">Depth bound for a comparator list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../bitonic-sorter/index.html#bitonic-merge">Bitonic merger</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#append">Depth of sequential composition of comparator lists</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#append-disjoint">Parallel composition of comparator lists on adjacent blocks</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#within">Comparators within an interval</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#depth-le-half-cleaner">The half-cleaner has depth at most <span class="arithmatex">\(1\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#half-cleaner">Half-cleaner</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#levels">Comparator levels under earliest scheduling</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#depth-le-bitonic-sort-n">Depth of the bitonic sorter&#x27;s comparator list</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/depth-le-bitonic-sort-n">
+<h4 class="bp-thmheading" id="depth-le-bitonic-sort-n">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Depth of the bitonic sorter&#x27;s comparator list</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L204" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.depthLE_bitonicSortN in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.depthLE_bitonicSortN in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#depth-le-bitonic-sort-n" aria-label="Link to Depth of the bitonic sorter&#x27;s comparator list" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.Bitonic.depthLE_bitonicSortN</div>
+<div class="bp-thmcontent">
+<p>For all natural numbers <span class="arithmatex">\(k\)</span> and <span class="arithmatex">\(b\)</span>, the
+comparator list of Batcher's bitonic sorter on the block of <span class="arithmatex">\(2^k\)</span> wires
+<span class="arithmatex">\(b, b + 1, \dots, b + 2^k - 1\)</span> has depth at most <span class="arithmatex">\(d\)</span> for some natural number <span class="arithmatex">\(d\)</span> with
+<span class="arithmatex">\(2d \le k(k+1)\)</span>; that is, its depth is at most <span class="arithmatex">\(k(k+1)/2\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> depthLE_bitonicSortN : ∀ k b, ∃ d, <a class="bp-lean-ref" href="#depth-le" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE">DepthLE</a> (<a class="bp-lean-ref" href="../bitonic-sorter/index.html#bitonic-sort-n" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.bitonicSortN">bitonicSortN</a> k b) d ∧ 2 * d ≤ k * (k + 1)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DepthLE (ps : List (ℕ × ℕ)) (d : ℕ) : <span class="bp-lean-keyword">Prop</span> := ∀ x, levels ps (<span class="bp-lean-keyword">fun</span> _ =&gt; 0) x ≤ d</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean:57</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.bitonicSortN">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> bitonicSortN : ℕ → ℕ → List (ℕ × ℕ)
+  | 0, _ =&gt; []
+  | k + 1, b =&gt; bitonicSortN k b ++ (bitonicSortN k (b + 2 ^ k)).map Prod.swap ++
+      bitonicMerge (k + 1) b</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Bitonic.lean:400</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 10 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#depth-le">Depth bound for a comparator list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../bitonic-sorter/index.html#bitonic-sort-n">Batcher&#x27;s bitonic sorter on a block of wires</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#append">Depth of sequential composition of comparator lists</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#append-disjoint">Parallel composition of comparator lists on adjacent blocks</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#within">Comparators within an interval</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#bitonic-merge">Bitonic merger</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#depth-le-bitonic-merge">The bitonic merger has depth at most <span class="arithmatex">\(k\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#half-cleaner">Half-cleaner</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#levels">Comparator levels under earliest scheduling</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#levels-swap">Swapping the wires of every comparator does not change levels</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bitonic-sorter-depth-le">Batcher&#x27;s bitonic sorting network has depth at most <span class="arithmatex">\(k(k+1)/2\)</span></a></span></div>
+</div>
+</details>
+</div>
+<h2 id="every-sorting-network-on-n-wires-has-depth-at-least-log2-n">Every sorting network on <code>n</code> wires has depth at least <code>log₂ n</code></h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/influence">
+<h4 class="bp-thmheading" id="influence">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Influence sets of wires</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L228" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.influence in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.influence in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#influence" aria-label="Link to Influence sets of wires" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.Bitonic.influence</div>
+<div class="bp-thmcontent">
+<p>Given a list <span class="arithmatex">\(ps\)</span> of comparators on wires indexed by <span class="arithmatex">\(\mathbb{N}\)</span>
+and an assignment <span class="arithmatex">\(S\)</span> of a finite set of natural numbers to each wire, the influence sets after
+<span class="arithmatex">\(ps\)</span> are computed by processing the comparators in order: a comparator <span class="arithmatex">\((i, j)\)</span> replaces the
+current sets of both wires <span class="arithmatex">\(i\)</span> and <span class="arithmatex">\(j\)</span> by their union, and leaves the sets of all other wires
+unchanged. Starting from <span class="arithmatex">\(S(x) = \{x\}\)</span>, the set of a wire tracks the inputs it can depend on.</p>
+<p>Evaluating this definition directly re-reads both wires' earlier sets at every comparator, a cost
+exponential in the depth, so it serves as a proof device only.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> influence : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (ℕ × ℕ) → (ℕ → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset#doc" title="Finset">Finset</a> ℕ) → ℕ → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset#doc" title="Finset">Finset</a> ℕ
+  | [], S =&gt; S
+  | c :: ps, S =&gt; influence ps <span class="bp-lean-keyword">fun</span> x =&gt; <span class="bp-lean-keyword">if</span> x = c.1 ∨ x = c.2 <span class="bp-lean-keyword">then</span> S c.1 ∪ S c.2 <span class="bp-lean-keyword">else</span> S x</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#card-influence-le">Influence sets grow at most exponentially with the level</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#le-two-pow-of-sorts">Sorting comparator lists on <span class="arithmatex">\(n\)</span> wires have depth at least <span class="arithmatex">\(\log_2 n\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#run-n-congr-influence">Outputs depend only on the influence set</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/card-influence-le">
+<h4 class="bp-thmheading" id="card-influence-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Influence sets grow at most exponentially with the level</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L233" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.card_influence_le in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.card_influence_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#card-influence-le" aria-label="Link to Influence sets grow at most exponentially with the level" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.Bitonic.card_influence_le</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(p\)</span> be a list of comparators
+on wires indexed by <span class="arithmatex">\(\mathbb{N}\)</span>. Let <span class="arithmatex">\(S\)</span> assign to each wire a finite set of natural numbers and
+let <span class="arithmatex">\(\ell\)</span> assign to each wire a natural number, such that <span class="arithmatex">\(|S(x)| \le 2^{\ell(x)}\)</span> for every
+wire <span class="arithmatex">\(x\)</span>. For each wire <span class="arithmatex">\(x\)</span>, let <span class="arithmatex">\(L(x)\)</span> be the level of <span class="arithmatex">\(x\)</span> after <span class="arithmatex">\(p\)</span> starting from the levels
+<span class="arithmatex">\(\ell\)</span>. Then for every wire <span class="arithmatex">\(x\)</span>, the influence set of <span class="arithmatex">\(x\)</span> after <span class="arithmatex">\(p\)</span> starting from <span class="arithmatex">\(S\)</span> has at most
+<span class="arithmatex">\(2^{L(x)}\)</span> elements.</p>
+<p>In particular, a wire at level <span class="arithmatex">\(l\)</span> depends on at most <span class="arithmatex">\(2^l\)</span> inputs.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> card_influence_le : ∀ (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (ℕ × ℕ)) (S : ℕ → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset#doc" title="Finset">Finset</a> ℕ) (lv : ℕ → ℕ),
+    (∀ x, (S x).card ≤ 2 ^ lv x) → ∀ x, (<a class="bp-lean-ref" href="#influence" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.influence">influence</a> ps S x).card ≤ 2 ^ <a class="bp-lean-ref" href="#levels" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels">levels</a> ps lv x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.influence">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> influence : List (ℕ × ℕ) → (ℕ → Finset ℕ) → ℕ → Finset ℕ
+  | [], S =&gt; S
+  | c :: ps, S =&gt; influence ps <span class="bp-lean-keyword">fun</span> x =&gt; <span class="bp-lean-keyword">if</span> x = c.1 ∨ x = c.2 <span class="bp-lean-keyword">then</span> S c.1 ∪ S c.2 <span class="bp-lean-keyword">else</span> S x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean:228</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.levels">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> levels : List (ℕ × ℕ) → (ℕ → ℕ) → ℕ → ℕ
+  | [], lv =&gt; lv
+  | c :: ps, lv =&gt; levels ps <span class="bp-lean-keyword">fun</span> x =&gt;
+      <span class="bp-lean-keyword">if</span> x = c.1 ∨ x = c.2 <span class="bp-lean-keyword">then</span> max (lv c.1) (lv c.2) + 1 <span class="bp-lean-keyword">else</span> lv x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean:51</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#influence">Influence sets of wires</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#levels">Comparator levels under earliest scheduling</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#le-two-pow-of-sorts">Sorting comparator lists on <span class="arithmatex">\(n\)</span> wires have depth at least <span class="arithmatex">\(\log_2 n\)</span></a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/run-n-congr-influence">
+<h4 class="bp-thmheading" id="run-n-congr-influence">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Outputs depend only on the influence set</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L250" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.runN_congr_influence in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.runN_congr_influence in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#run-n-congr-influence" aria-label="Link to Outputs depend only on the influence set" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.Bitonic.runN_congr_influence</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(f_0, g_0 : \mathbb{N} \to \alpha\)</span> be two
+inputs with values in a linear order <span class="arithmatex">\(\alpha\)</span>, let <span class="arithmatex">\(S\)</span> assign to each wire <span class="arithmatex">\(x\)</span> a finite set <span class="arithmatex">\(S(x)\)</span>
+of input positions, and let <span class="arithmatex">\(F, G : \mathbb{N} \to \alpha\)</span> be wire values such that for every wire
+<span class="arithmatex">\(x\)</span>, if <span class="arithmatex">\(f_0\)</span> and <span class="arithmatex">\(g_0\)</span> agree on <span class="arithmatex">\(S(x)\)</span>, then <span class="arithmatex">\(F(x) = G(x)\)</span>. Then for every list of comparators
+and every wire <span class="arithmatex">\(x\)</span>, if <span class="arithmatex">\(f_0\)</span> and <span class="arithmatex">\(g_0\)</span> agree on the influence set of <span class="arithmatex">\(x\)</span> obtained from <span class="arithmatex">\(S\)</span> through
+the comparators, running the comparators on <span class="arithmatex">\(F\)</span> and on <span class="arithmatex">\(G\)</span> gives the same value at wire <span class="arithmatex">\(x\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> runN_congr_influence {α : <span class="bp-lean-keyword">Type</span>*} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LinearOrder#doc" title="LinearOrder">LinearOrder</a> α] (f₀ g₀ : ℕ → α) :
+    ∀ (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (ℕ × ℕ)) (S : ℕ → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset#doc" title="Finset">Finset</a> ℕ) (F G : ℕ → α),
+      (∀ x, (∀ y ∈ S x, f₀ y = g₀ y) → F x = G x) →
+      ∀ x, (∀ y ∈ <a class="bp-lean-ref" href="#influence" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.influence">influence</a> ps S x, f₀ y = g₀ y) → <a class="bp-lean-ref" href="../bitonic-sorter/index.html#run-n" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.runN">runN</a> ps F x = <a class="bp-lean-ref" href="../bitonic-sorter/index.html#run-n" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.runN">runN</a> ps G x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.influence">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> influence : List (ℕ × ℕ) → (ℕ → Finset ℕ) → ℕ → Finset ℕ
+  | [], S =&gt; S
+  | c :: ps, S =&gt; influence ps <span class="bp-lean-keyword">fun</span> x =&gt; <span class="bp-lean-keyword">if</span> x = c.1 ∨ x = c.2 <span class="bp-lean-keyword">then</span> S c.1 ∪ S c.2 <span class="bp-lean-keyword">else</span> S x</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean:228</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.runN">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> runN (ps : List (ℕ × ℕ)) (f : ℕ → α) : ℕ → α :=
+  ps.foldl (<span class="bp-lean-keyword">fun</span> g c =&gt; cmp c.1 c.2 g) f</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Bitonic.lean:75</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#influence">Influence sets of wires</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../bitonic-sorter/index.html#run-n">Running a comparator network on natural-number-indexed wires</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#cmp">Comparator on natural-number-indexed wires</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#le-two-pow-of-sorts">Sorting comparator lists on <span class="arithmatex">\(n\)</span> wires have depth at least <span class="arithmatex">\(\log_2 n\)</span></a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/exists-false-run-n">
+<h4 class="bp-thmheading" id="exists-false-run-n">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Comparators inside <span class="arithmatex">\((0, n)\)</span> keep a false value inside <span class="arithmatex">\((0, n)\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L274" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.exists_false_runN in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.exists_false_runN in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#exists-false-run-n" aria-label="Link to Comparators inside (0, n) keep a false value inside (0, n)" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.Bitonic.exists_false_runN</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(n\)</span> be a natural
+number, let <span class="arithmatex">\(p\)</span> be a list of comparators, each joining two wires in <span class="arithmatex">\([0, n)\)</span>, and let <span class="arithmatex">\(f\)</span> assign a
+Boolean value to each wire in <span class="arithmatex">\(\mathbb{N}\)</span>. If <span class="arithmatex">\(f(y)\)</span> is false for some <span class="arithmatex">\(y &lt; n\)</span>, then after
+running <span class="arithmatex">\(p\)</span> on <span class="arithmatex">\(f\)</span> some wire <span class="arithmatex">\(y &lt; n\)</span> carries the value false.</p>
+<p>The smaller value moves to the first wire of each comparator.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> exists_false_runN : ∀ {ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (ℕ × ℕ)} {n : ℕ}, <a class="bp-lean-ref" href="../bitonic-sorter/index.html#within" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.Within">Within</a> ps 0 n →
+    ∀ (f : ℕ → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>), (∃ y &lt; n, f y = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a>) → ∃ y &lt; n, <a class="bp-lean-ref" href="../bitonic-sorter/index.html#run-n" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.runN">runN</a> ps f y = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a></code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.Within">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Within (ps : List (ℕ × ℕ)) (lo hi : ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ p ∈ ps, lo ≤ p.1 ∧ p.1 &lt; hi ∧ lo ≤ p.2 ∧ p.2 &lt; hi</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Bitonic.lean:88</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.runN">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> runN (ps : List (ℕ × ℕ)) (f : ℕ → α) : ℕ → α :=
+  ps.foldl (<span class="bp-lean-keyword">fun</span> g c =&gt; cmp c.1 c.2 g) f</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Bitonic.lean:75</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../bitonic-sorter/index.html#within">Comparators within an interval</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../bitonic-sorter/index.html#run-n">Running a comparator network on natural-number-indexed wires</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#cmp">Comparator on natural-number-indexed wires</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#le-two-pow-of-sorts">Sorting comparator lists on <span class="arithmatex">\(n\)</span> wires have depth at least <span class="arithmatex">\(\log_2 n\)</span></a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/le-two-pow-of-sorts">
+<h4 class="bp-thmheading" id="le-two-pow-of-sorts">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Sorting comparator lists on <span class="arithmatex">\(n\)</span> wires have depth at least <span class="arithmatex">\(\log_2 n\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L293" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.le_two_pow_of_sorts in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.le_two_pow_of_sorts in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#le-two-pow-of-sorts" aria-label="Link to Sorting comparator lists on n wires have depth at least log₂ n" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.Bitonic.le_two_pow_of_sorts</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(ps\)</span> be a list
+of comparators on wires indexed by <span class="arithmatex">\(\mathbb{N}\)</span>, all of whose wires lie in <span class="arithmatex">\([0, n)\)</span>, and let <span class="arithmatex">\(d\)</span>
+be a natural number. Suppose that for every Boolean input <span class="arithmatex">\(v\)</span> on the wires <span class="arithmatex">\(0, \dots, n - 1\)</span>,
+extended by <span class="arithmatex">\(\mathrm{false}\)</span> to the wires <span class="arithmatex">\(\ge n\)</span>, the output <span class="arithmatex">\(w\)</span> of <span class="arithmatex">\(ps\)</span> satisfies
+<span class="arithmatex">\(w_i \le w_j\)</span> whenever <span class="arithmatex">\(i \le j &lt; n\)</span> (with <span class="arithmatex">\(\mathrm{false} &lt; \mathrm{true}\)</span>). If <span class="arithmatex">\(ps\)</span> has depth at
+most <span class="arithmatex">\(d\)</span>, then <span class="arithmatex">\(n \le 2^d\)</span>.</p>
+<p>The smallest output depends on every input, and a wire at level <span class="arithmatex">\(d\)</span> depends on at most <span class="arithmatex">\(2^d\)</span>
+inputs.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> le_two_pow_of_sorts {ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (ℕ × ℕ)} {n d : ℕ} (hw : <a class="bp-lean-ref" href="../bitonic-sorter/index.html#within" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.Within">Within</a> ps 0 n)
+    (hsort : ∀ (v : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) (i j : ℕ), i ≤ j → j &lt; n →
+      <a class="bp-lean-ref" href="../bitonic-sorter/index.html#run-n" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.runN">runN</a> ps (<a class="bp-lean-ref" href="../bitonic-sorter/index.html#extend-false" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.extendFalse">extendFalse</a> v) i ≤ <a class="bp-lean-ref" href="../bitonic-sorter/index.html#run-n" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.runN">runN</a> ps (<a class="bp-lean-ref" href="../bitonic-sorter/index.html#extend-false" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.extendFalse">extendFalse</a> v) j)
+    (hd : <a class="bp-lean-ref" href="#depth-le" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE">DepthLE</a> ps d) : n ≤ 2 ^ d</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.Within">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Within (ps : List (ℕ × ℕ)) (lo hi : ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ p ∈ ps, lo ≤ p.1 ∧ p.1 &lt; hi ∧ lo ≤ p.2 ∧ p.2 &lt; hi</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Bitonic.lean:88</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.runN">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> runN (ps : List (ℕ × ℕ)) (f : ℕ → α) : ℕ → α :=
+  ps.foldl (<span class="bp-lean-keyword">fun</span> g c =&gt; cmp c.1 c.2 g) f</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Bitonic.lean:75</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.extendFalse">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> extendFalse {N : ℕ} (v : Fin N → Bool) : ℕ → Bool :=
+  <span class="bp-lean-keyword">fun</span> j =&gt; <span class="bp-lean-keyword">if</span> h : j &lt; N <span class="bp-lean-keyword">then</span> v ⟨j, h⟩ <span class="bp-lean-keyword">else</span> false</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Bitonic.lean:490</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DepthLE (ps : List (ℕ × ℕ)) (d : ℕ) : <span class="bp-lean-keyword">Prop</span> := ∀ x, levels ps (<span class="bp-lean-keyword">fun</span> _ =&gt; 0) x ≤ d</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean:57</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 10 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#depth-le">Depth bound for a comparator list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../bitonic-sorter/index.html#within">Comparators within an interval</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../bitonic-sorter/index.html#extend-false">Extension of a Boolean vector by false</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../bitonic-sorter/index.html#run-n">Running a comparator network on natural-number-indexed wires</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-influence-le">Influence sets grow at most exponentially with the level</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#exists-false-run-n">Comparators inside <span class="arithmatex">\((0, n)\)</span> keep a false value inside <span class="arithmatex">\((0, n)\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#influence">Influence sets of wires</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#levels">Comparator levels under earliest scheduling</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#run-n-congr-influence">Outputs depend only on the influence set</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#run-n-const">Constant blocks stay constant</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#le-of-depth-le-bitonic-sort-n">The bitonic sorting comparator list on <span class="arithmatex">\(2^k\)</span> wires has depth at least <span class="arithmatex">\(k\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#le-two-pow-of-sorts-2">Every sorting network on <span class="arithmatex">\(n\)</span> wires has depth at least <span class="arithmatex">\(\log_2 n\)</span></a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/le-of-depth-le-bitonic-sort-n">
+<h4 class="bp-thmheading" id="le-of-depth-le-bitonic-sort-n">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The bitonic sorting comparator list on <span class="arithmatex">\(2^k\)</span> wires has depth at least <span class="arithmatex">\(k\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L324" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.le_of_depthLE_bitonicSortN in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.Bitonic.le_of_depthLE_bitonicSortN in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#le-of-depth-le-bitonic-sort-n" aria-label="Link to The bitonic sorting comparator list on 2ᵏ wires has depth at least k" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.Bitonic.le_of_depthLE_bitonicSortN</div>
+<div class="bp-thmcontent">
+<p>For all natural
+numbers <span class="arithmatex">\(k\)</span> and <span class="arithmatex">\(d\)</span>, if the comparator list of Batcher's bitonic sorter on the wires
+<span class="arithmatex">\(0, \dots, 2^k - 1\)</span> has depth at most <span class="arithmatex">\(d\)</span>, then <span class="arithmatex">\(k \le d\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> le_of_depthLE_bitonicSortN {k d : ℕ} (hd : <a class="bp-lean-ref" href="#depth-le" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE">DepthLE</a> (<a class="bp-lean-ref" href="../bitonic-sorter/index.html#bitonic-sort-n" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.bitonicSortN">bitonicSortN</a> k 0) d) : k ≤ d</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DepthLE (ps : List (ℕ × ℕ)) (d : ℕ) : <span class="bp-lean-keyword">Prop</span> := ∀ x, levels ps (<span class="bp-lean-keyword">fun</span> _ =&gt; 0) x ≤ d</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean:57</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.bitonicSortN">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> bitonicSortN : ℕ → ℕ → List (ℕ × ℕ)
+  | 0, _ =&gt; []
+  | k + 1, b =&gt; bitonicSortN k b ++ (bitonicSortN k (b + 2 ^ k)).map Prod.swap ++
+      bitonicMerge (k + 1) b</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Bitonic.lean:400</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 9</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#depth-le">Depth bound for a comparator list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../bitonic-sorter/index.html#bitonic-sort-n">Batcher&#x27;s bitonic sorter on a block of wires</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#within">Comparators within an interval</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#bitonic-merge">Bitonic merger</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#bitonic-sort-n-sorts">The bitonic sorter sorts every <code>0</code>-<code>1</code> input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#extend-false">Extension of a Boolean vector by false</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#half-cleaner">Half-cleaner</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#le-two-pow-of-sorts">Sorting comparator lists on <span class="arithmatex">\(n\)</span> wires have depth at least <span class="arithmatex">\(\log_2 n\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#run-n">Running a comparator network on natural-number-indexed wires</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="depth-of-networks">Depth of <code>Network</code>s</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/to-pairs">
+<h4 class="bp-thmheading" id="to-pairs">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Comparator list of a network</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L340" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.Network.toPairs in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.Network.toPairs in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#to-pairs" aria-label="Link to Comparator list of a network" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.Network.toPairs</div>
+<div class="bp-thmcontent">
+<p>The comparators of a network on <span class="arithmatex">\(n\)</span> wires, in order, with
+each comparator <span class="arithmatex">\((i, j)\)</span> written as the pair of natural numbers <span class="arithmatex">\((i, j)\)</span>, forgetting that
+<span class="arithmatex">\(i, j &lt; n\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Network.toPairs (net : <a class="bp-lean-ref" href="../sorting-networks-and-the-zero-one-principle/index.html#network" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Network">Network</a> n) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (ℕ × ℕ) := net.map <span class="bp-lean-keyword">fun</span> c =&gt; (c.1.val, c.2.val)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Network">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Network (n : ℕ) := List (Fin n × Fin n)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/ZeroOne.lean:56</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../sorting-networks-and-the-zero-one-principle/index.html#network">Comparator network</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../batcher-odd-even-mergesort/index.html#odd-even-sorter-depth-le">Depth bound for Batcher&#x27;s odd-even merge sorting network</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#bitonic-sorter-depth-le">Batcher&#x27;s bitonic sorting network has depth at most <span class="arithmatex">\(k(k+1)/2\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#depth-le-2">Depth bound for a comparator network</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#le-two-pow-of-sorts-2">Every sorting network on <span class="arithmatex">\(n\)</span> wires has depth at least <span class="arithmatex">\(\log_2 n\)</span></a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/depth-le-2">
+<h4 class="bp-thmheading" id="depth-le-2">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Depth bound for a comparator network</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L367" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.Network.DepthLE in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.Network.DepthLE in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#depth-le-2" aria-label="Link to Depth bound for a comparator network" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.Network.DepthLE</div>
+<div class="bp-thmcontent">
+<p>A comparator network on <span class="arithmatex">\(n\)</span> wires has depth at most
+<span class="arithmatex">\(d\)</span> when its list of comparators, read as pairs of wire numbers in <span class="arithmatex">\(\mathbb{N}\)</span>, has depth at
+most <span class="arithmatex">\(d\)</span>: starting with every wire at level <span class="arithmatex">\(0\)</span> and scheduling each comparator one level after the
+later of its two wires, every wire ends at level at most <span class="arithmatex">\(d\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Network.DepthLE (net : <a class="bp-lean-ref" href="../sorting-networks-and-the-zero-one-principle/index.html#network" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Network">Network</a> n) (d : ℕ) : <span class="bp-lean-keyword">Prop</span> := <a class="bp-lean-ref" href="#depth-le" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE">Bitonic.DepthLE</a> (<a class="bp-lean-ref" href="#to-pairs" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Network.toPairs">Network.toPairs</a> net) d</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Network">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Network (n : ℕ) := List (Fin n × Fin n)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/ZeroOne.lean:56</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.DepthLE">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DepthLE (ps : List (ℕ × ℕ)) (d : ℕ) : <span class="bp-lean-keyword">Prop</span> := ∀ x, levels ps (<span class="bp-lean-keyword">fun</span> _ =&gt; 0) x ≤ d</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean:57</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Network.toPairs">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Network.toPairs (net : Network n) : List (ℕ × ℕ) := net.map <span class="bp-lean-keyword">fun</span> c =&gt; (c.1.val, c.2.val)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean:340</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#depth-le">Depth bound for a comparator list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../sorting-networks-and-the-zero-one-principle/index.html#network">Comparator network</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#to-pairs">Comparator list of a network</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../batcher-odd-even-mergesort/index.html#le-of-odd-even-sorter-depth-le">Lower bound for the depth of Batcher&#x27;s odd-even merge sorting network</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../batcher-odd-even-mergesort/index.html#odd-even-sorter-depth-le">Depth bound for Batcher&#x27;s odd-even merge sorting network</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bitonic-sorter-depth-le">Batcher&#x27;s bitonic sorting network has depth at most <span class="arithmatex">\(k(k+1)/2\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#le-of-bitonic-sorter-depth-le">Batcher&#x27;s bitonic sorter on <span class="arithmatex">\(2^k\)</span> wires has depth at least <span class="arithmatex">\(k\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#le-two-pow-of-sorts-2">Every sorting network on <span class="arithmatex">\(n\)</span> wires has depth at least <span class="arithmatex">\(\log_2 n\)</span></a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/le-two-pow-of-sorts-2">
+<h4 class="bp-thmheading" id="le-two-pow-of-sorts-2">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Every sorting network on <span class="arithmatex">\(n\)</span> wires has depth at least <span class="arithmatex">\(\log_2 n\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L372" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.Network.le_two_pow_of_sorts in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.Network.le_two_pow_of_sorts in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#le-two-pow-of-sorts-2" aria-label="Link to Every sorting network on n wires has depth at least log₂ n" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.Network.le_two_pow_of_sorts</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(C\)</span> be a comparator
+network on <span class="arithmatex">\(n\)</span> wires and <span class="arithmatex">\(d\)</span> a natural number. If <span class="arithmatex">\(C\)</span> sorts every Boolean input (its output is
+monotone in the wire order for every input in <span class="arithmatex">\(\{\mathrm{false}, \mathrm{true}\}^n\)</span>, with
+<span class="arithmatex">\(\mathrm{false} &lt; \mathrm{true}\)</span>) and <span class="arithmatex">\(C\)</span> has depth at most <span class="arithmatex">\(d\)</span>, then <span class="arithmatex">\(n \le 2^d\)</span>.</p>
+<p>By the 0-1 principle, the hypothesis implies that <span class="arithmatex">\(C\)</span> sorts every input over every linear order.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> Network.le_two_pow_of_sorts {net : <a class="bp-lean-ref" href="../sorting-networks-and-the-zero-one-principle/index.html#network" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Network">Network</a> n} {d : ℕ} (hs : <a class="bp-lean-ref" href="../sorting-networks-and-the-zero-one-principle/index.html#sorts" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Sorts">Sorts</a> net <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>)
+    (hd : <a class="bp-lean-ref" href="#depth-le-2" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Network.DepthLE">Network.DepthLE</a> net d) : n ≤ 2 ^ d</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Network">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Network (n : ℕ) := List (Fin n × Fin n)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/ZeroOne.lean:56</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Sorts">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Sorts (net : Network n) (α : <span class="bp-lean-keyword">Type</span>*) [LinearOrder α] : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ v : Fin n → α, Monotone (run net v)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/ZeroOne.lean:68</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Network.DepthLE">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Network.DepthLE (net : Network n) (d : ℕ) : <span class="bp-lean-keyword">Prop</span> := Bitonic.DepthLE (Network.toPairs net) d</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean:367</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 11 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../sorting-networks-and-the-zero-one-principle/index.html#network">Comparator network</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#depth-le-2">Depth bound for a comparator network</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../sorting-networks-and-the-zero-one-principle/index.html#sorts">Networks that sort</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#within">Comparators within an interval</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#ext-run-of-pairs">Transported comparator lists agree with the original on Boolean inputs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#extend-false">Extension of a Boolean vector by false</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#le-two-pow-of-sorts">Sorting comparator lists on <span class="arithmatex">\(n\)</span> wires have depth at least <span class="arithmatex">\(\log_2 n\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#of-pairs">Restricting comparators to finitely many wires</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#run-n">Running a comparator network on natural-number-indexed wires</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#to-pairs">Comparator list of a network</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../sorting-networks-and-the-zero-one-principle/index.html#run">Running a comparator network</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../batcher-odd-even-mergesort/index.html#le-of-odd-even-sorter-depth-le">Lower bound for the depth of Batcher&#x27;s odd-even merge sorting network</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#le-of-bitonic-sorter-depth-le">Batcher&#x27;s bitonic sorter on <span class="arithmatex">\(2^k\)</span> wires has depth at least <span class="arithmatex">\(k\)</span></a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/bitonic-sorter-depth-le">
+<h4 class="bp-thmheading" id="bitonic-sorter-depth-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Batcher&#x27;s bitonic sorting network has depth at most <span class="arithmatex">\(k(k+1)/2\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L383" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.bitonicSorter_depthLE in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.bitonicSorter_depthLE in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#bitonic-sorter-depth-le" aria-label="Link to Batcher&#x27;s bitonic sorting network has depth at most k(k+1)/2" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.bitonicSorter_depthLE</div>
+<div class="bp-thmcontent">
+<p>For every natural number
+<span class="arithmatex">\(k\)</span>, Batcher's bitonic sorting network on <span class="arithmatex">\(2^k\)</span> wires has depth at most <span class="arithmatex">\(d\)</span> for some natural
+number <span class="arithmatex">\(d\)</span> with <span class="arithmatex">\(2d \le k(k+1)\)</span>; that is, its depth is at most <span class="arithmatex">\(k(k+1)/2\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> bitonicSorter_depthLE (k : ℕ) :
+    ∃ d, <a class="bp-lean-ref" href="#depth-le-2" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Network.DepthLE">Network.DepthLE</a> (<a class="bp-lean-ref" href="../bitonic-sorter/index.html#bitonic-sorter" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.bitonicSorter">bitonicSorter</a> k) d ∧ 2 * d ≤ k * (k + 1)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Network.DepthLE">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Network.DepthLE (net : Network n) (d : ℕ) : <span class="bp-lean-keyword">Prop</span> := Bitonic.DepthLE (Network.toPairs net) d</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean:367</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.bitonicSorter">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> bitonicSorter (k : ℕ) : Network (2 ^ k) := ofPairs (2 ^ k) (bitonicSortN k 0)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Bitonic.lean:525</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 11</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../bitonic-sorter/index.html#bitonic-sorter">Batcher&#x27;s bitonic sorting network</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#depth-le-2">Depth bound for a comparator network</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#depth-le">Depth bound for a comparator list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#within">Comparators within an interval</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#bitonic-merge">Bitonic merger</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#bitonic-sort-n">Batcher&#x27;s bitonic sorter on a block of wires</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#depth-le-bitonic-sort-n">Depth of the bitonic sorter&#x27;s comparator list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#half-cleaner">Half-cleaner</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#of-pairs">Restricting comparators to finitely many wires</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../sorting-networks-and-the-zero-one-principle/index.html#network">Comparator network</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#to-pairs">Comparator list of a network</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks/le-of-bitonic-sorter-depth-le">
+<h4 class="bp-thmheading" id="le-of-bitonic-sorter-depth-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Batcher&#x27;s bitonic sorter on <span class="arithmatex">\(2^k\)</span> wires has depth at least <span class="arithmatex">\(k\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean#L391" aria-label="View Cslib.Algorithms.Lean.SortingNetworks.le_of_bitonicSorter_depthLE in Lean source" title="View Cslib.Algorithms.Lean.SortingNetworks.le_of_bitonicSorter_depthLE in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#le-of-bitonic-sorter-depth-le" aria-label="Link to Batcher&#x27;s bitonic sorter on 2ᵏ wires has depth at least k" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.SortingNetworks.le_of_bitonicSorter_depthLE</div>
+<div class="bp-thmcontent">
+<p>For all natural numbers
+<span class="arithmatex">\(k\)</span> and <span class="arithmatex">\(d\)</span>, if Batcher's bitonic sorting network on <span class="arithmatex">\(2^k\)</span> wires has depth at most <span class="arithmatex">\(d\)</span>, then
+<span class="arithmatex">\(k \le d\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> le_of_bitonicSorter_depthLE {k d : ℕ} (hd : <a class="bp-lean-ref" href="#depth-le-2" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Network.DepthLE">Network.DepthLE</a> (<a class="bp-lean-ref" href="../bitonic-sorter/index.html#bitonic-sorter" data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.bitonicSorter">bitonicSorter</a> k) d) :
+    k ≤ d</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Network.DepthLE">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Network.DepthLE (net : Network n) (d : ℕ) : <span class="bp-lean-keyword">Prop</span> := Bitonic.DepthLE (Network.toPairs net) d</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Depth.lean:367</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SortingNetworks.Bitonic.bitonicSorter">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> bitonicSorter (k : ℕ) : Network (2 ^ k) := ofPairs (2 ^ k) (bitonicSortN k 0)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/SortingNetworks/Bitonic.lean:525</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../bitonic-sorter/index.html#bitonic-sorter">Batcher&#x27;s bitonic sorting network</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#depth-le-2">Depth bound for a comparator network</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bitonic-sorter/index.html#bitonic-sorter-sorts">Batcher&#x27;s bitonic sorter sorts every input over every linear order</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#le-two-pow-of-sorts-2">Every sorting network on <span class="arithmatex">\(n\)</span> wires has depth at least <span class="arithmatex">\(\log_2 n\)</span></a></span></div>
+</div>
+</details>
+</div>
+</div>
+<p><link rel="stylesheet" href="../../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../../dependencies/index.json" data-graph-src="../../../../../dependencies/scopes/ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks.json" data-page-href="index.html" data-scope-id="ComputerScience/sorting-and-searching/sorting-networks/depth-of-sorting-networks">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>

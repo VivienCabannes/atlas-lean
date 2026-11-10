@@ -1,0 +1,4643 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../relational-interpretation-of-pdl-programs/index.html">
+      
+      
+        <link rel="next" href="../../sahlqvist-formulas/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Partial correctness and loop invariants for PDL - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#pdl" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Partial correctness and loop invariants for PDL
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_2" id="__nav_2_1_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Logic
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_2_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modal logic
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_2_2" id="__nav_2_1_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Modal logic
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../epistemic-logic/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Epistemic logic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kripke-semantics/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kripke semantics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../bisimulation/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bisimulation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modal-calculus/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modal μ-calculus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../model-checking-game-for-the-modal-calculus/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model-checking game for the modal μ-calculus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../normal-modal-logics/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Normal modal logics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_2_2_8" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Propositional dynamic logic
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_2_2_8" id="__nav_2_1_2_2_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_2_1_2_2_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_2_2_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Propositional dynamic logic
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../propositional-dynamic-logic-pdl/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Propositional dynamic logic (PDL)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../relational-interpretation-of-pdl-programs/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Relational interpretation of PDL programs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Partial correctness and loop invariants for PDL
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Partial correctness and loop invariants for PDL
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pdl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PDL
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hoare_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hoare
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pdl_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PDL
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hoare_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hoare
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pdl_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PDL
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sahlqvist-formulas/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sahlqvist formulas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../soundness-and-completeness-of-normal-modal-logic/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Soundness and completeness of normal modal logics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../filtration-and-the-finite-model-property/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Filtration and the finite model property
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../standard-translation-of-modal-logic/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Standard translation of modal logic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../propositional-logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Propositional logic and satisfiability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../first-order-logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    First-order logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../temporal-logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Temporal logic and model checking
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../proof-theory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proof theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../model-theory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../ComputerScience/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pdl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PDL
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hoare_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hoare
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pdl_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PDL
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hoare_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hoare
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pdl_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PDL
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../../index.html" tabindex="-1">Logic</a></li><li><a href="../../index.html" tabindex="-1">Modal logic</a></li><li><a href="../index.html" tabindex="-1">Propositional dynamic logic</a></li><li aria-current="page">Partial correctness and loop invariants for PDL</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Partial correctness and loop invariants for PDL</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="Logic/modal-logic/propositional-dynamic-logic/partial-correctness-and-loop-invariants-for-pdl" data-page-title="Partial correctness and loop invariants for PDL">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="partial-correctness-and-loop-invariants-for-pdl">Partial correctness and loop invariants for PDL</h1>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>17</strong> fully proved</span></div>
+</div>
+<h2 id="pdl">PDL</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Logic/modal-logic/propositional-dynamic-logic/partial-correctness-and-loop-invariants-for-pdl/hoare">
+<h4 class="bp-thmheading" id="hoare">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Partial-correctness Hoare triple for PDL programs</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Logics/PDL/Hoare.lean#L39" aria-label="View Cslib.PDL.Hoare in Lean source" title="View Cslib.PDL.Hoare in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#hoare" aria-label="Link to Partial-correctness Hoare triple for PDL programs" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.PDL.Hoare</div>
+<div class="bp-thmcontent">
+<p>Every execution of <code>a</code> from <code>P</code> ends in <code>Q</code>, without a termination
+requirement.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Hoare (M : <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#model" data-lean-name="Cslib.PDL.Model">Model</a> World Atom Label) (P : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set#doc" title="Set">Set</a> World)
+    (a : <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#program" data-lean-name="Cslib.PDL.Program">Program</a> Atom Label) (Q : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set#doc" title="Set">Set</a> World) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s t⦄, s ∈ P → <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#prog-rel" data-lean-name="Cslib.PDL.ProgRel">ProgRel</a> M a s t → t ∈ Q</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.PDL.Model">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Model (World : <span class="bp-lean-keyword">Type</span> u) (Atom : <span class="bp-lean-keyword">Type</span> v) (Label : <span class="bp-lean-keyword">Type</span> w) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- One accessibility relation per atomic program label. -/</span>
+  rel : Label → World → World → <span class="bp-lean-keyword">Prop</span>
+  <span class="bp-lean-comment">/-- The atoms true at each world. -/</span>
+  valuation : World → Atom → <span class="bp-lean-keyword">Prop</span></code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Basic.lean:44</p>
+</div>
+<div data-lean-name="Cslib.PDL.Program">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> Program (Atom : <span class="bp-lean-keyword">Type</span> v) (Label : <span class="bp-lean-keyword">Type</span> w) <span class="bp-lean-keyword">where</span>
+  | atomic (a : Label) : Program Atom Label
+  | seq (α β : Program Atom Label) : Program Atom Label
+  | choice (α β : Program Atom Label) : Program Atom Label
+  | star (α : Program Atom Label) : Program Atom Label
+  | test (φ : Formula Atom Label) : Program Atom Label</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Basic.lean:59</p>
+</div>
+<div data-lean-name="Cslib.PDL.ProgRel">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> ProgRel {World Atom Label : <span class="bp-lean-keyword">Type</span>*} (M : Model World Atom Label) :
+    Program Atom Label → World → World → <span class="bp-lean-keyword">Prop</span>
+  | .atomic a, w, v =&gt; M.rel a w v
+  | .seq α β, w, v =&gt; ∃ u, ProgRel M α w u ∧ ProgRel M β u v
+  | .choice α β, w, v =&gt; ProgRel M α w v ∨ ProgRel M β w v
+  | .star α, w, v =&gt; Relation.ReflTransGen (ProgRel M α) w v
+  | .test φ, w, v =&gt; w = v ∧ Sat M φ w</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Basic.lean:76</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 14</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#model">PDL model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#prog-rel">Relation denoted by a PDL program</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#program">PDL programs</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#choice-iff">Hoare rule for nondeterministic choice</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#consequence">Hoare rule of consequence</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hoare-iff-box">Hoare triples with formula assertions as box validity</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hoare-iff-subset-core">Partial correctness as inclusion in the relational core</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hoare-iff-test-eq">Hoare triples as KAT absorption equations</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hoare-iff-test-le">Hoare triples as KAT test inequalities</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#seq">Hoare rule for sequential composition</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#star">Hoare invariant rule for iteration</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#test-iff">Hoare rule for formula tests</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#test-mul-star-absorption">Test absorption lifts through iteration</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#test-mul-while-do-absorption">Loop exit absorption from a guarded-body absorption equation</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#while-do-2">Hoare invariant rule for guarded while loops</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#while-do-consequence">While-loop rule with initialization and exit implication</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#while-do-iff-exists-invariant">Semantic completeness of the while-loop invariant rule</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Logic/modal-logic/propositional-dynamic-logic/partial-correctness-and-loop-invariants-for-pdl/hoare-iff-subset-core">
+<h4 class="bp-thmheading" id="hoare-iff-subset-core">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Partial correctness as inclusion in the relational core</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Logics/PDL/Hoare.lean#L44" aria-label="View Cslib.PDL.hoare_iff_subset_core in Lean source" title="View Cslib.PDL.hoare_iff_subset_core in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#hoare-iff-subset-core" aria-label="Link to Partial correctness as inclusion in the relational core" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.PDL.hoare_iff_subset_core</div>
+<div class="bp-thmcontent">
+<p>Partial correctness agrees with the canonical relation's core.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> hoare_iff_subset_core :
+    <a class="bp-lean-ref" href="#hoare" data-lean-name="Cslib.PDL.Hoare">Hoare</a> M P a Q ↔ P ⊆ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=SetRel.core#doc" title="SetRel.core">SetRel.core</a> (a.toRelation M) Q</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.PDL.Hoare">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Hoare (M : Model World Atom Label) (P : Set World)
+    (a : Program Atom Label) (Q : Set World) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s t⦄, s ∈ P → ProgRel M a s t → t ∈ Q</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Hoare.lean:39</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hoare">Partial-correctness Hoare triple for PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#model">PDL model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#program">PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../relational-interpretation-of-pdl-programs/index.html#to-relation">Relational interpretation of a PDL program</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../propositional-dynamic-logic-pdl/index.html#prog-rel">Relation denoted by a PDL program</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#hoare-iff-test-eq">Hoare triples as KAT absorption equations</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#hoare-iff-test-le">Hoare triples as KAT test inequalities</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Logic/modal-logic/propositional-dynamic-logic/partial-correctness-and-loop-invariants-for-pdl/hoare-iff-test-le">
+<h4 class="bp-thmheading" id="hoare-iff-test-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Hoare triples as KAT test inequalities</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Logics/PDL/Hoare.lean#L53" aria-label="View Cslib.PDL.hoare_iff_test_le in Lean source" title="View Cslib.PDL.hoare_iff_test_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#hoare-iff-test-le" aria-label="Link to Hoare triples as KAT test inequalities" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.PDL.hoare_iff_test_le</div>
+<div class="bp-thmcontent">
+<p>Hoare verification is equivalent to the KAT test inequality.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> hoare_iff_test_le :
+    <a class="bp-lean-ref" href="#hoare" data-lean-name="Cslib.PDL.Hoare">Hoare</a> M P a Q ↔ <a class="bp-lean-ref" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-set" data-lean-name="Cslib.RelationAlgebra.testSet">testSet</a> P * a.toRelation M ≤
+      a.toRelation M * <a class="bp-lean-ref" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-set" data-lean-name="Cslib.RelationAlgebra.testSet">testSet</a> Q</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.PDL.Hoare">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Hoare (M : Model World Atom Label) (P : Set World)
+    (a : Program Atom Label) (Q : Set World) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s t⦄, s ∈ P → ProgRel M a s t → t ∈ Q</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Hoare.lean:39</p>
+</div>
+<div data-lean-name="Cslib.RelationAlgebra.testSet">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> testSet (P : Set World) : SquareRelations World :=
+  {(s, t) | s = t ∧ s ∈ P}</code></pre>
+<p class="bp-lean-where">CSLibExt/Foundations/RelationAlgebra/Tests.lean:33</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 7</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hoare">Partial-correctness Hoare triple for PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#model">PDL model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#program">PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../relational-interpretation-of-pdl-programs/index.html#to-relation">Relational interpretation of a PDL program</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-set">Diagonal test relation of an assertion</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#hoare-iff-subset-core">Partial correctness as inclusion in the relational core</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-mul-le-mul-test-iff">Verification inequality characterizes partial correctness</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Logic/modal-logic/propositional-dynamic-logic/partial-correctness-and-loop-invariants-for-pdl/hoare-iff-test-eq">
+<h4 class="bp-thmheading" id="hoare-iff-test-eq">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Hoare triples as KAT absorption equations</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Logics/PDL/Hoare.lean#L60" aria-label="View Cslib.PDL.hoare_iff_test_eq in Lean source" title="View Cslib.PDL.hoare_iff_test_eq in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#hoare-iff-test-eq" aria-label="Link to Hoare triples as KAT absorption equations" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.PDL.hoare_iff_test_eq</div>
+<div class="bp-thmcontent">
+<p>The equivalent KAT absorption equation for verification.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> hoare_iff_test_eq :
+    <a class="bp-lean-ref" href="#hoare" data-lean-name="Cslib.PDL.Hoare">Hoare</a> M P a Q ↔ <a class="bp-lean-ref" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-set" data-lean-name="Cslib.RelationAlgebra.testSet">testSet</a> P * a.toRelation M =
+      <a class="bp-lean-ref" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-set" data-lean-name="Cslib.RelationAlgebra.testSet">testSet</a> P * a.toRelation M * <a class="bp-lean-ref" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-set" data-lean-name="Cslib.RelationAlgebra.testSet">testSet</a> Q</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.PDL.Hoare">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Hoare (M : Model World Atom Label) (P : Set World)
+    (a : Program Atom Label) (Q : Set World) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s t⦄, s ∈ P → ProgRel M a s t → t ∈ Q</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Hoare.lean:39</p>
+</div>
+<div data-lean-name="Cslib.RelationAlgebra.testSet">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> testSet (P : Set World) : SquareRelations World :=
+  {(s, t) | s = t ∧ s ∈ P}</code></pre>
+<p class="bp-lean-where">CSLibExt/Foundations/RelationAlgebra/Tests.lean:33</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 7 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hoare">Partial-correctness Hoare triple for PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#model">PDL model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#program">PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../relational-interpretation-of-pdl-programs/index.html#to-relation">Relational interpretation of a PDL program</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-set">Diagonal test relation of an assertion</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#hoare-iff-subset-core">Partial correctness as inclusion in the relational core</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-mul-eq-test-mul-test-iff">Postcondition absorption characterizes partial correctness</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#test-mul-star-absorption">Test absorption lifts through iteration</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#test-mul-while-do-absorption">Loop exit absorption from a guarded-body absorption equation</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Logic/modal-logic/propositional-dynamic-logic/partial-correctness-and-loop-invariants-for-pdl/hoare-iff-box">
+<h4 class="bp-thmheading" id="hoare-iff-box">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Hoare triples with formula assertions as box validity</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Logics/PDL/Hoare.lean#L68" aria-label="View Cslib.PDL.hoare_iff_box in Lean source" title="View Cslib.PDL.hoare_iff_box in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#hoare-iff-box" aria-label="Link to Hoare triples with formula assertions as box validity" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.PDL.hoare_iff_box</div>
+<div class="bp-thmcontent">
+<p>Formula assertions connect Hoare verification to global PDL validity,
+not just an atomic-action modality.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> hoare_iff_box (φ ψ : <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#formula" data-lean-name="Cslib.PDL.Formula">Formula</a> Atom Label) :
+    <a class="bp-lean-ref" href="#hoare" data-lean-name="Cslib.PDL.Hoare">Hoare</a> M {s | <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#sat" data-lean-name="Cslib.PDL.Sat">Sat</a> M φ s} a {s | <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#sat" data-lean-name="Cslib.PDL.Sat">Sat</a> M ψ s} ↔
+      ∀ s, <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#sat" data-lean-name="Cslib.PDL.Sat">Sat</a> M (.imp φ (.box a ψ)) s</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.PDL.Formula">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> Formula (Atom : <span class="bp-lean-keyword">Type</span> v) (Label : <span class="bp-lean-keyword">Type</span> w) <span class="bp-lean-keyword">where</span>
+  | atom (a : Atom) : Formula Atom Label
+  | bot : Formula Atom Label
+  | imp (φ ψ : Formula Atom Label) : Formula Atom Label
+  | box (α : Program Atom Label) (φ : Formula Atom Label) : Formula Atom Label</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Basic.lean:52</p>
+</div>
+<div data-lean-name="Cslib.PDL.Hoare">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Hoare (M : Model World Atom Label) (P : Set World)
+    (a : Program Atom Label) (Q : Set World) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s t⦄, s ∈ P → ProgRel M a s t → t ∈ Q</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Hoare.lean:39</p>
+</div>
+<div data-lean-name="Cslib.PDL.Sat">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Sat {World Atom Label : <span class="bp-lean-keyword">Type</span>*} (M : Model World Atom Label) :
+    Formula Atom Label → World → <span class="bp-lean-keyword">Prop</span>
+  | .atom a, w =&gt; M.valuation w a
+  | .bot, _ =&gt; False
+  | .imp φ ψ, w =&gt; Sat M φ w → Sat M ψ w
+  | .box α φ, w =&gt; ∀ v, ProgRel M α w v → Sat M φ v</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Basic.lean:85</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 6</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#formula">PDL formulas</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hoare">Partial-correctness Hoare triple for PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#model">PDL model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#program">PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#sat">Satisfaction of PDL formulas</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../propositional-dynamic-logic-pdl/index.html#prog-rel">Relation denoted by a PDL program</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="hoare_1">Hoare</h2>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Logic/modal-logic/propositional-dynamic-logic/partial-correctness-and-loop-invariants-for-pdl/consequence">
+<h4 class="bp-thmheading" id="consequence">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Hoare rule of consequence</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Logics/PDL/Hoare.lean#L80" aria-label="View Cslib.PDL.Hoare.consequence in Lean source" title="View Cslib.PDL.Hoare.consequence in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#consequence" aria-label="Link to Hoare rule of consequence" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.PDL.Hoare.consequence</div>
+<div class="bp-thmcontent">
+<p>Strengthen the precondition and weaken the postcondition.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> consequence {P&#x27; Q&#x27; : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set#doc" title="Set">Set</a> World} (h : <a class="bp-lean-ref" href="#hoare" data-lean-name="Cslib.PDL.Hoare">Hoare</a> M P a Q)
+    (hP : P&#x27; ⊆ P) (hQ : Q ⊆ Q&#x27;) : <a class="bp-lean-ref" href="#hoare" data-lean-name="Cslib.PDL.Hoare">Hoare</a> M P&#x27; a Q&#x27;</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.PDL.Hoare">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Hoare (M : Model World Atom Label) (P : Set World)
+    (a : Program Atom Label) (Q : Set World) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s t⦄, s ∈ P → ProgRel M a s t → t ∈ Q</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Hoare.lean:39</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hoare">Partial-correctness Hoare triple for PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#model">PDL model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#program">PDL programs</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../propositional-dynamic-logic-pdl/index.html#prog-rel">Relation denoted by a PDL program</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#while-do-consequence">While-loop rule with initialization and exit implication</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Logic/modal-logic/propositional-dynamic-logic/partial-correctness-and-loop-invariants-for-pdl/seq">
+<h4 class="bp-thmheading" id="seq">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Hoare rule for sequential composition</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Logics/PDL/Hoare.lean#L86" aria-label="View Cslib.PDL.Hoare.seq in Lean source" title="View Cslib.PDL.Hoare.seq in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#seq" aria-label="Link to Hoare rule for sequential composition" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.PDL.Hoare.seq</div>
+<div class="bp-thmcontent">
+<p>Sequential verification uses the first postcondition as the second
+precondition.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> seq (ha : <a class="bp-lean-ref" href="#hoare" data-lean-name="Cslib.PDL.Hoare">Hoare</a> M P a I) (hb : <a class="bp-lean-ref" href="#hoare" data-lean-name="Cslib.PDL.Hoare">Hoare</a> M I b Q) :
+    <a class="bp-lean-ref" href="#hoare" data-lean-name="Cslib.PDL.Hoare">Hoare</a> M P (.seq a b) Q</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.PDL.Hoare">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Hoare (M : Model World Atom Label) (P : Set World)
+    (a : Program Atom Label) (Q : Set World) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s t⦄, s ∈ P → ProgRel M a s t → t ∈ Q</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Hoare.lean:39</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hoare">Partial-correctness Hoare triple for PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#model">PDL model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#program">PDL programs</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../propositional-dynamic-logic-pdl/index.html#prog-rel">Relation denoted by a PDL program</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Logic/modal-logic/propositional-dynamic-logic/partial-correctness-and-loop-invariants-for-pdl/choice-iff">
+<h4 class="bp-thmheading" id="choice-iff">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Hoare rule for nondeterministic choice</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Logics/PDL/Hoare.lean#L92" aria-label="View Cslib.PDL.Hoare.choice_iff in Lean source" title="View Cslib.PDL.Hoare.choice_iff in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#choice-iff" aria-label="Link to Hoare rule for nondeterministic choice" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.PDL.Hoare.choice_iff</div>
+<div class="bp-thmcontent">
+<p>Nondeterministic choice is safe exactly when both branches are.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> choice_iff :
+    <a class="bp-lean-ref" href="#hoare" data-lean-name="Cslib.PDL.Hoare">Hoare</a> M P (.choice a b) Q ↔ <a class="bp-lean-ref" href="#hoare" data-lean-name="Cslib.PDL.Hoare">Hoare</a> M P a Q ∧ <a class="bp-lean-ref" href="#hoare" data-lean-name="Cslib.PDL.Hoare">Hoare</a> M P b Q</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.PDL.Hoare">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Hoare (M : Model World Atom Label) (P : Set World)
+    (a : Program Atom Label) (Q : Set World) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s t⦄, s ∈ P → ProgRel M a s t → t ∈ Q</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Hoare.lean:39</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hoare">Partial-correctness Hoare triple for PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#model">PDL model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#program">PDL programs</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../propositional-dynamic-logic-pdl/index.html#prog-rel">Relation denoted by a PDL program</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Logic/modal-logic/propositional-dynamic-logic/partial-correctness-and-loop-invariants-for-pdl/test-iff">
+<h4 class="bp-thmheading" id="test-iff">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Hoare rule for formula tests</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Logics/PDL/Hoare.lean#L103" aria-label="View Cslib.PDL.Hoare.test_iff in Lean source" title="View Cslib.PDL.Hoare.test_iff in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#test-iff" aria-label="Link to Hoare rule for formula tests" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.PDL.Hoare.test_iff</div>
+<div class="bp-thmcontent">
+<p>A formula test requires the postcondition only where the test passes.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> test_iff (φ : <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#formula" data-lean-name="Cslib.PDL.Formula">Formula</a> Atom Label) :
+    <a class="bp-lean-ref" href="#hoare" data-lean-name="Cslib.PDL.Hoare">Hoare</a> M P (.test φ) Q ↔ P ∩ {s | <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#sat" data-lean-name="Cslib.PDL.Sat">Sat</a> M φ s} ⊆ Q</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.PDL.Formula">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> Formula (Atom : <span class="bp-lean-keyword">Type</span> v) (Label : <span class="bp-lean-keyword">Type</span> w) <span class="bp-lean-keyword">where</span>
+  | atom (a : Atom) : Formula Atom Label
+  | bot : Formula Atom Label
+  | imp (φ ψ : Formula Atom Label) : Formula Atom Label
+  | box (α : Program Atom Label) (φ : Formula Atom Label) : Formula Atom Label</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Basic.lean:52</p>
+</div>
+<div data-lean-name="Cslib.PDL.Hoare">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Hoare (M : Model World Atom Label) (P : Set World)
+    (a : Program Atom Label) (Q : Set World) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s t⦄, s ∈ P → ProgRel M a s t → t ∈ Q</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Hoare.lean:39</p>
+</div>
+<div data-lean-name="Cslib.PDL.Sat">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Sat {World Atom Label : <span class="bp-lean-keyword">Type</span>*} (M : Model World Atom Label) :
+    Formula Atom Label → World → <span class="bp-lean-keyword">Prop</span>
+  | .atom a, w =&gt; M.valuation w a
+  | .bot, _ =&gt; False
+  | .imp φ ψ, w =&gt; Sat M φ w → Sat M ψ w
+  | .box α φ, w =&gt; ∀ v, ProgRel M α w v → Sat M φ v</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Basic.lean:85</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 6</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#formula">PDL formulas</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hoare">Partial-correctness Hoare triple for PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#model">PDL model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#program">PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#sat">Satisfaction of PDL formulas</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../propositional-dynamic-logic-pdl/index.html#prog-rel">Relation denoted by a PDL program</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Logic/modal-logic/propositional-dynamic-logic/partial-correctness-and-loop-invariants-for-pdl/star">
+<h4 class="bp-thmheading" id="star">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Hoare invariant rule for iteration</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Logics/PDL/Hoare.lean#L113" aria-label="View Cslib.PDL.Hoare.star in Lean source" title="View Cslib.PDL.Hoare.star in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#star" aria-label="Link to Hoare invariant rule for iteration" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.PDL.Hoare.star</div>
+<div class="bp-thmcontent">
+<p>A one-step invariant holds after every finite number of iterations,
+including zero, via CSLib's canonical closure-preservation theorem.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> star (h : <a class="bp-lean-ref" href="#hoare" data-lean-name="Cslib.PDL.Hoare">Hoare</a> M I a I) : <a class="bp-lean-ref" href="#hoare" data-lean-name="Cslib.PDL.Hoare">Hoare</a> M I (.star a) I</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.PDL.Hoare">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Hoare (M : Model World Atom Label) (P : Set World)
+    (a : Program Atom Label) (Q : Set World) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s t⦄, s ∈ P → ProgRel M a s t → t ∈ Q</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Hoare.lean:39</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hoare">Partial-correctness Hoare triple for PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#model">PDL model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#program">PDL programs</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../propositional-dynamic-logic-pdl/index.html#prog-rel">Relation denoted by a PDL program</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#test-mul-star-absorption">Test absorption lifts through iteration</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#while-do-2">Hoare invariant rule for guarded while loops</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="pdl_1">PDL</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Logic/modal-logic/propositional-dynamic-logic/partial-correctness-and-loop-invariants-for-pdl/while-do">
+<h4 class="bp-thmheading" id="while-do">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Guarded while loop in PDL</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Logics/PDL/Hoare.lean#L123" aria-label="View Cslib.PDL.Program.whileDo in Lean source" title="View Cslib.PDL.Program.whileDo in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#while-do" aria-label="Link to Guarded while loop in PDL" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.PDL.Program.whileDo</div>
+<div class="bp-thmcontent">
+<p>A guarded loop in the existing PDL syntax: iterate guarded body
+steps, then test that the guard is false.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Program.whileDo (guard : <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#formula" data-lean-name="Cslib.PDL.Formula">Formula</a> Atom Label)
+    (body : <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#program" data-lean-name="Cslib.PDL.Program">Program</a> Atom Label) : <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#program" data-lean-name="Cslib.PDL.Program">Program</a> Atom Label :=
+  .seq (.star (.seq (.test guard) body)) (.test (.imp guard .bot))</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.PDL.Formula">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> Formula (Atom : <span class="bp-lean-keyword">Type</span> v) (Label : <span class="bp-lean-keyword">Type</span> w) <span class="bp-lean-keyword">where</span>
+  | atom (a : Atom) : Formula Atom Label
+  | bot : Formula Atom Label
+  | imp (φ ψ : Formula Atom Label) : Formula Atom Label
+  | box (α : Program Atom Label) (φ : Formula Atom Label) : Formula Atom Label</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Basic.lean:52</p>
+</div>
+<div data-lean-name="Cslib.PDL.Program">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> Program (Atom : <span class="bp-lean-keyword">Type</span> v) (Label : <span class="bp-lean-keyword">Type</span> w) <span class="bp-lean-keyword">where</span>
+  | atomic (a : Label) : Program Atom Label
+  | seq (α β : Program Atom Label) : Program Atom Label
+  | choice (α β : Program Atom Label) : Program Atom Label
+  | star (α : Program Atom Label) : Program Atom Label
+  | test (φ : Formula Atom Label) : Program Atom Label</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Basic.lean:59</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#formula">PDL formulas</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#program">PDL programs</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#test-mul-while-do-absorption">Loop exit absorption from a guarded-body absorption equation</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#while-do-2">Hoare invariant rule for guarded while loops</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#while-do-consequence">While-loop rule with initialization and exit implication</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#while-do-iff-exists-invariant">Semantic completeness of the while-loop invariant rule</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="hoare_2">Hoare</h2>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Logic/modal-logic/propositional-dynamic-logic/partial-correctness-and-loop-invariants-for-pdl/while-do-2">
+<h4 class="bp-thmheading" id="while-do-2">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Hoare invariant rule for guarded while loops</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Logics/PDL/Hoare.lean#L131" aria-label="View Cslib.PDL.Hoare.whileDo in Lean source" title="View Cslib.PDL.Hoare.whileDo in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#while-do-2" aria-label="Link to Hoare invariant rule for guarded while loops" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.PDL.Hoare.whileDo</div>
+<div class="bp-thmcontent">
+<p>The guarded-loop invariant rule is partial correctness, including
+zero-step exits; it does not guarantee termination.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> whileDo (guard : <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#formula" data-lean-name="Cslib.PDL.Formula">Formula</a> Atom Label)
+    (h : <a class="bp-lean-ref" href="#hoare" data-lean-name="Cslib.PDL.Hoare">Hoare</a> M (I ∩ {s | <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#sat" data-lean-name="Cslib.PDL.Sat">Sat</a> M guard s}) a I) :
+    <a class="bp-lean-ref" href="#hoare" data-lean-name="Cslib.PDL.Hoare">Hoare</a> M I (<a class="bp-lean-ref" href="#while-do" data-lean-name="Cslib.PDL.Program.whileDo">Program.whileDo</a> guard a) (I ∩ {s | ¬ <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#sat" data-lean-name="Cslib.PDL.Sat">Sat</a> M guard s})</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.PDL.Formula">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> Formula (Atom : <span class="bp-lean-keyword">Type</span> v) (Label : <span class="bp-lean-keyword">Type</span> w) <span class="bp-lean-keyword">where</span>
+  | atom (a : Atom) : Formula Atom Label
+  | bot : Formula Atom Label
+  | imp (φ ψ : Formula Atom Label) : Formula Atom Label
+  | box (α : Program Atom Label) (φ : Formula Atom Label) : Formula Atom Label</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Basic.lean:52</p>
+</div>
+<div data-lean-name="Cslib.PDL.Hoare">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Hoare (M : Model World Atom Label) (P : Set World)
+    (a : Program Atom Label) (Q : Set World) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s t⦄, s ∈ P → ProgRel M a s t → t ∈ Q</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Hoare.lean:39</p>
+</div>
+<div data-lean-name="Cslib.PDL.Sat">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Sat {World Atom Label : <span class="bp-lean-keyword">Type</span>*} (M : Model World Atom Label) :
+    Formula Atom Label → World → <span class="bp-lean-keyword">Prop</span>
+  | .atom a, w =&gt; M.valuation w a
+  | .bot, _ =&gt; False
+  | .imp φ ψ, w =&gt; Sat M φ w → Sat M ψ w
+  | .box α φ, w =&gt; ∀ v, ProgRel M α w v → Sat M φ v</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Basic.lean:85</p>
+</div>
+<div data-lean-name="Cslib.PDL.Program.whileDo">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Program.whileDo (guard : Formula Atom Label)
+    (body : Program Atom Label) : Program Atom Label :=
+  .seq (.star (.seq (.test guard) body)) (.test (.imp guard .bot))</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Hoare.lean:123</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 8 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#formula">PDL formulas</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hoare">Partial-correctness Hoare triple for PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#model">PDL model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#program">PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#while-do">Guarded while loop in PDL</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#sat">Satisfaction of PDL formulas</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#star">Hoare invariant rule for iteration</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../propositional-dynamic-logic-pdl/index.html#prog-rel">Relation denoted by a PDL program</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#test-mul-while-do-absorption">Loop exit absorption from a guarded-body absorption equation</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#while-do-consequence">While-loop rule with initialization and exit implication</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Logic/modal-logic/propositional-dynamic-logic/partial-correctness-and-loop-invariants-for-pdl/while-do-consequence">
+<h4 class="bp-thmheading" id="while-do-consequence">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">While-loop rule with initialization and exit implication</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Logics/PDL/Hoare.lean#L143" aria-label="View Cslib.PDL.Hoare.whileDo_consequence in Lean source" title="View Cslib.PDL.Hoare.whileDo_consequence in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#while-do-consequence" aria-label="Link to While-loop rule with initialization and exit implication" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.PDL.Hoare.whileDo_consequence</div>
+<div class="bp-thmcontent">
+<p>Verify a guarded loop using initialization, invariant preservation,
+and the exit implication to the desired postcondition.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> whileDo_consequence (guard : <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#formula" data-lean-name="Cslib.PDL.Formula">Formula</a> Atom Label)
+    (hinit : P ⊆ I) (hbody : <a class="bp-lean-ref" href="#hoare" data-lean-name="Cslib.PDL.Hoare">Hoare</a> M (I ∩ {s | <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#sat" data-lean-name="Cslib.PDL.Sat">Sat</a> M guard s}) a I)
+    (hexit : I ∩ {s | ¬ <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#sat" data-lean-name="Cslib.PDL.Sat">Sat</a> M guard s} ⊆ Q) :
+    <a class="bp-lean-ref" href="#hoare" data-lean-name="Cslib.PDL.Hoare">Hoare</a> M P (<a class="bp-lean-ref" href="#while-do" data-lean-name="Cslib.PDL.Program.whileDo">Program.whileDo</a> guard a) Q</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.PDL.Formula">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> Formula (Atom : <span class="bp-lean-keyword">Type</span> v) (Label : <span class="bp-lean-keyword">Type</span> w) <span class="bp-lean-keyword">where</span>
+  | atom (a : Atom) : Formula Atom Label
+  | bot : Formula Atom Label
+  | imp (φ ψ : Formula Atom Label) : Formula Atom Label
+  | box (α : Program Atom Label) (φ : Formula Atom Label) : Formula Atom Label</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Basic.lean:52</p>
+</div>
+<div data-lean-name="Cslib.PDL.Hoare">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Hoare (M : Model World Atom Label) (P : Set World)
+    (a : Program Atom Label) (Q : Set World) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s t⦄, s ∈ P → ProgRel M a s t → t ∈ Q</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Hoare.lean:39</p>
+</div>
+<div data-lean-name="Cslib.PDL.Sat">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Sat {World Atom Label : <span class="bp-lean-keyword">Type</span>*} (M : Model World Atom Label) :
+    Formula Atom Label → World → <span class="bp-lean-keyword">Prop</span>
+  | .atom a, w =&gt; M.valuation w a
+  | .bot, _ =&gt; False
+  | .imp φ ψ, w =&gt; Sat M φ w → Sat M ψ w
+  | .box α φ, w =&gt; ∀ v, ProgRel M α w v → Sat M φ v</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Basic.lean:85</p>
+</div>
+<div data-lean-name="Cslib.PDL.Program.whileDo">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Program.whileDo (guard : Formula Atom Label)
+    (body : Program Atom Label) : Program Atom Label :=
+  .seq (.star (.seq (.test guard) body)) (.test (.imp guard .bot))</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Hoare.lean:123</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 8 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#formula">PDL formulas</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hoare">Partial-correctness Hoare triple for PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#model">PDL model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#program">PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#while-do">Guarded while loop in PDL</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#sat">Satisfaction of PDL formulas</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#consequence">Hoare rule of consequence</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#while-do-2">Hoare invariant rule for guarded while loops</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#while-do-iff-exists-invariant">Semantic completeness of the while-loop invariant rule</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Logic/modal-logic/propositional-dynamic-logic/partial-correctness-and-loop-invariants-for-pdl/while-do-iff-exists-invariant">
+<h4 class="bp-thmheading" id="while-do-iff-exists-invariant">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Semantic completeness of the while-loop invariant rule</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Logics/PDL/Hoare.lean#L152" aria-label="View Cslib.PDL.Hoare.whileDo_iff_exists_invariant in Lean source" title="View Cslib.PDL.Hoare.whileDo_iff_exists_invariant in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#while-do-iff-exists-invariant" aria-label="Link to Semantic completeness of the while-loop invariant rule" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.PDL.Hoare.whileDo_iff_exists_invariant</div>
+<div class="bp-thmcontent">
+<p>The guarded-loop rule is semantically complete for arbitrary set
+assertions. The witness is guarded-body reachability from <code>P</code>, independent
+of <code>Q</code>; this is not a completeness claim for a syntactic assertion language.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> whileDo_iff_exists_invariant (guard : <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#formula" data-lean-name="Cslib.PDL.Formula">Formula</a> Atom Label) :
+    <a class="bp-lean-ref" href="#hoare" data-lean-name="Cslib.PDL.Hoare">Hoare</a> M P (<a class="bp-lean-ref" href="#while-do" data-lean-name="Cslib.PDL.Program.whileDo">Program.whileDo</a> guard a) Q ↔
+      ∃ I : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set#doc" title="Set">Set</a> World, P ⊆ I ∧
+        <a class="bp-lean-ref" href="#hoare" data-lean-name="Cslib.PDL.Hoare">Hoare</a> M (I ∩ {s | <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#sat" data-lean-name="Cslib.PDL.Sat">Sat</a> M guard s}) a I ∧
+        I ∩ {s | ¬ <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#sat" data-lean-name="Cslib.PDL.Sat">Sat</a> M guard s} ⊆ Q</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.PDL.Formula">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> Formula (Atom : <span class="bp-lean-keyword">Type</span> v) (Label : <span class="bp-lean-keyword">Type</span> w) <span class="bp-lean-keyword">where</span>
+  | atom (a : Atom) : Formula Atom Label
+  | bot : Formula Atom Label
+  | imp (φ ψ : Formula Atom Label) : Formula Atom Label
+  | box (α : Program Atom Label) (φ : Formula Atom Label) : Formula Atom Label</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Basic.lean:52</p>
+</div>
+<div data-lean-name="Cslib.PDL.Hoare">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Hoare (M : Model World Atom Label) (P : Set World)
+    (a : Program Atom Label) (Q : Set World) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s t⦄, s ∈ P → ProgRel M a s t → t ∈ Q</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Hoare.lean:39</p>
+</div>
+<div data-lean-name="Cslib.PDL.Program.whileDo">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Program.whileDo (guard : Formula Atom Label)
+    (body : Program Atom Label) : Program Atom Label :=
+  .seq (.star (.seq (.test guard) body)) (.test (.imp guard .bot))</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Hoare.lean:123</p>
+</div>
+<div data-lean-name="Cslib.PDL.Sat">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Sat {World Atom Label : <span class="bp-lean-keyword">Type</span>*} (M : Model World Atom Label) :
+    Formula Atom Label → World → <span class="bp-lean-keyword">Prop</span>
+  | .atom a, w =&gt; M.valuation w a
+  | .bot, _ =&gt; False
+  | .imp φ ψ, w =&gt; Sat M φ w → Sat M ψ w
+  | .box α φ, w =&gt; ∀ v, ProgRel M α w v → Sat M φ v</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Basic.lean:85</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 9</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#formula">PDL formulas</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hoare">Partial-correctness Hoare triple for PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#model">PDL model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#program">PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#while-do">Guarded while loop in PDL</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#sat">Satisfaction of PDL formulas</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#while-do-consequence">While-loop rule with initialization and exit implication</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../propositional-dynamic-logic-pdl/index.html#prog-rel">Relation denoted by a PDL program</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../relational-interpretation-of-pdl-programs/index.html#to-relation">Relational interpretation of a PDL program</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="pdl_2">PDL</h2>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Logic/modal-logic/propositional-dynamic-logic/partial-correctness-and-loop-invariants-for-pdl/sat-box-star-induction">
+<h4 class="bp-thmheading" id="sat-box-star-induction">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">PDL induction restricted to reachable states</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Logics/PDL/Hoare.lean#L176" aria-label="View Cslib.PDL.sat_box_star_induction in Lean source" title="View Cslib.PDL.sat_box_star_induction in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#sat-box-star-induction" aria-label="Link to PDL induction restricted to reachable states" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.PDL.sat_box_star_induction</div>
+<div class="bp-thmcontent">
+<p>PDL induction restricted to states reachable from the initial world.
+This proves <code>[a*]&amp;#40;φ → [a]φ) → (φ → [a*]φ)</code> without assuming preservation
+on unreachable states.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> sat_box_star_induction {φ : <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#formula" data-lean-name="Cslib.PDL.Formula">Formula</a> Atom Label} {s : World}
+    (hstep : <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#sat" data-lean-name="Cslib.PDL.Sat">Sat</a> M (.box (.star a) (.imp φ (.box a φ))) s)
+    (hinit : <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#sat" data-lean-name="Cslib.PDL.Sat">Sat</a> M φ s) : <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#sat" data-lean-name="Cslib.PDL.Sat">Sat</a> M (.box (.star a) φ) s</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.PDL.Formula">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> Formula (Atom : <span class="bp-lean-keyword">Type</span> v) (Label : <span class="bp-lean-keyword">Type</span> w) <span class="bp-lean-keyword">where</span>
+  | atom (a : Atom) : Formula Atom Label
+  | bot : Formula Atom Label
+  | imp (φ ψ : Formula Atom Label) : Formula Atom Label
+  | box (α : Program Atom Label) (φ : Formula Atom Label) : Formula Atom Label</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Basic.lean:52</p>
+</div>
+<div data-lean-name="Cslib.PDL.Sat">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Sat {World Atom Label : <span class="bp-lean-keyword">Type</span>*} (M : Model World Atom Label) :
+    Formula Atom Label → World → <span class="bp-lean-keyword">Prop</span>
+  | .atom a, w =&gt; M.valuation w a
+  | .bot, _ =&gt; False
+  | .imp φ ψ, w =&gt; Sat M φ w → Sat M ψ w
+  | .box α φ, w =&gt; ∀ v, ProgRel M α w v → Sat M φ v</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Basic.lean:85</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#formula">PDL formulas</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#model">PDL model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#program">PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#sat">Satisfaction of PDL formulas</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../propositional-dynamic-logic-pdl/index.html#prog-rel">Relation denoted by a PDL program</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Logic/modal-logic/propositional-dynamic-logic/partial-correctness-and-loop-invariants-for-pdl/test-mul-star-absorption">
+<h4 class="bp-thmheading" id="test-mul-star-absorption">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Test absorption lifts through iteration</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Logics/PDL/Hoare.lean#L186" aria-label="View Cslib.PDL.test_mul_star_absorption in Lean source" title="View Cslib.PDL.test_mul_star_absorption in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#test-mul-star-absorption" aria-label="Link to Test absorption lifts through iteration" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.PDL.test_mul_star_absorption</div>
+<div class="bp-thmcontent">
+<p>Concrete relational test absorption lifts through PDL iteration,
+connecting the algebraic verification equation to closure invariance.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> test_mul_star_absorption
+    (h : <a class="bp-lean-ref" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-set" data-lean-name="Cslib.RelationAlgebra.testSet">testSet</a> I * a.toRelation M =
+      <a class="bp-lean-ref" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-set" data-lean-name="Cslib.RelationAlgebra.testSet">testSet</a> I * a.toRelation M * <a class="bp-lean-ref" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-set" data-lean-name="Cslib.RelationAlgebra.testSet">testSet</a> I) :
+    <a class="bp-lean-ref" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-set" data-lean-name="Cslib.RelationAlgebra.testSet">testSet</a> I * a.star.toRelation M =
+      <a class="bp-lean-ref" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-set" data-lean-name="Cslib.RelationAlgebra.testSet">testSet</a> I * a.star.toRelation M * <a class="bp-lean-ref" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-set" data-lean-name="Cslib.RelationAlgebra.testSet">testSet</a> I</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.RelationAlgebra.testSet">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> testSet (P : Set World) : SquareRelations World :=
+  {(s, t) | s = t ∧ s ∈ P}</code></pre>
+<p class="bp-lean-where">CSLibExt/Foundations/RelationAlgebra/Tests.lean:33</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 7</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#model">PDL model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#program">PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../relational-interpretation-of-pdl-programs/index.html#to-relation">Relational interpretation of a PDL program</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-set">Diagonal test relation of an assertion</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#hoare">Partial-correctness Hoare triple for PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#star">Hoare invariant rule for iteration</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#hoare-iff-test-eq">Hoare triples as KAT absorption equations</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Logic/modal-logic/propositional-dynamic-logic/partial-correctness-and-loop-invariants-for-pdl/test-mul-while-do-absorption">
+<h4 class="bp-thmheading" id="test-mul-while-do-absorption">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Loop exit absorption from a guarded-body absorption equation</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Logics/PDL/Hoare.lean#L195" aria-label="View Cslib.PDL.test_mul_whileDo_absorption in Lean source" title="View Cslib.PDL.test_mul_whileDo_absorption in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#test-mul-while-do-absorption" aria-label="Link to Loop exit absorption from a guarded-body absorption equation" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.PDL.test_mul_whileDo_absorption</div>
+<div class="bp-thmcontent">
+<p>A guarded-body verification equation implies the loop's exit
+verification equation over the same canonical relational carrier.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> test_mul_whileDo_absorption (guard : <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#formula" data-lean-name="Cslib.PDL.Formula">Formula</a> Atom Label)
+    (h : <a class="bp-lean-ref" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-set" data-lean-name="Cslib.RelationAlgebra.testSet">testSet</a> (I ∩ {s | <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#sat" data-lean-name="Cslib.PDL.Sat">Sat</a> M guard s}) * a.toRelation M =
+      <a class="bp-lean-ref" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-set" data-lean-name="Cslib.RelationAlgebra.testSet">testSet</a> (I ∩ {s | <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#sat" data-lean-name="Cslib.PDL.Sat">Sat</a> M guard s}) * a.toRelation M * <a class="bp-lean-ref" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-set" data-lean-name="Cslib.RelationAlgebra.testSet">testSet</a> I) :
+    <a class="bp-lean-ref" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-set" data-lean-name="Cslib.RelationAlgebra.testSet">testSet</a> I * (<a class="bp-lean-ref" href="#while-do" data-lean-name="Cslib.PDL.Program.whileDo">Program.whileDo</a> guard a).toRelation M =
+      <a class="bp-lean-ref" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-set" data-lean-name="Cslib.RelationAlgebra.testSet">testSet</a> I * (<a class="bp-lean-ref" href="#while-do" data-lean-name="Cslib.PDL.Program.whileDo">Program.whileDo</a> guard a).toRelation M *
+        <a class="bp-lean-ref" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-set" data-lean-name="Cslib.RelationAlgebra.testSet">testSet</a> (I ∩ {s | ¬ <a class="bp-lean-ref" href="../propositional-dynamic-logic-pdl/index.html#sat" data-lean-name="Cslib.PDL.Sat">Sat</a> M guard s})</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.PDL.Formula">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> Formula (Atom : <span class="bp-lean-keyword">Type</span> v) (Label : <span class="bp-lean-keyword">Type</span> w) <span class="bp-lean-keyword">where</span>
+  | atom (a : Atom) : Formula Atom Label
+  | bot : Formula Atom Label
+  | imp (φ ψ : Formula Atom Label) : Formula Atom Label
+  | box (α : Program Atom Label) (φ : Formula Atom Label) : Formula Atom Label</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Basic.lean:52</p>
+</div>
+<div data-lean-name="Cslib.RelationAlgebra.testSet">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> testSet (P : Set World) : SquareRelations World :=
+  {(s, t) | s = t ∧ s ∈ P}</code></pre>
+<p class="bp-lean-where">CSLibExt/Foundations/RelationAlgebra/Tests.lean:33</p>
+</div>
+<div data-lean-name="Cslib.PDL.Sat">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Sat {World Atom Label : <span class="bp-lean-keyword">Type</span>*} (M : Model World Atom Label) :
+    Formula Atom Label → World → <span class="bp-lean-keyword">Prop</span>
+  | .atom a, w =&gt; M.valuation w a
+  | .bot, _ =&gt; False
+  | .imp φ ψ, w =&gt; Sat M φ w → Sat M ψ w
+  | .box α φ, w =&gt; ∀ v, ProgRel M α w v → Sat M φ v</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Basic.lean:85</p>
+</div>
+<div data-lean-name="Cslib.PDL.Program.whileDo">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Program.whileDo (guard : Formula Atom Label)
+    (body : Program Atom Label) : Program Atom Label :=
+  .seq (.star (.seq (.test guard) body)) (.test (.imp guard .bot))</code></pre>
+<p class="bp-lean-where">CSLibExt/Logics/PDL/Hoare.lean:123</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 10</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#formula">PDL formulas</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#model">PDL model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#program">PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../relational-interpretation-of-pdl-programs/index.html#to-relation">Relational interpretation of a PDL program</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#while-do">Guarded while loop in PDL</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../propositional-dynamic-logic-pdl/index.html#sat">Satisfaction of PDL formulas</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../../ComputerScience/program-logics-and-verification/kleene-algebra-with-tests/index.html#test-set">Diagonal test relation of an assertion</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#hoare">Partial-correctness Hoare triple for PDL programs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#while-do-2">Hoare invariant rule for guarded while loops</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#hoare-iff-test-eq">Hoare triples as KAT absorption equations</a></span></div>
+</div>
+</details>
+</div>
+</div>
+<p><link rel="stylesheet" href="../../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../../dependencies/index.json" data-graph-src="../../../../../dependencies/scopes/Logic/modal-logic/propositional-dynamic-logic/partial-correctness-and-loop-invariants-for-pdl.json" data-page-href="index.html" data-scope-id="Logic/modal-logic/propositional-dynamic-logic/partial-correctness-and-loop-invariants-for-pdl">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>

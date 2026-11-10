@@ -1,0 +1,5625 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../index.html">
+      
+      
+        <link rel="next" href="../orientation-and-segment-intersection-tests/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Closest pair of points problem - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Closest pair of points problem
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23" id="__nav_2_1_23_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_23_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Computer Science
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../data-structures/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data structures
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../graph-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../process-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Process calculi and behavioural equivalence
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../type-systems-and-lambda-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Type systems and lambda calculi
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../programming-language-semantics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programming language semantics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../machine-learning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Machine learning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../sorting-and-searching/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sorting and searching
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../dynamic-programming/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic programming
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../greedy-algorithms-and-matroids/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Greedy algorithms and matroids
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../approximation-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Approximation algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../online-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Online algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../randomized-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Randomized algorithms and probabilistic analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../parallel-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../algebraic-and-numerical-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic and numerical algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23_16" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computational geometry
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23_16" id="__nav_2_1_23_16_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_23_16_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23_16">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Computational geometry
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Closest pair of points problem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../orientation-and-segment-intersection-tests/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Orientation and segment intersection tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../monotone-chain-convex-hull-algorithm/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monotone chain convex hull algorithm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sweep-line-segment-intersection-detection/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sweep-line segment intersection detection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../string-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    String algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../heuristic-search-and-planning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heuristic search and planning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../cryptography/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cryptography
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../databases/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Databases
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../quantum-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../concurrent-systems-and-protocols/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concurrent systems and protocols
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../program-logics-and-verification/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Program logics and verification
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../index.html" tabindex="-1">Computer Science</a></li><li><a href="../index.html" tabindex="-1">Computational geometry</a></li><li aria-current="page">Closest pair of points problem</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Closest pair of points problem</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem" data-page-title="Closest pair of points problem">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="closest-pair-of-points-problem">Closest pair of points problem</h1>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/dist2">
+<h4 class="bp-thmheading" id="dist2">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Squared distance in the plane</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean#L59" aria-label="View Cslib.Algorithms.Lean.Geometry.dist2 in Lean source" title="View Cslib.Algorithms.Lean.Geometry.dist2 in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#dist2" aria-label="Link to Squared distance in the plane" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.dist2</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field. The squared distance
+between points <span class="arithmatex">\(p = (p_1, p_2)\)</span> and <span class="arithmatex">\(q = (q_1, q_2)\)</span> of <span class="arithmatex">\(K^2\)</span> is <span class="arithmatex">\((p_1 - q_1)^2 + (p_2 - q_2)^2\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> dist2 (p q : 𝕜 × 𝕜) : 𝕜 := (p.1 - q.1) ^ 2 + (p.2 - q.2) ^ 2</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 16</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#brute-min-time">Cost of the brute-force closest-pair scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-eq-brute-min">Divide and conquer agrees with brute force</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-eq-none-iff">The closest-pair algorithm returns no value exactly on fewer than two points</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-is-answer">The closest-pair algorithm returns the answer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-spec">Correctness of divide-and-conquer closest pair</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec-is-answer">The closest-pair recursion is correct on lists sorted by first coordinate</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec-time-le">Running time of the closest-pair recursion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-answer">Closest-pair answer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-min-pair-dist2">Least pairwise squared distance</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#length-le-seven">Packing bound for the strip</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#min-dist-from">Least squared distance from a point to a list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#min-dist-from-spec">The nearest-point scan returns the least squared distance</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#same-side-far">Same-side points far apart</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#scan-from">Strip scan from a point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#scan-from-time">Cost of the scan from one strip point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#strip-scan-lower">The strip scan bounds every pair with a small vertical gap</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/is-min-pair-dist2">
+<h4 class="bp-thmheading" id="is-min-pair-dist2">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Least pairwise squared distance</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean#L62" aria-label="View Cslib.Algorithms.Lean.Geometry.IsMinPairDist2 in Lean source" title="View Cslib.Algorithms.Lean.Geometry.IsMinPairDist2 in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#is-min-pair-dist2" aria-label="Link to Least pairwise squared distance" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.IsMinPairDist2</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field, and write
+<span class="arithmatex">\(d(p, q) = (p_1 - q_1)^2 + (p_2 - q_2)^2\)</span> for the squared distance between points
+<span class="arithmatex">\(p = (p_1, p_2)\)</span> and <span class="arithmatex">\(q = (q_1, q_2)\)</span> of <span class="arithmatex">\(K^2\)</span>. For a list <span class="arithmatex">\(c_1, \dots, c_n\)</span> of points of <span class="arithmatex">\(K^2\)</span>,
+an element <span class="arithmatex">\(\delta\)</span> of <span class="arithmatex">\(K\)</span> is the least pairwise squared distance of the list when
+<span class="arithmatex">\(\delta = d(c_i, c_j)\)</span> for some <span class="arithmatex">\(i &lt; j\)</span> and <span class="arithmatex">\(\delta \le d(c_i, c_j)\)</span> for all <span class="arithmatex">\(i &lt; j\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsMinPairDist2 (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) (δ : 𝕜) : <span class="bp-lean-keyword">Prop</span> :=
+  (∃ p q, [p, q] &lt;+ ps ∧ <a class="bp-lean-ref" href="#dist2" data-lean-name="Cslib.Algorithms.Lean.Geometry.dist2">dist2</a> p q = δ) ∧ ∀ p q, [p, q] &lt;+ ps → δ ≤ <a class="bp-lean-ref" href="#dist2" data-lean-name="Cslib.Algorithms.Lean.Geometry.dist2">dist2</a> p q</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.dist2">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> dist2 (p q : 𝕜 × 𝕜) : 𝕜 := (p.1 - q.1) ^ 2 + (p.2 - q.2) ^ 2</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:59</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#dist2">Squared distance in the plane</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-eq-none-iff">The closest-pair algorithm returns no value exactly on fewer than two points</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-pair-spec">Correctness of divide-and-conquer closest pair</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/min-dist-from">
+<h4 class="bp-thmheading" id="min-dist-from">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Least squared distance from a point to a list</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean#L66" aria-label="View Cslib.Algorithms.Lean.Geometry.minDistFrom in Lean source" title="View Cslib.Algorithms.Lean.Geometry.minDistFrom in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#min-dist-from" aria-label="Link to Least squared distance from a point to a list" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.minDistFrom</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field, and
+write <span class="arithmatex">\(d(p, q) = (p_1 - q_1)^2 + (p_2 - q_2)^2\)</span> for the squared distance between points
+<span class="arithmatex">\(p = (p_1, p_2)\)</span> and <span class="arithmatex">\(q = (q_1, q_2)\)</span> of <span class="arithmatex">\(K^2\)</span>. For a point <span class="arithmatex">\(p\)</span> and a list <span class="arithmatex">\(c_1, \dots, c_m\)</span> of
+points of <span class="arithmatex">\(K^2\)</span>, the least squared distance from <span class="arithmatex">\(p\)</span> to the list is no value if <span class="arithmatex">\(m = 0\)</span> and
+<span class="arithmatex">\(\min_{1 \le k \le m} d(p, c_k)\)</span> otherwise. Computing it is charged one unit of cost per point of
+the list, <span class="arithmatex">\(m\)</span> units in total.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> minDistFrom (p : 𝕜 × 𝕜) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜) → TimeM ℕ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option#doc" title="Option">Option</a> 𝕜)
+  | [] =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.none#doc" title="Option.none">none</a>
+  | q :: qs =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      <span class="bp-lean-keyword">let</span> r ← minDistFrom p qs
+      <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> (<a class="bp-lean-ref" href="../../data-structures/range-query-structures/sparse-table/index.html#omin" data-lean-name="Cslib.Algorithms.Lean.SparseTable.omin">omin</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> (<a class="bp-lean-ref" href="#dist2" data-lean-name="Cslib.Algorithms.Lean.Geometry.dist2">dist2</a> p q)) r)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SparseTable.omin">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> omin {α : <span class="bp-lean-keyword">Type</span> u} [Min α] : Option α → Option α → Option α
+  | none, b =&gt; b
+  | some a, none =&gt; some a
+  | some a, some b =&gt; some (min a b)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/DataStructures/SparseTable.lean:59</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.dist2">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> dist2 (p q : 𝕜 × 𝕜) : 𝕜 := (p.1 - q.1) ^ 2 + (p.2 - q.2) ^ 2</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:59</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#dist2">Squared distance in the plane</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../data-structures/range-query-structures/sparse-table/index.html#omin">Option minimum</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#brute-min">Brute-force closest pair</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#brute-min-time">Cost of the brute-force closest-pair scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-eq-brute-min">Divide and conquer agrees with brute force</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec-is-answer">The closest-pair recursion is correct on lists sorted by first coordinate</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#min-dist-from-spec">The nearest-point scan returns the least squared distance</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/brute-min">
+<h4 class="bp-thmheading" id="brute-min">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Brute-force closest pair</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean#L74" aria-label="View Cslib.Algorithms.Lean.Geometry.bruteMin in Lean source" title="View Cslib.Algorithms.Lean.Geometry.bruteMin in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#brute-min" aria-label="Link to Brute-force closest pair" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.bruteMin</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a field with a linear order, and write
+<span class="arithmatex">\(d(p, q) = (x - x')^2 + (y - y')^2\)</span> for the squared distance between points <span class="arithmatex">\(p = (x, y)\)</span> and
+<span class="arithmatex">\(q = (x', y')\)</span> of <span class="arithmatex">\(K^2\)</span>. On a list <span class="arithmatex">\(c_1, \dots, c_n\)</span> of points in <span class="arithmatex">\(K^2\)</span>, the brute-force scan
+returns no value if <span class="arithmatex">\(n &lt; 2\)</span>, and otherwise returns <span class="arithmatex">\(\min_{i &lt; j} d(c_i, c_j)\)</span>: for each <span class="arithmatex">\(i\)</span> it
+computes the least squared distance from <span class="arithmatex">\(c_i\)</span> to the later points <span class="arithmatex">\(c_{i+1}, \dots, c_n\)</span>, and
+takes the least of these minima. It is charged one unit of cost per squared distance computed.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> bruteMin : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜) → TimeM ℕ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option#doc" title="Option">Option</a> 𝕜)
+  | [] =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.none#doc" title="Option.none">none</a>
+  | p :: ps =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> a ← <a class="bp-lean-ref" href="#min-dist-from" data-lean-name="Cslib.Algorithms.Lean.Geometry.minDistFrom">minDistFrom</a> p ps
+      <span class="bp-lean-keyword">let</span> b ← bruteMin ps
+      <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> (<a class="bp-lean-ref" href="../../data-structures/range-query-structures/sparse-table/index.html#omin" data-lean-name="Cslib.Algorithms.Lean.SparseTable.omin">omin</a> a b)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.minDistFrom">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> minDistFrom (p : 𝕜 × 𝕜) : List (𝕜 × 𝕜) → TimeM ℕ (Option 𝕜)
+  | [] =&gt; pure none
+  | q :: qs =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      <span class="bp-lean-keyword">let</span> r ← minDistFrom p qs
+      pure (omin (some (dist2 p q)) r)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:66</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SparseTable.omin">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> omin {α : <span class="bp-lean-keyword">Type</span> u} [Min α] : Option α → Option α → Option α
+  | none, b =&gt; b
+  | some a, none =&gt; some a
+  | some a, some b =&gt; some (min a b)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/DataStructures/SparseTable.lean:59</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#min-dist-from">Least squared distance from a point to a list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../data-structures/range-query-structures/sparse-table/index.html#omin">Option minimum</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#brute-min-time">Cost of the brute-force closest-pair scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-pair-eq-brute-min">Divide and conquer agrees with brute force</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-rec">Closest-pair recursion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec-is-answer">The closest-pair recursion is correct on lists sorted by first coordinate</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec-time-le">Running time of the closest-pair recursion</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/scan-from">
+<h4 class="bp-thmheading" id="scan-from">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Strip scan from a point</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean#L83" aria-label="View Cslib.Algorithms.Lean.Geometry.scanFrom in Lean source" title="View Cslib.Algorithms.Lean.Geometry.scanFrom in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#scan-from" aria-label="Link to Strip scan from a point" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.scanFrom</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field, and write
+<span class="arithmatex">\(d(p, q) = (p_1 - q_1)^2 + (p_2 - q_2)^2\)</span> for the squared distance between points
+<span class="arithmatex">\(p = (p_1, p_2)\)</span> and <span class="arithmatex">\(q = (q_1, q_2)\)</span> of <span class="arithmatex">\(K^2\)</span>. Let <span class="arithmatex">\(\delta \in K\)</span>, let <span class="arithmatex">\(p = (p_1, p_2)\)</span> be a
+point of <span class="arithmatex">\(K^2\)</span> and <span class="arithmatex">\(c_1, \dots, c_m\)</span> a list of points <span class="arithmatex">\(c_l = (x_l, y_l)\)</span> of <span class="arithmatex">\(K^2\)</span>, and let
+<span class="arithmatex">\(k \le m\)</span> be largest such that <span class="arithmatex">\((y_l - p_2)^2 &lt; \delta\)</span> for all <span class="arithmatex">\(1 \le l \le k\)</span>. The scan from <span class="arithmatex">\(p\)</span>
+with threshold <span class="arithmatex">\(\delta\)</span> returns no value if <span class="arithmatex">\(k = 0\)</span> and <span class="arithmatex">\(\min_{1 \le l \le k} d(p, c_l)\)</span>
+otherwise. It is charged one unit of cost per point <span class="arithmatex">\(c_1, \dots, c_k\)</span>: it stops at the first
+point whose squared vertical gap to <span class="arithmatex">\(p\)</span> is at least <span class="arithmatex">\(\delta\)</span>, without computing its distance.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> scanFrom (δ : 𝕜) (p : 𝕜 × 𝕜) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜) → TimeM ℕ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option#doc" title="Option">Option</a> 𝕜)
+  | [] =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.none#doc" title="Option.none">none</a>
+  | q :: qs =&gt;
+      <span class="bp-lean-keyword">if</span> (q.2 - p.2) ^ 2 &lt; δ <span class="bp-lean-keyword">then</span> <span class="bp-lean-keyword">do</span>
+        ✓
+        <span class="bp-lean-keyword">let</span> r ← scanFrom δ p qs
+        <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> (<a class="bp-lean-ref" href="../../data-structures/range-query-structures/sparse-table/index.html#omin" data-lean-name="Cslib.Algorithms.Lean.SparseTable.omin">omin</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> (<a class="bp-lean-ref" href="#dist2" data-lean-name="Cslib.Algorithms.Lean.Geometry.dist2">dist2</a> p q)) r)
+      <span class="bp-lean-keyword">else</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.none#doc" title="Option.none">none</a></code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.SparseTable.omin">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> omin {α : <span class="bp-lean-keyword">Type</span> u} [Min α] : Option α → Option α → Option α
+  | none, b =&gt; b
+  | some a, none =&gt; some a
+  | some a, some b =&gt; some (min a b)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/DataStructures/SparseTable.lean:59</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.dist2">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> dist2 (p q : 𝕜 × 𝕜) : 𝕜 := (p.1 - q.1) ^ 2 + (p.2 - q.2) ^ 2</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:59</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#dist2">Squared distance in the plane</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../data-structures/range-query-structures/sparse-table/index.html#omin">Option minimum</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec-is-answer">The closest-pair recursion is correct on lists sorted by first coordinate</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#scan-from-time">Cost of the scan from one strip point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#strip-scan">Closest-pair strip scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#strip-scan-lower">The strip scan bounds every pair with a small vertical gap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#strip-scan-time-le">Cost of the strip scan</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/strip-scan">
+<h4 class="bp-thmheading" id="strip-scan">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Closest-pair strip scan</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean#L93" aria-label="View Cslib.Algorithms.Lean.Geometry.stripScan in Lean source" title="View Cslib.Algorithms.Lean.Geometry.stripScan in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#strip-scan" aria-label="Link to Closest-pair strip scan" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.stripScan</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field, <span class="arithmatex">\(\delta \in K\)</span> and
+<span class="arithmatex">\(c_1, \dots, c_n\)</span> a list of points of <span class="arithmatex">\(K^2\)</span>. For each <span class="arithmatex">\(i\)</span>, the strip scan runs the strip scan from
+<span class="arithmatex">\(c_i\)</span> with threshold <span class="arithmatex">\(\delta\)</span> on the later points <span class="arithmatex">\(c_{i+1}, \dots, c_n\)</span>. It returns the least of
+the values these scans return, or no value if none of them returns a value, and its cost is the
+sum of their costs.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> stripScan (δ : 𝕜) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜) → TimeM ℕ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option#doc" title="Option">Option</a> 𝕜)
+  | [] =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.none#doc" title="Option.none">none</a>
+  | p :: ps =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> a ← <a class="bp-lean-ref" href="#scan-from" data-lean-name="Cslib.Algorithms.Lean.Geometry.scanFrom">scanFrom</a> δ p ps
+      <span class="bp-lean-keyword">let</span> b ← stripScan δ ps
+      <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> (<a class="bp-lean-ref" href="../../data-structures/range-query-structures/sparse-table/index.html#omin" data-lean-name="Cslib.Algorithms.Lean.SparseTable.omin">omin</a> a b)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.scanFrom">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> scanFrom (δ : 𝕜) (p : 𝕜 × 𝕜) : List (𝕜 × 𝕜) → TimeM ℕ (Option 𝕜)
+  | [] =&gt; pure none
+  | q :: qs =&gt;
+      <span class="bp-lean-keyword">if</span> (q.2 - p.2) ^ 2 &lt; δ <span class="bp-lean-keyword">then</span> <span class="bp-lean-keyword">do</span>
+        ✓
+        <span class="bp-lean-keyword">let</span> r ← scanFrom δ p qs
+        pure (omin (some (dist2 p q)) r)
+      <span class="bp-lean-keyword">else</span> pure none</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:83</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SparseTable.omin">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> omin {α : <span class="bp-lean-keyword">Type</span> u} [Min α] : Option α → Option α → Option α
+  | none, b =&gt; b
+  | some a, none =&gt; some a
+  | some a, some b =&gt; some (min a b)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/DataStructures/SparseTable.lean:59</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#scan-from">Strip scan from a point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../data-structures/range-query-structures/sparse-table/index.html#omin">Option minimum</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-rec">Closest-pair recursion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec-is-answer">The closest-pair recursion is correct on lists sorted by first coordinate</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec-time-le">Running time of the closest-pair recursion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#strip-scan-lower">The strip scan bounds every pair with a small vertical gap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#strip-scan-time-le">Cost of the strip scan</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/closest-rec">
+<h4 class="bp-thmheading" id="closest-rec">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Closest-pair recursion</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean#L101" aria-label="View Cslib.Algorithms.Lean.Geometry.closestRec in Lean source" title="View Cslib.Algorithms.Lean.Geometry.closestRec in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#closest-rec" aria-label="Link to Closest-pair recursion" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.closestRec</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field and <span class="arithmatex">\(c_1, \dots, c_n\)</span> a list
+of points <span class="arithmatex">\(c_i = (x_i, y_i)\)</span> of <span class="arithmatex">\(K^2\)</span>. If <span class="arithmatex">\(n \le 3\)</span>, the recursion returns the brute-force scan of
+the list. Otherwise let <span class="arithmatex">\(m = \lfloor n/2 \rfloor\)</span>, and run the recursion on <span class="arithmatex">\(c_1, \dots, c_m\)</span> and
+on <span class="arithmatex">\(c_{m+1}, \dots, c_n\)</span>. If neither call returns a value, it returns no value. Otherwise let
+<span class="arithmatex">\(\delta\)</span> be the least of the returned values, let <span class="arithmatex">\(T\)</span> be the list of the points <span class="arithmatex">\(c_i\)</span> with
+<span class="arithmatex">\((x_i - x_m)^2 &lt; \delta\)</span> in their original order, sorted by second coordinate with a stable merge
+sort, and run the strip scan with threshold <span class="arithmatex">\(\delta\)</span> on <span class="arithmatex">\(T\)</span>. The recursion returns
+<span class="arithmatex">\(\min(\delta, s)\)</span> if the strip scan returns a value <span class="arithmatex">\(s\)</span>, and <span class="arithmatex">\(\delta\)</span> otherwise. In the base case
+its cost is that of the brute-force scan; otherwise it is the sum of the costs of the two
+recursive calls and of the strip scan when it is run, and splitting, filtering and sorting are
+free.</p>
+</div>
+<div class="bp-lean-source">
+<details class="bp-lean-fold">
+<summary><code>Cslib.Algorithms.Lean.Geometry.closestRec</code> · 19 lines</summary>
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> closestRec (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) : TimeM ℕ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option#doc" title="Option">Option</a> 𝕜) :=
+  <span class="bp-lean-keyword">if</span> _h : xs.length ≤ 3 <span class="bp-lean-keyword">then</span> <a class="bp-lean-ref" href="#brute-min" data-lean-name="Cslib.Algorithms.Lean.Geometry.bruteMin">bruteMin</a> xs
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">do</span>
+    <span class="bp-lean-keyword">let</span> L := xs.take (xs.length / 2)
+    <span class="bp-lean-keyword">let</span> R := xs.drop (xs.length / 2)
+    <span class="bp-lean-keyword">let</span> dl ← closestRec L
+    <span class="bp-lean-keyword">let</span> dr ← closestRec R
+    <span class="bp-lean-keyword">match</span> <a class="bp-lean-ref" href="../../data-structures/range-query-structures/sparse-table/index.html#omin" data-lean-name="Cslib.Algorithms.Lean.SparseTable.omin">omin</a> dl dr <span class="bp-lean-keyword">with</span>
+    | <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.none#doc" title="Option.none">none</a> =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.none#doc" title="Option.none">none</a>
+    | <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> δ =&gt;
+        <span class="bp-lean-keyword">let</span> xmid := (L.getLast?.map <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Prod.fst#doc" title="Prod.fst">Prod.fst</a>).getD 0
+        <span class="bp-lean-keyword">let</span> strip := xs.filter <span class="bp-lean-keyword">fun</span> p =&gt; (p.1 - xmid) ^ 2 &lt; δ
+        <span class="bp-lean-keyword">let</span> ys := strip.mergeSort <span class="bp-lean-keyword">fun</span> a b =&gt; a.2 ≤ b.2
+        <span class="bp-lean-keyword">let</span> s ← <a class="bp-lean-ref" href="#strip-scan" data-lean-name="Cslib.Algorithms.Lean.Geometry.stripScan">stripScan</a> δ ys
+        <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> (<a class="bp-lean-ref" href="../../data-structures/range-query-structures/sparse-table/index.html#omin" data-lean-name="Cslib.Algorithms.Lean.SparseTable.omin">omin</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> δ) s)
+<span class="bp-lean-keyword">termination_by</span> xs.length
+<span class="bp-lean-keyword">decreasing_by</span>
+  all_goals simp only [List.length_take, List.length_drop]
+  all_goals omega</code></pre>
+</details>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.bruteMin">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> bruteMin : List (𝕜 × 𝕜) → TimeM ℕ (Option 𝕜)
+  | [] =&gt; pure none
+  | p :: ps =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> a ← minDistFrom p ps
+      <span class="bp-lean-keyword">let</span> b ← bruteMin ps
+      pure (omin a b)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:74</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.SparseTable.omin">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> omin {α : <span class="bp-lean-keyword">Type</span> u} [Min α] : Option α → Option α → Option α
+  | none, b =&gt; b
+  | some a, none =&gt; some a
+  | some a, some b =&gt; some (min a b)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/DataStructures/SparseTable.lean:59</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.stripScan">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> stripScan (δ : 𝕜) : List (𝕜 × 𝕜) → TimeM ℕ (Option 𝕜)
+  | [] =&gt; pure none
+  | p :: ps =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> a ← scanFrom δ p ps
+      <span class="bp-lean-keyword">let</span> b ← stripScan δ ps
+      pure (omin a b)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:93</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#brute-min">Brute-force closest pair</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#strip-scan">Closest-pair strip scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../data-structures/range-query-structures/sparse-table/index.html#omin">Option minimum</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-pair">Divide-and-conquer closest pair</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-is-answer">The closest-pair algorithm returns the answer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-time-le">Running time of the closest-pair algorithm</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-rec-is-answer">The closest-pair recursion is correct on lists sorted by first coordinate</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-rec-time-le">Running time of the closest-pair recursion</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/closest-pair">
+<h4 class="bp-thmheading" id="closest-pair">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Divide-and-conquer closest pair</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean#L122" aria-label="View Cslib.Algorithms.Lean.Geometry.closestPair in Lean source" title="View Cslib.Algorithms.Lean.Geometry.closestPair in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#closest-pair" aria-label="Link to Divide-and-conquer closest pair" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.closestPair</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a field with a linear order. Given a list of
+points in <span class="arithmatex">\(K^2\)</span>, the closest-pair algorithm sorts the points by first coordinate (merge sort, at
+no cost) and runs the closest-pair recursion on the sorted list. It returns a squared distance or
+no value, and is charged one unit of cost per squared distance computed.</p>
+<p>This is CLRS <code>CLOSEST-PAIR</code> (Section 33.4), with distances compared squared.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> closestPair (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) : TimeM ℕ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option#doc" title="Option">Option</a> 𝕜) :=
+  <a class="bp-lean-ref" href="#closest-rec" data-lean-name="Cslib.Algorithms.Lean.Geometry.closestRec">closestRec</a> (ps.mergeSort <span class="bp-lean-keyword">fun</span> a b =&gt; a.1 ≤ b.1)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.closestRec">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> closestRec (xs : List (𝕜 × 𝕜)) : TimeM ℕ (Option 𝕜) :=
+  <span class="bp-lean-keyword">if</span> _h : xs.length ≤ 3 <span class="bp-lean-keyword">then</span> bruteMin xs
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">do</span>
+    <span class="bp-lean-keyword">let</span> L := xs.take (xs.length / 2)
+    <span class="bp-lean-keyword">let</span> R := xs.drop (xs.length / 2)
+    <span class="bp-lean-keyword">let</span> dl ← closestRec L
+    <span class="bp-lean-keyword">let</span> dr ← closestRec R
+    <span class="bp-lean-keyword">match</span> omin dl dr <span class="bp-lean-keyword">with</span>
+    | none =&gt; pure none
+    | some δ =&gt;
+        <span class="bp-lean-keyword">let</span> xmid := (L.getLast?.map Prod.fst).getD 0
+        <span class="bp-lean-keyword">let</span> strip := xs.filter <span class="bp-lean-keyword">fun</span> p =&gt; (p.1 - xmid) ^ 2 &lt; δ
+  ⋯</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:101</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-rec">Closest-pair recursion</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-pair-eq-brute-min">Divide and conquer agrees with brute force</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-pair-eq-none-iff">The closest-pair algorithm returns no value exactly on fewer than two points</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-pair-is-answer">The closest-pair algorithm returns the answer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-pair-spec">Correctness of divide-and-conquer closest pair</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-pair-time-le">Running time of the closest-pair algorithm</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/is-answer">
+<h4 class="bp-thmheading" id="is-answer">
+<span class="bp-thmcaption" data-search-exclude>Structure</span><span class="bp-thmtitle">Closest-pair answer</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean#L129" aria-label="View Cslib.Algorithms.Lean.Geometry.IsAnswer in Lean source" title="View Cslib.Algorithms.Lean.Geometry.IsAnswer in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#is-answer" aria-label="Link to Closest-pair answer" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.IsAnswer</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field, and write
+<span class="arithmatex">\(d(p, q) = (p_1 - q_1)^2 + (p_2 - q_2)^2\)</span> for the squared distance between points
+<span class="arithmatex">\(p = (p_1, p_2)\)</span> and <span class="arithmatex">\(q = (q_1, q_2)\)</span> of <span class="arithmatex">\(K^2\)</span>. For a list <span class="arithmatex">\(c_1, \dots, c_n\)</span> of points of <span class="arithmatex">\(K^2\)</span>,
+an optional value <span class="arithmatex">\(r\)</span> (an element of <span class="arithmatex">\(K\)</span> or no value) is an answer for the list when every value
+<span class="arithmatex">\(\delta\)</span> that <span class="arithmatex">\(r\)</span> holds equals <span class="arithmatex">\(d(c_i, c_j)\)</span> for some <span class="arithmatex">\(i &lt; j\)</span>, and when for all <span class="arithmatex">\(i &lt; j\)</span>, <span class="arithmatex">\(r\)</span> holds
+a value <span class="arithmatex">\(\delta\)</span> with <span class="arithmatex">\(\delta \le d(c_i, c_j)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> IsAnswer (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) (r : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option#doc" title="Option">Option</a> 𝕜) : <span class="bp-lean-keyword">Prop</span> <span class="bp-lean-keyword">where</span>
+  attained : ∀ δ, r = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> δ → ∃ p q, [p, q] &lt;+ ps ∧ <a class="bp-lean-ref" href="#dist2" data-lean-name="Cslib.Algorithms.Lean.Geometry.dist2">dist2</a> p q = δ
+  lower : ∀ p q, [p, q] &lt;+ ps → ∃ δ, r = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> δ ∧ δ ≤ <a class="bp-lean-ref" href="#dist2" data-lean-name="Cslib.Algorithms.Lean.Geometry.dist2">dist2</a> p q</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.dist2">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> dist2 (p q : 𝕜 × 𝕜) : 𝕜 := (p.1 - q.1) ^ 2 + (p.2 - q.2) ^ 2</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:59</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 6</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#dist2">Squared distance in the plane</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-eq-brute-min">Divide and conquer agrees with brute force</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-eq-none-iff">The closest-pair algorithm returns no value exactly on fewer than two points</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-pair-is-answer">The closest-pair algorithm returns the answer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-spec">Correctness of divide-and-conquer closest pair</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-rec-is-answer">The closest-pair recursion is correct on lists sorted by first coordinate</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec-time-le">Running time of the closest-pair recursion</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/min-dist-from-spec">
+<h4 class="bp-thmheading" id="min-dist-from-spec">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The nearest-point scan returns the least squared distance</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean#L234" aria-label="View Cslib.Algorithms.Lean.Geometry.minDistFrom_spec in Lean source" title="View Cslib.Algorithms.Lean.Geometry.minDistFrom_spec in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#min-dist-from-spec" aria-label="Link to The nearest-point scan returns the least squared distance" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.minDistFrom_spec</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered
+field, write <span class="arithmatex">\(d(u, v) = (x - x')^2 + (y - y')^2\)</span> for the squared distance between points
+<span class="arithmatex">\(u = (x, y)\)</span> and <span class="arithmatex">\(v = (x', y')\)</span> of <span class="arithmatex">\(K^2\)</span>, let <span class="arithmatex">\(p \in K^2\)</span>, and let <span class="arithmatex">\(qs\)</span> be a list of points in
+<span class="arithmatex">\(K^2\)</span>. If the scan for the least squared distance from <span class="arithmatex">\(p\)</span> to the entries of <span class="arithmatex">\(qs\)</span> returns a value
+<span class="arithmatex">\(\delta\)</span>, then <span class="arithmatex">\(\delta = d(p, q)\)</span> for some entry <span class="arithmatex">\(q\)</span> of <span class="arithmatex">\(qs\)</span>. For every entry <span class="arithmatex">\(q\)</span> of <span class="arithmatex">\(qs\)</span>, the
+scan returns a value <span class="arithmatex">\(\delta\)</span> with <span class="arithmatex">\(\delta \le d(p, q)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> minDistFrom_spec (p : 𝕜 × 𝕜) (qs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) :
+    (∀ δ, (<a class="bp-lean-ref" href="#min-dist-from" data-lean-name="Cslib.Algorithms.Lean.Geometry.minDistFrom">minDistFrom</a> p qs).ret = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> δ → ∃ q ∈ qs, <a class="bp-lean-ref" href="#dist2" data-lean-name="Cslib.Algorithms.Lean.Geometry.dist2">dist2</a> p q = δ) ∧
+      ∀ q ∈ qs, ∃ δ, (<a class="bp-lean-ref" href="#min-dist-from" data-lean-name="Cslib.Algorithms.Lean.Geometry.minDistFrom">minDistFrom</a> p qs).ret = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> δ ∧ δ ≤ <a class="bp-lean-ref" href="#dist2" data-lean-name="Cslib.Algorithms.Lean.Geometry.dist2">dist2</a> p q</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.minDistFrom">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> minDistFrom (p : 𝕜 × 𝕜) : List (𝕜 × 𝕜) → TimeM ℕ (Option 𝕜)
+  | [] =&gt; pure none
+  | q :: qs =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      <span class="bp-lean-keyword">let</span> r ← minDistFrom p qs
+      pure (omin (some (dist2 p q)) r)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:66</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.dist2">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> dist2 (p q : 𝕜 × 𝕜) : 𝕜 := (p.1 - q.1) ^ 2 + (p.2 - q.2) ^ 2</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:59</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#dist2">Squared distance in the plane</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#min-dist-from">Least squared distance from a point to a list</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../data-structures/range-query-structures/sparse-table/index.html#omin">Option minimum</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-eq-brute-min">Divide and conquer agrees with brute force</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec-is-answer">The closest-pair recursion is correct on lists sorted by first coordinate</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/strip-scan-lower">
+<h4 class="bp-thmheading" id="strip-scan-lower">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The strip scan bounds every pair with a small vertical gap</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean#L327" aria-label="View Cslib.Algorithms.Lean.Geometry.stripScan_lower in Lean source" title="View Cslib.Algorithms.Lean.Geometry.stripScan_lower in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#strip-scan-lower" aria-label="Link to The strip scan bounds every pair with a small vertical gap" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.stripScan_lower</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered
+field, write <span class="arithmatex">\(d(p, q) = (x - x')^2 + (y - y')^2\)</span> for the squared distance between points
+<span class="arithmatex">\(p = (x, y)\)</span> and <span class="arithmatex">\(q = (x', y')\)</span> of <span class="arithmatex">\(K^2\)</span>, and let <span class="arithmatex">\(\delta \in K\)</span>. Let <span class="arithmatex">\(ys\)</span> be a list of points in
+<span class="arithmatex">\(K^2\)</span> sorted by second coordinate: whenever an entry precedes another, its second coordinate is at
+most the other's. If <span class="arithmatex">\(a = (a_1, a_2)\)</span> and <span class="arithmatex">\(b = (b_1, b_2)\)</span> are entries of <span class="arithmatex">\(ys\)</span> at positions <span class="arithmatex">\(i &lt; j\)</span>
+respectively and <span class="arithmatex">\((b_2 - a_2)^2 &lt; \delta\)</span>, then the strip scan with threshold <span class="arithmatex">\(\delta\)</span> on <span class="arithmatex">\(ys\)</span>
+returns a value <span class="arithmatex">\(e\)</span> with <span class="arithmatex">\(e \le d(a, b)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> stripScan_lower (δ : 𝕜) (ys : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) (hs : ys.Pairwise <span class="bp-lean-keyword">fun</span> a b =&gt; a.2 ≤ b.2)
+    (a b : 𝕜 × 𝕜) (hab : [a, b] &lt;+ ys) (hgap : (b.2 - a.2) ^ 2 &lt; δ) :
+    ∃ d, (<a class="bp-lean-ref" href="#strip-scan" data-lean-name="Cslib.Algorithms.Lean.Geometry.stripScan">stripScan</a> δ ys).ret = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> d ∧ d ≤ <a class="bp-lean-ref" href="#dist2" data-lean-name="Cslib.Algorithms.Lean.Geometry.dist2">dist2</a> a b</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.stripScan">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> stripScan (δ : 𝕜) : List (𝕜 × 𝕜) → TimeM ℕ (Option 𝕜)
+  | [] =&gt; pure none
+  | p :: ps =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> a ← scanFrom δ p ps
+      <span class="bp-lean-keyword">let</span> b ← stripScan δ ps
+      pure (omin a b)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:93</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.dist2">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> dist2 (p q : 𝕜 × 𝕜) : 𝕜 := (p.1 - q.1) ^ 2 + (p.2 - q.2) ^ 2</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:59</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#dist2">Squared distance in the plane</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#strip-scan">Closest-pair strip scan</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#scan-from">Strip scan from a point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../data-structures/range-query-structures/sparse-table/index.html#omin">Option minimum</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec-is-answer">The closest-pair recursion is correct on lists sorted by first coordinate</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/closest-rec-is-answer">
+<h4 class="bp-thmheading" id="closest-rec-is-answer">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The closest-pair recursion is correct on lists sorted by first coordinate</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean#L341" aria-label="View Cslib.Algorithms.Lean.Geometry.closestRec_isAnswer in Lean source" title="View Cslib.Algorithms.Lean.Geometry.closestRec_isAnswer in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#closest-rec-is-answer" aria-label="Link to The closest-pair recursion is correct on lists sorted by first coordinate" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.closestRec_isAnswer</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a
+linearly ordered field, write <span class="arithmatex">\(d(u, v) = (x - x')^2 + (y - y')^2\)</span> for the squared distance between
+points <span class="arithmatex">\(u = (x, y)\)</span> and <span class="arithmatex">\(v = (x', y')\)</span> of <span class="arithmatex">\(K^2\)</span>, and let <span class="arithmatex">\(xs\)</span> be a list of points in <span class="arithmatex">\(K^2\)</span> sorted
+by first coordinate: whenever an entry precedes another, its first coordinate is at most the
+other's. If the closest-pair recursion returns a value <span class="arithmatex">\(\delta\)</span> on <span class="arithmatex">\(xs\)</span>, then <span class="arithmatex">\(\delta = d(p, q)\)</span>
+for some entries <span class="arithmatex">\(p\)</span>, <span class="arithmatex">\(q\)</span> of <span class="arithmatex">\(xs\)</span> at different positions. For any two entries <span class="arithmatex">\(p\)</span>, <span class="arithmatex">\(q\)</span> of <span class="arithmatex">\(xs\)</span> at
+different positions, the recursion returns a value <span class="arithmatex">\(\delta\)</span> with <span class="arithmatex">\(\delta \le d(p, q)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> closestRec_isAnswer (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) (hs : xs.Pairwise <span class="bp-lean-keyword">fun</span> a b =&gt; a.1 ≤ b.1) :
+    <a class="bp-lean-ref" href="#is-answer" data-lean-name="Cslib.Algorithms.Lean.Geometry.IsAnswer">IsAnswer</a> xs (<a class="bp-lean-ref" href="#closest-rec" data-lean-name="Cslib.Algorithms.Lean.Geometry.closestRec">closestRec</a> xs).ret</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.IsAnswer">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> IsAnswer (ps : List (𝕜 × 𝕜)) (r : Option 𝕜) : <span class="bp-lean-keyword">Prop</span> <span class="bp-lean-keyword">where</span>
+  attained : ∀ δ, r = some δ → ∃ p q, [p, q] &lt;+ ps ∧ dist2 p q = δ
+  lower : ∀ p q, [p, q] &lt;+ ps → ∃ δ, r = some δ ∧ δ ≤ dist2 p q</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:129</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.closestRec">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> closestRec (xs : List (𝕜 × 𝕜)) : TimeM ℕ (Option 𝕜) :=
+  <span class="bp-lean-keyword">if</span> _h : xs.length ≤ 3 <span class="bp-lean-keyword">then</span> bruteMin xs
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">do</span>
+    <span class="bp-lean-keyword">let</span> L := xs.take (xs.length / 2)
+    <span class="bp-lean-keyword">let</span> R := xs.drop (xs.length / 2)
+    <span class="bp-lean-keyword">let</span> dl ← closestRec L
+    <span class="bp-lean-keyword">let</span> dr ← closestRec R
+    <span class="bp-lean-keyword">match</span> omin dl dr <span class="bp-lean-keyword">with</span>
+    | none =&gt; pure none
+    | some δ =&gt;
+        <span class="bp-lean-keyword">let</span> xmid := (L.getLast?.map Prod.fst).getD 0
+        <span class="bp-lean-keyword">let</span> strip := xs.filter <span class="bp-lean-keyword">fun</span> p =&gt; (p.1 - xmid) ^ 2 &lt; δ
+  ⋯</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:101</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 10 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-answer">Closest-pair answer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-rec">Closest-pair recursion</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#brute-min">Brute-force closest pair</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#dist2">Squared distance in the plane</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#min-dist-from">Least squared distance from a point to a list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#min-dist-from-spec">The nearest-point scan returns the least squared distance</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#scan-from">Strip scan from a point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#strip-scan">Closest-pair strip scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#strip-scan-lower">The strip scan bounds every pair with a small vertical gap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../data-structures/range-query-structures/sparse-table/index.html#omin">Option minimum</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-is-answer">The closest-pair algorithm returns the answer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec-time-le">Running time of the closest-pair recursion</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/closest-pair-is-answer">
+<h4 class="bp-thmheading" id="closest-pair-is-answer">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The closest-pair algorithm returns the answer</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean#L462" aria-label="View Cslib.Algorithms.Lean.Geometry.closestPair_isAnswer in Lean source" title="View Cslib.Algorithms.Lean.Geometry.closestPair_isAnswer in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#closest-pair-is-answer" aria-label="Link to The closest-pair algorithm returns the answer" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.closestPair_isAnswer</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field, write
+<span class="arithmatex">\(d(p, q) = (x - x')^2 + (y - y')^2\)</span> for the squared distance between points <span class="arithmatex">\(p = (x, y)\)</span> and
+<span class="arithmatex">\(q = (x', y')\)</span> of <span class="arithmatex">\(K^2\)</span>, and let <span class="arithmatex">\(ps\)</span> be a list of points in <span class="arithmatex">\(K^2\)</span>. If the divide-and-conquer
+closest-pair algorithm returns a value <span class="arithmatex">\(\delta\)</span> on <span class="arithmatex">\(ps\)</span>, then <span class="arithmatex">\(\delta = d(p, q)\)</span> for some entries
+<span class="arithmatex">\(p\)</span>, <span class="arithmatex">\(q\)</span> of <span class="arithmatex">\(ps\)</span> at different positions. For any two entries <span class="arithmatex">\(p\)</span>, <span class="arithmatex">\(q\)</span> of <span class="arithmatex">\(ps\)</span> at different
+positions, the algorithm returns a value <span class="arithmatex">\(\delta\)</span> with <span class="arithmatex">\(\delta \le d(p, q)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> closestPair_isAnswer (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) : <a class="bp-lean-ref" href="#is-answer" data-lean-name="Cslib.Algorithms.Lean.Geometry.IsAnswer">IsAnswer</a> ps (<a class="bp-lean-ref" href="#closest-pair" data-lean-name="Cslib.Algorithms.Lean.Geometry.closestPair">closestPair</a> ps).ret</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.IsAnswer">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> IsAnswer (ps : List (𝕜 × 𝕜)) (r : Option 𝕜) : <span class="bp-lean-keyword">Prop</span> <span class="bp-lean-keyword">where</span>
+  attained : ∀ δ, r = some δ → ∃ p q, [p, q] &lt;+ ps ∧ dist2 p q = δ
+  lower : ∀ p q, [p, q] &lt;+ ps → ∃ δ, r = some δ ∧ δ ≤ dist2 p q</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:129</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.closestPair">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> closestPair (ps : List (𝕜 × 𝕜)) : TimeM ℕ (Option 𝕜) :=
+  closestRec (ps.mergeSort <span class="bp-lean-keyword">fun</span> a b =&gt; a.1 ≤ b.1)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:122</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-answer">Closest-pair answer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-pair">Divide-and-conquer closest pair</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec">Closest-pair recursion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec-is-answer">The closest-pair recursion is correct on lists sorted by first coordinate</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#dist2">Squared distance in the plane</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-eq-brute-min">Divide and conquer agrees with brute force</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-eq-none-iff">The closest-pair algorithm returns no value exactly on fewer than two points</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-spec">Correctness of divide-and-conquer closest pair</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/closest-pair-spec">
+<h4 class="bp-thmheading" id="closest-pair-spec">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Correctness of divide-and-conquer closest pair</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean#L471" aria-label="View Cslib.Algorithms.Lean.Geometry.closestPair_spec in Lean source" title="View Cslib.Algorithms.Lean.Geometry.closestPair_spec in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#closest-pair-spec" aria-label="Link to Correctness of divide-and-conquer closest pair" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.closestPair_spec</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field and let
+<span class="arithmatex">\(ps\)</span> be a list of at least two points in <span class="arithmatex">\(K^2\)</span>. Then the divide-and-conquer closest-pair algorithm
+returns a value <span class="arithmatex">\(\delta\)</span>, and <span class="arithmatex">\(\delta\)</span> is the least squared distance between two entries of <span class="arithmatex">\(ps\)</span>
+at different positions: some two entries at different positions have squared distance <span class="arithmatex">\(\delta\)</span>,
+and any two entries at different positions have squared distance at least <span class="arithmatex">\(\delta\)</span>.</p>
+<p>This is the correctness of CLRS Section 33.4, with distances compared squared.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> closestPair_spec (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) (hps : 2 ≤ ps.length) :
+    ∃ δ, (<a class="bp-lean-ref" href="#closest-pair" data-lean-name="Cslib.Algorithms.Lean.Geometry.closestPair">closestPair</a> ps).ret = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.some#doc" title="Option.some">some</a> δ ∧ <a class="bp-lean-ref" href="#is-min-pair-dist2" data-lean-name="Cslib.Algorithms.Lean.Geometry.IsMinPairDist2">IsMinPairDist2</a> ps δ</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.closestPair">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> closestPair (ps : List (𝕜 × 𝕜)) : TimeM ℕ (Option 𝕜) :=
+  closestRec (ps.mergeSort <span class="bp-lean-keyword">fun</span> a b =&gt; a.1 ≤ b.1)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:122</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.IsMinPairDist2">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsMinPairDist2 (ps : List (𝕜 × 𝕜)) (δ : 𝕜) : <span class="bp-lean-keyword">Prop</span> :=
+  (∃ p q, [p, q] &lt;+ ps ∧ dist2 p q = δ) ∧ ∀ p q, [p, q] &lt;+ ps → δ ≤ dist2 p q</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:62</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-min-pair-dist2">Least pairwise squared distance</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-pair">Divide-and-conquer closest pair</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-answer">Closest-pair answer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-is-answer">The closest-pair algorithm returns the answer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#dist2">Squared distance in the plane</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-eq-none-iff">The closest-pair algorithm returns no value exactly on fewer than two points</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/closest-pair-eq-none-iff">
+<h4 class="bp-thmheading" id="closest-pair-eq-none-iff">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The closest-pair algorithm returns no value exactly on fewer than two points</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean#L480" aria-label="View Cslib.Algorithms.Lean.Geometry.closestPair_eq_none_iff in Lean source" title="View Cslib.Algorithms.Lean.Geometry.closestPair_eq_none_iff in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#closest-pair-eq-none-iff" aria-label="Link to The closest-pair algorithm returns no value exactly on fewer than two points" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.closestPair_eq_none_iff</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a
+linearly ordered field. For every list of points in <span class="arithmatex">\(K^2\)</span>, the divide-and-conquer closest-pair
+algorithm returns no value if and only if the list has fewer than two entries.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> closestPair_eq_none_iff (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) :
+    (<a class="bp-lean-ref" href="#closest-pair" data-lean-name="Cslib.Algorithms.Lean.Geometry.closestPair">closestPair</a> ps).ret = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Option.none#doc" title="Option.none">none</a> ↔ ps.length &lt; 2</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.closestPair">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> closestPair (ps : List (𝕜 × 𝕜)) : TimeM ℕ (Option 𝕜) :=
+  closestRec (ps.mergeSort <span class="bp-lean-keyword">fun</span> a b =&gt; a.1 ≤ b.1)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:122</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 6</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-pair">Divide-and-conquer closest pair</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-answer">Closest-pair answer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-min-pair-dist2">Least pairwise squared distance</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-is-answer">The closest-pair algorithm returns the answer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-spec">Correctness of divide-and-conquer closest pair</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#dist2">Squared distance in the plane</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/closest-pair-eq-brute-min">
+<h4 class="bp-thmheading" id="closest-pair-eq-brute-min">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Divide and conquer agrees with brute force</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean#L498" aria-label="View Cslib.Algorithms.Lean.Geometry.closestPair_eq_bruteMin in Lean source" title="View Cslib.Algorithms.Lean.Geometry.closestPair_eq_bruteMin in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#closest-pair-eq-brute-min" aria-label="Link to Divide and conquer agrees with brute force" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.closestPair_eq_bruteMin</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field. For every
+list of points in <span class="arithmatex">\(K^2\)</span>, the divide-and-conquer closest-pair algorithm returns the same value as
+the brute-force scan (their costs may differ).</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> closestPair_eq_bruteMin (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) :
+    (<a class="bp-lean-ref" href="#closest-pair" data-lean-name="Cslib.Algorithms.Lean.Geometry.closestPair">closestPair</a> ps).ret = (<a class="bp-lean-ref" href="#brute-min" data-lean-name="Cslib.Algorithms.Lean.Geometry.bruteMin">bruteMin</a> ps).ret</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.closestPair">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> closestPair (ps : List (𝕜 × 𝕜)) : TimeM ℕ (Option 𝕜) :=
+  closestRec (ps.mergeSort <span class="bp-lean-keyword">fun</span> a b =&gt; a.1 ≤ b.1)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:122</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.bruteMin">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> bruteMin : List (𝕜 × 𝕜) → TimeM ℕ (Option 𝕜)
+  | [] =&gt; pure none
+  | p :: ps =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> a ← minDistFrom p ps
+      <span class="bp-lean-keyword">let</span> b ← bruteMin ps
+      pure (omin a b)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:74</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 8</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#brute-min">Brute-force closest pair</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-pair">Divide-and-conquer closest pair</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-answer">Closest-pair answer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-is-answer">The closest-pair algorithm returns the answer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#dist2">Squared distance in the plane</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#min-dist-from">Least squared distance from a point to a list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#min-dist-from-spec">The nearest-point scan returns the least squared distance</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../data-structures/range-query-structures/sparse-table/index.html#omin">Option minimum</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/brute-min-time">
+<h4 class="bp-thmheading" id="brute-min-time">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Cost of the brute-force closest-pair scan</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean#L515" aria-label="View Cslib.Algorithms.Lean.Geometry.bruteMin_time in Lean source" title="View Cslib.Algorithms.Lean.Geometry.bruteMin_time in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#brute-min-time" aria-label="Link to Cost of the brute-force closest-pair scan" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.bruteMin_time</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a field with a linear order and let
+<span class="arithmatex">\(ps\)</span> be a list of <span class="arithmatex">\(n\)</span> points in <span class="arithmatex">\(K^2\)</span>. Counting one unit of cost per squared distance computed,
+twice the cost of the brute-force scan on <span class="arithmatex">\(ps\)</span> equals <span class="arithmatex">\(n(n-1)\)</span>; that is, the scan computes exactly
+<span class="arithmatex">\(n(n-1)/2\)</span> squared distances.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> bruteMin_time (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) :
+    2 * (<a class="bp-lean-ref" href="#brute-min" data-lean-name="Cslib.Algorithms.Lean.Geometry.bruteMin">bruteMin</a> ps).time = ps.length * (ps.length - 1)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.bruteMin">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> bruteMin : List (𝕜 × 𝕜) → TimeM ℕ (Option 𝕜)
+  | [] =&gt; pure none
+  | p :: ps =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> a ← minDistFrom p ps
+      <span class="bp-lean-keyword">let</span> b ← bruteMin ps
+      pure (omin a b)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:74</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#brute-min">Brute-force closest pair</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#dist2">Squared distance in the plane</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#min-dist-from">Least squared distance from a point to a list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../data-structures/range-query-structures/sparse-table/index.html#omin">Option minimum</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec-time-le">Running time of the closest-pair recursion</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/tagged">
+<h4 class="bp-thmheading" id="tagged">
+<span class="bp-thmcaption" data-search-exclude>Abbreviation</span><span class="bp-thmtitle">Side-tagged points</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPairTime.lean#L52" aria-label="View Cslib.Algorithms.Lean.Geometry.Tagged in Lean source" title="View Cslib.Algorithms.Lean.Geometry.Tagged in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#tagged" aria-label="Link to Side-tagged points" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.Tagged</div>
+<div class="bp-thmcontent">
+<p>A tagged point is a pair <span class="arithmatex">\((p, s)\)</span> of a point <span class="arithmatex">\(p \in \mathbb{R}^2\)</span> and a
+Boolean <span class="arithmatex">\(s\)</span>, read as the side of the dividing line on which <span class="arithmatex">\(p\)</span> lies: false for left, true for
+right.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Tagged := (ℝ × ℝ) × <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a></code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec-time-le">Running time of the closest-pair recursion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#in-strip">Strip points</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#length-le-seven">Packing bound for the strip</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#same-side-far">Same-side points far apart</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#strip-scan-time-le">Cost of the strip scan</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/same-side-far">
+<h4 class="bp-thmheading" id="same-side-far">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Same-side points far apart</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPairTime.lean#L55" aria-label="View Cslib.Algorithms.Lean.Geometry.SameSideFar in Lean source" title="View Cslib.Algorithms.Lean.Geometry.SameSideFar in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#same-side-far" aria-label="Link to Same-side points far apart" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.SameSideFar</div>
+<div class="bp-thmcontent">
+<p>For a real <span class="arithmatex">\(\delta\)</span>, two tagged points <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span> are
+same-side far apart when, if <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span> carry the same side, the squared distance between their
+points is at least <span class="arithmatex">\(\delta\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> SameSideFar (δ : ℝ) (a b : <a class="bp-lean-ref" href="#tagged" data-lean-name="Cslib.Algorithms.Lean.Geometry.Tagged">Tagged</a>) : <span class="bp-lean-keyword">Prop</span> := a.2 = b.2 → δ ≤ <a class="bp-lean-ref" href="#dist2" data-lean-name="Cslib.Algorithms.Lean.Geometry.dist2">dist2</a> a.1 b.1</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.Tagged">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Tagged := (ℝ × ℝ) × Bool</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPairTime.lean:52</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.dist2">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> dist2 (p q : 𝕜 × 𝕜) : 𝕜 := (p.1 - q.1) ^ 2 + (p.2 - q.2) ^ 2</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:59</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#tagged">Side-tagged points</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#dist2">Squared distance in the plane</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec-time-le">Running time of the closest-pair recursion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#length-le-seven">Packing bound for the strip</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#strip-scan-time-le">Cost of the strip scan</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/in-strip">
+<h4 class="bp-thmheading" id="in-strip">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Strip points</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPairTime.lean#L58" aria-label="View Cslib.Algorithms.Lean.Geometry.InStrip in Lean source" title="View Cslib.Algorithms.Lean.Geometry.InStrip in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#in-strip" aria-label="Link to Strip points" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.InStrip</div>
+<div class="bp-thmcontent">
+<p>Given reals <span class="arithmatex">\(\delta\)</span> and <span class="arithmatex">\(x_{\mathrm{mid}}\)</span>, a tagged point <span class="arithmatex">\(((x, y), s)\)</span> lies
+in the strip when <span class="arithmatex">\((x - x_{\mathrm{mid}})^2 &lt; \delta\)</span>, and moreover <span class="arithmatex">\(x \le x_{\mathrm{mid}}\)</span> if its
+side <span class="arithmatex">\(s\)</span> is left (<span class="arithmatex">\(s\)</span> false) and <span class="arithmatex">\(x_{\mathrm{mid}} \le x\)</span> if its side <span class="arithmatex">\(s\)</span> is right (<span class="arithmatex">\(s\)</span> true).</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> InStrip (δ xmid : ℝ) (a : <a class="bp-lean-ref" href="#tagged" data-lean-name="Cslib.Algorithms.Lean.Geometry.Tagged">Tagged</a>) : <span class="bp-lean-keyword">Prop</span> :=
+  (a.1.1 - xmid) ^ 2 &lt; δ ∧ (a.2 = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a> → a.1.1 ≤ xmid) ∧ (a.2 = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a> → xmid ≤ a.1.1)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.Tagged">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Tagged := (ℝ × ℝ) × Bool</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPairTime.lean:52</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#tagged">Side-tagged points</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec-time-le">Running time of the closest-pair recursion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#length-le-seven">Packing bound for the strip</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#strip-scan-time-le">Cost of the strip scan</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/length-le-seven">
+<h4 class="bp-thmheading" id="length-le-seven">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Packing bound for the strip</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPairTime.lean#L112" aria-label="View Cslib.Algorithms.Lean.Geometry.length_le_seven in Lean source" title="View Cslib.Algorithms.Lean.Geometry.length_le_seven in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#length-le-seven" aria-label="Link to Packing bound for the strip" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.length_le_seven</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\delta\)</span> and <span class="arithmatex">\(x_{\mathrm{mid}}\)</span> be reals, <span class="arithmatex">\(p\)</span> a tagged
+point, <span class="arithmatex">\(Z\)</span> a list of tagged points, and <span class="arithmatex">\(L\)</span> the list <span class="arithmatex">\(p\)</span> followed by <span class="arithmatex">\(Z\)</span>; write <span class="arithmatex">\(y_a\)</span> for the
+<span class="arithmatex">\(y\)</span>-coordinate of a tagged point <span class="arithmatex">\(a\)</span>. Suppose every point of <span class="arithmatex">\(L\)</span> lies in the strip for <span class="arithmatex">\(\delta\)</span> and
+<span class="arithmatex">\(x_{\mathrm{mid}}\)</span>, any two points of <span class="arithmatex">\(L\)</span> at different positions with the same side are at squared
+distance at least <span class="arithmatex">\(\delta\)</span>, and every point <span class="arithmatex">\(a\)</span> of <span class="arithmatex">\(Z\)</span> satisfies <span class="arithmatex">\(y_p \le y_a\)</span> and
+<span class="arithmatex">\((y_a - y_p)^2 &lt; \delta\)</span>. Then <span class="arithmatex">\(Z\)</span> has at most <span class="arithmatex">\(7\)</span> entries.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> length_le_seven {δ xmid : ℝ} (p : <a class="bp-lean-ref" href="#tagged" data-lean-name="Cslib.Algorithms.Lean.Geometry.Tagged">Tagged</a>) (Z : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-ref" href="#tagged" data-lean-name="Cslib.Algorithms.Lean.Geometry.Tagged">Tagged</a>)
+    (hpair : (p :: Z).Pairwise (<a class="bp-lean-ref" href="#same-side-far" data-lean-name="Cslib.Algorithms.Lean.Geometry.SameSideFar">SameSideFar</a> δ))
+    (hstrip : ∀ a ∈ p :: Z, <a class="bp-lean-ref" href="#in-strip" data-lean-name="Cslib.Algorithms.Lean.Geometry.InStrip">InStrip</a> δ xmid a)
+    (hy : ∀ a ∈ Z, p.1.2 ≤ a.1.2 ∧ (a.1.2 - p.1.2) ^ 2 &lt; δ) :
+    Z.length ≤ 7</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.Tagged">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Tagged := (ℝ × ℝ) × Bool</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPairTime.lean:52</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.SameSideFar">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> SameSideFar (δ : ℝ) (a b : Tagged) : <span class="bp-lean-keyword">Prop</span> := a.2 = b.2 → δ ≤ dist2 a.1 b.1</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPairTime.lean:55</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.InStrip">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> InStrip (δ xmid : ℝ) (a : Tagged) : <span class="bp-lean-keyword">Prop</span> :=
+  (a.1.1 - xmid) ^ 2 &lt; δ ∧ (a.2 = false → a.1.1 ≤ xmid) ∧ (a.2 = true → xmid ≤ a.1.1)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPairTime.lean:58</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>CLRS, third edition, Section 33.4, the packing argument.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#in-strip">Strip points</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#same-side-far">Same-side points far apart</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#tagged">Side-tagged points</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#dist2">Squared distance in the plane</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#strip-scan-time-le">Cost of the strip scan</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/scan-from-time">
+<h4 class="bp-thmheading" id="scan-from-time">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Cost of the scan from one strip point</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPairTime.lean#L164" aria-label="View Cslib.Algorithms.Lean.Geometry.scanFrom_time in Lean source" title="View Cslib.Algorithms.Lean.Geometry.scanFrom_time in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#scan-from-time" aria-label="Link to Cost of the scan from one strip point" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.scanFrom_time</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\delta\)</span> be a real, <span class="arithmatex">\(q = (q_1, q_2)\)</span> a point of
+<span class="arithmatex">\(\mathbb{R}^2\)</span> and <span class="arithmatex">\(L\)</span> a list of points of <span class="arithmatex">\(\mathbb{R}^2\)</span>. The cost of the scan from <span class="arithmatex">\(q\)</span> over <span class="arithmatex">\(L\)</span>
+with threshold <span class="arithmatex">\(\delta\)</span>, one unit per squared distance computed, equals the length of the longest
+initial segment of <span class="arithmatex">\(L\)</span> all of whose points <span class="arithmatex">\(r = (r_1, r_2)\)</span> satisfy <span class="arithmatex">\((r_2 - q_2)^2 &lt; \delta\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> scanFrom_time (δ : ℝ) (q : ℝ × ℝ) (L : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (ℝ × ℝ)) :
+    (<a class="bp-lean-ref" href="#scan-from" data-lean-name="Cslib.Algorithms.Lean.Geometry.scanFrom">scanFrom</a> δ q L).time = (L.takeWhile <span class="bp-lean-keyword">fun</span> r =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Decidable.decide#doc" title="Decidable.decide">decide</a> ((r.2 - q.2) ^ 2 &lt; δ)).length</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.scanFrom">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> scanFrom (δ : 𝕜) (p : 𝕜 × 𝕜) : List (𝕜 × 𝕜) → TimeM ℕ (Option 𝕜)
+  | [] =&gt; pure none
+  | q :: qs =&gt;
+      <span class="bp-lean-keyword">if</span> (q.2 - p.2) ^ 2 &lt; δ <span class="bp-lean-keyword">then</span> <span class="bp-lean-keyword">do</span>
+        ✓
+        <span class="bp-lean-keyword">let</span> r ← scanFrom δ p qs
+        pure (omin (some (dist2 p q)) r)
+      <span class="bp-lean-keyword">else</span> pure none</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:83</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#scan-from">Strip scan from a point</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#dist2">Squared distance in the plane</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../data-structures/range-query-structures/sparse-table/index.html#omin">Option minimum</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#strip-scan-time-le">Cost of the strip scan</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/strip-scan-time-le">
+<h4 class="bp-thmheading" id="strip-scan-time-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Cost of the strip scan</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPairTime.lean#L176" aria-label="View Cslib.Algorithms.Lean.Geometry.stripScan_time_le in Lean source" title="View Cslib.Algorithms.Lean.Geometry.stripScan_time_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#strip-scan-time-le" aria-label="Link to Cost of the strip scan" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.stripScan_time_le</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\delta\)</span> and <span class="arithmatex">\(x_{\mathrm{mid}}\)</span> be reals and <span class="arithmatex">\(Y\)</span> a list of
+tagged points that is sorted by nondecreasing <span class="arithmatex">\(y\)</span>-coordinate, whose points all lie in the strip for
+<span class="arithmatex">\(\delta\)</span> and <span class="arithmatex">\(x_{\mathrm{mid}}\)</span>, and in which any two points at different positions with the same
+side are at squared distance at least <span class="arithmatex">\(\delta\)</span>. Then the strip scan with parameter <span class="arithmatex">\(\delta\)</span> over the
+underlying points of <span class="arithmatex">\(Y\)</span> (tags forgotten) computes at most <span class="arithmatex">\(7m\)</span> squared distances, where <span class="arithmatex">\(m\)</span> is the
+length of <span class="arithmatex">\(Y\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> stripScan_time_le (δ xmid : ℝ) (Y : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-ref" href="#tagged" data-lean-name="Cslib.Algorithms.Lean.Geometry.Tagged">Tagged</a>)
+    (hsorted : Y.Pairwise <span class="bp-lean-keyword">fun</span> a b =&gt; a.1.2 ≤ b.1.2) (hpair : Y.Pairwise (<a class="bp-lean-ref" href="#same-side-far" data-lean-name="Cslib.Algorithms.Lean.Geometry.SameSideFar">SameSideFar</a> δ))
+    (hstrip : ∀ a ∈ Y, <a class="bp-lean-ref" href="#in-strip" data-lean-name="Cslib.Algorithms.Lean.Geometry.InStrip">InStrip</a> δ xmid a) :
+    (<a class="bp-lean-ref" href="#strip-scan" data-lean-name="Cslib.Algorithms.Lean.Geometry.stripScan">stripScan</a> δ (Y.map <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Prod.fst#doc" title="Prod.fst">Prod.fst</a>)).time ≤ 7 * Y.length</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.Tagged">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Tagged := (ℝ × ℝ) × Bool</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPairTime.lean:52</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.SameSideFar">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> SameSideFar (δ : ℝ) (a b : Tagged) : <span class="bp-lean-keyword">Prop</span> := a.2 = b.2 → δ ≤ dist2 a.1 b.1</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPairTime.lean:55</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.InStrip">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> InStrip (δ xmid : ℝ) (a : Tagged) : <span class="bp-lean-keyword">Prop</span> :=
+  (a.1.1 - xmid) ^ 2 &lt; δ ∧ (a.2 = false → a.1.1 ≤ xmid) ∧ (a.2 = true → xmid ≤ a.1.1)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPairTime.lean:58</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.stripScan">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> stripScan (δ : 𝕜) : List (𝕜 × 𝕜) → TimeM ℕ (Option 𝕜)
+  | [] =&gt; pure none
+  | p :: ps =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> a ← scanFrom δ p ps
+      <span class="bp-lean-keyword">let</span> b ← stripScan δ ps
+      pure (omin a b)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:93</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 8 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#in-strip">Strip points</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#same-side-far">Same-side points far apart</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#tagged">Side-tagged points</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#strip-scan">Closest-pair strip scan</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#length-le-seven">Packing bound for the strip</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#scan-from">Strip scan from a point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#scan-from-time">Cost of the scan from one strip point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../data-structures/range-query-structures/sparse-table/index.html#omin">Option minimum</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec-time-le">Running time of the closest-pair recursion</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/closest-rec-time-le">
+<h4 class="bp-thmheading" id="closest-rec-time-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Running time of the closest-pair recursion</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPairTime.lean#L218" aria-label="View Cslib.Algorithms.Lean.Geometry.closestRec_time_le in Lean source" title="View Cslib.Algorithms.Lean.Geometry.closestRec_time_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#closest-rec-time-le" aria-label="Link to Running time of the closest-pair recursion" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.closestRec_time_le</div>
+<div class="bp-thmcontent">
+<p>For every list of <span class="arithmatex">\(n\)</span> points in <span class="arithmatex">\(\mathbb{R}^2\)</span>
+sorted by nondecreasing <span class="arithmatex">\(x\)</span>-coordinate, the divide-and-conquer recursion of the closest-pair
+algorithm computes at most <span class="arithmatex">\(7 n \lceil \log_2 n \rceil + n\)</span> squared distances, where
+<span class="arithmatex">\(\lceil \log_2 0 \rceil\)</span> is read as <span class="arithmatex">\(0\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> closestRec_time_le (xs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (ℝ × ℝ)) (hs : xs.Pairwise <span class="bp-lean-keyword">fun</span> a b =&gt; a.1 ≤ b.1) :
+    (<a class="bp-lean-ref" href="#closest-rec" data-lean-name="Cslib.Algorithms.Lean.Geometry.closestRec">closestRec</a> xs).time ≤ 7 * xs.length * <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat.clog#doc" title="Nat.clog">Nat.clog</a> 2 xs.length + xs.length</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.closestRec">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> closestRec (xs : List (𝕜 × 𝕜)) : TimeM ℕ (Option 𝕜) :=
+  <span class="bp-lean-keyword">if</span> _h : xs.length ≤ 3 <span class="bp-lean-keyword">then</span> bruteMin xs
+  <span class="bp-lean-keyword">else</span> <span class="bp-lean-keyword">do</span>
+    <span class="bp-lean-keyword">let</span> L := xs.take (xs.length / 2)
+    <span class="bp-lean-keyword">let</span> R := xs.drop (xs.length / 2)
+    <span class="bp-lean-keyword">let</span> dl ← closestRec L
+    <span class="bp-lean-keyword">let</span> dr ← closestRec R
+    <span class="bp-lean-keyword">match</span> omin dl dr <span class="bp-lean-keyword">with</span>
+    | none =&gt; pure none
+    | some δ =&gt;
+        <span class="bp-lean-keyword">let</span> xmid := (L.getLast?.map Prod.fst).getD 0
+        <span class="bp-lean-keyword">let</span> strip := xs.filter <span class="bp-lean-keyword">fun</span> p =&gt; (p.1 - xmid) ^ 2 &lt; δ
+  ⋯</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:101</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 12 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-rec">Closest-pair recursion</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#in-strip">Strip points</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-answer">Closest-pair answer</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#same-side-far">Same-side points far apart</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#tagged">Side-tagged points</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#brute-min">Brute-force closest pair</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#brute-min-time">Cost of the brute-force closest-pair scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec-is-answer">The closest-pair recursion is correct on lists sorted by first coordinate</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#dist2">Squared distance in the plane</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#strip-scan">Closest-pair strip scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#strip-scan-time-le">Cost of the strip scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../data-structures/range-query-structures/sparse-table/index.html#omin">Option minimum</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-pair-time-le">Running time of the closest-pair algorithm</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/closest-pair-of-points-problem/closest-pair-time-le">
+<h4 class="bp-thmheading" id="closest-pair-time-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Running time of the closest-pair algorithm</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ClosestPairTime.lean#L356" aria-label="View Cslib.Algorithms.Lean.Geometry.closestPair_time_le in Lean source" title="View Cslib.Algorithms.Lean.Geometry.closestPair_time_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#closest-pair-time-le" aria-label="Link to Running time of the closest-pair algorithm" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.closestPair_time_le</div>
+<div class="bp-thmcontent">
+<p>For every list of <span class="arithmatex">\(n\)</span> points in <span class="arithmatex">\(\mathbb{R}^2\)</span>,
+the closest-pair algorithm computes at most <span class="arithmatex">\(7 n \lceil \log_2 n \rceil + n\)</span> squared distances,
+where <span class="arithmatex">\(\lceil \log_2 0 \rceil\)</span> is read as <span class="arithmatex">\(0\)</span>. In particular it computes <span class="arithmatex">\(O(n \log n)\)</span> distances.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> closestPair_time_le (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (ℝ × ℝ)) :
+    (<a class="bp-lean-ref" href="#closest-pair" data-lean-name="Cslib.Algorithms.Lean.Geometry.closestPair">closestPair</a> ps).time ≤ 7 * ps.length * <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat.clog#doc" title="Nat.clog">Nat.clog</a> 2 ps.length + ps.length</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.closestPair">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> closestPair (ps : List (𝕜 × 𝕜)) : TimeM ℕ (Option 𝕜) :=
+  closestRec (ps.mergeSort <span class="bp-lean-keyword">fun</span> a b =&gt; a.1 ≤ b.1)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ClosestPair.lean:122</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_1">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>CLRS, third edition, Section 33.4.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#closest-pair">Divide-and-conquer closest pair</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec">Closest-pair recursion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#closest-rec-time-le">Running time of the closest-pair recursion</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>25</strong> fully proved</span></div>
+</div>
+</div>
+<p><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../dependencies/index.json" data-graph-src="../../../../dependencies/scopes/ComputerScience/computational-geometry/closest-pair-of-points-problem.json" data-page-href="index.html" data-scope-id="ComputerScience/computational-geometry/closest-pair-of-points-problem">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>

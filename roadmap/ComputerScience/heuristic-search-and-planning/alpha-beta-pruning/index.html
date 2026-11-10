@@ -1,0 +1,5539 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../ac-3-algorithm/index.html">
+      
+      
+        <link rel="next" href="../value-iteration/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Alpha–beta pruning - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#scan-bounds-and-order-facts" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Alpha–beta pruning
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23" id="__nav_2_1_23_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_23_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Computer Science
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../data-structures/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data structures
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../graph-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../process-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Process calculi and behavioural equivalence
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../type-systems-and-lambda-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Type systems and lambda calculi
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../programming-language-semantics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programming language semantics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../machine-learning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Machine learning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../sorting-and-searching/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sorting and searching
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../dynamic-programming/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic programming
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../greedy-algorithms-and-matroids/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Greedy algorithms and matroids
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../approximation-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Approximation algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../online-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Online algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../randomized-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Randomized algorithms and probabilistic analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../parallel-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../algebraic-and-numerical-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic and numerical algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../computational-geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computational geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../string-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    String algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23_18" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heuristic search and planning
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23_18" id="__nav_2_1_23_18_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_23_18_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23_18">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Heuristic search and planning
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../a-search-algorithm/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A&#42; search algorithm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ac-3-algorithm/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AC-3 algorithm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Alpha–beta pruning
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Alpha–beta pruning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#scan-bounds-and-order-facts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scan bounds and order facts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cost
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-minimax-value-from-here-on-the-order-is-bounded" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The minimax value; from here on the order is bounded
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#correctness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Correctness
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../value-iteration/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Value iteration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../policy-iteration/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Policy iteration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../cryptography/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cryptography
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../databases/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Databases
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../quantum-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../concurrent-systems-and-protocols/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concurrent systems and protocols
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../program-logics-and-verification/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Program logics and verification
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#scan-bounds-and-order-facts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scan bounds and order facts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cost
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-minimax-value-from-here-on-the-order-is-bounded" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The minimax value; from here on the order is bounded
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#correctness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Correctness
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../index.html" tabindex="-1">Computer Science</a></li><li><a href="../index.html" tabindex="-1">Heuristic search and planning</a></li><li aria-current="page">Alpha–beta pruning</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Alpha–beta pruning</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="ComputerScience/heuristic-search-and-planning/alpha-beta-pruning" data-page-title="Alpha–beta pruning">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="alphabeta-pruning">Alpha–beta pruning</h1>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/heuristic-search-and-planning/alpha-beta-pruning/game-tree">
+<h4 class="bp-thmheading" id="game-tree">
+<span class="bp-thmcaption" data-search-exclude>Inductive</span><span class="bp-thmtitle">Game tree</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean#L60" aria-label="View Cslib.Algorithms.Lean.AlphaBeta.GameTree in Lean source" title="View Cslib.Algorithms.Lean.AlphaBeta.GameTree in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#game-tree" aria-label="Link to Game tree" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.AlphaBeta.GameTree</div>
+<div class="bp-thmcontent">
+<p>A game tree with values in a type <span class="arithmatex">\(\alpha\)</span> is either a leaf, which carries a
+value in <span class="arithmatex">\(\alpha\)</span> (the value of a terminal position), or an inner node, which carries a finite
+list of game trees (the positions reachable in one move; the list may be empty). Game trees are
+built inductively, so every game tree is finite.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> GameTree (α : <span class="bp-lean-keyword">Type</span> u) <span class="bp-lean-keyword">where</span>
+  | leaf : α → GameTree α
+  | node : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (GameTree α) → GameTree α</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 16</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta">Alpha-beta pruning</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-bot-top">Alpha-beta with the full window returns the minimax value</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-eq-of-mem-window">Alpha-beta is exact inside the window</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-le-of-minimax-le">Alpha-beta fails low when the minimax value is at most the lower bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-list">Alpha-beta scan of the children</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-list-false-le">The minimizer&#x27;s alpha-beta scan stays at or below its upper bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-list-spec">Correctness of the alpha-beta scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-list-time-le">Cost of the alpha-beta scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-spec">Alpha-beta is correct</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-time-le">Alpha-beta never evaluates more leaves than the tree has</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#le-alpha-beta-list-true">Lower bound for the maximizer&#x27;s scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#le-alpha-beta-of-le-minimax">Alpha-beta at or above the top of the window</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#leaves">Number of leaves</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#leaves-list">Number of leaves of a list of game trees</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#minimax">Minimax value</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#minimax-list">Minimax value of a list of positions</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/heuristic-search-and-planning/alpha-beta-pruning/leaves">
+<h4 class="bp-thmheading" id="leaves">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Number of leaves</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean#L68" aria-label="View Cslib.Algorithms.Lean.AlphaBeta.leaves in Lean source" title="View Cslib.Algorithms.Lean.AlphaBeta.leaves in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#leaves" aria-label="Link to Number of leaves" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.AlphaBeta.leaves</div>
+<div class="bp-thmcontent">
+<p>The number of leaves of a game tree is defined recursively: a leaf counts
+<span class="arithmatex">\(1\)</span>, and an inner node counts the total number of leaves of its children (so an inner node without
+children counts <span class="arithmatex">\(0\)</span>).</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> leaves : <a class="bp-lean-ref" href="#game-tree" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">GameTree</a> α → ℕ
+  | .leaf _ =&gt; 1
+  | .node ts =&gt; <a class="bp-lean-ref" href="#leaves-list" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.leavesList">leavesList</a> ts</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> GameTree (α : <span class="bp-lean-keyword">Type</span> u) <span class="bp-lean-keyword">where</span>
+  | leaf : α → GameTree α
+  | node : List (GameTree α) → GameTree α</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.leavesList">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> leavesList : List (GameTree α) → ℕ
+  | [] =&gt; 0
+  | t :: ts =&gt; leaves t + leavesList ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:73</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#game-tree">Game tree</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-list-time-le">Cost of the alpha-beta scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-time-le">Alpha-beta never evaluates more leaves than the tree has</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/heuristic-search-and-planning/alpha-beta-pruning/leaves-list">
+<h4 class="bp-thmheading" id="leaves-list">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Number of leaves of a list of game trees</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean#L73" aria-label="View Cslib.Algorithms.Lean.AlphaBeta.leavesList in Lean source" title="View Cslib.Algorithms.Lean.AlphaBeta.leavesList in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#leaves-list" aria-label="Link to Number of leaves of a list of game trees" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.AlphaBeta.leavesList</div>
+<div class="bp-thmcontent">
+<p>The number of leaves of a finite list of game
+trees is the sum of the numbers of leaves of its members (<span class="arithmatex">\(0\)</span> for the empty list).</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> leavesList : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#game-tree" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">GameTree</a> α) → ℕ
+  | [] =&gt; 0
+  | t :: ts =&gt; <a class="bp-lean-ref" href="#leaves" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.leaves">leaves</a> t + leavesList ts</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> GameTree (α : <span class="bp-lean-keyword">Type</span> u) <span class="bp-lean-keyword">where</span>
+  | leaf : α → GameTree α
+  | node : List (GameTree α) → GameTree α</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.leaves">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> leaves : GameTree α → ℕ
+  | .leaf _ =&gt; 1
+  | .node ts =&gt; leavesList ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:68</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#game-tree">Game tree</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-list-time-le">Cost of the alpha-beta scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-time-le">Alpha-beta never evaluates more leaves than the tree has</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/heuristic-search-and-planning/alpha-beta-pruning/alpha-beta">
+<h4 class="bp-thmheading" id="alpha-beta">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Alpha-beta pruning</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean#L82" aria-label="View Cslib.Algorithms.Lean.AlphaBeta.alphaBeta in Lean source" title="View Cslib.Algorithms.Lean.AlphaBeta.alphaBeta in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#alpha-beta" aria-label="Link to Alpha-beta pruning" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.AlphaBeta.alphaBeta</div>
+<div class="bp-thmcontent">
+<p>For a player <span class="arithmatex">\(p\)</span> to move and values <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span> in a linear order,
+alpha-beta pruning with window <span class="arithmatex">\([a, b]\)</span> returns the value of a leaf at a cost of one unit (one
+leaf evaluation), and on an inner node runs the alpha-beta scan of its children for <span class="arithmatex">\(p\)</span> with
+window <span class="arithmatex">\([a, b]\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> alphaBeta : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → α → α → <a class="bp-lean-ref" href="#game-tree" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">GameTree</a> α → TimeM ℕ α
+  | _, _, _, .leaf x =&gt; <span class="bp-lean-keyword">do</span>
+      TimeM.tick 1
+      <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> x
+  | p, a, b, .node ts =&gt; <a class="bp-lean-ref" href="#alpha-beta-list" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList">alphaBetaList</a> p a b ts</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> GameTree (α : <span class="bp-lean-keyword">Type</span> u) <span class="bp-lean-keyword">where</span>
+  | leaf : α → GameTree α
+  | node : List (GameTree α) → GameTree α</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> alphaBetaList : Bool → α → α → List (GameTree α) → TimeM ℕ α
+  | true, a, _, [] =&gt; pure a
+  | false, _, b, [] =&gt; pure b
+  | true, a, b, t :: ts =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> v ← alphaBeta false a b t
+      <span class="bp-lean-keyword">let</span> a&#x27; := max a v
+      <span class="bp-lean-keyword">if</span> b ≤ a&#x27; <span class="bp-lean-keyword">then</span> pure a&#x27; <span class="bp-lean-keyword">else</span> alphaBetaList true a&#x27; b ts
+  | false, a, b, t :: ts =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> v ← alphaBeta true a b t
+      <span class="bp-lean-keyword">let</span> b&#x27; := min b v
+      <span class="bp-lean-keyword">if</span> b&#x27; ≤ a <span class="bp-lean-keyword">then</span> pure b&#x27; <span class="bp-lean-keyword">else</span> alphaBetaList false a b&#x27; ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:90</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 10</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#game-tree">Game tree</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-bot-top">Alpha-beta with the full window returns the minimax value</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-eq-of-mem-window">Alpha-beta is exact inside the window</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-le-of-minimax-le">Alpha-beta fails low when the minimax value is at most the lower bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-list-false-le">The minimizer&#x27;s alpha-beta scan stays at or below its upper bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-list-spec">Correctness of the alpha-beta scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-list-time-le">Cost of the alpha-beta scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-spec">Alpha-beta is correct</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-time-le">Alpha-beta never evaluates more leaves than the tree has</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#le-alpha-beta-list-true">Lower bound for the maximizer&#x27;s scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#le-alpha-beta-of-le-minimax">Alpha-beta at or above the top of the window</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/heuristic-search-and-planning/alpha-beta-pruning/alpha-beta-list">
+<h4 class="bp-thmheading" id="alpha-beta-list">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Alpha-beta scan of the children</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean#L90" aria-label="View Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList in Lean source" title="View Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#alpha-beta-list" aria-label="Link to Alpha-beta scan of the children" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList</div>
+<div class="bp-thmcontent">
+<p>Given the player <span class="arithmatex">\(p\)</span> to move, values <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span> in a
+linear order and a list of game trees (the children of a position), the scan runs alpha-beta
+pruning for the other player on the children in order, each time with the current bounds <span class="arithmatex">\(a\)</span> and
+<span class="arithmatex">\(b\)</span>. The maximizer replaces <span class="arithmatex">\(a\)</span> by <span class="arithmatex">\(\max(a, v)\)</span>, where <span class="arithmatex">\(v\)</span> is the child's returned value, and
+stops as soon as <span class="arithmatex">\(b \le a\)</span>, returning the new <span class="arithmatex">\(a\)</span>; if it never stops early it returns the final
+<span class="arithmatex">\(a\)</span> (<span class="arithmatex">\(a\)</span> itself for an empty list). The minimizer replaces <span class="arithmatex">\(b\)</span> by <span class="arithmatex">\(\min(b, v)\)</span> and stops as soon
+as <span class="arithmatex">\(b \le a\)</span>, returning the new <span class="arithmatex">\(b\)</span>; if it never stops early it returns the final <span class="arithmatex">\(b\)</span> (<span class="arithmatex">\(b\)</span> itself
+for an empty list). The cost of the scan is the total cost of the children it evaluates.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> alphaBetaList : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → α → α → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#game-tree" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">GameTree</a> α) → TimeM ℕ α
+  | <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a>, a, _, [] =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> a
+  | <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a>, _, b, [] =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> b
+  | <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a>, a, b, t :: ts =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> v ← <a class="bp-lean-ref" href="#alpha-beta" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBeta">alphaBeta</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a> a b t
+      <span class="bp-lean-keyword">let</span> a&#x27; := <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Max.max#doc" title="Max.max">max</a> a v
+      <span class="bp-lean-keyword">if</span> b ≤ a&#x27; <span class="bp-lean-keyword">then</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> a&#x27; <span class="bp-lean-keyword">else</span> alphaBetaList <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a> a&#x27; b ts
+  | <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a>, a, b, t :: ts =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> v ← <a class="bp-lean-ref" href="#alpha-beta" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBeta">alphaBeta</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a> a b t
+      <span class="bp-lean-keyword">let</span> b&#x27; := <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Min.min#doc" title="Min.min">min</a> b v
+      <span class="bp-lean-keyword">if</span> b&#x27; ≤ a <span class="bp-lean-keyword">then</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> b&#x27; <span class="bp-lean-keyword">else</span> alphaBetaList <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a> a b&#x27; ts</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> GameTree (α : <span class="bp-lean-keyword">Type</span> u) <span class="bp-lean-keyword">where</span>
+  | leaf : α → GameTree α
+  | node : List (GameTree α) → GameTree α</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBeta">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> alphaBeta : Bool → α → α → GameTree α → TimeM ℕ α
+  | _, _, _, .leaf x =&gt; <span class="bp-lean-keyword">do</span>
+      TimeM.tick 1
+      pure x
+  | p, a, b, .node ts =&gt; alphaBetaList p a b ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:82</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 6</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#game-tree">Game tree</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-list-false-le">The minimizer&#x27;s alpha-beta scan stays at or below its upper bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-list-spec">Correctness of the alpha-beta scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-list-time-le">Cost of the alpha-beta scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-spec">Alpha-beta is correct</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-time-le">Alpha-beta never evaluates more leaves than the tree has</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#le-alpha-beta-list-true">Lower bound for the maximizer&#x27;s scan</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>17</strong> fully proved</span></div>
+</div>
+<h2 id="scan-bounds-and-order-facts">Scan bounds and order facts</h2>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/heuristic-search-and-planning/alpha-beta-pruning/le-alpha-beta-list-true">
+<h4 class="bp-thmheading" id="le-alpha-beta-list-true">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Lower bound for the maximizer&#x27;s scan</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean#L106" aria-label="View Cslib.Algorithms.Lean.AlphaBeta.le_alphaBetaList_true in Lean source" title="View Cslib.Algorithms.Lean.AlphaBeta.le_alphaBetaList_true in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#le-alpha-beta-list-true" aria-label="Link to Lower bound for the maximizer&#x27;s scan" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.AlphaBeta.le_alphaBetaList_true</div>
+<div class="bp-thmcontent">
+<p>Let values lie in a linear order. For all values <span class="arithmatex">\(a\)</span>
+and <span class="arithmatex">\(b\)</span> and every finite list of game trees, the value returned by the alpha-beta scan of the list
+with the maximizer to move and window <span class="arithmatex">\([a, b]\)</span> is at least <span class="arithmatex">\(a\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> le_alphaBetaList_true (a b : α) :
+    ∀ ts : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#game-tree" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">GameTree</a> α), a ≤ (<a class="bp-lean-ref" href="#alpha-beta-list" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList">alphaBetaList</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a> a b ts).ret</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> GameTree (α : <span class="bp-lean-keyword">Type</span> u) <span class="bp-lean-keyword">where</span>
+  | leaf : α → GameTree α
+  | node : List (GameTree α) → GameTree α</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> alphaBetaList : Bool → α → α → List (GameTree α) → TimeM ℕ α
+  | true, a, _, [] =&gt; pure a
+  | false, _, b, [] =&gt; pure b
+  | true, a, b, t :: ts =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> v ← alphaBeta false a b t
+      <span class="bp-lean-keyword">let</span> a&#x27; := max a v
+      <span class="bp-lean-keyword">if</span> b ≤ a&#x27; <span class="bp-lean-keyword">then</span> pure a&#x27; <span class="bp-lean-keyword">else</span> alphaBetaList true a&#x27; b ts
+  | false, a, b, t :: ts =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> v ← alphaBeta true a b t
+      <span class="bp-lean-keyword">let</span> b&#x27; := min b v
+      <span class="bp-lean-keyword">if</span> b&#x27; ≤ a <span class="bp-lean-keyword">then</span> pure b&#x27; <span class="bp-lean-keyword">else</span> alphaBetaList false a b&#x27; ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:90</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#game-tree">Game tree</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-list">Alpha-beta scan of the children</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta">Alpha-beta pruning</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-list-spec">Correctness of the alpha-beta scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-spec">Alpha-beta is correct</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/heuristic-search-and-planning/alpha-beta-pruning/alpha-beta-list-false-le">
+<h4 class="bp-thmheading" id="alpha-beta-list-false-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The minimizer&#x27;s alpha-beta scan stays at or below its upper bound</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean#L116" aria-label="View Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList_false_le in Lean source" title="View Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList_false_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#alpha-beta-list-false-le" aria-label="Link to The minimizer&#x27;s alpha-beta scan stays at or below its upper bound" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList_false_le</div>
+<div class="bp-thmcontent">
+<p>For all values <span class="arithmatex">\(a, b\)</span> in
+a linear order and every list <span class="arithmatex">\(ts\)</span> of game trees, the value returned by the alpha-beta scan of
+<span class="arithmatex">\(ts\)</span> for the minimizer with lower bound <span class="arithmatex">\(a\)</span> and upper bound <span class="arithmatex">\(b\)</span> is at most <span class="arithmatex">\(b\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> alphaBetaList_false_le (a b : α) :
+    ∀ ts : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#game-tree" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">GameTree</a> α), (<a class="bp-lean-ref" href="#alpha-beta-list" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList">alphaBetaList</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a> a b ts).ret ≤ b</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> GameTree (α : <span class="bp-lean-keyword">Type</span> u) <span class="bp-lean-keyword">where</span>
+  | leaf : α → GameTree α
+  | node : List (GameTree α) → GameTree α</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> alphaBetaList : Bool → α → α → List (GameTree α) → TimeM ℕ α
+  | true, a, _, [] =&gt; pure a
+  | false, _, b, [] =&gt; pure b
+  | true, a, b, t :: ts =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> v ← alphaBeta false a b t
+      <span class="bp-lean-keyword">let</span> a&#x27; := max a v
+      <span class="bp-lean-keyword">if</span> b ≤ a&#x27; <span class="bp-lean-keyword">then</span> pure a&#x27; <span class="bp-lean-keyword">else</span> alphaBetaList true a&#x27; b ts
+  | false, a, b, t :: ts =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> v ← alphaBeta true a b t
+      <span class="bp-lean-keyword">let</span> b&#x27; := min b v
+      <span class="bp-lean-keyword">if</span> b&#x27; ≤ a <span class="bp-lean-keyword">then</span> pure b&#x27; <span class="bp-lean-keyword">else</span> alphaBetaList false a b&#x27; ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:90</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#game-tree">Game tree</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-list">Alpha-beta scan of the children</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta">Alpha-beta pruning</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-list-spec">Correctness of the alpha-beta scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-spec">Alpha-beta is correct</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="cost">Cost</h2>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/heuristic-search-and-planning/alpha-beta-pruning/alpha-beta-time-le">
+<h4 class="bp-thmheading" id="alpha-beta-time-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Alpha-beta never evaluates more leaves than the tree has</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean#L161" aria-label="View Cslib.Algorithms.Lean.AlphaBeta.alphaBeta_time_le in Lean source" title="View Cslib.Algorithms.Lean.AlphaBeta.alphaBeta_time_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#alpha-beta-time-le" aria-label="Link to Alpha-beta never evaluates more leaves than the tree has" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.AlphaBeta.alphaBeta_time_le</div>
+<div class="bp-thmcontent">
+<p>For either player <span class="arithmatex">\(p\)</span> to move
+and all values <span class="arithmatex">\(a, b\)</span> in a linear order, alpha-beta pruning run on a game tree <span class="arithmatex">\(t\)</span> for <span class="arithmatex">\(p\)</span> with
+window <span class="arithmatex">\([a, b]\)</span> evaluates at most as many leaves as <span class="arithmatex">\(t\)</span> has, each leaf evaluation costing one
+unit.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> alphaBeta_time_le : ∀ (p : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) (a b : α) (t : <a class="bp-lean-ref" href="#game-tree" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">GameTree</a> α),
+    (<a class="bp-lean-ref" href="#alpha-beta" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBeta">alphaBeta</a> p a b t).time ≤ <a class="bp-lean-ref" href="#leaves" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.leaves">leaves</a> t</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> GameTree (α : <span class="bp-lean-keyword">Type</span> u) <span class="bp-lean-keyword">where</span>
+  | leaf : α → GameTree α
+  | node : List (GameTree α) → GameTree α</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBeta">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> alphaBeta : Bool → α → α → GameTree α → TimeM ℕ α
+  | _, _, _, .leaf x =&gt; <span class="bp-lean-keyword">do</span>
+      TimeM.tick 1
+      pure x
+  | p, a, b, .node ts =&gt; alphaBetaList p a b ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:82</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.leaves">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> leaves : GameTree α → ℕ
+  | .leaf _ =&gt; 1
+  | .node ts =&gt; leavesList ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:68</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#game-tree">Game tree</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta">Alpha-beta pruning</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#leaves">Number of leaves</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-list">Alpha-beta scan of the children</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#leaves-list">Number of leaves of a list of game trees</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/heuristic-search-and-planning/alpha-beta-pruning/alpha-beta-list-time-le">
+<h4 class="bp-thmheading" id="alpha-beta-list-time-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Cost of the alpha-beta scan</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean#L169" aria-label="View Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList_time_le in Lean source" title="View Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList_time_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#alpha-beta-list-time-le" aria-label="Link to Cost of the alpha-beta scan" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList_time_le</div>
+<div class="bp-thmcontent">
+<p>For either player <span class="arithmatex">\(p\)</span>, all values <span class="arithmatex">\(a, b\)</span> in a linear order
+and every list <span class="arithmatex">\(ts\)</span> of game trees, the alpha-beta scan of <span class="arithmatex">\(ts\)</span> for <span class="arithmatex">\(p\)</span> with lower bound <span class="arithmatex">\(a\)</span> and
+upper bound <span class="arithmatex">\(b\)</span> evaluates at most as many leaves as the trees in <span class="arithmatex">\(ts\)</span> have in total, each leaf
+evaluation costing one unit.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> alphaBetaList_time_le : ∀ (p : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) (a b : α) (ts : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#game-tree" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">GameTree</a> α)),
+    (<a class="bp-lean-ref" href="#alpha-beta-list" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList">alphaBetaList</a> p a b ts).time ≤ <a class="bp-lean-ref" href="#leaves-list" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.leavesList">leavesList</a> ts</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> GameTree (α : <span class="bp-lean-keyword">Type</span> u) <span class="bp-lean-keyword">where</span>
+  | leaf : α → GameTree α
+  | node : List (GameTree α) → GameTree α</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> alphaBetaList : Bool → α → α → List (GameTree α) → TimeM ℕ α
+  | true, a, _, [] =&gt; pure a
+  | false, _, b, [] =&gt; pure b
+  | true, a, b, t :: ts =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> v ← alphaBeta false a b t
+      <span class="bp-lean-keyword">let</span> a&#x27; := max a v
+      <span class="bp-lean-keyword">if</span> b ≤ a&#x27; <span class="bp-lean-keyword">then</span> pure a&#x27; <span class="bp-lean-keyword">else</span> alphaBetaList true a&#x27; b ts
+  | false, a, b, t :: ts =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> v ← alphaBeta true a b t
+      <span class="bp-lean-keyword">let</span> b&#x27; := min b v
+      <span class="bp-lean-keyword">if</span> b&#x27; ≤ a <span class="bp-lean-keyword">then</span> pure b&#x27; <span class="bp-lean-keyword">else</span> alphaBetaList false a b&#x27; ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:90</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.leavesList">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> leavesList : List (GameTree α) → ℕ
+  | [] =&gt; 0
+  | t :: ts =&gt; leaves t + leavesList ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:73</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#game-tree">Game tree</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-list">Alpha-beta scan of the children</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#leaves-list">Number of leaves of a list of game trees</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta">Alpha-beta pruning</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#leaves">Number of leaves</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="the-minimax-value-from-here-on-the-order-is-bounded">The minimax value; from here on the order is bounded</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/heuristic-search-and-planning/alpha-beta-pruning/minimax">
+<h4 class="bp-thmheading" id="minimax">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Minimax value</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean#L191" aria-label="View Cslib.Algorithms.Lean.AlphaBeta.minimax in Lean source" title="View Cslib.Algorithms.Lean.AlphaBeta.minimax in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#minimax" aria-label="Link to Minimax value" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.AlphaBeta.minimax</div>
+<div class="bp-thmcontent">
+<p>Let values lie in a bounded linear order. The minimax value of a game tree
+with player <span class="arithmatex">\(p\)</span> to move (the maximizer or the minimizer) is defined recursively: a leaf is worth
+the value it carries; an inner node is worth, for the maximizer, the maximum of the minimax values
+of its children with the minimizer to move, and for the minimizer, the minimum of the minimax
+values of its children with the maximizer to move. An inner node without children is worth <span class="arithmatex">\(\bot\)</span>
+to the maximizer and <span class="arithmatex">\(\top\)</span> to the minimizer.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> minimax : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → <a class="bp-lean-ref" href="#game-tree" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">GameTree</a> α → α
+  | _, .leaf x =&gt; x
+  | p, .node ts =&gt; <a class="bp-lean-ref" href="#minimax-list" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.minimaxList">minimaxList</a> p ts</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> GameTree (α : <span class="bp-lean-keyword">Type</span> u) <span class="bp-lean-keyword">where</span>
+  | leaf : α → GameTree α
+  | node : List (GameTree α) → GameTree α</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.minimaxList">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> minimaxList : Bool → List (GameTree α) → α
+  | true, [] =&gt; ⊥
+  | false, [] =&gt; ⊤
+  | true, t :: ts =&gt; max (minimax false t) (minimaxList true ts)
+  | false, t :: ts =&gt; min (minimax true t) (minimaxList false ts)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:198</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 6</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#game-tree">Game tree</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-bot-top">Alpha-beta with the full window returns the minimax value</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-eq-of-mem-window">Alpha-beta is exact inside the window</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-le-of-minimax-le">Alpha-beta fails low when the minimax value is at most the lower bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-list-spec">Correctness of the alpha-beta scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-spec">Alpha-beta is correct</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#le-alpha-beta-of-le-minimax">Alpha-beta at or above the top of the window</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/heuristic-search-and-planning/alpha-beta-pruning/minimax-list">
+<h4 class="bp-thmheading" id="minimax-list">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Minimax value of a list of positions</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean#L198" aria-label="View Cslib.Algorithms.Lean.AlphaBeta.minimaxList in Lean source" title="View Cslib.Algorithms.Lean.AlphaBeta.minimaxList in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#minimax-list" aria-label="Link to Minimax value of a list of positions" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.AlphaBeta.minimaxList</div>
+<div class="bp-thmcontent">
+<p>Let values lie in a bounded linear order. For a player
+<span class="arithmatex">\(p\)</span> and a finite list of game trees, the value for <span class="arithmatex">\(p\)</span> is the best of their minimax values with the
+other player to move: for the maximizer, the maximum of these values, or <span class="arithmatex">\(\bot\)</span> if the list is
+empty; for the minimizer, the minimum of these values, or <span class="arithmatex">\(\top\)</span> if the list is empty.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> minimaxList : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#game-tree" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">GameTree</a> α) → α
+  | <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a>, [] =&gt; ⊥
+  | <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a>, [] =&gt; ⊤
+  | <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a>, t :: ts =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Max.max#doc" title="Max.max">max</a> (<a class="bp-lean-ref" href="#minimax" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.minimax">minimax</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a> t) (minimaxList <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a> ts)
+  | <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a>, t :: ts =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Min.min#doc" title="Min.min">min</a> (<a class="bp-lean-ref" href="#minimax" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.minimax">minimax</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a> t) (minimaxList <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a> ts)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> GameTree (α : <span class="bp-lean-keyword">Type</span> u) <span class="bp-lean-keyword">where</span>
+  | leaf : α → GameTree α
+  | node : List (GameTree α) → GameTree α</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.minimax">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> minimax : Bool → GameTree α → α
+  | _, .leaf x =&gt; x
+  | p, .node ts =&gt; minimaxList p ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:191</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#game-tree">Game tree</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-list-spec">Correctness of the alpha-beta scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-spec">Alpha-beta is correct</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="correctness">Correctness</h2>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/heuristic-search-and-planning/alpha-beta-pruning/alpha-beta-spec">
+<h4 class="bp-thmheading" id="alpha-beta-spec">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Alpha-beta is correct</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean#L210" aria-label="View Cslib.Algorithms.Lean.AlphaBeta.alphaBeta_spec in Lean source" title="View Cslib.Algorithms.Lean.AlphaBeta.alphaBeta_spec in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#alpha-beta-spec" aria-label="Link to Alpha-beta is correct" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.AlphaBeta.alphaBeta_spec</div>
+<div class="bp-thmcontent">
+<p><strong>Alpha-beta is correct</strong> (Knuth and Moore 1975, Theorem 1): for <code>a ≤ b</code>, the result of
+alpha-beta agrees with the minimax value after clamping both to the window <code>[a, b]</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> alphaBeta_spec : ∀ (p : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) (a b : α) (t : <a class="bp-lean-ref" href="#game-tree" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">GameTree</a> α), a ≤ b →
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Max.max#doc" title="Max.max">max</a> a (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Min.min#doc" title="Min.min">min</a> b (<a class="bp-lean-ref" href="#alpha-beta" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBeta">alphaBeta</a> p a b t).ret) = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Max.max#doc" title="Max.max">max</a> a (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Min.min#doc" title="Min.min">min</a> b (<a class="bp-lean-ref" href="#minimax" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.minimax">minimax</a> p t))</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> GameTree (α : <span class="bp-lean-keyword">Type</span> u) <span class="bp-lean-keyword">where</span>
+  | leaf : α → GameTree α
+  | node : List (GameTree α) → GameTree α</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBeta">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> alphaBeta : Bool → α → α → GameTree α → TimeM ℕ α
+  | _, _, _, .leaf x =&gt; <span class="bp-lean-keyword">do</span>
+      TimeM.tick 1
+      pure x
+  | p, a, b, .node ts =&gt; alphaBetaList p a b ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:82</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.minimax">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> minimax : Bool → GameTree α → α
+  | _, .leaf x =&gt; x
+  | p, .node ts =&gt; minimaxList p ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:191</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 7 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#game-tree">Game tree</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta">Alpha-beta pruning</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#minimax">Minimax value</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-list">Alpha-beta scan of the children</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-list-false-le">The minimizer&#x27;s alpha-beta scan stays at or below its upper bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#le-alpha-beta-list-true">Lower bound for the maximizer&#x27;s scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#minimax-list">Minimax value of a list of positions</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-bot-top">Alpha-beta with the full window returns the minimax value</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-eq-of-mem-window">Alpha-beta is exact inside the window</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-le-of-minimax-le">Alpha-beta fails low when the minimax value is at most the lower bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#le-alpha-beta-of-le-minimax">Alpha-beta at or above the top of the window</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/heuristic-search-and-planning/alpha-beta-pruning/alpha-beta-list-spec">
+<h4 class="bp-thmheading" id="alpha-beta-list-spec">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Correctness of the alpha-beta scan</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean#L218" aria-label="View Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList_spec in Lean source" title="View Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList_spec in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#alpha-beta-list-spec" aria-label="Link to Correctness of the alpha-beta scan" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList_spec</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(p\)</span> be the player to move, <span class="arithmatex">\(ts\)</span> a list of game
+trees with values in a bounded linear order, and <span class="arithmatex">\(a \le b\)</span>. Let <span class="arithmatex">\(r\)</span> be the value returned by the
+alpha-beta scan of <span class="arithmatex">\(ts\)</span> for <span class="arithmatex">\(p\)</span> with window <span class="arithmatex">\([a, b]\)</span>, and let <span class="arithmatex">\(m\)</span> be the best value for <span class="arithmatex">\(p\)</span> among
+<span class="arithmatex">\(ts\)</span>: the maximum of the minimax values of the trees in <span class="arithmatex">\(ts\)</span> for the minimizer (<span class="arithmatex">\(\bot\)</span> if <span class="arithmatex">\(ts\)</span> is
+empty) when <span class="arithmatex">\(p\)</span> is the maximizer, and the minimum of their minimax values for the maximizer
+(<span class="arithmatex">\(\top\)</span> if <span class="arithmatex">\(ts\)</span> is empty) when <span class="arithmatex">\(p\)</span> is the minimizer. Then <span class="arithmatex">\(\max(a, \min(b, r)) =
+\max(a, \min(b, m))\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> alphaBetaList_spec : ∀ (p : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) (a b : α) (ts : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#game-tree" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">GameTree</a> α)), a ≤ b →
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Max.max#doc" title="Max.max">max</a> a (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Min.min#doc" title="Min.min">min</a> b (<a class="bp-lean-ref" href="#alpha-beta-list" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList">alphaBetaList</a> p a b ts).ret) = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Max.max#doc" title="Max.max">max</a> a (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Min.min#doc" title="Min.min">min</a> b (<a class="bp-lean-ref" href="#minimax-list" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.minimaxList">minimaxList</a> p ts))</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> GameTree (α : <span class="bp-lean-keyword">Type</span> u) <span class="bp-lean-keyword">where</span>
+  | leaf : α → GameTree α
+  | node : List (GameTree α) → GameTree α</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBetaList">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> alphaBetaList : Bool → α → α → List (GameTree α) → TimeM ℕ α
+  | true, a, _, [] =&gt; pure a
+  | false, _, b, [] =&gt; pure b
+  | true, a, b, t :: ts =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> v ← alphaBeta false a b t
+      <span class="bp-lean-keyword">let</span> a&#x27; := max a v
+      <span class="bp-lean-keyword">if</span> b ≤ a&#x27; <span class="bp-lean-keyword">then</span> pure a&#x27; <span class="bp-lean-keyword">else</span> alphaBetaList true a&#x27; b ts
+  | false, a, b, t :: ts =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> v ← alphaBeta true a b t
+      <span class="bp-lean-keyword">let</span> b&#x27; := min b v
+      <span class="bp-lean-keyword">if</span> b&#x27; ≤ a <span class="bp-lean-keyword">then</span> pure b&#x27; <span class="bp-lean-keyword">else</span> alphaBetaList false a b&#x27; ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:90</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.minimaxList">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> minimaxList : Bool → List (GameTree α) → α
+  | true, [] =&gt; ⊥
+  | false, [] =&gt; ⊤
+  | true, t :: ts =&gt; max (minimax false t) (minimaxList true ts)
+  | false, t :: ts =&gt; min (minimax true t) (minimaxList false ts)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:198</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 7</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#game-tree">Game tree</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta-list">Alpha-beta scan of the children</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#minimax-list">Minimax value of a list of positions</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta">Alpha-beta pruning</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-list-false-le">The minimizer&#x27;s alpha-beta scan stays at or below its upper bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#le-alpha-beta-list-true">Lower bound for the maximizer&#x27;s scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#minimax">Minimax value</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/heuristic-search-and-planning/alpha-beta-pruning/alpha-beta-le-of-minimax-le">
+<h4 class="bp-thmheading" id="alpha-beta-le-of-minimax-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Alpha-beta fails low when the minimax value is at most the lower bound</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean#L241" aria-label="View Cslib.Algorithms.Lean.AlphaBeta.alphaBeta_le_of_minimax_le in Lean source" title="View Cslib.Algorithms.Lean.AlphaBeta.alphaBeta_le_of_minimax_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#alpha-beta-le-of-minimax-le" aria-label="Link to Alpha-beta fails low when the minimax value is at most the lower bound" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.AlphaBeta.alphaBeta_le_of_minimax_le</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(t\)</span> be a game
+tree with values in a bounded linear order, <span class="arithmatex">\(p\)</span> the player to move and <span class="arithmatex">\(a &lt; b\)</span> values. If the
+minimax value of <span class="arithmatex">\(t\)</span> for <span class="arithmatex">\(p\)</span> is at most <span class="arithmatex">\(a\)</span>, then alpha-beta pruning run on <span class="arithmatex">\(t\)</span> for <span class="arithmatex">\(p\)</span> with the
+window <span class="arithmatex">\([a, b]\)</span> returns a value at most <span class="arithmatex">\(a\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> alphaBeta_le_of_minimax_le {p : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>} {a b : α} {t : <a class="bp-lean-ref" href="#game-tree" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">GameTree</a> α} (hab : a &lt; b)
+    (h : <a class="bp-lean-ref" href="#minimax" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.minimax">minimax</a> p t ≤ a) : (<a class="bp-lean-ref" href="#alpha-beta" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBeta">alphaBeta</a> p a b t).ret ≤ a</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> GameTree (α : <span class="bp-lean-keyword">Type</span> u) <span class="bp-lean-keyword">where</span>
+  | leaf : α → GameTree α
+  | node : List (GameTree α) → GameTree α</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.minimax">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> minimax : Bool → GameTree α → α
+  | _, .leaf x =&gt; x
+  | p, .node ts =&gt; minimaxList p ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:191</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBeta">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> alphaBeta : Bool → α → α → GameTree α → TimeM ℕ α
+  | _, _, _, .leaf x =&gt; <span class="bp-lean-keyword">do</span>
+      TimeM.tick 1
+      pure x
+  | p, a, b, .node ts =&gt; alphaBetaList p a b ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:82</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#game-tree">Game tree</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta">Alpha-beta pruning</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#minimax">Minimax value</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-spec">Alpha-beta is correct</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/heuristic-search-and-planning/alpha-beta-pruning/alpha-beta-eq-of-mem-window">
+<h4 class="bp-thmheading" id="alpha-beta-eq-of-mem-window">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Alpha-beta is exact inside the window</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean#L248" aria-label="View Cslib.Algorithms.Lean.AlphaBeta.alphaBeta_eq_of_mem_window in Lean source" title="View Cslib.Algorithms.Lean.AlphaBeta.alphaBeta_eq_of_mem_window in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#alpha-beta-eq-of-mem-window" aria-label="Link to Alpha-beta is exact inside the window" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.AlphaBeta.alphaBeta_eq_of_mem_window</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(t\)</span> be a game tree with values in a bounded
+linear order, <span class="arithmatex">\(p\)</span> the player to move and <span class="arithmatex">\(a, b\)</span> values. If the minimax value <span class="arithmatex">\(v\)</span> of <span class="arithmatex">\(t\)</span> for <span class="arithmatex">\(p\)</span>
+satisfies <span class="arithmatex">\(a &lt; v &lt; b\)</span>, then alpha-beta pruning run on <span class="arithmatex">\(t\)</span> for <span class="arithmatex">\(p\)</span> with the window <span class="arithmatex">\([a, b]\)</span> returns
+exactly <span class="arithmatex">\(v\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> alphaBeta_eq_of_mem_window {p : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>} {a b : α} {t : <a class="bp-lean-ref" href="#game-tree" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">GameTree</a> α}
+    (ha : a &lt; <a class="bp-lean-ref" href="#minimax" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.minimax">minimax</a> p t) (hb : <a class="bp-lean-ref" href="#minimax" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.minimax">minimax</a> p t &lt; b) : (<a class="bp-lean-ref" href="#alpha-beta" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBeta">alphaBeta</a> p a b t).ret = <a class="bp-lean-ref" href="#minimax" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.minimax">minimax</a> p t</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> GameTree (α : <span class="bp-lean-keyword">Type</span> u) <span class="bp-lean-keyword">where</span>
+  | leaf : α → GameTree α
+  | node : List (GameTree α) → GameTree α</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.minimax">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> minimax : Bool → GameTree α → α
+  | _, .leaf x =&gt; x
+  | p, .node ts =&gt; minimaxList p ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:191</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBeta">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> alphaBeta : Bool → α → α → GameTree α → TimeM ℕ α
+  | _, _, _, .leaf x =&gt; <span class="bp-lean-keyword">do</span>
+      TimeM.tick 1
+      pure x
+  | p, a, b, .node ts =&gt; alphaBetaList p a b ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:82</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#game-tree">Game tree</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta">Alpha-beta pruning</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#minimax">Minimax value</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-spec">Alpha-beta is correct</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/heuristic-search-and-planning/alpha-beta-pruning/le-alpha-beta-of-le-minimax">
+<h4 class="bp-thmheading" id="le-alpha-beta-of-le-minimax">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Alpha-beta at or above the top of the window</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean#L255" aria-label="View Cslib.Algorithms.Lean.AlphaBeta.le_alphaBeta_of_le_minimax in Lean source" title="View Cslib.Algorithms.Lean.AlphaBeta.le_alphaBeta_of_le_minimax in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#le-alpha-beta-of-le-minimax" aria-label="Link to Alpha-beta at or above the top of the window" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.AlphaBeta.le_alphaBeta_of_le_minimax</div>
+<div class="bp-thmcontent">
+<p>Let values lie in a bounded linear order, let
+<span class="arithmatex">\(t\)</span> be a game tree, let <span class="arithmatex">\(p\)</span> be a player, and let <span class="arithmatex">\(a &lt; b\)</span>. If the minimax value of <span class="arithmatex">\(t\)</span> with <span class="arithmatex">\(p\)</span> to
+move is at least <span class="arithmatex">\(b\)</span>, then the value returned by alpha-beta pruning on <span class="arithmatex">\(t\)</span> with <span class="arithmatex">\(p\)</span> to move and
+window <span class="arithmatex">\([a, b]\)</span> is at least <span class="arithmatex">\(b\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> le_alphaBeta_of_le_minimax {p : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>} {a b : α} {t : <a class="bp-lean-ref" href="#game-tree" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">GameTree</a> α} (hab : a &lt; b)
+    (h : b ≤ <a class="bp-lean-ref" href="#minimax" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.minimax">minimax</a> p t) : b ≤ (<a class="bp-lean-ref" href="#alpha-beta" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBeta">alphaBeta</a> p a b t).ret</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> GameTree (α : <span class="bp-lean-keyword">Type</span> u) <span class="bp-lean-keyword">where</span>
+  | leaf : α → GameTree α
+  | node : List (GameTree α) → GameTree α</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.minimax">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> minimax : Bool → GameTree α → α
+  | _, .leaf x =&gt; x
+  | p, .node ts =&gt; minimaxList p ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:191</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBeta">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> alphaBeta : Bool → α → α → GameTree α → TimeM ℕ α
+  | _, _, _, .leaf x =&gt; <span class="bp-lean-keyword">do</span>
+      TimeM.tick 1
+      pure x
+  | p, a, b, .node ts =&gt; alphaBetaList p a b ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:82</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#game-tree">Game tree</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta">Alpha-beta pruning</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#minimax">Minimax value</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-spec">Alpha-beta is correct</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/heuristic-search-and-planning/alpha-beta-pruning/alpha-beta-bot-top">
+<h4 class="bp-thmheading" id="alpha-beta-bot-top">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Alpha-beta with the full window returns the minimax value</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean#L262" aria-label="View Cslib.Algorithms.Lean.AlphaBeta.alphaBeta_bot_top in Lean source" title="View Cslib.Algorithms.Lean.AlphaBeta.alphaBeta_bot_top in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#alpha-beta-bot-top" aria-label="Link to Alpha-beta with the full window returns the minimax value" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.AlphaBeta.alphaBeta_bot_top</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(t\)</span> be a game tree whose
+values lie in a bounded linear order with least element <span class="arithmatex">\(\bot\)</span> and greatest element <span class="arithmatex">\(\top\)</span>. For
+either player <span class="arithmatex">\(p\)</span> to move, alpha-beta pruning run on <span class="arithmatex">\(t\)</span> for <span class="arithmatex">\(p\)</span> with the window <span class="arithmatex">\([\bot, \top]\)</span>
+returns exactly the minimax value of <span class="arithmatex">\(t\)</span> for <span class="arithmatex">\(p\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> alphaBeta_bot_top (p : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) (t : <a class="bp-lean-ref" href="#game-tree" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">GameTree</a> α) :
+    (<a class="bp-lean-ref" href="#alpha-beta" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBeta">alphaBeta</a> p ⊥ ⊤ t).ret = <a class="bp-lean-ref" href="#minimax" data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.minimax">minimax</a> p t</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.GameTree">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> GameTree (α : <span class="bp-lean-keyword">Type</span> u) <span class="bp-lean-keyword">where</span>
+  | leaf : α → GameTree α
+  | node : List (GameTree α) → GameTree α</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:60</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.alphaBeta">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> alphaBeta : Bool → α → α → GameTree α → TimeM ℕ α
+  | _, _, _, .leaf x =&gt; <span class="bp-lean-keyword">do</span>
+      TimeM.tick 1
+      pure x
+  | p, a, b, .node ts =&gt; alphaBetaList p a b ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:82</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.AlphaBeta.minimax">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> minimax : Bool → GameTree α → α
+  | _, .leaf x =&gt; x
+  | p, .node ts =&gt; minimaxList p ts</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/GameTree/AlphaBeta.lean:191</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#game-tree">Game tree</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#alpha-beta">Alpha-beta pruning</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#minimax">Minimax value</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#alpha-beta-spec">Alpha-beta is correct</a></span></div>
+</div>
+</details>
+</div>
+</div>
+<p><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../dependencies/index.json" data-graph-src="../../../../dependencies/scopes/ComputerScience/heuristic-search-and-planning/alpha-beta-pruning.json" data-page-href="index.html" data-scope-id="ComputerScience/heuristic-search-and-planning/alpha-beta-pruning">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>

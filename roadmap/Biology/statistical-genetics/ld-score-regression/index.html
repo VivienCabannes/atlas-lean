@@ -1,0 +1,5256 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../latent-causal-variable-model/index.html">
+      
+      
+        <link rel="next" href="../genomic-prediction-from-summary-statistics/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>LD-score regression - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              LD-score regression
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../ComputerScience/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_27" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_27" id="__nav_2_1_27_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_27_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_27">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematical Biology
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../population-genetics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Population genetics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../coalescent-theory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Coalescent theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../bioinformatics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bioinformatics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../phylogenetics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phylogenetics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_27_6" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical genetics
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_27_6" id="__nav_2_1_27_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_27_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_27_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Statistical genetics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bayesian-fine-mapping-and-colocalization/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bayesian fine-mapping and colocalization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bolt-lmm-mixed-model-association/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    BOLT-LMM mixed-model association
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gene-constraint-scores-pli-and-loeuf/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gene constraint scores (pLI and LOEUF)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../imputation-of-association-summary-statistics/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Imputation of association summary statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../latent-causal-variable-model/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Latent causal variable model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LD-score regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../genomic-prediction-from-summary-statistics/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Genomic prediction from summary statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mendelian-randomization/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mendelian randomization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../posterior-of-the-heterozygous-selection-coeffici/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Posterior of the heterozygous selection coefficient
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../principal-component-correction-for-stratificatio/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Principal-component correction for stratification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proximal-contamination-in-mixed-model-associatio/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proximal contamination in mixed-model association
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../signed-ld-profile-regression/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Signed LD profile regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stratified-ld-score-regression/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stratified LD-score regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../testing-ld-consistency-of-association-statistics/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testing LD consistency of association statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../population-structure/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Population structure and admixture
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../quantitative-genetics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantitative genetics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../systems-biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Systems biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../detecting-selection/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Detecting natural selection
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../cancer-genomics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cancer genomics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../population-dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Population and evolutionary dynamics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../pattern-formation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reaction–diffusion and pattern formation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../epidemiology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical epidemiology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../index.html" tabindex="-1">Mathematical Biology</a></li><li><a href="../index.html" tabindex="-1">Statistical genetics</a></li><li aria-current="page">LD-score regression</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← LD-score regression</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression" data-page-title="LD-score regression">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="ld-score-regression">LD-score regression</h1>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/ld-corr">
+<h4 class="bp-thmheading" id="ld-corr">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Normalized cross product of genotype markers</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L86" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScore.ldCorr in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScore.ldCorr in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#ld-corr" aria-label="Link to Normalized cross product of genotype markers" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScore.ldCorr</div>
+<div class="bp-thmcontent">
+<p>The normalized cross product <code>r j k = X_jᵀ X_k / N</code> of markers <code>j</code> and <code>k</code>. For a
+standardized genotype matrix (<code>IsStandardized</code>) it is the sample correlation of the two
+markers; for other matrices it is only a scale-dependent dot product.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> ldCorr (X : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) ℝ) (j k : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) : ℝ :=
+  (∑ i, X i j * X i k) / N</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 18</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../quantitative-genetics/linear-mixed-models-and-blup/index.html#integral-marginal-effect">The mean of the marginal estimates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../quantitative-genetics/linear-mixed-models-and-blup/index.html#integral-marginal-effect-sub-mul">The raw residual-product second moment of the marginal estimates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../genomic-prediction-from-summary-statistics/index.html#integral-chi-sq">Expected association statistic in the stratified LD-score model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../genomic-prediction-from-summary-statistics/index.html#integral-chi-sq-single-causal">One causal variant</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../genomic-prediction-from-summary-statistics/index.html#strat-ldscore">Stratified LD score</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#integral-chi-sq">Expected association statistic for an arbitrary genotype matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ld-corr-self">A standardized marker has correlation one with itself</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ld-corr-sq-le-one">Correlations of standardized markers lie in (-1, 1)</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ld-score">LD score of a marker</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../signed-ld-profile-regression/index.html#integral-alpha-hat">First-moment identity, exact in-sample form</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../signed-ld-profile-regression/index.html#integral-gls-estimator">Unbiasedness of the weighted least-squares estimator</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../signed-ld-profile-regression/index.html#integral-gls-estimator-of-background">Unbiasedness with covariates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../signed-ld-profile-regression/index.html#ld-matrix">In-sample LD matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stratified-ld-score-regression/index.html#annot-ldscore">Annotation LD score of a marker</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stratified-ld-score-regression/index.html#integral-chi-sq">Expected statistic with per-marker variances</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stratified-ld-score-regression/index.html#integral-chi-sq-of-alpha">Frequency-dependent architecture</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../stratified-ld-score-regression/index.html#integral-chi-sq-of-annot">Stratified LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stratified-ld-score-regression/index.html#integral-chi-sq-of-standardized">Expected chi-squared statistic of a standardized marker</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/ld-score">
+<h4 class="bp-thmheading" id="ld-score">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">LD score of a marker</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L91" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScore.ldScore in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScore.ldScore in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#ld-score" aria-label="Link to LD score of a marker" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScore.ldScore</div>
+<div class="bp-thmcontent">
+<p>The LD score <code>ℓ j = ∑ k, r j k ^ 2</code> of marker <code>j</code> (an LD score in the sense of the cited
+paper for a standardized genotype matrix).</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> ldScore (X : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) ℝ) (j : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) : ℝ :=
+  ∑ k, <a class="bp-lean-ref" href="#ld-corr" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.ldCorr">ldCorr</a> X j k ^ 2</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.ldCorr">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> ldCorr (X : Matrix (Fin N) (Fin M) ℝ) (j k : Fin M) : ℝ :=
+  (∑ i, X i j * X i k) / N</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:86</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 8</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ld-corr">Normalized cross product of genotype markers</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#integral-chi-sq">Expected association statistic for an arbitrary genotype matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#integral-chi-sq-of-standardized">LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#integral-chi-sq-strat">Expected association statistic under stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#integral-chi-sq-strat-of-const">LD-score regression with constant stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#integral-chi-sq-strat-of-standardized">Expected statistic under stratification for standardized genotypes</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mean-integral-chi-sq">Polygenic inflation of the mean association statistic</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mean-integral-chi-sq-strat-of-const">Mean association statistic with constant stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mean-ldscore">Mean LD score</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/is-standardized">
+<h4 class="bp-thmheading" id="is-standardized">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Standardized genotype matrix</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L96" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#is-standardized" aria-label="Link to Standardized genotype matrix" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized</div>
+<div class="bp-thmcontent">
+<p>The genotype matrix is standardized: every marker column has mean <code>0</code> and sum of squares
+<code>N</code> (unit sample variance).</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsStandardized (X : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) ℝ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ k, ∑ i, X i k = 0 ∧ ∑ i, X i k ^ 2 = N</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 15</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../genomic-prediction-from-summary-statistics/index.html#integral-chi-sq-of-standardized">Stratified LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../genomic-prediction-from-summary-statistics/index.html#integral-chi-sq-single-causal">One causal variant</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#attenuation-ratio-of-const">Attenuation ratio under constant stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#confounding-share-of-const">Confounding share of inflation under constant stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#integral-chi-sq-of-standardized">LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#integral-chi-sq-strat-of-const">LD-score regression with constant stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#integral-chi-sq-strat-of-standardized">Expected statistic under stratification for standardized genotypes</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ld-corr-self">A standardized marker has correlation one with itself</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ld-corr-sq-le-one">Correlations of standardized markers lie in (-1, 1)</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mean-integral-chi-sq">Polygenic inflation of the mean association statistic</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mean-integral-chi-sq-strat-of-const">Mean association statistic with constant stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stratified-ld-score-regression/index.html#integral-chi-sq-eq-design-mul-vec">Expected statistics are the design matrix times the parameters</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stratified-ld-score-regression/index.html#integral-chi-sq-of-alpha">Frequency-dependent architecture</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stratified-ld-score-regression/index.html#integral-chi-sq-of-annot">Stratified LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stratified-ld-score-regression/index.html#integral-chi-sq-of-standardized">Expected chi-squared statistic of a standardized marker</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/ld-corr-self">
+<h4 class="bp-thmheading" id="ld-corr-self">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">A standardized marker has correlation one with itself</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L100" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized.ldCorr_self in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized.ldCorr_self in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#ld-corr-self" aria-label="Link to A standardized marker has correlation one with itself" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized.ldCorr_self</div>
+<div class="bp-thmcontent">
+<p>For a standardized matrix each marker has correlation <code>1</code> with itself.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> IsStandardized.ldCorr_self {X : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) ℝ} (hX : <a class="bp-lean-ref" href="#is-standardized" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized">IsStandardized</a> X)
+    (hN : N ≠ 0) (k : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) : <a class="bp-lean-ref" href="#ld-corr" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.ldCorr">ldCorr</a> X k k = 1</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsStandardized (X : Matrix (Fin N) (Fin M) ℝ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ k, ∑ i, X i k = 0 ∧ ∑ i, X i k ^ 2 = N</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:96</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.ldCorr">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> ldCorr (X : Matrix (Fin N) (Fin M) ℝ) (j k : Fin M) : ℝ :=
+  (∑ i, X i j * X i k) / N</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:86</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-standardized">Standardized genotype matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ld-corr">Normalized cross product of genotype markers</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/ld-corr-sq-le-one">
+<h4 class="bp-thmheading" id="ld-corr-sq-le-one">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Correlations of standardized markers lie in (-1, 1)</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L107" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized.ldCorr_sq_le_one in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized.ldCorr_sq_le_one in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#ld-corr-sq-le-one" aria-label="Link to Correlations of standardized markers lie in (-1, 1)" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized.ldCorr_sq_le_one</div>
+<div class="bp-thmcontent">
+<p>For a standardized matrix the correlations lie in <code>[-1, 1]</code> (Cauchy–Schwarz).</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> IsStandardized.ldCorr_sq_le_one {X : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) ℝ} (hX : <a class="bp-lean-ref" href="#is-standardized" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized">IsStandardized</a> X)
+    (j k : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) : <a class="bp-lean-ref" href="#ld-corr" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.ldCorr">ldCorr</a> X j k ^ 2 ≤ 1</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsStandardized (X : Matrix (Fin N) (Fin M) ℝ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ k, ∑ i, X i k = 0 ∧ ∑ i, X i k ^ 2 = N</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:96</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.ldCorr">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> ldCorr (X : Matrix (Fin N) (Fin M) ℝ) (j k : Fin M) : ℝ :=
+  (∑ i, X i j * X i k) / N</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:86</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-standardized">Standardized genotype matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ld-corr">Normalized cross product of genotype markers</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/model">
+<h4 class="bp-thmheading" id="model">
+<span class="bp-thmcaption" data-search-exclude>Structure</span><span class="bp-thmtitle">Random-effects model of LD-score regression</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L131" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScore.Model in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScore.Model in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#model" aria-label="Link to Random-effects model of LD-score regression" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScore.Model</div>
+<div class="bp-thmcontent">
+<p>The random-effects model of LD-score regression (Bulik-Sullivan et al. 2015), stated at
+the level of raw second moments, for <code>N</code> individuals and <code>M</code> markers with heritability <code>h2</code>.</p>
+<ul>
+<li><code>beta k</code> is the (random) effect of marker <code>k</code>, with <code>∫ β k * β l = h2 / M * [k = l]</code>;</li>
+<li><code>eps i</code> is the environmental noise of individual <code>i</code>, with
+  <code>∫ ε i * ε i' = (1 - h2) * [i = i']</code>;</li>
+<li>effects and noise are orthogonal in <code>L²</code>.</li>
+</ul>
+<p>The measure is arbitrary and no means are assumed; for a probability measure and mean-zero
+effects and noise these are the covariance conditions of the cited model. The genotype matrix is
+not part of the model: all expectations are conditional on it.</p>
+</div>
+<div class="bp-lean-source">
+<details class="bp-lean-fold">
+<summary><code>MathlibExt.Biology.StatisticalGenetics.LDScore.Model</code> · 17 lines</summary>
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Model (μ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> Ω) (N M : ℕ) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The SNP heritability `h²`. -/</span>
+  h2 : ℝ
+  <span class="bp-lean-comment">/-- Random per-marker effect sizes. -/</span>
+  beta : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M → Ω → ℝ
+  <span class="bp-lean-comment">/-- Random environmental noise. -/</span>
+  eps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N → Ω → ℝ
+  <span class="bp-lean-comment">/-- Effects are square integrable. -/</span>
+  memLp_beta : ∀ k, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.MemLp#doc" title="MeasureTheory.MemLp">MemLp</a> (<a class="bp-lean-ref" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L135" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model.beta">beta</a> k) 2 μ
+  <span class="bp-lean-comment">/-- Noise terms are square integrable. -/</span>
+  memLp_eps : ∀ i, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.MemLp#doc" title="MeasureTheory.MemLp">MemLp</a> (<a class="bp-lean-ref" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L137" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model.eps">eps</a> i) 2 μ
+  <span class="bp-lean-comment">/-- Raw second moments of the effects: `∫ β βᵀ = (h² / M) I`. -/</span>
+  integral_beta_mul : ∀ k l, ∫ ω, <a class="bp-lean-ref" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L135" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model.beta">beta</a> k ω * <a class="bp-lean-ref" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L135" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model.beta">beta</a> l ω ∂μ = <span class="bp-lean-keyword">if</span> k = l <span class="bp-lean-keyword">then</span> <a class="bp-lean-ref" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L133" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model.h2">h2</a> / M <span class="bp-lean-keyword">else</span> 0
+  <span class="bp-lean-comment">/-- Raw second moments of the noise: `∫ ε εᵀ = (1 - h²) I`. -/</span>
+  integral_eps_mul : ∀ i i&#x27;, ∫ ω, <a class="bp-lean-ref" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L137" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model.eps">eps</a> i ω * <a class="bp-lean-ref" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L137" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model.eps">eps</a> i&#x27; ω ∂μ = <span class="bp-lean-keyword">if</span> i = i&#x27; <span class="bp-lean-keyword">then</span> 1 - <a class="bp-lean-ref" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L133" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model.h2">h2</a> <span class="bp-lean-keyword">else</span> 0
+  <span class="bp-lean-comment">/-- Effects and noise are orthogonal in `L²`: `∫ β εᵀ = 0`. -/</span>
+  integral_beta_mul_eps : ∀ k i, ∫ ω, <a class="bp-lean-ref" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L135" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model.beta">beta</a> k ω * <a class="bp-lean-ref" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L137" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model.eps">eps</a> i ω ∂μ = 0</code></pre>
+</details>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model.beta">
+<pre class="bp-lean"><code>  beta : Fin M → Ω → ℝ</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:135</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model.eps">
+<pre class="bp-lean"><code>  eps : Fin N → Ω → ℝ</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:137</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model.h2">
+<pre class="bp-lean"><code>  h2 : ℝ</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:133</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 22</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../genomic-prediction-from-summary-statistics/index.html#accuracy-sq-of-ldscore">Polygenic-score accuracy in the LD-score model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../genomic-prediction-from-summary-statistics/index.html#of-ldscore">Effect-estimate model derived from the LD-score model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../genomic-prediction-from-summary-statistics/index.html#of-ldscore-beta-hat">Estimates of the derived model are normalized scores</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#attenuation-ratio-of-const">Attenuation ratio under constant stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#beta-hat">Normalized marginal score in the LD-score model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#beta-hat-strat">Normalized score under stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#chi-sq">Association statistic in the LD-score model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#chi-sq-strat">Association statistic under stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#confounding-share-of-const">Confounding share of inflation under constant stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#h2-le-one">Heritability is at most one in the LD-score model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#h2-nonneg">Nonnegativity of heritability in the LD-score model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#integral-chi-sq">Expected association statistic for an arbitrary genotype matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#integral-chi-sq-of-standardized">LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#integral-chi-sq-strat">Expected association statistic under stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#integral-chi-sq-strat-of-const">LD-score regression with constant stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#integral-chi-sq-strat-of-standardized">Expected statistic under stratification for standardized genotypes</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mean-integral-chi-sq">Polygenic inflation of the mean association statistic</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mean-integral-chi-sq-strat-of-const">Mean association statistic with constant stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#pheno">Phenotype in the LD-score model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#pheno-strat">Phenotype with population stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stratified-ld-score-regression/index.html#chi-sq-of-ldscore">Stratified statistic agrees with the LD-score statistic</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stratified-ld-score-regression/index.html#of-ldscore">LD-score regression model as a stratified model</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/h2-nonneg">
+<h4 class="bp-thmheading" id="h2-nonneg">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Nonnegativity of heritability in the LD-score model</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L154" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScore.Model.h2_nonneg in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScore.Model.h2_nonneg in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#h2-nonneg" aria-label="Link to Nonnegativity of heritability in the LD-score model" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScore.Model.h2_nonneg</div>
+<div class="bp-thmcontent">
+<p>The heritability is nonnegative when there is at least one marker.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> h2_nonneg (hM : 0 &lt; M) : 0 ≤ D.h2</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#model">Random-effects model of LD-score regression</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/h2-le-one">
+<h4 class="bp-thmheading" id="h2-le-one">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Heritability is at most one in the LD-score model</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L164" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScore.Model.h2_le_one in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScore.Model.h2_le_one in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#h2-le-one" aria-label="Link to Heritability is at most one in the LD-score model" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScore.Model.h2_le_one</div>
+<div class="bp-thmcontent">
+<p>The heritability is at most <code>1</code> when there is at least one individual.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> h2_le_one (hN : 0 &lt; N) : D.h2 ≤ 1</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#model">Random-effects model of LD-score regression</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/pheno">
+<h4 class="bp-thmheading" id="pheno">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Phenotype in the LD-score model</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L172" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScore.Model.pheno in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScore.Model.pheno in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#pheno" aria-label="Link to Phenotype in the LD-score model" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScore.Model.pheno</div>
+<div class="bp-thmcontent">
+<p>The phenotype <code>y = X β + ε</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> pheno (i : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N) (ω : Ω) : ℝ := ∑ k, X i k * D.beta k ω + D.eps i ω</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#model">Random-effects model of LD-score regression</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../genomic-prediction-from-summary-statistics/index.html#of-ldscore-beta-hat">Estimates of the derived model are normalized scores</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#beta-hat">Normalized marginal score in the LD-score model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#integral-chi-sq">Expected association statistic for an arbitrary genotype matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#integral-chi-sq-strat">Expected association statistic under stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#pheno-strat">Phenotype with population stratification</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/beta-hat">
+<h4 class="bp-thmheading" id="beta-hat">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Normalized marginal score in the LD-score model</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L177" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScore.Model.betaHat in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScore.Model.betaHat in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#beta-hat" aria-label="Link to Normalized marginal score in the LD-score model" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScore.Model.betaHat</div>
+<div class="bp-thmcontent">
+<p>The <code>N</code>-normalized score <code>β̂ j = X_jᵀ y / N</code> of marker <code>j</code>. For a standardized column
+(<code>∑ i, X i j ^ 2 = N</code>) it is the marginal least-squares estimate of the effect of marker <code>j</code>;
+in general that estimate has denominator <code>∑ i, X i j ^ 2</code> instead of <code>N</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> betaHat (j : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) (ω : Ω) : ℝ := (∑ i, X i j * D.pheno X i ω) / N</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#model">Random-effects model of LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#pheno">Phenotype in the LD-score model</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../genomic-prediction-from-summary-statistics/index.html#of-ldscore-beta-hat">Estimates of the derived model are normalized scores</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#chi-sq">Association statistic in the LD-score model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#integral-chi-sq">Expected association statistic for an arbitrary genotype matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#integral-chi-sq-strat">Expected association statistic under stratification</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/chi-sq">
+<h4 class="bp-thmheading" id="chi-sq">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Association statistic in the LD-score model</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L180" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScore.Model.chiSq in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScore.Model.chiSq in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#chi-sq" aria-label="Link to Association statistic in the LD-score model" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScore.Model.chiSq</div>
+<div class="bp-thmcontent">
+<p>The association statistic <code>χ² j = N * β̂ j ^ 2</code> of marker <code>j</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> chiSq (j : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) (ω : Ω) : ℝ := N * D.betaHat X j ω ^ 2</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#model">Random-effects model of LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#beta-hat">Normalized marginal score in the LD-score model</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#integral-chi-sq">Expected association statistic for an arbitrary genotype matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#integral-chi-sq-of-standardized">LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#integral-chi-sq-strat">Expected association statistic under stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mean-integral-chi-sq">Polygenic inflation of the mean association statistic</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stratified-ld-score-regression/index.html#chi-sq-of-ldscore">Stratified statistic agrees with the LD-score statistic</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/integral-chi-sq">
+<h4 class="bp-thmheading" id="integral-chi-sq">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Expected association statistic for an arbitrary genotype matrix</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L218" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScore.Model.integral_chiSq in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScore.Model.integral_chiSq in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#integral-chi-sq" aria-label="Link to Expected association statistic for an arbitrary genotype matrix" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScore.Model.integral_chiSq</div>
+<div class="bp-thmcontent">
+<p>The exact expectation of the association statistic built from the <code>N</code>-normalized score,
+for an arbitrary genotype matrix:
+<code>𝔼[χ² j] = N h² / M * ℓ j + (1 - h²) * (∑ i, X i j ^ 2) / N</code>. (For <code>N = 0</code> both sides are <code>0</code>
+by the convention <code>x / 0 = 0</code>.)</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> integral_chiSq (j : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) :
+    ∫ ω, D.chiSq X j ω ∂μ =
+      N * D.h2 / M * <a class="bp-lean-ref" href="#ld-score" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.ldScore">ldScore</a> X j + (1 - D.h2) * (∑ i, X i j ^ 2) / N</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.ldScore">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> ldScore (X : Matrix (Fin N) (Fin M) ℝ) (j : Fin M) : ℝ :=
+  ∑ k, ldCorr X j k ^ 2</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:91</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 6 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#model">Random-effects model of LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#chi-sq">Association statistic in the LD-score model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ld-score">LD score of a marker</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#beta-hat">Normalized marginal score in the LD-score model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#pheno">Phenotype in the LD-score model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#ld-corr">Normalized cross product of genotype markers</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#integral-chi-sq-of-standardized">LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#integral-chi-sq-strat">Expected association statistic under stratification</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/integral-chi-sq-of-standardized">
+<h4 class="bp-thmheading" id="integral-chi-sq-of-standardized">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">LD-score regression</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScore.lean#L257" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScore.Model.integral_chiSq_of_standardized in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScore.Model.integral_chiSq_of_standardized in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#integral-chi-sq-of-standardized" aria-label="Link to LD-score regression" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScore.Model.integral_chiSq_of_standardized</div>
+<div class="bp-thmcontent">
+<p>LD-score regression (Bulik-Sullivan et al. 2015): for a standardized genotype matrix
+(<code>IsStandardized</code>, so that <code>ldCorr</code> is the sample correlation and <code>ldScore</code> the LD score) and
+<code>N ≠ 0</code>, <code>𝔼[χ² j] = N h² / M * ℓ j + (1 - h²)</code>. The expected association statistic is affine in
+the LD score, with slope <code>N h² / M</code> and intercept <code>1 - h²</code>. The proof uses only that column <code>j</code>
+has sum of squares <code>N</code>; the rest of the standardization is what makes <code>ℓ j</code> an LD score.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> integral_chiSq_of_standardized (hN : N ≠ 0) (j : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) (hX : <a class="bp-lean-ref" href="#is-standardized" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized">IsStandardized</a> X) :
+    ∫ ω, D.chiSq X j ω ∂μ = N * D.h2 / M * <a class="bp-lean-ref" href="#ld-score" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.ldScore">ldScore</a> X j + (1 - D.h2)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsStandardized (X : Matrix (Fin N) (Fin M) ℝ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ k, ∑ i, X i k = 0 ∧ ∑ i, X i k ^ 2 = N</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:96</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.ldScore">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> ldScore (X : Matrix (Fin N) (Fin M) ℝ) (j : Fin M) : ℝ :=
+  ∑ k, ldCorr X j k ^ 2</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:91</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-standardized">Standardized genotype matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#model">Random-effects model of LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#chi-sq">Association statistic in the LD-score model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ld-score">LD score of a marker</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#integral-chi-sq">Expected association statistic for an arbitrary genotype matrix</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mean-integral-chi-sq">Polygenic inflation of the mean association statistic</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/mean-ldscore">
+<h4 class="bp-thmheading" id="mean-ldscore">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Mean LD score</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean#L69" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.meanLDScore in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.meanLDScore in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#mean-ldscore" aria-label="Link to Mean LD score" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.meanLDScore</div>
+<div class="bp-thmcontent">
+<p>The mean LD score <code>ℓ̄ = (1 / M) ∑ j, ℓ j</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> meanLDScore (X : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) ℝ) : ℝ := (∑ j, <a class="bp-lean-ref" href="#ld-score" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.ldScore">ldScore</a> X j) / M</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.ldScore">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> ldScore (X : Matrix (Fin N) (Fin M) ℝ) (j : Fin M) : ℝ :=
+  ∑ k, ldCorr X j k ^ 2</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:91</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ld-score">LD score of a marker</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#attenuation-ratio-of-const">Attenuation ratio under constant stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#confounding-share-of-const">Confounding share of inflation under constant stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mean-integral-chi-sq">Polygenic inflation of the mean association statistic</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mean-integral-chi-sq-strat-of-const">Mean association statistic with constant stratification</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/mean-integral-chi-sq">
+<h4 class="bp-thmheading" id="mean-integral-chi-sq">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Polygenic inflation of the mean association statistic</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean#L73" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.mean_integral_chiSq in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.mean_integral_chiSq in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#mean-integral-chi-sq" aria-label="Link to Polygenic inflation of the mean association statistic" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.mean_integral_chiSq</div>
+<div class="bp-thmcontent">
+<p>Polygenic inflation: for a standardized genotype matrix with <code>N, M ≠ 0</code>, the mean expected
+association statistic is <code>1 - h² + N h² ℓ̄ / M</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> mean_integral_chiSq (D : <a class="bp-lean-ref" href="#model" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model">Model</a> μ N M) (X : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) ℝ) (hN : N ≠ 0)
+    (hM : M ≠ 0) (hX : <a class="bp-lean-ref" href="#is-standardized" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized">IsStandardized</a> X) :
+    (∑ j, ∫ ω, D.chiSq X j ω ∂μ) / M = 1 - D.h2 + N * D.h2 / M * <a class="bp-lean-ref" href="#mean-ldscore" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.meanLDScore">meanLDScore</a> X</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Model (μ : Measure Ω) (N M : ℕ) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The SNP heritability `h²`. -/</span>
+  h2 : ℝ
+  <span class="bp-lean-comment">/-- Random per-marker effect sizes. -/</span>
+  beta : Fin M → Ω → ℝ
+  <span class="bp-lean-comment">/-- Random environmental noise. -/</span>
+  eps : Fin N → Ω → ℝ
+  <span class="bp-lean-comment">/-- Effects are square integrable. -/</span>
+  memLp_beta : ∀ k, MemLp (beta k) 2 μ
+  <span class="bp-lean-comment">/-- Noise terms are square integrable. -/</span>
+  memLp_eps : ∀ i, MemLp (eps i) 2 μ
+  <span class="bp-lean-comment">/-- Raw second moments of the effects: `∫ β βᵀ = (h² / M) I`. -/</span>
+  ⋯</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:131</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsStandardized (X : Matrix (Fin N) (Fin M) ℝ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ k, ∑ i, X i k = 0 ∧ ∑ i, X i k ^ 2 = N</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:96</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.meanLDScore">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> meanLDScore (X : Matrix (Fin N) (Fin M) ℝ) : ℝ := (∑ j, ldScore X j) / M</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean:69</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 6</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-standardized">Standardized genotype matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#model">Random-effects model of LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#chi-sq">Association statistic in the LD-score model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mean-ldscore">Mean LD score</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#integral-chi-sq-of-standardized">LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#ld-score">LD score of a marker</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/pheno-strat">
+<h4 class="bp-thmheading" id="pheno-strat">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Phenotype with population stratification</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean#L84" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.phenoStrat in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.phenoStrat in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#pheno-strat" aria-label="Link to Phenotype with population stratification" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.phenoStrat</div>
+<div class="bp-thmcontent">
+<p>The phenotype with a stratification shift: <code>y i = (X β) i + ε i + s * c i</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> phenoStrat (D : <a class="bp-lean-ref" href="#model" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model">Model</a> μ N M) (X : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) ℝ) (s : ℝ) (c : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N → ℝ)
+    (i : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N) (ω : Ω) : ℝ := D.pheno X i ω + s * c i</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Model (μ : Measure Ω) (N M : ℕ) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The SNP heritability `h²`. -/</span>
+  h2 : ℝ
+  <span class="bp-lean-comment">/-- Random per-marker effect sizes. -/</span>
+  beta : Fin M → Ω → ℝ
+  <span class="bp-lean-comment">/-- Random environmental noise. -/</span>
+  eps : Fin N → Ω → ℝ
+  <span class="bp-lean-comment">/-- Effects are square integrable. -/</span>
+  memLp_beta : ∀ k, MemLp (beta k) 2 μ
+  <span class="bp-lean-comment">/-- Noise terms are square integrable. -/</span>
+  memLp_eps : ∀ i, MemLp (eps i) 2 μ
+  <span class="bp-lean-comment">/-- Raw second moments of the effects: `∫ β βᵀ = (h² / M) I`. -/</span>
+  ⋯</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:131</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#model">Random-effects model of LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#pheno">Phenotype in the LD-score model</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#beta-hat-strat">Normalized score under stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#integral-chi-sq-strat">Expected association statistic under stratification</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/beta-hat-strat">
+<h4 class="bp-thmheading" id="beta-hat-strat">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Normalized score under stratification</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean#L88" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.betaHatStrat in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.betaHatStrat in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#beta-hat-strat" aria-label="Link to Normalized score under stratification" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.betaHatStrat</div>
+<div class="bp-thmcontent">
+<p>The <code>N</code>-normalized score of marker <code>j</code> under stratification, <code>X_jᵀ y / N</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> betaHatStrat (D : <a class="bp-lean-ref" href="#model" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model">Model</a> μ N M) (X : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) ℝ) (s : ℝ)
+    (c : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N → ℝ) (j : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) (ω : Ω) : ℝ := (∑ i, X i j * <a class="bp-lean-ref" href="#pheno-strat" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.phenoStrat">phenoStrat</a> D X s c i ω) / N</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Model (μ : Measure Ω) (N M : ℕ) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The SNP heritability `h²`. -/</span>
+  h2 : ℝ
+  <span class="bp-lean-comment">/-- Random per-marker effect sizes. -/</span>
+  beta : Fin M → Ω → ℝ
+  <span class="bp-lean-comment">/-- Random environmental noise. -/</span>
+  eps : Fin N → Ω → ℝ
+  <span class="bp-lean-comment">/-- Effects are square integrable. -/</span>
+  memLp_beta : ∀ k, MemLp (beta k) 2 μ
+  <span class="bp-lean-comment">/-- Noise terms are square integrable. -/</span>
+  memLp_eps : ∀ i, MemLp (eps i) 2 μ
+  <span class="bp-lean-comment">/-- Raw second moments of the effects: `∫ β βᵀ = (h² / M) I`. -/</span>
+  ⋯</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:131</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.phenoStrat">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> phenoStrat (D : Model μ N M) (X : Matrix (Fin N) (Fin M) ℝ) (s : ℝ) (c : Fin N → ℝ)
+    (i : Fin N) (ω : Ω) : ℝ := D.pheno X i ω + s * c i</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean:84</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#model">Random-effects model of LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#pheno-strat">Phenotype with population stratification</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#chi-sq-strat">Association statistic under stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#integral-chi-sq-strat">Expected association statistic under stratification</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/chi-sq-strat">
+<h4 class="bp-thmheading" id="chi-sq-strat">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Association statistic under stratification</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean#L92" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.chiSqStrat in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.chiSqStrat in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#chi-sq-strat" aria-label="Link to Association statistic under stratification" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.chiSqStrat</div>
+<div class="bp-thmcontent">
+<p>The association statistic <code>N * β̂ j ^ 2</code> under stratification.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> chiSqStrat (D : <a class="bp-lean-ref" href="#model" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model">Model</a> μ N M) (X : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) ℝ) (s : ℝ)
+    (c : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N → ℝ) (j : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) (ω : Ω) : ℝ := N * <a class="bp-lean-ref" href="#beta-hat-strat" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.betaHatStrat">betaHatStrat</a> D X s c j ω ^ 2</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Model (μ : Measure Ω) (N M : ℕ) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The SNP heritability `h²`. -/</span>
+  h2 : ℝ
+  <span class="bp-lean-comment">/-- Random per-marker effect sizes. -/</span>
+  beta : Fin M → Ω → ℝ
+  <span class="bp-lean-comment">/-- Random environmental noise. -/</span>
+  eps : Fin N → Ω → ℝ
+  <span class="bp-lean-comment">/-- Effects are square integrable. -/</span>
+  memLp_beta : ∀ k, MemLp (beta k) 2 μ
+  <span class="bp-lean-comment">/-- Noise terms are square integrable. -/</span>
+  memLp_eps : ∀ i, MemLp (eps i) 2 μ
+  <span class="bp-lean-comment">/-- Raw second moments of the effects: `∫ β βᵀ = (h² / M) I`. -/</span>
+  ⋯</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:131</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.betaHatStrat">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> betaHatStrat (D : Model μ N M) (X : Matrix (Fin N) (Fin M) ℝ) (s : ℝ)
+    (c : Fin N → ℝ) (j : Fin M) (ω : Ω) : ℝ := (∑ i, X i j * phenoStrat D X s c i ω) / N</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean:88</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 6</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#model">Random-effects model of LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#beta-hat-strat">Normalized score under stratification</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#attenuation-ratio-of-const">Attenuation ratio under constant stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#confounding-share-of-const">Confounding share of inflation under constant stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#integral-chi-sq-strat">Expected association statistic under stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#integral-chi-sq-strat-of-const">LD-score regression with constant stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#integral-chi-sq-strat-of-standardized">Expected statistic under stratification for standardized genotypes</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mean-integral-chi-sq-strat-of-const">Mean association statistic with constant stratification</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/integral-chi-sq-strat">
+<h4 class="bp-thmheading" id="integral-chi-sq-strat">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Expected association statistic under stratification</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean#L97" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.integral_chiSqStrat in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.integral_chiSqStrat in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#integral-chi-sq-strat" aria-label="Link to Expected association statistic under stratification" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.integral_chiSqStrat</div>
+<div class="bp-thmcontent">
+<p>Stratification inflation: for a probability measure and mean-zero effects and noise,
+<code>𝔼[χ² j] = N h² / M * ℓ j + (1 - h²) (∑ i, X i j ^ 2) / N + N s² (X_jᵀ c / N)²</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> integral_chiSqStrat [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsProbabilityMeasure#doc" title="MeasureTheory.IsProbabilityMeasure">IsProbabilityMeasure</a> μ] (D : <a class="bp-lean-ref" href="#model" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model">Model</a> μ N M)
+    (X : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) ℝ) (hβ : ∀ k, ∫ ω, D.beta k ω ∂μ = 0)
+    (hε : ∀ i, ∫ ω, D.eps i ω ∂μ = 0) (s : ℝ) (c : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N → ℝ) (j : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) :
+    ∫ ω, <a class="bp-lean-ref" href="#chi-sq-strat" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.chiSqStrat">chiSqStrat</a> D X s c j ω ∂μ =
+      N * D.h2 / M * <a class="bp-lean-ref" href="#ld-score" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.ldScore">ldScore</a> X j + (1 - D.h2) * (∑ i, X i j ^ 2) / N +
+        N * s ^ 2 * ((∑ i, X i j * c i) / N) ^ 2</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Model (μ : Measure Ω) (N M : ℕ) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The SNP heritability `h²`. -/</span>
+  h2 : ℝ
+  <span class="bp-lean-comment">/-- Random per-marker effect sizes. -/</span>
+  beta : Fin M → Ω → ℝ
+  <span class="bp-lean-comment">/-- Random environmental noise. -/</span>
+  eps : Fin N → Ω → ℝ
+  <span class="bp-lean-comment">/-- Effects are square integrable. -/</span>
+  memLp_beta : ∀ k, MemLp (beta k) 2 μ
+  <span class="bp-lean-comment">/-- Noise terms are square integrable. -/</span>
+  memLp_eps : ∀ i, MemLp (eps i) 2 μ
+  <span class="bp-lean-comment">/-- Raw second moments of the effects: `∫ β βᵀ = (h² / M) I`. -/</span>
+  ⋯</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:131</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.chiSqStrat">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> chiSqStrat (D : Model μ N M) (X : Matrix (Fin N) (Fin M) ℝ) (s : ℝ)
+    (c : Fin N → ℝ) (j : Fin M) (ω : Ω) : ℝ := N * betaHatStrat D X s c j ω ^ 2</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean:92</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.ldScore">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> ldScore (X : Matrix (Fin N) (Fin M) ℝ) (j : Fin M) : ℝ :=
+  ∑ k, ldCorr X j k ^ 2</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:91</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 9 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#model">Random-effects model of LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ld-score">LD score of a marker</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#chi-sq-strat">Association statistic under stratification</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#beta-hat">Normalized marginal score in the LD-score model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#chi-sq">Association statistic in the LD-score model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#integral-chi-sq">Expected association statistic for an arbitrary genotype matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#pheno">Phenotype in the LD-score model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#beta-hat-strat">Normalized score under stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#pheno-strat">Phenotype with population stratification</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#integral-chi-sq-strat-of-standardized">Expected statistic under stratification for standardized genotypes</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/integral-chi-sq-strat-of-standardized">
+<h4 class="bp-thmheading" id="integral-chi-sq-strat-of-standardized">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Expected statistic under stratification for standardized genotypes</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean#L146" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.integral_chiSqStrat_of_standardized in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.integral_chiSqStrat_of_standardized in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#integral-chi-sq-strat-of-standardized" aria-label="Link to Expected statistic under stratification for standardized genotypes" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.integral_chiSqStrat_of_standardized</div>
+<div class="bp-thmcontent">
+<p>Stratification inflation for a standardized genotype matrix and <code>N ≠ 0</code>:
+<code>𝔼[χ² j] = N h² / M * ℓ j + (1 - h²) + N s² (X_jᵀ c / N)²</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> integral_chiSqStrat_of_standardized [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsProbabilityMeasure#doc" title="MeasureTheory.IsProbabilityMeasure">IsProbabilityMeasure</a> μ] (D : <a class="bp-lean-ref" href="#model" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model">Model</a> μ N M)
+    (X : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) ℝ) (hN : N ≠ 0) (hX : <a class="bp-lean-ref" href="#is-standardized" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized">IsStandardized</a> X)
+    (hβ : ∀ k, ∫ ω, D.beta k ω ∂μ = 0) (hε : ∀ i, ∫ ω, D.eps i ω ∂μ = 0) (s : ℝ)
+    (c : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N → ℝ) (j : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) :
+    ∫ ω, <a class="bp-lean-ref" href="#chi-sq-strat" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.chiSqStrat">chiSqStrat</a> D X s c j ω ∂μ =
+      N * D.h2 / M * <a class="bp-lean-ref" href="#ld-score" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.ldScore">ldScore</a> X j + (1 - D.h2) + N * s ^ 2 * ((∑ i, X i j * c i) / N) ^ 2</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Model (μ : Measure Ω) (N M : ℕ) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The SNP heritability `h²`. -/</span>
+  h2 : ℝ
+  <span class="bp-lean-comment">/-- Random per-marker effect sizes. -/</span>
+  beta : Fin M → Ω → ℝ
+  <span class="bp-lean-comment">/-- Random environmental noise. -/</span>
+  eps : Fin N → Ω → ℝ
+  <span class="bp-lean-comment">/-- Effects are square integrable. -/</span>
+  memLp_beta : ∀ k, MemLp (beta k) 2 μ
+  <span class="bp-lean-comment">/-- Noise terms are square integrable. -/</span>
+  memLp_eps : ∀ i, MemLp (eps i) 2 μ
+  <span class="bp-lean-comment">/-- Raw second moments of the effects: `∫ β βᵀ = (h² / M) I`. -/</span>
+  ⋯</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:131</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsStandardized (X : Matrix (Fin N) (Fin M) ℝ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ k, ∑ i, X i k = 0 ∧ ∑ i, X i k ^ 2 = N</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:96</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.chiSqStrat">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> chiSqStrat (D : Model μ N M) (X : Matrix (Fin N) (Fin M) ℝ) (s : ℝ)
+    (c : Fin N → ℝ) (j : Fin M) (ω : Ω) : ℝ := N * betaHatStrat D X s c j ω ^ 2</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean:92</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.ldScore">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> ldScore (X : Matrix (Fin N) (Fin M) ℝ) (j : Fin M) : ℝ :=
+  ∑ k, ldCorr X j k ^ 2</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:91</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-standardized">Standardized genotype matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#model">Random-effects model of LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ld-score">LD score of a marker</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#chi-sq-strat">Association statistic under stratification</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#integral-chi-sq-strat">Expected association statistic under stratification</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#integral-chi-sq-strat-of-const">LD-score regression with constant stratification</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/integral-chi-sq-strat-of-const">
+<h4 class="bp-thmheading" id="integral-chi-sq-strat-of-const">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">LD-score regression with constant stratification</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean#L157" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.integral_chiSqStrat_of_const in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.integral_chiSqStrat_of_const in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#integral-chi-sq-strat-of-const" aria-label="Link to LD-score regression with constant stratification" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.integral_chiSqStrat_of_const</div>
+<div class="bp-thmcontent">
+<p>With a constant stratification term (<code>s² (X_jᵀ c / N)² = a</code> for every marker), the expected
+statistic is exactly affine in the LD score, with slope <code>N h² / M</code> and intercept
+<code>1 - h² + N a</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> integral_chiSqStrat_of_const [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsProbabilityMeasure#doc" title="MeasureTheory.IsProbabilityMeasure">IsProbabilityMeasure</a> μ] (D : <a class="bp-lean-ref" href="#model" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model">Model</a> μ N M)
+    (X : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) ℝ) (hN : N ≠ 0) (hX : <a class="bp-lean-ref" href="#is-standardized" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized">IsStandardized</a> X)
+    (hβ : ∀ k, ∫ ω, D.beta k ω ∂μ = 0) (hε : ∀ i, ∫ ω, D.eps i ω ∂μ = 0) (s : ℝ)
+    (c : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N → ℝ) {a : ℝ} (ha : ∀ j, s ^ 2 * ((∑ i, X i j * c i) / N) ^ 2 = a) (j : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) :
+    ∫ ω, <a class="bp-lean-ref" href="#chi-sq-strat" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.chiSqStrat">chiSqStrat</a> D X s c j ω ∂μ = N * D.h2 / M * <a class="bp-lean-ref" href="#ld-score" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.ldScore">ldScore</a> X j + (1 - D.h2 + N * a)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Model (μ : Measure Ω) (N M : ℕ) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The SNP heritability `h²`. -/</span>
+  h2 : ℝ
+  <span class="bp-lean-comment">/-- Random per-marker effect sizes. -/</span>
+  beta : Fin M → Ω → ℝ
+  <span class="bp-lean-comment">/-- Random environmental noise. -/</span>
+  eps : Fin N → Ω → ℝ
+  <span class="bp-lean-comment">/-- Effects are square integrable. -/</span>
+  memLp_beta : ∀ k, MemLp (beta k) 2 μ
+  <span class="bp-lean-comment">/-- Noise terms are square integrable. -/</span>
+  memLp_eps : ∀ i, MemLp (eps i) 2 μ
+  <span class="bp-lean-comment">/-- Raw second moments of the effects: `∫ β βᵀ = (h² / M) I`. -/</span>
+  ⋯</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:131</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsStandardized (X : Matrix (Fin N) (Fin M) ℝ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ k, ∑ i, X i k = 0 ∧ ∑ i, X i k ^ 2 = N</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:96</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.chiSqStrat">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> chiSqStrat (D : Model μ N M) (X : Matrix (Fin N) (Fin M) ℝ) (s : ℝ)
+    (c : Fin N → ℝ) (j : Fin M) (ω : Ω) : ℝ := N * betaHatStrat D X s c j ω ^ 2</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean:92</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.ldScore">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> ldScore (X : Matrix (Fin N) (Fin M) ℝ) (j : Fin M) : ℝ :=
+  ∑ k, ldCorr X j k ^ 2</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:91</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-standardized">Standardized genotype matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#model">Random-effects model of LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ld-score">LD score of a marker</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#chi-sq-strat">Association statistic under stratification</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#integral-chi-sq-strat-of-standardized">Expected statistic under stratification for standardized genotypes</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mean-integral-chi-sq-strat-of-const">Mean association statistic with constant stratification</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/mean-integral-chi-sq-strat-of-const">
+<h4 class="bp-thmheading" id="mean-integral-chi-sq-strat-of-const">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Mean association statistic with constant stratification</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean#L167" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.mean_integral_chiSqStrat_of_const in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.mean_integral_chiSqStrat_of_const in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#mean-integral-chi-sq-strat-of-const" aria-label="Link to Mean association statistic with constant stratification" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.mean_integral_chiSqStrat_of_const</div>
+<div class="bp-thmcontent">
+<p>With a constant stratification term <code>N a</code>, the mean expected statistic is
+<code>N h² ℓ̄ / M + (1 - h² + N a)</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> mean_integral_chiSqStrat_of_const [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsProbabilityMeasure#doc" title="MeasureTheory.IsProbabilityMeasure">IsProbabilityMeasure</a> μ] (D : <a class="bp-lean-ref" href="#model" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model">Model</a> μ N M)
+    (X : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) ℝ) (hN : N ≠ 0) (hM : M ≠ 0) (hX : <a class="bp-lean-ref" href="#is-standardized" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized">IsStandardized</a> X)
+    (hβ : ∀ k, ∫ ω, D.beta k ω ∂μ = 0) (hε : ∀ i, ∫ ω, D.eps i ω ∂μ = 0) (s : ℝ)
+    (c : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N → ℝ) {a : ℝ} (ha : ∀ j, s ^ 2 * ((∑ i, X i j * c i) / N) ^ 2 = a) :
+    (∑ j, ∫ ω, <a class="bp-lean-ref" href="#chi-sq-strat" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.chiSqStrat">chiSqStrat</a> D X s c j ω ∂μ) / M =
+      N * D.h2 / M * <a class="bp-lean-ref" href="#mean-ldscore" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.meanLDScore">meanLDScore</a> X + (1 - D.h2 + N * a)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Model (μ : Measure Ω) (N M : ℕ) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The SNP heritability `h²`. -/</span>
+  h2 : ℝ
+  <span class="bp-lean-comment">/-- Random per-marker effect sizes. -/</span>
+  beta : Fin M → Ω → ℝ
+  <span class="bp-lean-comment">/-- Random environmental noise. -/</span>
+  eps : Fin N → Ω → ℝ
+  <span class="bp-lean-comment">/-- Effects are square integrable. -/</span>
+  memLp_beta : ∀ k, MemLp (beta k) 2 μ
+  <span class="bp-lean-comment">/-- Noise terms are square integrable. -/</span>
+  memLp_eps : ∀ i, MemLp (eps i) 2 μ
+  <span class="bp-lean-comment">/-- Raw second moments of the effects: `∫ β βᵀ = (h² / M) I`. -/</span>
+  ⋯</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:131</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsStandardized (X : Matrix (Fin N) (Fin M) ℝ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ k, ∑ i, X i k = 0 ∧ ∑ i, X i k ^ 2 = N</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:96</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.chiSqStrat">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> chiSqStrat (D : Model μ N M) (X : Matrix (Fin N) (Fin M) ℝ) (s : ℝ)
+    (c : Fin N → ℝ) (j : Fin M) (ω : Ω) : ℝ := N * betaHatStrat D X s c j ω ^ 2</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean:92</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.meanLDScore">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> meanLDScore (X : Matrix (Fin N) (Fin M) ℝ) : ℝ := (∑ j, ldScore X j) / M</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean:69</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 6 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-standardized">Standardized genotype matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#model">Random-effects model of LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#chi-sq-strat">Association statistic under stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mean-ldscore">Mean LD score</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#ld-score">LD score of a marker</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#integral-chi-sq-strat-of-const">LD-score regression with constant stratification</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#attenuation-ratio-of-const">Attenuation ratio under constant stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#confounding-share-of-const">Confounding share of inflation under constant stratification</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/attenuation-ratio">
+<h4 class="bp-thmheading" id="attenuation-ratio">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Attenuation ratio</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean#L180" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.attenuationRatio in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.attenuationRatio in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#attenuation-ratio" aria-label="Link to Attenuation ratio" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.attenuationRatio</div>
+<div class="bp-thmcontent">
+<p>The attenuation ratio <code>(intercept - 1) / (mean χ² - 1)</code> of Loh et al. (2018).</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> attenuationRatio (intercept meanChiSq : ℝ) : ℝ :=
+  (intercept - 1) / (meanChiSq - 1)</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#attenuation-ratio-of-const">Attenuation ratio under constant stratification</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/attenuation-ratio-of-const">
+<h4 class="bp-thmheading" id="attenuation-ratio-of-const">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Attenuation ratio under constant stratification</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean#L185" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.attenuationRatio_of_const in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.attenuationRatio_of_const in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#attenuation-ratio-of-const" aria-label="Link to Attenuation ratio under constant stratification" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.attenuationRatio_of_const</div>
+<div class="bp-thmcontent">
+<p>With a constant stratification term <code>N a</code>, the attenuation ratio of the exact intercept
+<code>1 - h² + N a</code> and the mean expected statistic is <code>(N a - h²) / (N h² ℓ̄ / M + N a - h²)</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> attenuationRatio_of_const [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsProbabilityMeasure#doc" title="MeasureTheory.IsProbabilityMeasure">IsProbabilityMeasure</a> μ] (D : <a class="bp-lean-ref" href="#model" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model">Model</a> μ N M)
+    (X : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) ℝ) (hN : N ≠ 0) (hM : M ≠ 0) (hX : <a class="bp-lean-ref" href="#is-standardized" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized">IsStandardized</a> X)
+    (hβ : ∀ k, ∫ ω, D.beta k ω ∂μ = 0) (hε : ∀ i, ∫ ω, D.eps i ω ∂μ = 0) (s : ℝ)
+    (c : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N → ℝ) {a : ℝ} (ha : ∀ j, s ^ 2 * ((∑ i, X i j * c i) / N) ^ 2 = a) :
+    <a class="bp-lean-ref" href="#attenuation-ratio" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.attenuationRatio">attenuationRatio</a> (1 - D.h2 + N * a) ((∑ j, ∫ ω, <a class="bp-lean-ref" href="#chi-sq-strat" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.chiSqStrat">chiSqStrat</a> D X s c j ω ∂μ) / M) =
+      (N * a - D.h2) / (N * D.h2 / M * <a class="bp-lean-ref" href="#mean-ldscore" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.meanLDScore">meanLDScore</a> X + N * a - D.h2)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Model (μ : Measure Ω) (N M : ℕ) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The SNP heritability `h²`. -/</span>
+  h2 : ℝ
+  <span class="bp-lean-comment">/-- Random per-marker effect sizes. -/</span>
+  beta : Fin M → Ω → ℝ
+  <span class="bp-lean-comment">/-- Random environmental noise. -/</span>
+  eps : Fin N → Ω → ℝ
+  <span class="bp-lean-comment">/-- Effects are square integrable. -/</span>
+  memLp_beta : ∀ k, MemLp (beta k) 2 μ
+  <span class="bp-lean-comment">/-- Noise terms are square integrable. -/</span>
+  memLp_eps : ∀ i, MemLp (eps i) 2 μ
+  <span class="bp-lean-comment">/-- Raw second moments of the effects: `∫ β βᵀ = (h² / M) I`. -/</span>
+  ⋯</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:131</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsStandardized (X : Matrix (Fin N) (Fin M) ℝ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ k, ∑ i, X i k = 0 ∧ ∑ i, X i k ^ 2 = N</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:96</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.attenuationRatio">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> attenuationRatio (intercept meanChiSq : ℝ) : ℝ :=
+  (intercept - 1) / (meanChiSq - 1)</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean:180</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.chiSqStrat">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> chiSqStrat (D : Model μ N M) (X : Matrix (Fin N) (Fin M) ℝ) (s : ℝ)
+    (c : Fin N → ℝ) (j : Fin M) (ω : Ω) : ℝ := N * betaHatStrat D X s c j ω ^ 2</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean:92</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.meanLDScore">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> meanLDScore (X : Matrix (Fin N) (Fin M) ℝ) : ℝ := (∑ j, ldScore X j) / M</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean:69</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 6</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-standardized">Standardized genotype matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#model">Random-effects model of LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#attenuation-ratio">Attenuation ratio</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#chi-sq-strat">Association statistic under stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mean-ldscore">Mean LD score</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mean-integral-chi-sq-strat-of-const">Mean association statistic with constant stratification</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/confounding-share-of-const">
+<h4 class="bp-thmheading" id="confounding-share-of-const">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Confounding share of inflation under constant stratification</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean#L196" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.confoundingShare_of_const in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.confoundingShare_of_const in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#confounding-share-of-const" aria-label="Link to Confounding share of inflation under constant stratification" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.confoundingShare_of_const</div>
+<div class="bp-thmcontent">
+<p>With a constant stratification term <code>N a</code>, the share of the mean inflation above the exact
+null level <code>1 - h²</code> that is due to stratification is <code>N a / (N a + N h² ℓ̄ / M)</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> confoundingShare_of_const [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsProbabilityMeasure#doc" title="MeasureTheory.IsProbabilityMeasure">IsProbabilityMeasure</a> μ] (D : <a class="bp-lean-ref" href="#model" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model">Model</a> μ N M)
+    (X : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> M) ℝ) (hN : N ≠ 0) (hM : M ≠ 0) (hX : <a class="bp-lean-ref" href="#is-standardized" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized">IsStandardized</a> X)
+    (hβ : ∀ k, ∫ ω, D.beta k ω ∂μ = 0) (hε : ∀ i, ∫ ω, D.eps i ω ∂μ = 0) (s : ℝ)
+    (c : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> N → ℝ) {a : ℝ} (ha : ∀ j, s ^ 2 * ((∑ i, X i j * c i) / N) ^ 2 = a) :
+    ((1 - D.h2 + N * a) - (1 - D.h2)) /
+        ((∑ j, ∫ ω, <a class="bp-lean-ref" href="#chi-sq-strat" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.chiSqStrat">chiSqStrat</a> D X s c j ω ∂μ) / M - (1 - D.h2)) =
+      N * a / (N * a + N * D.h2 / M * <a class="bp-lean-ref" href="#mean-ldscore" data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.meanLDScore">meanLDScore</a> X)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.Model">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Model (μ : Measure Ω) (N M : ℕ) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The SNP heritability `h²`. -/</span>
+  h2 : ℝ
+  <span class="bp-lean-comment">/-- Random per-marker effect sizes. -/</span>
+  beta : Fin M → Ω → ℝ
+  <span class="bp-lean-comment">/-- Random environmental noise. -/</span>
+  eps : Fin N → Ω → ℝ
+  <span class="bp-lean-comment">/-- Effects are square integrable. -/</span>
+  memLp_beta : ∀ k, MemLp (beta k) 2 μ
+  <span class="bp-lean-comment">/-- Noise terms are square integrable. -/</span>
+  memLp_eps : ∀ i, MemLp (eps i) 2 μ
+  <span class="bp-lean-comment">/-- Raw second moments of the effects: `∫ β βᵀ = (h² / M) I`. -/</span>
+  ⋯</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:131</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScore.IsStandardized">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsStandardized (X : Matrix (Fin N) (Fin M) ℝ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ k, ∑ i, X i k = 0 ∧ ∑ i, X i k ^ 2 = N</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScore.lean:96</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.chiSqStrat">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> chiSqStrat (D : Model μ N M) (X : Matrix (Fin N) (Fin M) ℝ) (s : ℝ)
+    (c : Fin N → ℝ) (j : Fin M) (ω : Ω) : ℝ := N * betaHatStrat D X s c j ω ^ 2</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean:92</p>
+</div>
+<div data-lean-name="MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.meanLDScore">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> meanLDScore (X : Matrix (Fin N) (Fin M) ℝ) : ℝ := (∑ j, ldScore X j) / M</code></pre>
+<p class="bp-lean-where">MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean:69</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-standardized">Standardized genotype matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#model">Random-effects model of LD-score regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#chi-sq-strat">Association statistic under stratification</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mean-ldscore">Mean LD score</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mean-integral-chi-sq-strat-of-const">Mean association statistic with constant stratification</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Biology/statistical-genetics/ld-score-regression/confounding-share-mem-icc">
+<h4 class="bp-thmheading" id="confounding-share-mem-icc">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Confounding share lies between 0 and 1</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/MathlibExt/Biology/StatisticalGenetics/LDScoreInflation.lean#L209" aria-label="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.confoundingShare_mem_Icc in Lean source" title="View MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.confoundingShare_mem_Icc in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#confounding-share-mem-icc" aria-label="Link to Confounding share lies between 0 and 1" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Biology.StatisticalGenetics.LDScoreInflation.confoundingShare_mem_Icc</div>
+<div class="bp-thmcontent">
+<p>The confounding share <code>N a / (N a + N h² ℓ̄ / M)</code> lies in <code>[0, 1]</code> when <code>a</code>, <code>h²</code> and <code>ℓ̄</code>
+are nonnegative (as they are in the model: <code>a</code> is a square, <code>h² ≥ 0</code> by <code>Model.h2_nonneg</code>,
+LD scores are sums of squares).</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> confoundingShare_mem_Icc {a h2 lbar : ℝ} (ha : 0 ≤ a) (hh : 0 ≤ h2) (hl : 0 ≤ lbar) :
+    N * a / (N * a + N * h2 / M * lbar) ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Icc#doc" title="Set.Icc">Set.Icc</a> 0 1</code></pre>
+</div>
+</div>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>26</strong> fully proved</span></div>
+</div>
+</div>
+<p><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../dependencies/index.json" data-graph-src="../../../../dependencies/scopes/Biology/statistical-genetics/ld-score-regression.json" data-page-href="index.html" data-scope-id="Biology/statistical-genetics/ld-score-regression">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>

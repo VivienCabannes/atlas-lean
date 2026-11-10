@@ -1,0 +1,5497 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../index.html">
+      
+      
+        <link rel="next" href="../functional-dependencies/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Conflict serializability - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#databases" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Conflict serializability
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23" id="__nav_2_1_23_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_23_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Computer Science
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../data-structures/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data structures
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../graph-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../process-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Process calculi and behavioural equivalence
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../type-systems-and-lambda-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Type systems and lambda calculi
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../programming-language-semantics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programming language semantics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../machine-learning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Machine learning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../sorting-and-searching/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sorting and searching
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../dynamic-programming/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic programming
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../greedy-algorithms-and-matroids/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Greedy algorithms and matroids
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../approximation-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Approximation algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../online-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Online algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../randomized-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Randomized algorithms and probabilistic analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../parallel-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../algebraic-and-numerical-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic and numerical algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../computational-geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computational geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../string-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    String algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../heuristic-search-and-planning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heuristic search and planning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../cryptography/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cryptography
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23_20" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Databases
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23_20" id="__nav_2_1_23_20_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_23_20_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23_20">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Databases
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflict serializability
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conflict serializability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#databases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Databases
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conflicting-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conflicting operations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#databases_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Databases
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../functional-dependencies/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Functional dependencies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../relational-algebra/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Relational algebra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lossless-decomposition-and-normal-forms/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lossless decomposition and normal forms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../two-phase-locking/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Two-phase locking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../quantum-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../concurrent-systems-and-protocols/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concurrent systems and protocols
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../program-logics-and-verification/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Program logics and verification
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#databases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Databases
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conflicting-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conflicting operations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#databases_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Databases
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../index.html" tabindex="-1">Computer Science</a></li><li><a href="../index.html" tabindex="-1">Databases</a></li><li aria-current="page">Conflict serializability</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Conflict serializability</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="ComputerScience/databases/conflict-serializability" data-page-title="Conflict serializability">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="conflict-serializability">Conflict serializability</h1>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>16</strong> fully proved</span></div>
+</div>
+<h2 id="databases">Databases</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/databases/conflict-serializability/access">
+<h4 class="bp-thmheading" id="access">
+<span class="bp-thmcaption" data-search-exclude>Inductive</span><span class="bp-thmtitle">Read or write access</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Databases/Serializability.lean#L64" aria-label="View Cslib.Databases.Access in Lean source" title="View Cslib.Databases.Access in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#access" aria-label="Link to Read or write access" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Databases.Access</div>
+<div class="bp-thmcontent">
+<p>The kind of access an operation makes to its data item is one of
+two values: a read or a write.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> Access
+  <span class="bp-lean-comment">/-- A read. -/</span>
+  | read
+  <span class="bp-lean-comment">/-- A write. -/</span>
+  | write
+<span class="bp-lean-keyword">deriving</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=DecidableEq#doc" title="DecidableEq">DecidableEq</a></code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 10</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#conflict-equiv-serialize">Serializing along a topological order preserves conflict equivalence</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#conflict-serializable-of-rank">A rank increasing along precedence edges gives conflict serializability</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflicts">Conflicting operations</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-acyclic">A conflict-serializable schedule has an acyclic precedence graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#op">Operation of a schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#precedence-graph">Precedence graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../two-phase-locking/index.html#conflict-serializable">The two-phase locking theorem</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-phase-locking/index.html#locks-cover">Schedules covered by locks</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-phase-locking/index.html#locks-cover-at">Lock coverage at a position</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-phase-locking/index.html#mode">Lock mode required by an access</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/databases/conflict-serializability/op">
+<h4 class="bp-thmheading" id="op">
+<span class="bp-thmcaption" data-search-exclude>Structure</span><span class="bp-thmtitle">Operation of a schedule</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Databases/Serializability.lean#L73" aria-label="View Cslib.Databases.Op in Lean source" title="View Cslib.Databases.Op in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#op" aria-label="Link to Operation of a schedule" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Databases.Op</div>
+<div class="bp-thmcontent">
+<p>For <span class="arithmatex">\(n\)</span> transactions, numbered <span class="arithmatex">\(0, \dots, n - 1\)</span>, and data items
+of type <span class="arithmatex">\(X\)</span>, an operation consists of a transaction <span class="arithmatex">\(t \in \{0, \dots, n - 1\}\)</span>, an occurrence
+identifier <span class="arithmatex">\(k \in \mathbb{N}\)</span>, an access, which is a read or a write, and a data item <span class="arithmatex">\(x \in X\)</span>:
+transaction <span class="arithmatex">\(t\)</span> reads or writes <span class="arithmatex">\(x\)</span>, and <span class="arithmatex">\(k\)</span> makes repeated accesses of <span class="arithmatex">\(t\)</span> to an item distinct
+operations.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Op (n : ℕ) (X : <span class="bp-lean-keyword">Type</span>*) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The transaction performing the operation. -/</span>
+  txn : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n
+  <span class="bp-lean-comment">/-- An identifier of the occurrence (for instance its position in the transaction), which makes
+  repeated accesses of a transaction to an item distinct operations. -/</span>
+  step : ℕ
+  <span class="bp-lean-comment">/-- Read or write. -/</span>
+  access : <a class="bp-lean-ref" href="#access" data-lean-name="Cslib.Databases.Access">Access</a>
+  <span class="bp-lean-comment">/-- The data item accessed. -/</span>
+  item : X
+<span class="bp-lean-keyword">deriving</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=DecidableEq#doc" title="DecidableEq">DecidableEq</a></code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Databases.Access">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> Access
+  <span class="bp-lean-comment">/-- A read. -/</span>
+  | read
+  <span class="bp-lean-comment">/-- A write. -/</span>
+  | write
+<span class="bp-lean-keyword">deriving</span> DecidableEq</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:64</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 26</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#access">Read or write access</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflict-equiv">Conflict equivalence</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflict-equiv-serialize">Serializing along a topological order preserves conflict equivalence</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflict-serializable">Conflict-serializable schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflict-serializable-iff-is-acyclic">The serializability theorem</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflict-serializable-of-rank">A rank increasing along precedence edges gives conflict serializability</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflicts">Conflicting operations</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-acyclic">A conflict-serializable schedule has an acyclic precedence graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-serial">Serial schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-serial-serialize">Serializing along a complete transaction order gives a serial schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#order-matters">Operations whose relative order matters</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#precedence-edge">Edge of the precedence graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#precedence-graph">Precedence graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#serialize">Serialization of a schedule along a transaction order</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#txn-before">One transaction before another in a schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-phase-locking/index.html#action">Action of a locked schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-phase-locking/index.html#conflict-serializable">The two-phase locking theorem</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-phase-locking/index.html#conflict-serializable-2">Strict two-phase locking theorem</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-phase-locking/index.html#is-unlock-by">Release test</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-phase-locking/index.html#locked-items">Locked items</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-phase-locking/index.html#locks-cover">Schedules covered by locks</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-phase-locking/index.html#locks-cover-at">Lock coverage at a position</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-phase-locking/index.html#ops">Reads and writes of a locked schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-phase-locking/index.html#released-at">Release of the lock requested at a position</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-phase-locking/index.html#strict-at">Strictness at a pair of positions</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-phase-locking/index.html#strict-two-phase">Strict two-phase schedules</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-phase-locking/index.html#two-phase-at">Two-phase condition at a pair of positions</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="conflicting-operations">Conflicting operations</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/databases/conflict-serializability/conflicts">
+<h4 class="bp-thmheading" id="conflicts">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Conflicting operations</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Databases/Serializability.lean#L91" aria-label="View Cslib.Databases.Op.Conflicts in Lean source" title="View Cslib.Databases.Op.Conflicts in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#conflicts" aria-label="Link to Conflicting operations" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Databases.Op.Conflicts</div>
+<div class="bp-thmcontent">
+<p>Two operations of a schedule conflict when they belong to different
+transactions, access the same data item, and at least one of the two accesses is a write.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Conflicts (a b : <a class="bp-lean-ref" href="#op" data-lean-name="Cslib.Databases.Op">Op</a> n X) : <span class="bp-lean-keyword">Prop</span> :=
+  a.txn ≠ b.txn ∧ a.item = b.item ∧ (a.access = .write ∨ b.access = .write)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Databases.Op">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Op (n : ℕ) (X : <span class="bp-lean-keyword">Type</span>*) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The transaction performing the operation. -/</span>
+  txn : Fin n
+  <span class="bp-lean-comment">/-- An identifier of the occurrence (for instance its position in the transaction), which makes
+  repeated accesses of a transaction to an item distinct operations. -/</span>
+  step : ℕ
+  <span class="bp-lean-comment">/-- Read or write. -/</span>
+  access : Access
+  <span class="bp-lean-comment">/-- The data item accessed. -/</span>
+  item : X
+<span class="bp-lean-keyword">deriving</span> DecidableEq</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:73</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 7</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#access">Read or write access</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#op">Operation of a schedule</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#conflict-equiv-serialize">Serializing along a topological order preserves conflict equivalence</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#conflict-serializable-of-rank">A rank increasing along precedence edges gives conflict serializability</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-acyclic">A conflict-serializable schedule has an acyclic precedence graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#order-matters">Operations whose relative order matters</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#precedence-edge">Edge of the precedence graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#precedence-graph">Precedence graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../two-phase-locking/index.html#conflict-serializable">The two-phase locking theorem</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/databases/conflict-serializability/order-matters">
+<h4 class="bp-thmheading" id="order-matters">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Operations whose relative order matters</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Databases/Serializability.lean#L103" aria-label="View Cslib.Databases.Op.OrderMatters in Lean source" title="View Cslib.Databases.Op.OrderMatters in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#order-matters" aria-label="Link to Operations whose relative order matters" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Databases.Op.OrderMatters</div>
+<div class="bp-thmcontent">
+<p>Two operations <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span> are order-relevant when
+they belong to the same transaction or they conflict. These are the pairs whose relative order a
+conflict-equivalent schedule must keep.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> OrderMatters (a b : <a class="bp-lean-ref" href="#op" data-lean-name="Cslib.Databases.Op">Op</a> n X) : <span class="bp-lean-keyword">Prop</span> := a.txn = b.txn ∨ a.Conflicts b</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Databases.Op">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Op (n : ℕ) (X : <span class="bp-lean-keyword">Type</span>*) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The transaction performing the operation. -/</span>
+  txn : Fin n
+  <span class="bp-lean-comment">/-- An identifier of the occurrence (for instance its position in the transaction), which makes
+  repeated accesses of a transaction to an item distinct operations. -/</span>
+  step : ℕ
+  <span class="bp-lean-comment">/-- Read or write. -/</span>
+  access : Access
+  <span class="bp-lean-comment">/-- The data item accessed. -/</span>
+  item : X
+<span class="bp-lean-keyword">deriving</span> DecidableEq</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:73</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#op">Operation of a schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflicts">Conflicting operations</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflict-equiv">Conflict equivalence</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#conflict-equiv-serialize">Serializing along a topological order preserves conflict equivalence</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-acyclic">A conflict-serializable schedule has an acyclic precedence graph</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="databases_1">Databases</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/databases/conflict-serializability/conflict-equiv">
+<h4 class="bp-thmheading" id="conflict-equiv">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Conflict equivalence</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Databases/Serializability.lean#L114" aria-label="View Cslib.Databases.ConflictEquiv in Lean source" title="View Cslib.Databases.ConflictEquiv in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#conflict-equiv" aria-label="Link to Conflict equivalence" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Databases.ConflictEquiv</div>
+<div class="bp-thmcontent">
+<p>A schedule <span class="arithmatex">\(s'\)</span> is conflict-equivalent to a schedule <span class="arithmatex">\(s\)</span> when <span class="arithmatex">\(s'\)</span>
+is a permutation of <span class="arithmatex">\(s\)</span> and, for any two operations <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(b\)</span> that belong to the same
+transaction or conflict, an occurrence of <span class="arithmatex">\(a\)</span> comes before an occurrence of <span class="arithmatex">\(b\)</span> in <span class="arithmatex">\(s\)</span> if and
+only if the same holds in <span class="arithmatex">\(s'\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> ConflictEquiv (s s&#x27; : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#op" data-lean-name="Cslib.Databases.Op">Op</a> n X)) : <span class="bp-lean-keyword">Prop</span> :=
+  s.Perm s&#x27; ∧ ∀ a b, a.OrderMatters b → ([a, b] &lt;+ s ↔ [a, b] &lt;+ s&#x27;)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Databases.Op">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Op (n : ℕ) (X : <span class="bp-lean-keyword">Type</span>*) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The transaction performing the operation. -/</span>
+  txn : Fin n
+  <span class="bp-lean-comment">/-- An identifier of the occurrence (for instance its position in the transaction), which makes
+  repeated accesses of a transaction to an item distinct operations. -/</span>
+  step : ℕ
+  <span class="bp-lean-comment">/-- Read or write. -/</span>
+  access : Access
+  <span class="bp-lean-comment">/-- The data item accessed. -/</span>
+  item : X
+<span class="bp-lean-keyword">deriving</span> DecidableEq</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:73</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#op">Operation of a schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#order-matters">Operations whose relative order matters</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflict-equiv-serialize">Serializing along a topological order preserves conflict equivalence</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflict-serializable">Conflict-serializable schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#conflict-serializable-iff-is-acyclic">The serializability theorem</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-acyclic">A conflict-serializable schedule has an acyclic precedence graph</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/databases/conflict-serializability/txn-before">
+<h4 class="bp-thmheading" id="txn-before">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">One transaction before another in a schedule</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Databases/Serializability.lean#L118" aria-label="View Cslib.Databases.TxnBefore in Lean source" title="View Cslib.Databases.TxnBefore in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#txn-before" aria-label="Link to One transaction before another in a schedule" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Databases.TxnBefore</div>
+<div class="bp-thmcontent">
+<p>For a schedule <span class="arithmatex">\(s\)</span> and transactions <span class="arithmatex">\(i\)</span> and
+<span class="arithmatex">\(j\)</span>, transaction <span class="arithmatex">\(i\)</span> precedes transaction <span class="arithmatex">\(j\)</span> in <span class="arithmatex">\(s\)</span> when every operation of <span class="arithmatex">\(i\)</span> in <span class="arithmatex">\(s\)</span> occurs in
+<span class="arithmatex">\(s\)</span> before every operation of <span class="arithmatex">\(j\)</span> in <span class="arithmatex">\(s\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> TxnBefore (s : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#op" data-lean-name="Cslib.Databases.Op">Op</a> n X)) (i j : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ a ∈ s, ∀ b ∈ s, a.txn = i → b.txn = j → [a, b] &lt;+ s</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Databases.Op">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Op (n : ℕ) (X : <span class="bp-lean-keyword">Type</span>*) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The transaction performing the operation. -/</span>
+  txn : Fin n
+  <span class="bp-lean-comment">/-- An identifier of the occurrence (for instance its position in the transaction), which makes
+  repeated accesses of a transaction to an item distinct operations. -/</span>
+  step : ℕ
+  <span class="bp-lean-comment">/-- Read or write. -/</span>
+  access : Access
+  <span class="bp-lean-comment">/-- The data item accessed. -/</span>
+  item : X
+<span class="bp-lean-keyword">deriving</span> DecidableEq</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:73</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#op">Operation of a schedule</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-acyclic">A conflict-serializable schedule has an acyclic precedence graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-serial">Serial schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-serial-serialize">Serializing along a complete transaction order gives a serial schedule</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/databases/conflict-serializability/is-serial">
+<h4 class="bp-thmheading" id="is-serial">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Serial schedule</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Databases/Serializability.lean#L123" aria-label="View Cslib.Databases.IsSerial in Lean source" title="View Cslib.Databases.IsSerial in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#is-serial" aria-label="Link to Serial schedule" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Databases.IsSerial</div>
+<div class="bp-thmcontent">
+<p>A schedule <span class="arithmatex">\(s\)</span> is serial when, for any two distinct transactions <span class="arithmatex">\(i\)</span> and
+<span class="arithmatex">\(j\)</span>, either every operation of <span class="arithmatex">\(i\)</span> in <span class="arithmatex">\(s\)</span> occurs before every operation of <span class="arithmatex">\(j\)</span> in <span class="arithmatex">\(s\)</span>, or every
+operation of <span class="arithmatex">\(j\)</span> in <span class="arithmatex">\(s\)</span> occurs before every operation of <span class="arithmatex">\(i\)</span> in <span class="arithmatex">\(s\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsSerial (s : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#op" data-lean-name="Cslib.Databases.Op">Op</a> n X)) : <span class="bp-lean-keyword">Prop</span> := ∀ i j, i ≠ j → <a class="bp-lean-ref" href="#txn-before" data-lean-name="Cslib.Databases.TxnBefore">TxnBefore</a> s i j ∨ <a class="bp-lean-ref" href="#txn-before" data-lean-name="Cslib.Databases.TxnBefore">TxnBefore</a> s j i</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Databases.Op">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Op (n : ℕ) (X : <span class="bp-lean-keyword">Type</span>*) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The transaction performing the operation. -/</span>
+  txn : Fin n
+  <span class="bp-lean-comment">/-- An identifier of the occurrence (for instance its position in the transaction), which makes
+  repeated accesses of a transaction to an item distinct operations. -/</span>
+  step : ℕ
+  <span class="bp-lean-comment">/-- Read or write. -/</span>
+  access : Access
+  <span class="bp-lean-comment">/-- The data item accessed. -/</span>
+  item : X
+<span class="bp-lean-keyword">deriving</span> DecidableEq</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:73</p>
+</div>
+<div data-lean-name="Cslib.Databases.TxnBefore">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> TxnBefore (s : List (Op n X)) (i j : Fin n) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ a ∈ s, ∀ b ∈ s, a.txn = i → b.txn = j → [a, b] &lt;+ s</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:118</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#op">Operation of a schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#txn-before">One transaction before another in a schedule</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflict-serializable">Conflict-serializable schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#conflict-serializable-iff-is-acyclic">The serializability theorem</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-acyclic">A conflict-serializable schedule has an acyclic precedence graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-serial-serialize">Serializing along a complete transaction order gives a serial schedule</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/databases/conflict-serializability/conflict-serializable">
+<h4 class="bp-thmheading" id="conflict-serializable">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Conflict-serializable schedule</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Databases/Serializability.lean#L134" aria-label="View Cslib.Databases.ConflictSerializable in Lean source" title="View Cslib.Databases.ConflictSerializable in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#conflict-serializable" aria-label="Link to Conflict-serializable schedule" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Databases.ConflictSerializable</div>
+<div class="bp-thmcontent">
+<p>A schedule <span class="arithmatex">\(s\)</span> is conflict-serializable when some serial
+schedule is conflict-equivalent to <span class="arithmatex">\(s\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> ConflictSerializable (s : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#op" data-lean-name="Cslib.Databases.Op">Op</a> n X)) : <span class="bp-lean-keyword">Prop</span> := ∃ s&#x27;, <a class="bp-lean-ref" href="#is-serial" data-lean-name="Cslib.Databases.IsSerial">IsSerial</a> s&#x27; ∧ <a class="bp-lean-ref" href="#conflict-equiv" data-lean-name="Cslib.Databases.ConflictEquiv">ConflictEquiv</a> s s&#x27;</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Databases.Op">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Op (n : ℕ) (X : <span class="bp-lean-keyword">Type</span>*) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The transaction performing the operation. -/</span>
+  txn : Fin n
+  <span class="bp-lean-comment">/-- An identifier of the occurrence (for instance its position in the transaction), which makes
+  repeated accesses of a transaction to an item distinct operations. -/</span>
+  step : ℕ
+  <span class="bp-lean-comment">/-- Read or write. -/</span>
+  access : Access
+  <span class="bp-lean-comment">/-- The data item accessed. -/</span>
+  item : X
+<span class="bp-lean-keyword">deriving</span> DecidableEq</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:73</p>
+</div>
+<div data-lean-name="Cslib.Databases.IsSerial">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsSerial (s : List (Op n X)) : <span class="bp-lean-keyword">Prop</span> := ∀ i j, i ≠ j → TxnBefore s i j ∨ TxnBefore s j i</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:123</p>
+</div>
+<div data-lean-name="Cslib.Databases.ConflictEquiv">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> ConflictEquiv (s s&#x27; : List (Op n X)) : <span class="bp-lean-keyword">Prop</span> :=
+  s.Perm s&#x27; ∧ ∀ a b, a.OrderMatters b → ([a, b] &lt;+ s ↔ [a, b] &lt;+ s&#x27;)</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:114</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflict-equiv">Conflict equivalence</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-serial">Serial schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#op">Operation of a schedule</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflict-serializable-iff-is-acyclic">The serializability theorem</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflict-serializable-of-rank">A rank increasing along precedence edges gives conflict serializability</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-acyclic">A conflict-serializable schedule has an acyclic precedence graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-phase-locking/index.html#conflict-serializable">The two-phase locking theorem</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../two-phase-locking/index.html#conflict-serializable-2">Strict two-phase locking theorem</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/databases/conflict-serializability/precedence-edge">
+<h4 class="bp-thmheading" id="precedence-edge">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Edge of the precedence graph</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Databases/Serializability.lean#L138" aria-label="View Cslib.Databases.PrecedenceEdge in Lean source" title="View Cslib.Databases.PrecedenceEdge in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#precedence-edge" aria-label="Link to Edge of the precedence graph" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Databases.PrecedenceEdge</div>
+<div class="bp-thmcontent">
+<p>For a schedule <span class="arithmatex">\(s\)</span> and transactions <span class="arithmatex">\(i\)</span> and <span class="arithmatex">\(j\)</span>, there is a
+precedence edge from <span class="arithmatex">\(i\)</span> to <span class="arithmatex">\(j\)</span> in <span class="arithmatex">\(s\)</span> when some operation of <span class="arithmatex">\(i\)</span> occurs in <span class="arithmatex">\(s\)</span> before some
+operation of <span class="arithmatex">\(j\)</span> in <span class="arithmatex">\(s\)</span> that conflicts with it.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> PrecedenceEdge (s : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#op" data-lean-name="Cslib.Databases.Op">Op</a> n X)) (i j : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n) : <span class="bp-lean-keyword">Prop</span> :=
+  ∃ a ∈ s, ∃ b ∈ s, a.txn = i ∧ b.txn = j ∧ a.Conflicts b ∧ [a, b] &lt;+ s</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Databases.Op">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Op (n : ℕ) (X : <span class="bp-lean-keyword">Type</span>*) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The transaction performing the operation. -/</span>
+  txn : Fin n
+  <span class="bp-lean-comment">/-- An identifier of the occurrence (for instance its position in the transaction), which makes
+  repeated accesses of a transaction to an item distinct operations. -/</span>
+  step : ℕ
+  <span class="bp-lean-comment">/-- Read or write. -/</span>
+  access : Access
+  <span class="bp-lean-comment">/-- The data item accessed. -/</span>
+  item : X
+<span class="bp-lean-keyword">deriving</span> DecidableEq</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:73</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#op">Operation of a schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflicts">Conflicting operations</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#conflict-equiv-serialize">Serializing along a topological order preserves conflict equivalence</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflict-serializable-of-rank">A rank increasing along precedence edges gives conflict serializability</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-acyclic">A conflict-serializable schedule has an acyclic precedence graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#precedence-graph">Precedence graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../two-phase-locking/index.html#conflict-serializable">The two-phase locking theorem</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/databases/conflict-serializability/precedence-graph">
+<h4 class="bp-thmheading" id="precedence-graph">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Precedence graph</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Databases/Serializability.lean#L146" aria-label="View Cslib.Databases.precedenceGraph in Lean source" title="View Cslib.Databases.precedenceGraph in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#precedence-graph" aria-label="Link to Precedence graph" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Databases.precedenceGraph</div>
+<div class="bp-thmcontent">
+<p>The precedence (serialization) graph of a schedule <span class="arithmatex">\(s\)</span> of <span class="arithmatex">\(n\)</span>
+transactions is the directed adjacency graph whose vertices are the transactions
+<span class="arithmatex">\(0, \dots, n - 1\)</span>, listed in increasing order, and whose adjacency list at a transaction <span class="arithmatex">\(i\)</span> lists,
+in increasing order, the transactions <span class="arithmatex">\(j\)</span> such that there is a precedence edge from <span class="arithmatex">\(i\)</span> to <span class="arithmatex">\(j\)</span>
+in <span class="arithmatex">\(s\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> precedenceGraph (s : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#op" data-lean-name="Cslib.Databases.Op">Op</a> n X)) : <a class="bp-lean-ref" href="../../graph-algorithms/traversal-and-connectivity/adjacency-list/index.html#directed-adjacency" data-lean-name="Cslib.Algorithms.Lean.DirectedAdjacency">DirectedAdjacency</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n) <span class="bp-lean-keyword">where</span>
+  vertices := <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List.finRange#doc" title="List.finRange">List.finRange</a> n
+  vertices_nodup := <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List.nodup_finRange#doc" title="List.nodup_finRange">List.nodup_finRange</a> n
+  vertices_complete := <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List.mem_finRange#doc" title="List.mem_finRange">List.mem_finRange</a>
+  <a class="bp-lean-ref" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Graph/DirectedAdjacency.lean#L40" data-lean-name="Cslib.Algorithms.Lean.DirectedAdjacency.adjacency">adjacency</a> i := (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List.finRange#doc" title="List.finRange">List.finRange</a> n).filter <span class="bp-lean-keyword">fun</span> j =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Decidable.decide#doc" title="Decidable.decide">decide</a> (<a class="bp-lean-ref" href="#precedence-edge" data-lean-name="Cslib.Databases.PrecedenceEdge">PrecedenceEdge</a> s i j)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Databases.Op">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Op (n : ℕ) (X : <span class="bp-lean-keyword">Type</span>*) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The transaction performing the operation. -/</span>
+  txn : Fin n
+  <span class="bp-lean-comment">/-- An identifier of the occurrence (for instance its position in the transaction), which makes
+  repeated accesses of a transaction to an item distinct operations. -/</span>
+  step : ℕ
+  <span class="bp-lean-comment">/-- Read or write. -/</span>
+  access : Access
+  <span class="bp-lean-comment">/-- The data item accessed. -/</span>
+  item : X
+<span class="bp-lean-keyword">deriving</span> DecidableEq</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:73</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.DirectedAdjacency">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> DirectedAdjacency (V : <span class="bp-lean-keyword">Type</span> u) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The complete deterministic enumeration of vertices. -/</span>
+  vertices : List V
+  <span class="bp-lean-comment">/-- The vertex enumeration contains no duplicates. -/</span>
+  vertices_nodup : vertices.Nodup
+  <span class="bp-lean-comment">/-- Every vertex occurs in the enumeration. -/</span>
+  vertices_complete : ∀ vertex, vertex ∈ vertices
+  <span class="bp-lean-comment">/-- The ordered outgoing neighbors of each vertex. Entries may repeat. -/</span>
+  adjacency : V → List V</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Graph/DirectedAdjacency.lean:32</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.DirectedAdjacency.adjacency">
+<pre class="bp-lean"><code>  adjacency : V → List V</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Graph/DirectedAdjacency.lean:40</p>
+</div>
+<div data-lean-name="Cslib.Databases.PrecedenceEdge">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> PrecedenceEdge (s : List (Op n X)) (i j : Fin n) : <span class="bp-lean-keyword">Prop</span> :=
+  ∃ a ∈ s, ∃ b ∈ s, a.txn = i ∧ b.txn = j ∧ a.Conflicts b ∧ [a, b] &lt;+ s</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:138</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../graph-algorithms/traversal-and-connectivity/adjacency-list/index.html#directed-adjacency">Directed adjacency graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#access">Read or write access</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#op">Operation of a schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflicts">Conflicting operations</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#precedence-edge">Edge of the precedence graph</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflict-equiv-serialize">Serializing along a topological order preserves conflict equivalence</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflict-serializable-iff-is-acyclic">The serializability theorem</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#conflict-serializable-of-rank">A rank increasing along precedence edges gives conflict serializability</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-acyclic">A conflict-serializable schedule has an acyclic precedence graph</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/databases/conflict-serializability/serialize">
+<h4 class="bp-thmheading" id="serialize">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Serialization of a schedule along a transaction order</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Databases/Serializability.lean#L158" aria-label="View Cslib.Databases.serialize in Lean source" title="View Cslib.Databases.serialize in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#serialize" aria-label="Link to Serialization of a schedule along a transaction order" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Databases.serialize</div>
+<div class="bp-thmcontent">
+<p>For a list <span class="arithmatex">\(\sigma\)</span> of transactions
+and a schedule <span class="arithmatex">\(s\)</span>, the serialization of <span class="arithmatex">\(s\)</span> along <span class="arithmatex">\(\sigma\)</span> sorts the operations of <span class="arithmatex">\(s\)</span> by the
+position of the first occurrence of their transaction in <span class="arithmatex">\(\sigma\)</span>, where a transaction that does
+not occur in <span class="arithmatex">\(\sigma\)</span> gets the length of <span class="arithmatex">\(\sigma\)</span> as its position. The sort is stable: operations
+with the same position keep their relative order in <span class="arithmatex">\(s\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> serialize (order : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n)) (s : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#op" data-lean-name="Cslib.Databases.Op">Op</a> n X)) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#op" data-lean-name="Cslib.Databases.Op">Op</a> n X) :=
+  s.insertionSort <span class="bp-lean-keyword">fun</span> a b =&gt; order.idxOf a.txn ≤ order.idxOf b.txn</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Databases.Op">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Op (n : ℕ) (X : <span class="bp-lean-keyword">Type</span>*) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The transaction performing the operation. -/</span>
+  txn : Fin n
+  <span class="bp-lean-comment">/-- An identifier of the occurrence (for instance its position in the transaction), which makes
+  repeated accesses of a transaction to an item distinct operations. -/</span>
+  step : ℕ
+  <span class="bp-lean-comment">/-- Read or write. -/</span>
+  access : Access
+  <span class="bp-lean-comment">/-- The data item accessed. -/</span>
+  item : X
+<span class="bp-lean-keyword">deriving</span> DecidableEq</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:73</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#op">Operation of a schedule</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflict-equiv-serialize">Serializing along a topological order preserves conflict equivalence</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#conflict-serializable-iff-is-acyclic">The serializability theorem</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-serial-serialize">Serializing along a complete transaction order gives a serial schedule</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/databases/conflict-serializability/is-acyclic">
+<h4 class="bp-thmheading" id="is-acyclic">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">A conflict-serializable schedule has an acyclic precedence graph</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Databases/Serializability.lean#L227" aria-label="View Cslib.Databases.ConflictSerializable.isAcyclic in Lean source" title="View Cslib.Databases.ConflictSerializable.isAcyclic in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#is-acyclic" aria-label="Link to A conflict-serializable schedule has an acyclic precedence graph" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Databases.ConflictSerializable.isAcyclic</div>
+<div class="bp-thmcontent">
+<p>If a schedule <span class="arithmatex">\(s\)</span> in
+which no operation occurs twice is conflict-serializable, then the precedence graph of <span class="arithmatex">\(s\)</span> is
+acyclic.</p>
+<p>In a conflict-equivalent serial schedule, the position of the first operation of each
+transaction increases along every edge of the precedence graph.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> ConflictSerializable.isAcyclic {s : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#op" data-lean-name="Cslib.Databases.Op">Op</a> n X)} (hs : s.Nodup)
+    (h : <a class="bp-lean-ref" href="#conflict-serializable" data-lean-name="Cslib.Databases.ConflictSerializable">ConflictSerializable</a> s) : <a class="bp-lean-ref" href="../../graph-algorithms/traversal-and-connectivity/topological-sorting/index.html#is-acyclic" data-lean-name="Cslib.Algorithms.Lean.TopologicalSort.IsAcyclic">TopologicalSort.IsAcyclic</a> (<a class="bp-lean-ref" href="#precedence-graph" data-lean-name="Cslib.Databases.precedenceGraph">precedenceGraph</a> s)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Databases.Op">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Op (n : ℕ) (X : <span class="bp-lean-keyword">Type</span>*) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The transaction performing the operation. -/</span>
+  txn : Fin n
+  <span class="bp-lean-comment">/-- An identifier of the occurrence (for instance its position in the transaction), which makes
+  repeated accesses of a transaction to an item distinct operations. -/</span>
+  step : ℕ
+  <span class="bp-lean-comment">/-- Read or write. -/</span>
+  access : Access
+  <span class="bp-lean-comment">/-- The data item accessed. -/</span>
+  item : X
+<span class="bp-lean-keyword">deriving</span> DecidableEq</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:73</p>
+</div>
+<div data-lean-name="Cslib.Databases.ConflictSerializable">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> ConflictSerializable (s : List (Op n X)) : <span class="bp-lean-keyword">Prop</span> := ∃ s&#x27;, IsSerial s&#x27; ∧ ConflictEquiv s s&#x27;</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:134</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.TopologicalSort.IsAcyclic">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">def</span> IsAcyclic {α : <span class="bp-lean-keyword">Type</span> u} (g : DirectedAdjacency α) : <span class="bp-lean-keyword">Prop</span> :=
+  ¬ ∃ cycle, DirectedCycleIn g g.vertices cycle</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Graph/TopologicalSort.lean:1349</p>
+</div>
+<div data-lean-name="Cslib.Databases.precedenceGraph">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> precedenceGraph (s : List (Op n X)) : DirectedAdjacency (Fin n) <span class="bp-lean-keyword">where</span>
+  vertices := List.finRange n
+  vertices_nodup := List.nodup_finRange n
+  vertices_complete := List.mem_finRange
+  adjacency i := (List.finRange n).filter <span class="bp-lean-keyword">fun</span> j =&gt; decide (PrecedenceEdge s i j)</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:146</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 15 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../graph-algorithms/traversal-and-connectivity/topological-sorting/index.html#is-acyclic">Acyclic directed graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflict-serializable">Conflict-serializable schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#op">Operation of a schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#precedence-graph">Precedence graph</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../graph-algorithms/traversal-and-connectivity/adjacency-list/index.html#directed-adjacency">Directed adjacency graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../graph-algorithms/traversal-and-connectivity/adjacency-list/index.html#edge">Edge of a directed adjacency graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../graph-algorithms/traversal-and-connectivity/topological-sorting/index.html#directed-cycle-in">Directed cycle within a vertex list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../graph-algorithms/traversal-and-connectivity/topological-sorting/index.html#directed-cycle-in-iff">Characterization of directed cycles within a vertex list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#access">Read or write access</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#conflict-equiv">Conflict equivalence</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-serial">Serial schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#conflicts">Conflicting operations</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#order-matters">Operations whose relative order matters</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#precedence-edge">Edge of the precedence graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#txn-before">One transaction before another in a schedule</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#conflict-serializable-iff-is-acyclic">The serializability theorem</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/databases/conflict-serializability/is-serial-serialize">
+<h4 class="bp-thmheading" id="is-serial-serialize">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Serializing along a complete transaction order gives a serial schedule</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Databases/Serializability.lean#L259" aria-label="View Cslib.Databases.isSerial_serialize in Lean source" title="View Cslib.Databases.isSerial_serialize in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#is-serial-serialize" aria-label="Link to Serializing along a complete transaction order gives a serial schedule" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Databases.isSerial_serialize</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(s\)</span> be a
+schedule and <span class="arithmatex">\(L\)</span> a list in which every transaction occurs. Then the schedule obtained from <span class="arithmatex">\(s\)</span>
+by stably sorting its operations by the first position of their transaction in <span class="arithmatex">\(L\)</span> is serial.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> isSerial_serialize (s : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#op" data-lean-name="Cslib.Databases.Op">Op</a> n X)) {order : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n)}
+    (hocomp : ∀ i, i ∈ order) : <a class="bp-lean-ref" href="#is-serial" data-lean-name="Cslib.Databases.IsSerial">IsSerial</a> (<a class="bp-lean-ref" href="#serialize" data-lean-name="Cslib.Databases.serialize">serialize</a> order s)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Databases.Op">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Op (n : ℕ) (X : <span class="bp-lean-keyword">Type</span>*) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The transaction performing the operation. -/</span>
+  txn : Fin n
+  <span class="bp-lean-comment">/-- An identifier of the occurrence (for instance its position in the transaction), which makes
+  repeated accesses of a transaction to an item distinct operations. -/</span>
+  step : ℕ
+  <span class="bp-lean-comment">/-- Read or write. -/</span>
+  access : Access
+  <span class="bp-lean-comment">/-- The data item accessed. -/</span>
+  item : X
+<span class="bp-lean-keyword">deriving</span> DecidableEq</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:73</p>
+</div>
+<div data-lean-name="Cslib.Databases.IsSerial">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsSerial (s : List (Op n X)) : <span class="bp-lean-keyword">Prop</span> := ∀ i j, i ≠ j → TxnBefore s i j ∨ TxnBefore s j i</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:123</p>
+</div>
+<div data-lean-name="Cslib.Databases.serialize">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> serialize (order : List (Fin n)) (s : List (Op n X)) : List (Op n X) :=
+  s.insertionSort <span class="bp-lean-keyword">fun</span> a b =&gt; order.idxOf a.txn ≤ order.idxOf b.txn</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:158</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-serial">Serial schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#op">Operation of a schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#serialize">Serialization of a schedule along a transaction order</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#txn-before">One transaction before another in a schedule</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#conflict-serializable-iff-is-acyclic">The serializability theorem</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/databases/conflict-serializability/conflict-equiv-serialize">
+<h4 class="bp-thmheading" id="conflict-equiv-serialize">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Serializing along a topological order preserves conflict equivalence</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Databases/Serializability.lean#L285" aria-label="View Cslib.Databases.conflictEquiv_serialize in Lean source" title="View Cslib.Databases.conflictEquiv_serialize in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#conflict-equiv-serialize" aria-label="Link to Serializing along a topological order preserves conflict equivalence" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Databases.conflictEquiv_serialize</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(s\)</span> be a
+schedule in which no operation occurs twice, and let <span class="arithmatex">\(L\)</span> be a topological order of the
+precedence graph of <span class="arithmatex">\(s\)</span>. Then the schedule obtained from <span class="arithmatex">\(s\)</span> by stably sorting its operations
+by the first position of their transaction in <span class="arithmatex">\(L\)</span> is conflict-equivalent to <span class="arithmatex">\(s\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> conflictEquiv_serialize {s : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#op" data-lean-name="Cslib.Databases.Op">Op</a> n X)} (hs : s.Nodup) {order : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n)}
+    (horder : <a class="bp-lean-ref" href="../../graph-algorithms/traversal-and-connectivity/topological-sorting/index.html#is-topological-order" data-lean-name="Cslib.Algorithms.Lean.TopologicalSort.IsTopologicalOrder">TopologicalSort.IsTopologicalOrder</a> (<a class="bp-lean-ref" href="#precedence-graph" data-lean-name="Cslib.Databases.precedenceGraph">precedenceGraph</a> s) order) :
+    <a class="bp-lean-ref" href="#conflict-equiv" data-lean-name="Cslib.Databases.ConflictEquiv">ConflictEquiv</a> s (<a class="bp-lean-ref" href="#serialize" data-lean-name="Cslib.Databases.serialize">serialize</a> order s)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Databases.Op">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Op (n : ℕ) (X : <span class="bp-lean-keyword">Type</span>*) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The transaction performing the operation. -/</span>
+  txn : Fin n
+  <span class="bp-lean-comment">/-- An identifier of the occurrence (for instance its position in the transaction), which makes
+  repeated accesses of a transaction to an item distinct operations. -/</span>
+  step : ℕ
+  <span class="bp-lean-comment">/-- Read or write. -/</span>
+  access : Access
+  <span class="bp-lean-comment">/-- The data item accessed. -/</span>
+  item : X
+<span class="bp-lean-keyword">deriving</span> DecidableEq</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:73</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.TopologicalSort.IsTopologicalOrder">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">def</span> IsTopologicalOrder {α : <span class="bp-lean-keyword">Type</span> u} [DecidableEq α]
+    (g : DirectedAdjacency α) (order : List α) : <span class="bp-lean-keyword">Prop</span> :=
+  order.Nodup ∧
+  (∀ v, v ∈ order ↔ v ∈ g.vertices) ∧
+  ∀ u v, g.Edge u v → order.idxOf u &lt; order.idxOf v</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Graph/TopologicalSort.lean:1358</p>
+</div>
+<div data-lean-name="Cslib.Databases.precedenceGraph">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> precedenceGraph (s : List (Op n X)) : DirectedAdjacency (Fin n) <span class="bp-lean-keyword">where</span>
+  vertices := List.finRange n
+  vertices_nodup := List.nodup_finRange n
+  vertices_complete := List.mem_finRange
+  adjacency i := (List.finRange n).filter <span class="bp-lean-keyword">fun</span> j =&gt; decide (PrecedenceEdge s i j)</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:146</p>
+</div>
+<div data-lean-name="Cslib.Databases.ConflictEquiv">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> ConflictEquiv (s s&#x27; : List (Op n X)) : <span class="bp-lean-keyword">Prop</span> :=
+  s.Perm s&#x27; ∧ ∀ a b, a.OrderMatters b → ([a, b] &lt;+ s ↔ [a, b] &lt;+ s&#x27;)</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:114</p>
+</div>
+<div data-lean-name="Cslib.Databases.serialize">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> serialize (order : List (Fin n)) (s : List (Op n X)) : List (Op n X) :=
+  s.insertionSort <span class="bp-lean-keyword">fun</span> a b =&gt; order.idxOf a.txn ≤ order.idxOf b.txn</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:158</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 11 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../graph-algorithms/traversal-and-connectivity/topological-sorting/index.html#is-topological-order">Topological order</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflict-equiv">Conflict equivalence</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#op">Operation of a schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#precedence-graph">Precedence graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#serialize">Serialization of a schedule along a transaction order</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../graph-algorithms/traversal-and-connectivity/adjacency-list/index.html#directed-adjacency">Directed adjacency graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../graph-algorithms/traversal-and-connectivity/adjacency-list/index.html#edge">Edge of a directed adjacency graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#access">Read or write access</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#conflicts">Conflicting operations</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#order-matters">Operations whose relative order matters</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#precedence-edge">Edge of the precedence graph</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#conflict-serializable-iff-is-acyclic">The serializability theorem</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/databases/conflict-serializability/conflict-serializable-iff-is-acyclic">
+<h4 class="bp-thmheading" id="conflict-serializable-iff-is-acyclic">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The serializability theorem</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Databases/Serializability.lean#L309" aria-label="View Cslib.Databases.conflictSerializable_iff_isAcyclic in Lean source" title="View Cslib.Databases.conflictSerializable_iff_isAcyclic in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#conflict-serializable-iff-is-acyclic" aria-label="Link to The serializability theorem" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Databases.conflictSerializable_iff_isAcyclic</div>
+<div class="bp-thmcontent">
+<p>A schedule without duplicate operations is
+conflict-serializable exactly when its precedence graph is acyclic.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> conflictSerializable_iff_isAcyclic {s : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#op" data-lean-name="Cslib.Databases.Op">Op</a> n X)} (hs : s.Nodup) :
+    <a class="bp-lean-ref" href="#conflict-serializable" data-lean-name="Cslib.Databases.ConflictSerializable">ConflictSerializable</a> s ↔ <a class="bp-lean-ref" href="../../graph-algorithms/traversal-and-connectivity/topological-sorting/index.html#is-acyclic" data-lean-name="Cslib.Algorithms.Lean.TopologicalSort.IsAcyclic">TopologicalSort.IsAcyclic</a> (<a class="bp-lean-ref" href="#precedence-graph" data-lean-name="Cslib.Databases.precedenceGraph">precedenceGraph</a> s)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Databases.Op">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Op (n : ℕ) (X : <span class="bp-lean-keyword">Type</span>*) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The transaction performing the operation. -/</span>
+  txn : Fin n
+  <span class="bp-lean-comment">/-- An identifier of the occurrence (for instance its position in the transaction), which makes
+  repeated accesses of a transaction to an item distinct operations. -/</span>
+  step : ℕ
+  <span class="bp-lean-comment">/-- Read or write. -/</span>
+  access : Access
+  <span class="bp-lean-comment">/-- The data item accessed. -/</span>
+  item : X
+<span class="bp-lean-keyword">deriving</span> DecidableEq</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:73</p>
+</div>
+<div data-lean-name="Cslib.Databases.ConflictSerializable">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> ConflictSerializable (s : List (Op n X)) : <span class="bp-lean-keyword">Prop</span> := ∃ s&#x27;, IsSerial s&#x27; ∧ ConflictEquiv s s&#x27;</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:134</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.TopologicalSort.IsAcyclic">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">def</span> IsAcyclic {α : <span class="bp-lean-keyword">Type</span> u} (g : DirectedAdjacency α) : <span class="bp-lean-keyword">Prop</span> :=
+  ¬ ∃ cycle, DirectedCycleIn g g.vertices cycle</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Graph/TopologicalSort.lean:1349</p>
+</div>
+<div data-lean-name="Cslib.Databases.precedenceGraph">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> precedenceGraph (s : List (Op n X)) : DirectedAdjacency (Fin n) <span class="bp-lean-keyword">where</span>
+  vertices := List.finRange n
+  vertices_nodup := List.nodup_finRange n
+  vertices_complete := List.mem_finRange
+  adjacency i := (List.finRange n).filter <span class="bp-lean-keyword">fun</span> j =&gt; decide (PrecedenceEdge s i j)</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:146</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 17 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../graph-algorithms/traversal-and-connectivity/topological-sorting/index.html#is-acyclic">Acyclic directed graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflict-serializable">Conflict-serializable schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#op">Operation of a schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#precedence-graph">Precedence graph</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../graph-algorithms/traversal-and-connectivity/adjacency-list/index.html#directed-adjacency">Directed adjacency graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../graph-algorithms/traversal-and-connectivity/adjacency-list/index.html#edge">Edge of a directed adjacency graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../graph-algorithms/traversal-and-connectivity/topological-sorting/index.html#is-topological-order">Topological order</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../graph-algorithms/traversal-and-connectivity/topological-sorting/index.html#result">Outcome of Kahn&#x27;s topological sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../graph-algorithms/traversal-and-connectivity/topological-sorting/index.html#acyclic-implies-success">Kahn&#x27;s algorithm succeeds on acyclic graphs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../graph-algorithms/traversal-and-connectivity/topological-sorting/index.html#sort">Kahn&#x27;s topological sort</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../graph-algorithms/traversal-and-connectivity/topological-sorting/index.html#success-is-topological-order">A successful topological sort is a topological order</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#conflict-equiv">Conflict equivalence</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-acyclic">A conflict-serializable schedule has an acyclic precedence graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-serial">Serial schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#conflict-equiv-serialize">Serializing along a topological order preserves conflict equivalence</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-serial-serialize">Serializing along a complete transaction order gives a serial schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#serialize">Serialization of a schedule along a transaction order</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#conflict-serializable-of-rank">A rank increasing along precedence edges gives conflict serializability</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/databases/conflict-serializability/conflict-serializable-of-rank">
+<h4 class="bp-thmheading" id="conflict-serializable-of-rank">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">A rank increasing along precedence edges gives conflict serializability</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Databases/Serializability.lean#L320" aria-label="View Cslib.Databases.conflictSerializable_of_rank in Lean source" title="View Cslib.Databases.conflictSerializable_of_rank in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#conflict-serializable-of-rank" aria-label="Link to A rank increasing along precedence edges gives conflict serializability" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Databases.conflictSerializable_of_rank</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(s\)</span> be a
+schedule in which no operation occurs twice. If <span class="arithmatex">\(r\)</span> is a function from the transactions to the
+natural numbers with <span class="arithmatex">\(r(i) &lt; r(j)\)</span> whenever the precedence graph of <span class="arithmatex">\(s\)</span> has an edge from <span class="arithmatex">\(i\)</span> to
+<span class="arithmatex">\(j\)</span>, then <span class="arithmatex">\(s\)</span> is conflict-serializable.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> conflictSerializable_of_rank {s : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#op" data-lean-name="Cslib.Databases.Op">Op</a> n X)} (hs : s.Nodup) (rank : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → ℕ)
+    (h : ∀ i j, <a class="bp-lean-ref" href="#precedence-edge" data-lean-name="Cslib.Databases.PrecedenceEdge">PrecedenceEdge</a> s i j → rank i &lt; rank j) : <a class="bp-lean-ref" href="#conflict-serializable" data-lean-name="Cslib.Databases.ConflictSerializable">ConflictSerializable</a> s</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Databases.Op">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">structure</span> Op (n : ℕ) (X : <span class="bp-lean-keyword">Type</span>*) <span class="bp-lean-keyword">where</span>
+  <span class="bp-lean-comment">/-- The transaction performing the operation. -/</span>
+  txn : Fin n
+  <span class="bp-lean-comment">/-- An identifier of the occurrence (for instance its position in the transaction), which makes
+  repeated accesses of a transaction to an item distinct operations. -/</span>
+  step : ℕ
+  <span class="bp-lean-comment">/-- Read or write. -/</span>
+  access : Access
+  <span class="bp-lean-comment">/-- The data item accessed. -/</span>
+  item : X
+<span class="bp-lean-keyword">deriving</span> DecidableEq</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:73</p>
+</div>
+<div data-lean-name="Cslib.Databases.PrecedenceEdge">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> PrecedenceEdge (s : List (Op n X)) (i j : Fin n) : <span class="bp-lean-keyword">Prop</span> :=
+  ∃ a ∈ s, ∃ b ∈ s, a.txn = i ∧ b.txn = j ∧ a.Conflicts b ∧ [a, b] &lt;+ s</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:138</p>
+</div>
+<div data-lean-name="Cslib.Databases.ConflictSerializable">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> ConflictSerializable (s : List (Op n X)) : <span class="bp-lean-keyword">Prop</span> := ∃ s&#x27;, IsSerial s&#x27; ∧ ConflictEquiv s s&#x27;</code></pre>
+<p class="bp-lean-where">CSLibExt/Databases/Serializability.lean:134</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 12 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#conflict-serializable">Conflict-serializable schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#op">Operation of a schedule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#precedence-edge">Edge of the precedence graph</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../graph-algorithms/traversal-and-connectivity/adjacency-list/index.html#directed-adjacency">Directed adjacency graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../graph-algorithms/traversal-and-connectivity/adjacency-list/index.html#edge">Edge of a directed adjacency graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../graph-algorithms/traversal-and-connectivity/topological-sorting/index.html#directed-cycle-in">Directed cycle within a vertex list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../graph-algorithms/traversal-and-connectivity/topological-sorting/index.html#is-acyclic">Acyclic directed graph</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../graph-algorithms/traversal-and-connectivity/topological-sorting/index.html#directed-cycle-in-iff">Characterization of directed cycles within a vertex list</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#access">Read or write access</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#conflicts">Conflicting operations</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#conflict-serializable-iff-is-acyclic">The serializability theorem</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#precedence-graph">Precedence graph</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../two-phase-locking/index.html#conflict-serializable">The two-phase locking theorem</a></span></div>
+</div>
+</details>
+</div>
+</div>
+<p><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../dependencies/index.json" data-graph-src="../../../../dependencies/scopes/ComputerScience/databases/conflict-serializability.json" data-page-href="index.html" data-scope-id="ComputerScience/databases/conflict-serializability">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>

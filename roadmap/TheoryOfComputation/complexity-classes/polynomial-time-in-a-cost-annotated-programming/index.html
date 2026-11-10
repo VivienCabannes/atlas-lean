@@ -1,0 +1,5630 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../mahaney-s-theorem/index.html">
+      
+      
+        <link rel="next" href="../polynomial-time-on-single-tape-machines/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Polynomial time in a cost-annotated programming model - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Polynomial time in a cost-annotated programming model
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_22" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_22" id="__nav_2_1_22_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_22_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_22">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Theory of Computation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../np-completeness/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NP-completeness
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_22_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Complexity classes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_22_3" id="__nav_2_1_22_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_22_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_22_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Complexity classes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../blum-complexity-measures/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blum complexity measures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../polynomially-bounded-functions/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polynomially bounded functions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quadratic-overhead-of-single-tape-simulation/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quadratic overhead of single-tape simulation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../the-classes-p-np-and-conp/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The classes P, NP and coNP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mahaney-s-theorem/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mahaney&#39;s theorem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polynomial time in a cost-annotated programming model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../polynomial-time-on-single-tape-machines/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polynomial time on single-tape machines
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../time-and-space-classes-on-multi-tape-machines/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time and space classes on multi-tape machines
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../time-and-space-complexity-classes/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time and space complexity classes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../containments-between-time-and-space-classes/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Containments between time and space classes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../parameterized-complexity/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parameterized complexity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../polynomial-hierarchy/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Polynomial hierarchy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../time-and-resource-bounded-runs-of-abstract-machi/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Time- and resource-bounded runs of abstract machines
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../hierarchy-theorems-and-barriers/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hierarchy theorems and proof barriers
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../regular-languages/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Finite automata and regular languages
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../context-free-languages/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Context-free languages
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../decision-procedures/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Decision procedures for automata, grammars and strings
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../turing-machines/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Turing machines
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../equivalence-of-models/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Equivalence of models of computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../computability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computability and undecidability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../undecidable-problems/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Undecidable problems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../degrees-and-hierarchies/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Degrees of unsolvability and the arithmetical hierarchy
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../omega-automata-and-games/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Automata on infinite words and infinite games
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../context-sensitive-languages/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Context-sensitive languages
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../randomized-and-quantum-complexity/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Randomized, interactive and quantum complexity
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../counting-complexity/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Counting complexity
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../pseudorandomness-and-one-way-functions/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pseudorandomness and one-way functions
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../circuit-complexity/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Boolean circuit complexity
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../algebraic-complexity/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic complexity
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../descriptive-complexity/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Descriptive complexity
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../kolmogorov-complexity/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kolmogorov complexity
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../pcp-and-inapproximability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probabilistically checkable proofs and inapproximability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../completeness-other-classes/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Completeness for other complexity classes
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../polynomial-time-problems/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Problems solvable in polynomial time
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../fine-grained-complexity/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fine-grained and exponential-time complexity
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../ComputerScience/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../index.html" tabindex="-1">Theory of Computation</a></li><li><a href="../index.html" tabindex="-1">Complexity classes</a></li><li aria-current="page">Polynomial time in a cost-annotated programming model</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Polynomial time in a cost-annotated programming model</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-in-a-cost-annotated-programming" data-page-title="Polynomial time in a cost-annotated programming model">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="polynomial-time-in-a-cost-annotated-programming-model">Polynomial time in a cost-annotated programming model</h1>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-in-a-cost-annotated-programming/decides-in-declared-poly-time">
+<h4 class="bp-thmheading" id="decides-in-declared-poly-time">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Declared polynomial time for timed deciders</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/TimeMComplexity.lean#L71" aria-label="View Cslib.TimeMComplexity.DecidesInDeclaredPolyTime in Lean source" title="View Cslib.TimeMComplexity.DecidesInDeclaredPolyTime in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#decides-in-declared-poly-time" aria-label="Link to Declared polynomial time for timed deciders" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.TimeMComplexity.DecidesInDeclaredPolyTime</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(f\)</span> be a timed function that maps each
+list <span class="arithmatex">\(x\)</span> of Booleans to a Boolean <span class="arithmatex">\(f(x)\)</span> together with a declared time <span class="arithmatex">\(t_f(x) \in \mathbb{N}\)</span>.
+Then <span class="arithmatex">\(f\)</span> decides in declared polynomial time when there is a polynomial <span class="arithmatex">\(p\)</span> with natural-number
+coefficients such that <span class="arithmatex">\(t_f(x) \le p(|x|)\)</span> for every list <span class="arithmatex">\(x\)</span> of Booleans, where <span class="arithmatex">\(|x|\)</span> is the
+length of <span class="arithmatex">\(x\)</span>.</p>
+<p>This constrains only the trusted time annotation: it implies neither that <span class="arithmatex">\(f\)</span> is computable in
+any machine model nor that <span class="arithmatex">\(f\)</span> is related to any particular decision problem.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DecidesInDeclaredPolyTime (f : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → TimeM <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) : <span class="bp-lean-keyword">Prop</span> :=
+  ∃ p : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial#doc" title="Polynomial">Polynomial</a> ℕ, ∀ x, (f x).time ≤ p.eval x.length</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#decides-in-declared-poly-time-comp-reduc">Declared polynomial time is preserved under precomposition with a reduction</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#exists-decides-in-declared-poly-time">Every decision problem has a timed decider in declared polynomial time</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#verifier-in-declared-poly-time-of-decide">A decider with polynomial declared time gives a verifier with polynomial declared time</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-in-a-cost-annotated-programming/computes-in-declared-poly-time">
+<h4 class="bp-thmheading" id="computes-in-declared-poly-time">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Declared polynomial time for timed functions on bitstrings</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/TimeMComplexity.lean#L83" aria-label="View Cslib.TimeMComplexity.ComputesInDeclaredPolyTime in Lean source" title="View Cslib.TimeMComplexity.ComputesInDeclaredPolyTime in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#computes-in-declared-poly-time" aria-label="Link to Declared polynomial time for timed functions on bitstrings" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.TimeMComplexity.ComputesInDeclaredPolyTime</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(f\)</span> be a timed function
+that maps each list <span class="arithmatex">\(x\)</span> of Booleans to an output list <span class="arithmatex">\(f(x)\)</span> of Booleans together with a declared
+time <span class="arithmatex">\(t_f(x) \in \mathbb{N}\)</span>. Then <span class="arithmatex">\(f\)</span> computes in declared polynomial time when there is a
+polynomial <span class="arithmatex">\(p\)</span> with natural-number coefficients such that, for every list <span class="arithmatex">\(x\)</span> of Booleans, both
+<span class="arithmatex">\(t_f(x)\)</span> and the length of <span class="arithmatex">\(f(x)\)</span> are at most <span class="arithmatex">\(p(|x|)\)</span>, where <span class="arithmatex">\(|x|\)</span> is the length of <span class="arithmatex">\(x\)</span>.</p>
+<p>Declared times are trusted annotations, not checked against any machine model, so this does not
+make <span class="arithmatex">\(f\)</span> polynomial-time computable: for an arbitrary decision problem <span class="arithmatex">\(L\)</span>, the function returning
+the one-element list <span class="arithmatex">\([L(x)]\)</span> with declared time <span class="arithmatex">\(0\)</span> satisfies it. The output-length bound is what
+lets declared bounds compose.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> ComputesInDeclaredPolyTime (f : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → TimeM <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>)) : <span class="bp-lean-keyword">Prop</span> :=
+  ∃ p : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial#doc" title="Polynomial">Polynomial</a> ℕ, ∀ x, (f x).time ≤ p.eval x.length ∧
+    (f x).ret.length ≤ p.eval x.length</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 7</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#cook-levin-poly-many-one-red-of-declared">From declared-time to polynomial-time many-one reductions</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#decides-comp-reduction">A declared-time reduction followed by a decider for the target decides the source</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#decides-in-declared-poly-time-comp-reduc">Declared polynomial time is preserved under precomposition with a reduction</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#declared-poly-many-one-red-via">Declared-time many-one reduction by a timed function</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#declared-poly-many-one-red-via-refl">Declared-time many-one reduction is reflexive</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#declared-poly-many-one-red-via-trans">Declared-time many-one reductions compose</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#verifies-comp-reduction">Pulling a verifier back along a declared reduction</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-in-a-cost-annotated-programming/verifier-in-declared-poly-time">
+<h4 class="bp-thmheading" id="verifier-in-declared-poly-time">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Verifiers with polynomial declared time</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/TimeMComplexity.lean#L92" aria-label="View Cslib.TimeMComplexity.VerifierInDeclaredPolyTime in Lean source" title="View Cslib.TimeMComplexity.VerifierInDeclaredPolyTime in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#verifier-in-declared-poly-time" aria-label="Link to Verifiers with polynomial declared time" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.TimeMComplexity.VerifierInDeclaredPolyTime</div>
+<div class="bp-thmcontent">
+<p>A timed verifier <span class="arithmatex">\(V\)</span>, which assigns to each pair
+of bit strings <span class="arithmatex">\((x, w)\)</span> (an input and a witness) a timed computation returning a Boolean, runs in
+declared polynomial time when there is a polynomial <span class="arithmatex">\(q\)</span> with natural coefficients such that the
+declared time of <span class="arithmatex">\(V(x, w)\)</span> is at most <span class="arithmatex">\(q(|x| + |w|)\)</span> for all <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(w\)</span>.</p>
+<p>As for deciders, this constrains only the declared time, which is a trusted annotation, and
+establishes no computability in any machine model.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> VerifierInDeclaredPolyTime (V : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> × <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → TimeM <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) : <span class="bp-lean-keyword">Prop</span> :=
+  ∃ q : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial#doc" title="Polynomial">Polynomial</a> ℕ, ∀ xw, (V xw).time ≤ q.eval (xw.1.length + xw.2.length)</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#verifier-in-declared-poly-time-of-decide">A decider with polynomial declared time gives a verifier with polynomial declared time</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#verifies-comp-reduction">Pulling a verifier back along a declared reduction</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../np-completeness/cook-levin/polynomial-time-verifier-for-sat/part-01/index.html#sat-verifier-verifier-in-declared-poly-t">The SAT verifier has polynomial declared time</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-in-a-cost-annotated-programming/verifies">
+<h4 class="bp-thmheading" id="verifies">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Verifying a decision problem with a witness bound</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/TimeMComplexity.lean#L99" aria-label="View Cslib.TimeMComplexity.Verifies in Lean source" title="View Cslib.TimeMComplexity.Verifies in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#verifies" aria-label="Link to Verifying a decision problem with a witness bound" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.TimeMComplexity.Verifies</div>
+<div class="bp-thmcontent">
+<p>A timed verifier <span class="arithmatex">\(V\)</span>, which assigns to
+each pair of bit strings <span class="arithmatex">\((x, w)\)</span> (an input and a witness) a timed computation returning a
+Boolean, verifies a decision problem <span class="arithmatex">\(L\)</span> with witness bound <span class="arithmatex">\(p\)</span>, a polynomial with natural
+coefficients, when for every bit string <span class="arithmatex">\(x\)</span>, <span class="arithmatex">\(L(x)\)</span> holds if and only if there is a witness <span class="arithmatex">\(w\)</span>
+with <span class="arithmatex">\(|w| \le p(|x|)\)</span> such that <span class="arithmatex">\(V(x, w)\)</span> returns true.</p>
+<p>This is the verifier half of the definition of NP, phrased for a named timed verifier.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Verifies (V : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> × <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → TimeM <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>)
+    (L : <a class="bp-lean-ref" href="../the-classes-p-np-and-conp/index.html#decision-problem" data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">DecisionProblem</a>) (p : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial#doc" title="Polynomial">Polynomial</a> ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ x, L x ↔ ∃ w : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>, w.length ≤ p.eval x.length ∧
+    (V (x, w)).ret = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a></code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> DecisionProblem := List Bool → Bool</code></pre>
+<p class="bp-lean-where">MathlibExt/Computability/Complexity.lean:170</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#decision-problem">Decision problems</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mem-np-of-verifies">A timed verifier with polynomial-time output function puts its language in NP</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#verifies-comp-reduction">Pulling a verifier back along a declared reduction</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#verifies-of-decides">A decider is a verifier with witness bound zero</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../np-completeness/cook-levin/polynomial-time-verifier-for-sat/part-01/index.html#sat-verifier-verifies">The SAT verifier verifies SAT</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-in-a-cost-annotated-programming/declared-poly-many-one-red-via">
+<h4 class="bp-thmheading" id="declared-poly-many-one-red-via">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Declared-time many-one reduction by a timed function</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/TimeMComplexity.lean#L113" aria-label="View Cslib.TimeMComplexity.DeclaredPolyManyOneRedVia in Lean source" title="View Cslib.TimeMComplexity.DeclaredPolyManyOneRedVia in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#declared-poly-many-one-red-via" aria-label="Link to Declared-time many-one reduction by a timed function" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.TimeMComplexity.DeclaredPolyManyOneRedVia</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(L_1\)</span> and <span class="arithmatex">\(L_2\)</span> be decision
+problems and let <span class="arithmatex">\(f\)</span> be a timed function that maps each list <span class="arithmatex">\(x\)</span> of Booleans to a list <span class="arithmatex">\(f(x)\)</span> of
+Booleans together with a declared time. Then <span class="arithmatex">\(f\)</span> is a declared-time many-one reduction from <span class="arithmatex">\(L_1\)</span>
+to <span class="arithmatex">\(L_2\)</span> when <span class="arithmatex">\(f\)</span> computes in declared polynomial time and <span class="arithmatex">\(L_1(x) = L_2(f(x))\)</span> for every list <span class="arithmatex">\(x\)</span>
+of Booleans.</p>
+<p>Because declared times are trusted annotations, this is not a polynomial-time many-one reduction
+in the Turing-machine sense: nothing is established about the computability of <span class="arithmatex">\(f\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DeclaredPolyManyOneRedVia (f : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → TimeM <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>))
+    (L₁ L₂ : <a class="bp-lean-ref" href="../the-classes-p-np-and-conp/index.html#decision-problem" data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">DecisionProblem</a>) : <span class="bp-lean-keyword">Prop</span> :=
+  <a class="bp-lean-ref" href="#computes-in-declared-poly-time" data-lean-name="Cslib.TimeMComplexity.ComputesInDeclaredPolyTime">ComputesInDeclaredPolyTime</a> f ∧ ∀ x, L₁ x = L₂ (f x).ret</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> DecisionProblem := List Bool → Bool</code></pre>
+<p class="bp-lean-where">MathlibExt/Computability/Complexity.lean:170</p>
+</div>
+<div data-lean-name="Cslib.TimeMComplexity.ComputesInDeclaredPolyTime">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> ComputesInDeclaredPolyTime (f : List Bool → TimeM Nat (List Bool)) : <span class="bp-lean-keyword">Prop</span> :=
+  ∃ p : Polynomial ℕ, ∀ x, (f x).time ≤ p.eval x.length ∧
+    (f x).ret.length ≤ p.eval x.length</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/TimeMComplexity.lean:83</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 6</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#computes-in-declared-poly-time">Declared polynomial time for timed functions on bitstrings</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#decision-problem">Decision problems</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#cook-levin-poly-many-one-red-of-declared">From declared-time to polynomial-time many-one reductions</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#decides-comp-reduction">A declared-time reduction followed by a decider for the target decides the source</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#decides-in-declared-poly-time-comp-reduc">Declared polynomial time is preserved under precomposition with a reduction</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#declared-poly-many-one-red-via-refl">Declared-time many-one reduction is reflexive</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#declared-poly-many-one-red-via-trans">Declared-time many-one reductions compose</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#verifies-comp-reduction">Pulling a verifier back along a declared reduction</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-in-a-cost-annotated-programming/exists-decides-in-declared-poly-time">
+<h4 class="bp-thmheading" id="exists-decides-in-declared-poly-time">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Every decision problem has a timed decider in declared polynomial time</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/TimeMComplexity.lean#L135" aria-label="View Cslib.TimeMComplexity.exists_decidesInDeclaredPolyTime in Lean source" title="View Cslib.TimeMComplexity.exists_decidesInDeclaredPolyTime in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#exists-decides-in-declared-poly-time" aria-label="Link to Every decision problem has a timed decider in declared polynomial time" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.TimeMComplexity.exists_decidesInDeclaredPolyTime</div>
+<div class="bp-thmcontent">
+<p>For every decision
+problem <span class="arithmatex">\(L\)</span> there is a timed function <span class="arithmatex">\(f\)</span> from lists of Booleans to Booleans that decides in
+declared polynomial time and whose output <span class="arithmatex">\(f(x)\)</span> equals <span class="arithmatex">\(L(x)\)</span> for every list <span class="arithmatex">\(x\)</span> of Booleans.</p>
+<p>The witness returns <span class="arithmatex">\(L(x)\)</span> with declared time <span class="arithmatex">\(0\)</span>, treating the evaluation of <span class="arithmatex">\(L\)</span> as free. This is
+why no complexity classes are defined by quantifying over timed functions.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> exists_decidesInDeclaredPolyTime (L : <a class="bp-lean-ref" href="../the-classes-p-np-and-conp/index.html#decision-problem" data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">DecisionProblem</a>) :
+    ∃ f : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → TimeM <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>, <a class="bp-lean-ref" href="#decides-in-declared-poly-time" data-lean-name="Cslib.TimeMComplexity.DecidesInDeclaredPolyTime">DecidesInDeclaredPolyTime</a> f ∧
+      ∀ x, (f x).ret = L x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> DecisionProblem := List Bool → Bool</code></pre>
+<p class="bp-lean-where">MathlibExt/Computability/Complexity.lean:170</p>
+</div>
+<div data-lean-name="Cslib.TimeMComplexity.DecidesInDeclaredPolyTime">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DecidesInDeclaredPolyTime (f : List Bool → TimeM Nat Bool) : <span class="bp-lean-keyword">Prop</span> :=
+  ∃ p : Polynomial ℕ, ∀ x, (f x).time ≤ p.eval x.length</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/TimeMComplexity.lean:71</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#decides-in-declared-poly-time">Declared polynomial time for timed deciders</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#decision-problem">Decision problems</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-in-a-cost-annotated-programming/verifier-in-declared-poly-time-of-decide">
+<h4 class="bp-thmheading" id="verifier-in-declared-poly-time-of-decide">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">A decider with polynomial declared time gives a verifier with polynomial declared time</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/TimeMComplexity.lean#L142" aria-label="View Cslib.TimeMComplexity.verifierInDeclaredPolyTime_of_decidesInDeclaredPolyTime in Lean source" title="View Cslib.TimeMComplexity.verifierInDeclaredPolyTime_of_decidesInDeclaredPolyTime in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#verifier-in-declared-poly-time-of-decide" aria-label="Link to A decider with polynomial declared time gives a verifier with polynomial declared time" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.TimeMComplexity.verifierInDeclaredPolyTime_of_decidesInDeclaredPolyTime</div>
+<div class="bp-thmcontent">
+<p>If a timed decider <span class="arithmatex">\(f\)</span> on bit strings has declared time bounded by a polynomial in the input
+length, then the verifier that sends an input <span class="arithmatex">\(x\)</span> and a witness <span class="arithmatex">\(w\)</span> to <span class="arithmatex">\(f(x)\)</span>, ignoring <span class="arithmatex">\(w\)</span>, has
+declared time bounded by a polynomial in <span class="arithmatex">\(|x| + |w|\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> verifierInDeclaredPolyTime_of_decidesInDeclaredPolyTime
+    {f : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → TimeM <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>} (hf : <a class="bp-lean-ref" href="#decides-in-declared-poly-time" data-lean-name="Cslib.TimeMComplexity.DecidesInDeclaredPolyTime">DecidesInDeclaredPolyTime</a> f) :
+    <a class="bp-lean-ref" href="#verifier-in-declared-poly-time" data-lean-name="Cslib.TimeMComplexity.VerifierInDeclaredPolyTime">VerifierInDeclaredPolyTime</a> (<span class="bp-lean-keyword">fun</span> xw =&gt; f xw.1)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.TimeMComplexity.DecidesInDeclaredPolyTime">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DecidesInDeclaredPolyTime (f : List Bool → TimeM Nat Bool) : <span class="bp-lean-keyword">Prop</span> :=
+  ∃ p : Polynomial ℕ, ∀ x, (f x).time ≤ p.eval x.length</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/TimeMComplexity.lean:71</p>
+</div>
+<div data-lean-name="Cslib.TimeMComplexity.VerifierInDeclaredPolyTime">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> VerifierInDeclaredPolyTime (V : List Bool × List Bool → TimeM Nat Bool) : <span class="bp-lean-keyword">Prop</span> :=
+  ∃ q : Polynomial ℕ, ∀ xw, (V xw).time ≤ q.eval (xw.1.length + xw.2.length)</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/TimeMComplexity.lean:92</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#decides-in-declared-poly-time">Declared polynomial time for timed deciders</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#verifier-in-declared-poly-time">Verifiers with polynomial declared time</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-in-a-cost-annotated-programming/verifies-of-decides">
+<h4 class="bp-thmheading" id="verifies-of-decides">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">A decider is a verifier with witness bound zero</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/TimeMComplexity.lean#L152" aria-label="View Cslib.TimeMComplexity.verifies_of_decides in Lean source" title="View Cslib.TimeMComplexity.verifies_of_decides in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#verifies-of-decides" aria-label="Link to A decider is a verifier with witness bound zero" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.TimeMComplexity.verifies_of_decides</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(L\)</span> be a decision problem and let <span class="arithmatex">\(f\)</span>
+be a timed decider whose return value on every bit string <span class="arithmatex">\(x\)</span> equals <span class="arithmatex">\(L(x)\)</span>. Then the verifier
+that sends an input <span class="arithmatex">\(x\)</span> and a witness <span class="arithmatex">\(w\)</span> to <span class="arithmatex">\(f(x)\)</span>, ignoring <span class="arithmatex">\(w\)</span>, verifies <span class="arithmatex">\(L\)</span> with the zero
+polynomial as witness bound, so only the empty witness is allowed.</p>
+<p>Together with the fact that this verifier has polynomial declared time whenever <span class="arithmatex">\(f\)</span> does, this is
+the declared-time form of <span class="arithmatex">\(\mathrm{P} \subseteq \mathrm{NP}\)</span> for named algorithms.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> verifies_of_decides {f : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → TimeM <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>}
+    {L : <a class="bp-lean-ref" href="../the-classes-p-np-and-conp/index.html#decision-problem" data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">DecisionProblem</a>} (hdec : ∀ x, (f x).ret = L x) :
+    <a class="bp-lean-ref" href="#verifies" data-lean-name="Cslib.TimeMComplexity.Verifies">Verifies</a> (<span class="bp-lean-keyword">fun</span> xw =&gt; f xw.1) L 0</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> DecisionProblem := List Bool → Bool</code></pre>
+<p class="bp-lean-where">MathlibExt/Computability/Complexity.lean:170</p>
+</div>
+<div data-lean-name="Cslib.TimeMComplexity.Verifies">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Verifies (V : List Bool × List Bool → TimeM Nat Bool)
+    (L : DecisionProblem) (p : Polynomial ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ x, L x ↔ ∃ w : List Bool, w.length ≤ p.eval x.length ∧
+    (V (x, w)).ret = true</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/TimeMComplexity.lean:99</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#verifies">Verifying a decision problem with a witness bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#decision-problem">Decision problems</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-in-a-cost-annotated-programming/declared-poly-many-one-red-via-refl">
+<h4 class="bp-thmheading" id="declared-poly-many-one-red-via-refl">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Declared-time many-one reduction is reflexive</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/TimeMComplexity.lean#L164" aria-label="View Cslib.TimeMComplexity.declaredPolyManyOneRedVia_refl in Lean source" title="View Cslib.TimeMComplexity.declaredPolyManyOneRedVia_refl in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#declared-poly-many-one-red-via-refl" aria-label="Link to Declared-time many-one reduction is reflexive" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.TimeMComplexity.declaredPolyManyOneRedVia_refl</div>
+<div class="bp-thmcontent">
+<p>For every decision problem <span class="arithmatex">\(L\)</span>, the timed
+identity function, which returns its input with declared time <span class="arithmatex">\(0\)</span>, is a declared-time many-one
+reduction from <span class="arithmatex">\(L\)</span> to <span class="arithmatex">\(L\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> declaredPolyManyOneRedVia_refl (L : <a class="bp-lean-ref" href="../the-classes-p-np-and-conp/index.html#decision-problem" data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">DecisionProblem</a>) :
+    <a class="bp-lean-ref" href="#declared-poly-many-one-red-via" data-lean-name="Cslib.TimeMComplexity.DeclaredPolyManyOneRedVia">DeclaredPolyManyOneRedVia</a> (<span class="bp-lean-keyword">fun</span> x =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> x) L L</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> DecisionProblem := List Bool → Bool</code></pre>
+<p class="bp-lean-where">MathlibExt/Computability/Complexity.lean:170</p>
+</div>
+<div data-lean-name="Cslib.TimeMComplexity.DeclaredPolyManyOneRedVia">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DeclaredPolyManyOneRedVia (f : List Bool → TimeM Nat (List Bool))
+    (L₁ L₂ : DecisionProblem) : <span class="bp-lean-keyword">Prop</span> :=
+  ComputesInDeclaredPolyTime f ∧ ∀ x, L₁ x = L₂ (f x).ret</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/TimeMComplexity.lean:113</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#declared-poly-many-one-red-via">Declared-time many-one reduction by a timed function</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#decision-problem">Decision problems</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#computes-in-declared-poly-time">Declared polynomial time for timed functions on bitstrings</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-in-a-cost-annotated-programming/declared-poly-many-one-red-via-trans">
+<h4 class="bp-thmheading" id="declared-poly-many-one-red-via-trans">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Declared-time many-one reductions compose</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/TimeMComplexity.lean#L171" aria-label="View Cslib.TimeMComplexity.declaredPolyManyOneRedVia_trans in Lean source" title="View Cslib.TimeMComplexity.declaredPolyManyOneRedVia_trans in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#declared-poly-many-one-red-via-trans" aria-label="Link to Declared-time many-one reductions compose" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.TimeMComplexity.declaredPolyManyOneRedVia_trans</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(L_1\)</span>, <span class="arithmatex">\(L_2\)</span> and <span class="arithmatex">\(L_3\)</span> be decision problems.
+If <span class="arithmatex">\(f_1\)</span> is a declared-time many-one reduction from <span class="arithmatex">\(L_1\)</span> to <span class="arithmatex">\(L_2\)</span> and <span class="arithmatex">\(f_2\)</span> is a declared-time
+many-one reduction from <span class="arithmatex">\(L_2\)</span> to <span class="arithmatex">\(L_3\)</span>, then the timed function that on input <span class="arithmatex">\(x\)</span> returns
+<span class="arithmatex">\(f_2(f_1(x))\)</span>, with declared time the declared time of <span class="arithmatex">\(f_1\)</span> on <span class="arithmatex">\(x\)</span> plus that of <span class="arithmatex">\(f_2\)</span> on
+<span class="arithmatex">\(f_1(x)\)</span>, is a declared-time many-one reduction from <span class="arithmatex">\(L_1\)</span> to <span class="arithmatex">\(L_3\)</span>.</p>
+<p>If <span class="arithmatex">\(p_1\)</span> and <span class="arithmatex">\(p_2\)</span> bound the declared times and output lengths of <span class="arithmatex">\(f_1\)</span> and <span class="arithmatex">\(f_2\)</span>, then
+<span class="arithmatex">\(p_1 + p_2 \circ p_1\)</span> bounds those of the composite.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> declaredPolyManyOneRedVia_trans
+    {f₁ f₂ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → TimeM <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>)} {L₁ L₂ L₃ : <a class="bp-lean-ref" href="../the-classes-p-np-and-conp/index.html#decision-problem" data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">DecisionProblem</a>}
+    (h₁₂ : <a class="bp-lean-ref" href="#declared-poly-many-one-red-via" data-lean-name="Cslib.TimeMComplexity.DeclaredPolyManyOneRedVia">DeclaredPolyManyOneRedVia</a> f₁ L₁ L₂) (h₂₃ : <a class="bp-lean-ref" href="#declared-poly-many-one-red-via" data-lean-name="Cslib.TimeMComplexity.DeclaredPolyManyOneRedVia">DeclaredPolyManyOneRedVia</a> f₂ L₂ L₃) :
+    <a class="bp-lean-ref" href="#declared-poly-many-one-red-via" data-lean-name="Cslib.TimeMComplexity.DeclaredPolyManyOneRedVia">DeclaredPolyManyOneRedVia</a> (<span class="bp-lean-keyword">fun</span> x =&gt; f₁ x &gt;&gt;= f₂) L₁ L₃</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> DecisionProblem := List Bool → Bool</code></pre>
+<p class="bp-lean-where">MathlibExt/Computability/Complexity.lean:170</p>
+</div>
+<div data-lean-name="Cslib.TimeMComplexity.DeclaredPolyManyOneRedVia">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DeclaredPolyManyOneRedVia (f : List Bool → TimeM Nat (List Bool))
+    (L₁ L₂ : DecisionProblem) : <span class="bp-lean-keyword">Prop</span> :=
+  ComputesInDeclaredPolyTime f ∧ ∀ x, L₁ x = L₂ (f x).ret</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/TimeMComplexity.lean:113</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#declared-poly-many-one-red-via">Declared-time many-one reduction by a timed function</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#decision-problem">Decision problems</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#computes-in-declared-poly-time">Declared polynomial time for timed functions on bitstrings</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-in-a-cost-annotated-programming/decides-in-declared-poly-time-comp-reduc">
+<h4 class="bp-thmheading" id="decides-in-declared-poly-time-comp-reduc">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Declared polynomial time is preserved under precomposition with a reduction</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/TimeMComplexity.lean#L195" aria-label="View Cslib.TimeMComplexity.decidesInDeclaredPolyTime_comp_reduction in Lean source" title="View Cslib.TimeMComplexity.decidesInDeclaredPolyTime_comp_reduction in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#decides-in-declared-poly-time-comp-reduc" aria-label="Link to Declared polynomial time is preserved under precomposition with a reduction" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.TimeMComplexity.decidesInDeclaredPolyTime_comp_reduction</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(L_1\)</span> and
+<span class="arithmatex">\(L_2\)</span> be decision problems, let <span class="arithmatex">\(f\)</span> be a declared-time many-one reduction from <span class="arithmatex">\(L_1\)</span> to <span class="arithmatex">\(L_2\)</span>, and
+let <span class="arithmatex">\(g\)</span> be a timed function from lists of Booleans to Booleans that decides in declared polynomial
+time. Then the timed function that on input <span class="arithmatex">\(x\)</span> returns <span class="arithmatex">\(g(f(x))\)</span>, with declared time the declared
+time of <span class="arithmatex">\(f\)</span> on <span class="arithmatex">\(x\)</span> plus that of <span class="arithmatex">\(g\)</span> on <span class="arithmatex">\(f(x)\)</span>, decides in declared polynomial time.</p>
+<p>If <span class="arithmatex">\(p_f\)</span> bounds the declared time and output length of <span class="arithmatex">\(f\)</span> and <span class="arithmatex">\(p_g\)</span> bounds the declared time of
+<span class="arithmatex">\(g\)</span>, then <span class="arithmatex">\(p_f + p_g \circ p_f\)</span> bounds the declared time of the composite.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> decidesInDeclaredPolyTime_comp_reduction
+    {f : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → TimeM <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>)} {g : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → TimeM <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>}
+    {L₁ L₂ : <a class="bp-lean-ref" href="../the-classes-p-np-and-conp/index.html#decision-problem" data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">DecisionProblem</a>} (hred : <a class="bp-lean-ref" href="#declared-poly-many-one-red-via" data-lean-name="Cslib.TimeMComplexity.DeclaredPolyManyOneRedVia">DeclaredPolyManyOneRedVia</a> f L₁ L₂)
+    (hg : <a class="bp-lean-ref" href="#decides-in-declared-poly-time" data-lean-name="Cslib.TimeMComplexity.DecidesInDeclaredPolyTime">DecidesInDeclaredPolyTime</a> g) :
+    <a class="bp-lean-ref" href="#decides-in-declared-poly-time" data-lean-name="Cslib.TimeMComplexity.DecidesInDeclaredPolyTime">DecidesInDeclaredPolyTime</a> (<span class="bp-lean-keyword">fun</span> x =&gt; f x &gt;&gt;= g)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> DecisionProblem := List Bool → Bool</code></pre>
+<p class="bp-lean-where">MathlibExt/Computability/Complexity.lean:170</p>
+</div>
+<div data-lean-name="Cslib.TimeMComplexity.DeclaredPolyManyOneRedVia">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DeclaredPolyManyOneRedVia (f : List Bool → TimeM Nat (List Bool))
+    (L₁ L₂ : DecisionProblem) : <span class="bp-lean-keyword">Prop</span> :=
+  ComputesInDeclaredPolyTime f ∧ ∀ x, L₁ x = L₂ (f x).ret</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/TimeMComplexity.lean:113</p>
+</div>
+<div data-lean-name="Cslib.TimeMComplexity.DecidesInDeclaredPolyTime">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DecidesInDeclaredPolyTime (f : List Bool → TimeM Nat Bool) : <span class="bp-lean-keyword">Prop</span> :=
+  ∃ p : Polynomial ℕ, ∀ x, (f x).time ≤ p.eval x.length</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/TimeMComplexity.lean:71</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#decides-in-declared-poly-time">Declared polynomial time for timed deciders</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#declared-poly-many-one-red-via">Declared-time many-one reduction by a timed function</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#decision-problem">Decision problems</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#computes-in-declared-poly-time">Declared polynomial time for timed functions on bitstrings</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-in-a-cost-annotated-programming/decides-comp-reduction">
+<h4 class="bp-thmheading" id="decides-comp-reduction">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">A declared-time reduction followed by a decider for the target decides the source</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/TimeMComplexity.lean#L211" aria-label="View Cslib.TimeMComplexity.decides_comp_reduction in Lean source" title="View Cslib.TimeMComplexity.decides_comp_reduction in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#decides-comp-reduction" aria-label="Link to A declared-time reduction followed by a decider for the target decides the source" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.TimeMComplexity.decides_comp_reduction</div>
+<div class="bp-thmcontent">
+<p>Let
+<span class="arithmatex">\(L_1\)</span> and <span class="arithmatex">\(L_2\)</span> be decision problems, let <span class="arithmatex">\(f\)</span> be a declared-time many-one reduction from <span class="arithmatex">\(L_1\)</span> to
+<span class="arithmatex">\(L_2\)</span>, and let <span class="arithmatex">\(g\)</span> be a timed function from lists of Booleans to Booleans whose output on every
+list <span class="arithmatex">\(y\)</span> is <span class="arithmatex">\(L_2(y)\)</span>. Then for every list <span class="arithmatex">\(x\)</span> of Booleans, the timed function that runs <span class="arithmatex">\(f\)</span> on <span class="arithmatex">\(x\)</span>
+and then <span class="arithmatex">\(g\)</span> on its output returns <span class="arithmatex">\(L_1(x)\)</span>.</p>
+<p>Together with the preservation of declared polynomial time under such compositions, this is the
+declared-time form of closure under reductions; no membership in the class P is claimed.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> decides_comp_reduction
+    {f : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → TimeM <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>)} {g : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → TimeM <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>}
+    {L₁ L₂ : <a class="bp-lean-ref" href="../the-classes-p-np-and-conp/index.html#decision-problem" data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">DecisionProblem</a>} (hred : <a class="bp-lean-ref" href="#declared-poly-many-one-red-via" data-lean-name="Cslib.TimeMComplexity.DeclaredPolyManyOneRedVia">DeclaredPolyManyOneRedVia</a> f L₁ L₂)
+    (hdec : ∀ x, (g x).ret = L₂ x) (x : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) :
+    ((<span class="bp-lean-keyword">fun</span> x =&gt; f x &gt;&gt;= g) x).ret = L₁ x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> DecisionProblem := List Bool → Bool</code></pre>
+<p class="bp-lean-where">MathlibExt/Computability/Complexity.lean:170</p>
+</div>
+<div data-lean-name="Cslib.TimeMComplexity.DeclaredPolyManyOneRedVia">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DeclaredPolyManyOneRedVia (f : List Bool → TimeM Nat (List Bool))
+    (L₁ L₂ : DecisionProblem) : <span class="bp-lean-keyword">Prop</span> :=
+  ComputesInDeclaredPolyTime f ∧ ∀ x, L₁ x = L₂ (f x).ret</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/TimeMComplexity.lean:113</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#declared-poly-many-one-red-via">Declared-time many-one reduction by a timed function</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#decision-problem">Decision problems</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#computes-in-declared-poly-time">Declared polynomial time for timed functions on bitstrings</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-in-a-cost-annotated-programming/verifies-comp-reduction">
+<h4 class="bp-thmheading" id="verifies-comp-reduction">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Pulling a verifier back along a declared reduction</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/TimeMComplexity.lean#L226" aria-label="View Cslib.TimeMComplexity.verifies_comp_reduction in Lean source" title="View Cslib.TimeMComplexity.verifies_comp_reduction in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#verifies-comp-reduction" aria-label="Link to Pulling a verifier back along a declared reduction" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.TimeMComplexity.verifies_comp_reduction</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(L_1\)</span> and <span class="arithmatex">\(L_2\)</span> be decision
+problems, let <span class="arithmatex">\(f\)</span> be a declared polynomial-time many-one reduction from <span class="arithmatex">\(L_1\)</span> to <span class="arithmatex">\(L_2\)</span>, and let
+<span class="arithmatex">\(V\)</span> be a verifier with polynomial declared time that verifies <span class="arithmatex">\(L_2\)</span> with witness bound <span class="arithmatex">\(p\)</span>. Let
+<span class="arithmatex">\(V'\)</span> be the verifier that on input <span class="arithmatex">\(x\)</span> and witness <span class="arithmatex">\(w\)</span> first runs <span class="arithmatex">\(f\)</span> on <span class="arithmatex">\(x\)</span>, obtaining <span class="arithmatex">\(y\)</span>, then
+runs <span class="arithmatex">\(V\)</span> on <span class="arithmatex">\((y, w)\)</span> and accepts when <span class="arithmatex">\(V\)</span> accepts and <span class="arithmatex">\(|w| \le p(|y|)\)</span>; its declared time is the
+declared time of <span class="arithmatex">\(f(x)\)</span> plus that of <span class="arithmatex">\(V(y, w)\)</span>. Then <span class="arithmatex">\(V'\)</span> has polynomial declared time, and there
+is a polynomial <span class="arithmatex">\(p'\)</span> with natural coefficients such that <span class="arithmatex">\(V'\)</span> verifies <span class="arithmatex">\(L_1\)</span> with witness bound
+<span class="arithmatex">\(p'\)</span>.</p>
+<p>The proof takes <span class="arithmatex">\(p' = p \circ r\)</span> and the time bound <span class="arithmatex">\(r(n) + q(r(n) + n)\)</span> with <span class="arithmatex">\(n = |x| + |w|\)</span>,
+where <span class="arithmatex">\(r\)</span> bounds the declared time and output length of <span class="arithmatex">\(f\)</span> and <span class="arithmatex">\(q\)</span> bounds the declared time of
+<span class="arithmatex">\(V\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> verifies_comp_reduction
+    {f : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → TimeM <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>)}
+    {V : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> × <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → TimeM <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>}
+    {L₁ L₂ : <a class="bp-lean-ref" href="../the-classes-p-np-and-conp/index.html#decision-problem" data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">DecisionProblem</a>} {p : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial#doc" title="Polynomial">Polynomial</a> ℕ}
+    (hred : <a class="bp-lean-ref" href="#declared-poly-many-one-red-via" data-lean-name="Cslib.TimeMComplexity.DeclaredPolyManyOneRedVia">DeclaredPolyManyOneRedVia</a> f L₁ L₂) (hVt : <a class="bp-lean-ref" href="#verifier-in-declared-poly-time" data-lean-name="Cslib.TimeMComplexity.VerifierInDeclaredPolyTime">VerifierInDeclaredPolyTime</a> V)
+    (hV : <a class="bp-lean-ref" href="#verifies" data-lean-name="Cslib.TimeMComplexity.Verifies">Verifies</a> V L₂ p) :
+    ∃ p&#x27; : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial#doc" title="Polynomial">Polynomial</a> ℕ,
+      <a class="bp-lean-ref" href="#verifier-in-declared-poly-time" data-lean-name="Cslib.TimeMComplexity.VerifierInDeclaredPolyTime">VerifierInDeclaredPolyTime</a> (<span class="bp-lean-keyword">fun</span> xw =&gt; f xw.1 &gt;&gt;= <span class="bp-lean-keyword">fun</span> y =&gt;
+        (<span class="bp-lean-keyword">fun</span> b =&gt; b &amp;&amp; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Decidable.decide#doc" title="Decidable.decide">decide</a> (xw.2.length ≤ p.eval y.length)) &lt;$&gt;
+          V (y, xw.2)) ∧
+      <a class="bp-lean-ref" href="#verifies" data-lean-name="Cslib.TimeMComplexity.Verifies">Verifies</a> (<span class="bp-lean-keyword">fun</span> xw =&gt; f xw.1 &gt;&gt;= <span class="bp-lean-keyword">fun</span> y =&gt;
+        (<span class="bp-lean-keyword">fun</span> b =&gt; b &amp;&amp; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Decidable.decide#doc" title="Decidable.decide">decide</a> (xw.2.length ≤ p.eval y.length)) &lt;$&gt;
+          V (y, xw.2)) L₁ p&#x27;</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> DecisionProblem := List Bool → Bool</code></pre>
+<p class="bp-lean-where">MathlibExt/Computability/Complexity.lean:170</p>
+</div>
+<div data-lean-name="Cslib.TimeMComplexity.DeclaredPolyManyOneRedVia">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DeclaredPolyManyOneRedVia (f : List Bool → TimeM Nat (List Bool))
+    (L₁ L₂ : DecisionProblem) : <span class="bp-lean-keyword">Prop</span> :=
+  ComputesInDeclaredPolyTime f ∧ ∀ x, L₁ x = L₂ (f x).ret</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/TimeMComplexity.lean:113</p>
+</div>
+<div data-lean-name="Cslib.TimeMComplexity.VerifierInDeclaredPolyTime">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> VerifierInDeclaredPolyTime (V : List Bool × List Bool → TimeM Nat Bool) : <span class="bp-lean-keyword">Prop</span> :=
+  ∃ q : Polynomial ℕ, ∀ xw, (V xw).time ≤ q.eval (xw.1.length + xw.2.length)</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/TimeMComplexity.lean:92</p>
+</div>
+<div data-lean-name="Cslib.TimeMComplexity.Verifies">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Verifies (V : List Bool × List Bool → TimeM Nat Bool)
+    (L : DecisionProblem) (p : Polynomial ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ x, L x ↔ ∃ w : List Bool, w.length ≤ p.eval x.length ∧
+    (V (x, w)).ret = true</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/TimeMComplexity.lean:99</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#declared-poly-many-one-red-via">Declared-time many-one reduction by a timed function</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#verifier-in-declared-poly-time">Verifiers with polynomial declared time</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#verifies">Verifying a decision problem with a witness bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#decision-problem">Decision problems</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#computes-in-declared-poly-time">Declared polynomial time for timed functions on bitstrings</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-in-a-cost-annotated-programming/mem-p-of-decides">
+<h4 class="bp-thmheading" id="mem-p-of-decides">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">A timed decider with polynomial-time output function gives membership in P</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/TimeMComplexity.lean#L283" aria-label="View Cslib.TimeMComplexity.mem_P_of_decides in Lean source" title="View Cslib.TimeMComplexity.mem_P_of_decides in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#mem-p-of-decides" aria-label="Link to A timed decider with polynomial-time output function gives membership in P" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.TimeMComplexity.mem_P_of_decides</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(L\)</span> be
+a decision problem and let <span class="arithmatex">\(f\)</span> assign to each bit string <span class="arithmatex">\(x\)</span> a timed computation, that is, a
+Boolean return value together with a declared time in <span class="arithmatex">\(\mathbb{N}\)</span>, whose return value equals
+<span class="arithmatex">\(L(x)\)</span> for every <span class="arithmatex">\(x\)</span>. If the function sending <span class="arithmatex">\(x\)</span> to the return value of <span class="arithmatex">\(f(x)\)</span> is
+polynomial-time computable, then <span class="arithmatex">\(L\)</span> belongs to the class P.</p>
+<p>The polynomial-time hypothesis must be proved for the specific decider: it does not follow from a
+polynomial bound on the declared times, which are trusted annotations, since every decision
+problem has a decider of declared time zero.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> mem_P_of_decides {f : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → TimeM <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>}
+    {L : <a class="bp-lean-ref" href="../the-classes-p-np-and-conp/index.html#decision-problem" data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">DecisionProblem</a>} (hdec : ∀ x, (f x).ret = L x)
+    (h : <a class="bp-lean-ref" href="../the-classes-p-np-and-conp/index.html#is-poly-time" data-lean-name="MetaMathlibExt.ComplexityTheory.IsPolyTime">MetaMathlibExt.ComplexityTheory.IsPolyTime</a> <span class="bp-lean-keyword">fun</span> x =&gt; (f x).ret) :
+    L ∈ <a class="bp-lean-ref" href="../the-classes-p-np-and-conp/index.html#p" data-lean-name="MetaMathlibExt.ComplexityTheory.P">MetaMathlibExt.ComplexityTheory.P</a></code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> DecisionProblem := List Bool → Bool</code></pre>
+<p class="bp-lean-where">MathlibExt/Computability/Complexity.lean:170</p>
+</div>
+<div data-lean-name="MetaMathlibExt.ComplexityTheory.IsPolyTime">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsPolyTime {α β : <span class="bp-lean-keyword">Type</span>} [BitstringEncoding α] [BitstringEncoding β]
+    (f : α → β) : <span class="bp-lean-keyword">Prop</span> :=
+  IsPolyTimeWithEncoding (BitstringEncoding.toEncoding (α := α))
+    (BitstringEncoding.toEncoding (α := β)) f</code></pre>
+<p class="bp-lean-where">MathlibExt/Computability/Complexity.lean:186</p>
+</div>
+<div data-lean-name="MetaMathlibExt.ComplexityTheory.P">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> P : DecisionComplexityClass :=
+  { L | IsPolyTime L }</code></pre>
+<p class="bp-lean-where">MathlibExt/Computability/Complexity.lean:194</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 12</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#bitstring-encoding">Bitstring encodings</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#bit-decode">Decoding function of a bitstring encoding</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#bit-decode-bit-encode">Decoding inverts bitstring encoding</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#bit-encode">Encoding function of a bitstring encoding</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#delimit">Self-delimiting form of a bitstring</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#undelimit">Parsing one self-delimiting block</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#undelimit-blocks">Parsing a list of booleans into self-delimiting blocks</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#undelimit-blocks-aux">Bounded parsing of self-delimiting blocks</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#decision-complexity-class">Complexity classes</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#decision-problem">Decision problems</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#is-poly-time">Polynomial-time computable functions</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#p">The complexity class P</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-in-a-cost-annotated-programming/mem-np-of-verifies">
+<h4 class="bp-thmheading" id="mem-np-of-verifies">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">A timed verifier with polynomial-time output function puts its language in NP</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/TimeMComplexity.lean#L297" aria-label="View Cslib.TimeMComplexity.mem_NP_of_verifies in Lean source" title="View Cslib.TimeMComplexity.mem_NP_of_verifies in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#mem-np-of-verifies" aria-label="Link to A timed verifier with polynomial-time output function puts its language in NP" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.TimeMComplexity.mem_NP_of_verifies</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(L\)</span> be
+a decision problem, <span class="arithmatex">\(p\)</span> a polynomial with natural-number coefficients, and <span class="arithmatex">\(V\)</span> a timed function
+from pairs of lists of Booleans to Booleans that verifies <span class="arithmatex">\(L\)</span> with witness bound <span class="arithmatex">\(p\)</span>. If the
+function sending <span class="arithmatex">\((x, w)\)</span> to the output of <span class="arithmatex">\(V\)</span> on <span class="arithmatex">\((x, w)\)</span> is polynomial-time computable by a
+Turing machine for the canonical bitstring encodings, then <span class="arithmatex">\(L\)</span> is in NP.</p>
+<p>The polynomial-time hypothesis must be proved separately for <span class="arithmatex">\(V\)</span>; it does not follow from any
+bound on the declared time of <span class="arithmatex">\(V\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> mem_NP_of_verifies {V : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> × <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → TimeM <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>}
+    {L : <a class="bp-lean-ref" href="../the-classes-p-np-and-conp/index.html#decision-problem" data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">DecisionProblem</a>} {p : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial#doc" title="Polynomial">Polynomial</a> ℕ} (hver : <a class="bp-lean-ref" href="#verifies" data-lean-name="Cslib.TimeMComplexity.Verifies">Verifies</a> V L p)
+    (h : <a class="bp-lean-ref" href="../the-classes-p-np-and-conp/index.html#is-poly-time" data-lean-name="MetaMathlibExt.ComplexityTheory.IsPolyTime">MetaMathlibExt.ComplexityTheory.IsPolyTime</a> <span class="bp-lean-keyword">fun</span> xw =&gt; (V xw).ret) :
+    L ∈ <a class="bp-lean-ref" href="../the-classes-p-np-and-conp/index.html#np" data-lean-name="MetaMathlibExt.ComplexityTheory.NP">MetaMathlibExt.ComplexityTheory.NP</a></code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> DecisionProblem := List Bool → Bool</code></pre>
+<p class="bp-lean-where">MathlibExt/Computability/Complexity.lean:170</p>
+</div>
+<div data-lean-name="Cslib.TimeMComplexity.Verifies">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Verifies (V : List Bool × List Bool → TimeM Nat Bool)
+    (L : DecisionProblem) (p : Polynomial ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ x, L x ↔ ∃ w : List Bool, w.length ≤ p.eval x.length ∧
+    (V (x, w)).ret = true</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/TimeMComplexity.lean:99</p>
+</div>
+<div data-lean-name="MetaMathlibExt.ComplexityTheory.IsPolyTime">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsPolyTime {α β : <span class="bp-lean-keyword">Type</span>} [BitstringEncoding α] [BitstringEncoding β]
+    (f : α → β) : <span class="bp-lean-keyword">Prop</span> :=
+  IsPolyTimeWithEncoding (BitstringEncoding.toEncoding (α := α))
+    (BitstringEncoding.toEncoding (α := β)) f</code></pre>
+<p class="bp-lean-where">MathlibExt/Computability/Complexity.lean:186</p>
+</div>
+<div data-lean-name="MetaMathlibExt.ComplexityTheory.NP">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> NP : DecisionComplexityClass :=
+  { L | ∃ (p : Polynomial ℕ), ∃ R : (List Bool × List Bool) → Bool,
+      IsPolyTime R ∧
+      ∀ x, L x ↔ ∃ w : List Bool, w.length ≤ p.eval x.length ∧ R (x, w) }</code></pre>
+<p class="bp-lean-where">MathlibExt/Computability/Complexity.lean:200</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 13 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#verifies">Verifying a decision problem with a witness bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#bitstring-encoding">Bitstring encodings</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#bit-decode">Decoding function of a bitstring encoding</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#bit-decode-bit-encode">Decoding inverts bitstring encoding</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#bit-encode">Encoding function of a bitstring encoding</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#delimit">Self-delimiting form of a bitstring</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#undelimit">Parsing one self-delimiting block</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#undelimit-blocks">Parsing a list of booleans into self-delimiting blocks</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#undelimit-blocks-aux">Bounded parsing of self-delimiting blocks</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#decision-complexity-class">Complexity classes</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#decision-problem">Decision problems</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#is-poly-time">Polynomial-time computable functions</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#np">The complexity class NP</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../np-completeness/cook-levin/polynomial-time-verifier-for-sat/part-01/index.html#sat-dec-mem-np-of-is-poly-time">SAT is in NP if its verifier is polynomial-time</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="TheoryOfComputation/complexity-classes/polynomial-time-in-a-cost-annotated-programming/cook-levin-poly-many-one-red-of-declared">
+<h4 class="bp-thmheading" id="cook-levin-poly-many-one-red-of-declared">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">From declared-time to polynomial-time many-one reductions</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Computability/TimeMComplexity.lean#L309" aria-label="View Cslib.TimeMComplexity.cookLevinPolyManyOneRed_of_declared in Lean source" title="View Cslib.TimeMComplexity.cookLevinPolyManyOneRed_of_declared in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#cook-levin-poly-many-one-red-of-declared" aria-label="Link to From declared-time to polynomial-time many-one reductions" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.TimeMComplexity.cookLevinPolyManyOneRed_of_declared</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(L_1\)</span> and <span class="arithmatex">\(L_2\)</span> be decision
+problems and let <span class="arithmatex">\(f\)</span> be a declared-time many-one reduction from <span class="arithmatex">\(L_1\)</span> to <span class="arithmatex">\(L_2\)</span>. If the function
+sending <span class="arithmatex">\(x\)</span> to the output of <span class="arithmatex">\(f\)</span> on <span class="arithmatex">\(x\)</span> is polynomial-time computable by a Turing machine for the
+canonical bitstring encodings, then <span class="arithmatex">\(L_1\)</span> reduces to <span class="arithmatex">\(L_2\)</span> by a polynomial-time many-one
+reduction.</p>
+<p>The polynomial-time hypothesis must be proved separately for <span class="arithmatex">\(f\)</span>; it does not follow from the
+declared-time bound.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> cookLevinPolyManyOneRed_of_declared
+    {f : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> → TimeM <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>)} {L₁ L₂ : <a class="bp-lean-ref" href="../the-classes-p-np-and-conp/index.html#decision-problem" data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">DecisionProblem</a>}
+    (hred : <a class="bp-lean-ref" href="#declared-poly-many-one-red-via" data-lean-name="Cslib.TimeMComplexity.DeclaredPolyManyOneRedVia">DeclaredPolyManyOneRedVia</a> f L₁ L₂)
+    (h : <a class="bp-lean-ref" href="../the-classes-p-np-and-conp/index.html#is-poly-time" data-lean-name="MetaMathlibExt.ComplexityTheory.IsPolyTime">MetaMathlibExt.ComplexityTheory.IsPolyTime</a> <span class="bp-lean-keyword">fun</span> x =&gt; (f x).ret) :
+    <a class="bp-lean-ref" href="../../np-completeness/cook-levin/binary-encoding-of-cnf-formulas/index.html#poly-many-one-red" data-lean-name="Cslib.CookLevin.PolyManyOneRed">Cslib.CookLevin.PolyManyOneRed</a> L₁ L₂</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MetaMathlibExt.ComplexityTheory.DecisionProblem">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> DecisionProblem := List Bool → Bool</code></pre>
+<p class="bp-lean-where">MathlibExt/Computability/Complexity.lean:170</p>
+</div>
+<div data-lean-name="Cslib.TimeMComplexity.DeclaredPolyManyOneRedVia">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DeclaredPolyManyOneRedVia (f : List Bool → TimeM Nat (List Bool))
+    (L₁ L₂ : DecisionProblem) : <span class="bp-lean-keyword">Prop</span> :=
+  ComputesInDeclaredPolyTime f ∧ ∀ x, L₁ x = L₂ (f x).ret</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/TimeMComplexity.lean:113</p>
+</div>
+<div data-lean-name="MetaMathlibExt.ComplexityTheory.IsPolyTime">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsPolyTime {α β : <span class="bp-lean-keyword">Type</span>} [BitstringEncoding α] [BitstringEncoding β]
+    (f : α → β) : <span class="bp-lean-keyword">Prop</span> :=
+  IsPolyTimeWithEncoding (BitstringEncoding.toEncoding (α := α))
+    (BitstringEncoding.toEncoding (α := β)) f</code></pre>
+<p class="bp-lean-where">MathlibExt/Computability/Complexity.lean:186</p>
+</div>
+<div data-lean-name="Cslib.CookLevin.PolyManyOneRed">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> PolyManyOneRed (L₁ L₂ : MetaMathlibExt.ComplexityTheory.DecisionProblem) : <span class="bp-lean-keyword">Prop</span> :=
+  ∃ reduce : List Bool → List Bool,
+    MetaMathlibExt.ComplexityTheory.IsPolyTime reduce ∧ ∀ x, L₁ x = L₂ (reduce x)</code></pre>
+<p class="bp-lean-where">CSLibExt/Computability/CookLevin.lean:396</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 13</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../np-completeness/cook-levin/binary-encoding-of-cnf-formulas/index.html#poly-many-one-red">Polynomial-time many-one reduction</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#declared-poly-many-one-red-via">Declared-time many-one reduction by a timed function</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#bitstring-encoding">Bitstring encodings</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#bit-decode">Decoding function of a bitstring encoding</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#bit-decode-bit-encode">Decoding inverts bitstring encoding</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#bit-encode">Encoding function of a bitstring encoding</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#delimit">Self-delimiting form of a bitstring</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#undelimit">Parsing one self-delimiting block</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#undelimit-blocks">Parsing a list of booleans into self-delimiting blocks</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#undelimit-blocks-aux">Bounded parsing of self-delimiting blocks</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#decision-problem">Decision problems</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../the-classes-p-np-and-conp/index.html#is-poly-time">Polynomial-time computable functions</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#computes-in-declared-poly-time">Declared polynomial time for timed functions on bitstrings</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>16</strong> fully proved</span></div>
+</div>
+</div>
+<p><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../dependencies/index.json" data-graph-src="../../../../dependencies/scopes/TheoryOfComputation/complexity-classes/polynomial-time-in-a-cost-annotated-programming.json" data-page-href="index.html" data-scope-id="TheoryOfComputation/complexity-classes/polynomial-time-in-a-cost-annotated-programming">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>

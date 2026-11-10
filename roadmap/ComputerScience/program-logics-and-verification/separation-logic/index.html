@@ -1,0 +1,5450 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../kleene-algebra-with-tests/index.html">
+      
+      
+        <link rel="next" href="../verification-condition-generation/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Separation logic - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Separation logic
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23" id="__nav_2_1_23_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_23_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Computer Science
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../data-structures/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data structures
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../graph-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../process-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Process calculi and behavioural equivalence
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../type-systems-and-lambda-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Type systems and lambda calculi
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../programming-language-semantics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programming language semantics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../machine-learning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Machine learning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../sorting-and-searching/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sorting and searching
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../dynamic-programming/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic programming
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../greedy-algorithms-and-matroids/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Greedy algorithms and matroids
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../approximation-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Approximation algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../online-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Online algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../randomized-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Randomized algorithms and probabilistic analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../parallel-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../algebraic-and-numerical-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic and numerical algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../computational-geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computational geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../string-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    String algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../heuristic-search-and-planning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heuristic search and planning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../cryptography/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cryptography
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../databases/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Databases
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../quantum-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../concurrent-systems-and-protocols/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concurrent systems and protocols
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23_23" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Program logics and verification
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23_23" id="__nav_2_1_23_23_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_23_23_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Program logics and verification
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hoare-logic/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hoare logic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kleene-algebra-with-tests/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kleene algebra with tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Separation logic
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../verification-condition-generation/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verification-condition generation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../index.html" tabindex="-1">Computer Science</a></li><li><a href="../index.html" tabindex="-1">Program logics and verification</a></li><li aria-current="page">Separation logic</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Separation logic</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="ComputerScience/program-logics-and-verification/separation-logic" data-page-title="Separation logic">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="separation-logic">Separation logic</h1>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/program-logics-and-verification/separation-logic/hassertion">
+<h4 class="bp-thmheading" id="hassertion">
+<span class="bp-thmcaption" data-search-exclude>Abbreviation</span><span class="bp-thmtitle">Heap assertion</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Languages/IMP/SeparationLogic.lean#L39" aria-label="View Cslib.IMP.HAssertion in Lean source" title="View Cslib.IMP.HAssertion in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#hassertion" aria-label="Link to Heap assertion" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.IMP.HAssertion</div>
+<div class="bp-thmcontent">
+<p>A heap assertion is a predicate on a store and a heap: it assigns a
+proposition to every store <span class="arithmatex">\(s\)</span> and every heap <span class="arithmatex">\(h\)</span>. Heap assertions serve as the preconditions
+and postconditions of separation logic.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> HAssertion := <a class="bp-lean-ref" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state" data-lean-name="Cslib.IMP.State">State</a> → <a class="bp-lean-ref" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap" data-lean-name="Cslib.IMP.Heap">Heap</a> → <span class="bp-lean-keyword">Prop</span></code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.IMP.State">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> State := Nat → Nat</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/Syntax.lean:34</p>
+</div>
+<div data-lean-name="Cslib.IMP.Heap">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Heap := Finmap (<span class="bp-lean-keyword">fun</span> _ : Nat =&gt; Nat)</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/Heap.lean:35</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 18</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap">Heap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state">IMP program states</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#assign-step">Assignment rule with a store-irrelevant heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#emp">Empty-heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#entails">Entailment of heap assertions</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#exists">Existential rule for separation-logic triples</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#frame">Frame rule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#frame-of-store-irrel">Store-irrelevant frames satisfy the frame-rule side condition</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hand">Conjunction of heap assertions</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hexists">Existential heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#of-valid-frame">Framed embedding of Hoare validity</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#points-to">Points-to assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#pure">Pure assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#read-local">Local rule for a heap read</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sep-valid">Separation-logic triple validity</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#star">Separating conjunction</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#star-and-left">Pulling a store fact out of a separating conjunction</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#star-swap-right">Rearranging a separating conjunction</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#store-irrel">Store-irrelevant heap assertions</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#while-loop">Separation-logic while rule</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/program-logics-and-verification/separation-logic/entails">
+<h4 class="bp-thmheading" id="entails">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Entailment of heap assertions</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Languages/IMP/SeparationLogic.lean#L44" aria-label="View Cslib.IMP.HAssertion.Entails in Lean source" title="View Cslib.IMP.HAssertion.Entails in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#entails" aria-label="Link to Entailment of heap assertions" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.IMP.HAssertion.Entails</div>
+<div class="bp-thmcontent">
+<p>A heap assertion <span class="arithmatex">\(P\)</span> entails a heap assertion <span class="arithmatex">\(Q\)</span> when, for
+every store <span class="arithmatex">\(s\)</span> and every heap <span class="arithmatex">\(h\)</span>, if <span class="arithmatex">\(P\)</span> holds of <span class="arithmatex">\(s\)</span> and <span class="arithmatex">\(h\)</span>, then <span class="arithmatex">\(Q\)</span> holds of <span class="arithmatex">\(s\)</span> and <span class="arithmatex">\(h\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Entails (P Q : <a class="bp-lean-ref" href="#hassertion" data-lean-name="Cslib.IMP.HAssertion">HAssertion</a>) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s h⦄, P s h → Q s h</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.IMP.HAssertion">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> HAssertion := State → Heap → <span class="bp-lean-keyword">Prop</span></code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:39</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hassertion">Heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap">Heap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state">IMP program states</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#assign-step">Assignment rule with a store-irrelevant heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#read-local">Local rule for a heap read</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#star-swap-right">Rearranging a separating conjunction</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/program-logics-and-verification/separation-logic/emp">
+<h4 class="bp-thmheading" id="emp">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Empty-heap assertion</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Languages/IMP/SeparationLogic.lean#L55" aria-label="View Cslib.IMP.HAssertion.emp in Lean source" title="View Cslib.IMP.HAssertion.emp in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#emp" aria-label="Link to Empty-heap assertion" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.IMP.HAssertion.emp</div>
+<div class="bp-thmcontent">
+<p>The heap assertion <span class="arithmatex">\(\mathrm{emp}\)</span> holds of a store <span class="arithmatex">\(s\)</span> and a heap
+<span class="arithmatex">\(h\)</span> exactly when <span class="arithmatex">\(h\)</span> is the empty heap, whatever the store <span class="arithmatex">\(s\)</span> is.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> emp : <a class="bp-lean-ref" href="#hassertion" data-lean-name="Cslib.IMP.HAssertion">HAssertion</a> := <span class="bp-lean-keyword">fun</span> _ h =&gt; h = ∅</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.IMP.HAssertion">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> HAssertion := State → Heap → <span class="bp-lean-keyword">Prop</span></code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:39</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hassertion">Heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap">Heap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state">IMP program states</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/program-logics-and-verification/separation-logic/pure">
+<h4 class="bp-thmheading" id="pure">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Pure assertion</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Languages/IMP/SeparationLogic.lean#L58" aria-label="View Cslib.IMP.HAssertion.pure in Lean source" title="View Cslib.IMP.HAssertion.pure in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#pure" aria-label="Link to Pure assertion" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.IMP.HAssertion.pure</div>
+<div class="bp-thmcontent">
+<p>For a proposition <span class="arithmatex">\(p\)</span>, the pure assertion of <span class="arithmatex">\(p\)</span> holds of a store <span class="arithmatex">\(s\)</span> and
+a heap <span class="arithmatex">\(h\)</span> exactly when <span class="arithmatex">\(h\)</span> is the empty heap and <span class="arithmatex">\(p\)</span> is true.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> pure (p : <span class="bp-lean-keyword">Prop</span>) : <a class="bp-lean-ref" href="#hassertion" data-lean-name="Cslib.IMP.HAssertion">HAssertion</a> := <span class="bp-lean-keyword">fun</span> _ h =&gt; h = ∅ ∧ p</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.IMP.HAssertion">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> HAssertion := State → Heap → <span class="bp-lean-keyword">Prop</span></code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:39</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hassertion">Heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap">Heap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state">IMP program states</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/program-logics-and-verification/separation-logic/points-to">
+<h4 class="bp-thmheading" id="points-to">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Points-to assertion</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Languages/IMP/SeparationLogic.lean#L61" aria-label="View Cslib.IMP.HAssertion.pointsTo in Lean source" title="View Cslib.IMP.HAssertion.pointsTo in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#points-to" aria-label="Link to Points-to assertion" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.IMP.HAssertion.pointsTo</div>
+<div class="bp-thmcontent">
+<p>For natural numbers <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(v\)</span>, the assertion <span class="arithmatex">\(a \mapsto v\)</span> holds of
+a store <span class="arithmatex">\(s\)</span> and a heap <span class="arithmatex">\(h\)</span> exactly when <span class="arithmatex">\(h\)</span> is the singleton heap that maps the address <span class="arithmatex">\(a\)</span> to the
+value <span class="arithmatex">\(v\)</span> and allocates no other address.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> pointsTo (a v : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a>) : <a class="bp-lean-ref" href="#hassertion" data-lean-name="Cslib.IMP.HAssertion">HAssertion</a> :=
+  <span class="bp-lean-keyword">fun</span> _ h =&gt; h = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finmap.singleton#doc" title="Finmap.singleton">Finmap.singleton</a> a v</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.IMP.HAssertion">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> HAssertion := State → Heap → <span class="bp-lean-keyword">Prop</span></code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:39</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hassertion">Heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap">Heap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state">IMP program states</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#read-local">Local rule for a heap read</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/program-logics-and-verification/separation-logic/star">
+<h4 class="bp-thmheading" id="star">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Separating conjunction</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Languages/IMP/SeparationLogic.lean#L66" aria-label="View Cslib.IMP.HAssertion.star in Lean source" title="View Cslib.IMP.HAssertion.star in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#star" aria-label="Link to Separating conjunction" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.IMP.HAssertion.star</div>
+<div class="bp-thmcontent">
+<p>For heap assertions <span class="arithmatex">\(P\)</span> and <span class="arithmatex">\(Q\)</span>, the assertion <span class="arithmatex">\(P \star Q\)</span> holds
+of a store <span class="arithmatex">\(s\)</span> and a heap <span class="arithmatex">\(h\)</span> when there are disjoint heaps <span class="arithmatex">\(h_1\)</span> and <span class="arithmatex">\(h_2\)</span> with
+<span class="arithmatex">\(h = h_1 \cup h_2\)</span> such that <span class="arithmatex">\(P(s, h_1)\)</span> and <span class="arithmatex">\(Q(s, h_2)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> star (P Q : <a class="bp-lean-ref" href="#hassertion" data-lean-name="Cslib.IMP.HAssertion">HAssertion</a>) : <a class="bp-lean-ref" href="#hassertion" data-lean-name="Cslib.IMP.HAssertion">HAssertion</a> :=
+  <span class="bp-lean-keyword">fun</span> s h =&gt; ∃ h₁ h₂, <a class="bp-lean-ref" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#disjoint" data-lean-name="Cslib.IMP.Heap.Disjoint">Heap.Disjoint</a> h₁ h₂ ∧ h = h₁ ∪ h₂ ∧ P s h₁ ∧ Q s h₂</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.IMP.HAssertion">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> HAssertion := State → Heap → <span class="bp-lean-keyword">Prop</span></code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:39</p>
+</div>
+<div data-lean-name="Cslib.IMP.Heap.Disjoint">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Disjoint (h₁ h₂ : Heap) : <span class="bp-lean-keyword">Prop</span> := ∀ a, a ∈ h₁ → a ∉ h₂</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/Heap.lean:40</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hassertion">Heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap">Heap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#disjoint">Disjoint heaps</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state">IMP program states</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#frame">Frame rule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#of-valid-frame">Framed embedding of Hoare validity</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#star-and-left">Pulling a store fact out of a separating conjunction</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#star-swap-right">Rearranging a separating conjunction</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/program-logics-and-verification/separation-logic/hexists">
+<h4 class="bp-thmheading" id="hexists">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Existential heap assertion</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Languages/IMP/SeparationLogic.lean#L72" aria-label="View Cslib.IMP.HAssertion.hexists in Lean source" title="View Cslib.IMP.HAssertion.hexists in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#hexists" aria-label="Link to Existential heap assertion" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.IMP.HAssertion.hexists</div>
+<div class="bp-thmcontent">
+<p>For a function <span class="arithmatex">\(p\)</span> assigning a heap assertion <span class="arithmatex">\(p(n)\)</span> to each
+natural number <span class="arithmatex">\(n\)</span> (an address or a value), the assertion <span class="arithmatex">\(\exists n,\ p(n)\)</span> holds of a store <span class="arithmatex">\(s\)</span>
+and a heap <span class="arithmatex">\(h\)</span> exactly when <span class="arithmatex">\(p(n)\)</span> holds of <span class="arithmatex">\(s\)</span> and <span class="arithmatex">\(h\)</span> for some natural number <span class="arithmatex">\(n\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> hexists (p : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a> → <a class="bp-lean-ref" href="#hassertion" data-lean-name="Cslib.IMP.HAssertion">HAssertion</a>) : <a class="bp-lean-ref" href="#hassertion" data-lean-name="Cslib.IMP.HAssertion">HAssertion</a> :=
+  <span class="bp-lean-keyword">fun</span> s h =&gt; ∃ a, p a s h</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.IMP.HAssertion">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> HAssertion := State → Heap → <span class="bp-lean-keyword">Prop</span></code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:39</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hassertion">Heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap">Heap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state">IMP program states</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/program-logics-and-verification/separation-logic/hand">
+<h4 class="bp-thmheading" id="hand">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Conjunction of heap assertions</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Languages/IMP/SeparationLogic.lean#L76" aria-label="View Cslib.IMP.HAssertion.hand in Lean source" title="View Cslib.IMP.HAssertion.hand in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#hand" aria-label="Link to Conjunction of heap assertions" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.IMP.HAssertion.hand</div>
+<div class="bp-thmcontent">
+<p>For heap assertions <span class="arithmatex">\(P\)</span> and <span class="arithmatex">\(Q\)</span>, the assertion
+<span class="arithmatex">\(P \wedge Q\)</span> holds of a store <span class="arithmatex">\(s\)</span> and a heap <span class="arithmatex">\(h\)</span> exactly when <span class="arithmatex">\(P\)</span> holds of <span class="arithmatex">\(s\)</span> and <span class="arithmatex">\(h\)</span> and <span class="arithmatex">\(Q\)</span>
+holds of <span class="arithmatex">\(s\)</span> and the same heap <span class="arithmatex">\(h\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> hand (P Q : <a class="bp-lean-ref" href="#hassertion" data-lean-name="Cslib.IMP.HAssertion">HAssertion</a>) : <a class="bp-lean-ref" href="#hassertion" data-lean-name="Cslib.IMP.HAssertion">HAssertion</a> :=
+  <span class="bp-lean-keyword">fun</span> s h =&gt; P s h ∧ Q s h</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.IMP.HAssertion">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> HAssertion := State → Heap → <span class="bp-lean-keyword">Prop</span></code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:39</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hassertion">Heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap">Heap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state">IMP program states</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/program-logics-and-verification/separation-logic/sep-valid">
+<h4 class="bp-thmheading" id="sep-valid">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Separation-logic triple validity</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Languages/IMP/SeparationLogic.lean#L251" aria-label="View Cslib.IMP.SepValid in Lean source" title="View Cslib.IMP.SepValid in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#sep-valid" aria-label="Link to Separation-logic triple validity" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.IMP.SepValid</div>
+<div class="bp-thmcontent">
+<p>For heap assertions <span class="arithmatex">\(P\)</span>, <span class="arithmatex">\(Q\)</span> and a heap command <span class="arithmatex">\(c\)</span>,
+the triple <span class="arithmatex">\(\lbrace P \rbrace\ c\ \lbrace Q \rbrace\)</span> is valid (in the fault-avoiding sense)
+when, for every store <span class="arithmatex">\(s\)</span> and heap <span class="arithmatex">\(h\)</span> with <span class="arithmatex">\(P(s, h)\)</span>, the configuration <span class="arithmatex">\((c, s, h)\)</span> is safe
+(no configuration reachable from it is stuck at a command other than <span class="arithmatex">\(\mathtt{skip}\)</span>), and
+whenever <span class="arithmatex">\((c, s, h)\)</span> reaches <span class="arithmatex">\((\mathtt{skip}, s', h')\)</span> in finitely many heap steps,
+<span class="arithmatex">\(Q(s', h')\)</span> holds.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> SepValid (P : <a class="bp-lean-ref" href="#hassertion" data-lean-name="Cslib.IMP.HAssertion">HAssertion</a>) (c : <a class="bp-lean-ref" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap-cmd" data-lean-name="Cslib.IMP.HeapCmd">HeapCmd</a>) (Q : <a class="bp-lean-ref" href="#hassertion" data-lean-name="Cslib.IMP.HAssertion">HAssertion</a>) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s h⦄, P s h → <a class="bp-lean-ref" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#safe" data-lean-name="Cslib.IMP.Safe">Safe</a> (c, s, h) ∧
+    ∀ ⦃s&#x27; h&#x27;⦄, <a class="bp-lean-ref" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#hsteps" data-lean-name="Cslib.IMP.HSteps">HSteps</a> (c, s, h) (.skip, s&#x27;, h&#x27;) → Q s&#x27; h&#x27;</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.IMP.HAssertion">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> HAssertion := State → Heap → <span class="bp-lean-keyword">Prop</span></code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:39</p>
+</div>
+<div data-lean-name="Cslib.IMP.HeapCmd">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> HeapCmd <span class="bp-lean-keyword">where</span>
+  | skip
+  | assign (name : Nat) (value : AExp)
+  | seq (first second : HeapCmd)
+  | ite (guard : BExp) (thenBranch elseBranch : HeapCmd)
+  | while (guard : BExp) (body : HeapCmd)
+  | read (name : Nat) (addr : AExp)
+  | write (addr value : AExp)
+  | alloc (name : Nat) (value : AExp)
+  | free (addr : AExp)
+  <span class="bp-lean-keyword">deriving</span> DecidableEq, Repr</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/HeapStep.lean:40</p>
+</div>
+<div data-lean-name="Cslib.IMP.Safe">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Safe (cfg : HConfig) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ cfg&#x27;, HSteps cfg cfg&#x27; → cfg&#x27;.1 = .skip ∨ ∃ cfg&#x27;&#x27;, HStep cfg&#x27; cfg&#x27;&#x27;</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/HeapStep.lean:97</p>
+</div>
+<div data-lean-name="Cslib.IMP.HSteps">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> HSteps : HConfig → HConfig → <span class="bp-lean-keyword">Prop</span> := Relation.ReflTransGen HStep</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/HeapStep.lean:93</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 6 · Used by 7</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hassertion">Heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#hsteps">Multi-step heap execution</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap">Heap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap-cmd">Heap commands</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#safe">Safe heap configurations</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state">IMP program states</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#assign-step">Assignment rule with a store-irrelevant heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#exists">Existential rule for separation-logic triples</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#frame">Frame rule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#of-valid">Hoare validity embeds into separation validity</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#of-valid-frame">Framed embedding of Hoare validity</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#read-local">Local rule for a heap read</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#while-loop">Separation-logic while rule</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/program-logics-and-verification/separation-logic/while-loop">
+<h4 class="bp-thmheading" id="while-loop">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Separation-logic while rule</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Languages/IMP/SeparationLogic.lean#L430" aria-label="View Cslib.IMP.SepValid.whileLoop in Lean source" title="View Cslib.IMP.SepValid.whileLoop in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#while-loop" aria-label="Link to Separation-logic while rule" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.IMP.SepValid.whileLoop</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(I\)</span> be a heap assertion, <span class="arithmatex">\(b\)</span> a Boolean expression and
+<span class="arithmatex">\(c\)</span> a heap command. Write <span class="arithmatex">\(I \wedge b\)</span> for the assertion that holds of a store <span class="arithmatex">\(s\)</span> and a heap
+<span class="arithmatex">\(h\)</span> when <span class="arithmatex">\(I(s, h)\)</span> holds and <span class="arithmatex">\(b\)</span> evaluates to true in <span class="arithmatex">\(s\)</span>, and <span class="arithmatex">\(I \wedge \neg b\)</span> for the one
+that holds when <span class="arithmatex">\(I(s, h)\)</span> holds and <span class="arithmatex">\(b\)</span> evaluates to false in <span class="arithmatex">\(s\)</span>. If the triple
+<span class="arithmatex">\(\lbrace I \wedge b \rbrace\ c\ \lbrace I \rbrace\)</span> is valid, then so is the triple
+<span class="arithmatex">\(\lbrace I \rbrace\ \mathtt{while}\ b\ \mathtt{do}\ c\ \lbrace I \wedge \neg b \rbrace\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> whileLoop {I : <a class="bp-lean-ref" href="#hassertion" data-lean-name="Cslib.IMP.HAssertion">HAssertion</a>} {guard : <a class="bp-lean-ref" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#bexp" data-lean-name="Cslib.IMP.BExp">BExp</a>} {body : <a class="bp-lean-ref" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap-cmd" data-lean-name="Cslib.IMP.HeapCmd">HeapCmd</a>}
+    (hbody : <a class="bp-lean-ref" href="#sep-valid" data-lean-name="Cslib.IMP.SepValid">SepValid</a> (<span class="bp-lean-keyword">fun</span> s h =&gt; I s h ∧ guard.eval s = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a>) body I) :
+    <a class="bp-lean-ref" href="#sep-valid" data-lean-name="Cslib.IMP.SepValid">SepValid</a> I (.while guard body)
+      (<span class="bp-lean-keyword">fun</span> s h =&gt; I s h ∧ guard.eval s = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a>)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.IMP.HAssertion">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> HAssertion := State → Heap → <span class="bp-lean-keyword">Prop</span></code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:39</p>
+</div>
+<div data-lean-name="Cslib.IMP.BExp">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> BExp <span class="bp-lean-keyword">where</span>
+  | truth (value : Bool)
+  | eq (left right : AExp)
+  | le (left right : AExp)
+  | not (body : BExp)
+  | and (left right : BExp)
+  <span class="bp-lean-keyword">deriving</span> DecidableEq, Repr</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/Syntax.lean:46</p>
+</div>
+<div data-lean-name="Cslib.IMP.HeapCmd">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> HeapCmd <span class="bp-lean-keyword">where</span>
+  | skip
+  | assign (name : Nat) (value : AExp)
+  | seq (first second : HeapCmd)
+  | ite (guard : BExp) (thenBranch elseBranch : HeapCmd)
+  | while (guard : BExp) (body : HeapCmd)
+  | read (name : Nat) (addr : AExp)
+  | write (addr value : AExp)
+  | alloc (name : Nat) (value : AExp)
+  | free (addr : AExp)
+  <span class="bp-lean-keyword">deriving</span> DecidableEq, Repr</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/HeapStep.lean:40</p>
+</div>
+<div data-lean-name="Cslib.IMP.SepValid">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> SepValid (P : HAssertion) (c : HeapCmd) (Q : HAssertion) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s h⦄, P s h → Safe (c, s, h) ∧
+    ∀ ⦃s&#x27; h&#x27;⦄, HSteps (c, s, h) (.skip, s&#x27;, h&#x27;) → Q s&#x27; h&#x27;</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:251</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 13</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#bexp">Boolean expressions of IMP</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#eval-2">Evaluation of IMP Boolean expressions</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hassertion">Heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap">Heap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap-cmd">Heap commands</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sep-valid">Separation-logic triple validity</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state">IMP program states</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#aexp">Arithmetic expressions of IMP</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#eval">Evaluation of IMP arithmetic expressions</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#hconfig">Heap configurations</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#hstep">Small-step semantics of heap commands</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#hsteps">Multi-step heap execution</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#safe">Safe heap configurations</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/program-logics-and-verification/separation-logic/frame">
+<h4 class="bp-thmheading" id="frame">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Frame rule</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Languages/IMP/SeparationLogic.lean#L576" aria-label="View Cslib.IMP.SepValid.frame in Lean source" title="View Cslib.IMP.SepValid.frame in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#frame" aria-label="Link to Frame rule" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.IMP.SepValid.frame</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(P\)</span>, <span class="arithmatex">\(Q\)</span> and <span class="arithmatex">\(R\)</span> be heap assertions and <span class="arithmatex">\(c\)</span> a heap command. Suppose the
+separation-logic triple with precondition <span class="arithmatex">\(P\)</span>, command <span class="arithmatex">\(c\)</span> and postcondition <span class="arithmatex">\(Q\)</span> is valid, and
+suppose that whenever <span class="arithmatex">\(R\)</span> holds of a store <span class="arithmatex">\(s\)</span> and a heap <span class="arithmatex">\(h\)</span>, it also holds of <span class="arithmatex">\(s'\)</span> and <span class="arithmatex">\(h\)</span> for
+every store <span class="arithmatex">\(s'\)</span> that agrees with <span class="arithmatex">\(s\)</span> on every variable outside the set of variables that <span class="arithmatex">\(c\)</span> may
+assign to. Then the triple with precondition <span class="arithmatex">\(P \star R\)</span>, command <span class="arithmatex">\(c\)</span> and postcondition
+<span class="arithmatex">\(Q \star R\)</span> is valid, where <span class="arithmatex">\(\star\)</span> denotes separating conjunction.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> frame {P Q R : <a class="bp-lean-ref" href="#hassertion" data-lean-name="Cslib.IMP.HAssertion">HAssertion</a>} {c : <a class="bp-lean-ref" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap-cmd" data-lean-name="Cslib.IMP.HeapCmd">HeapCmd</a>}
+    (hvalid : <a class="bp-lean-ref" href="#sep-valid" data-lean-name="Cslib.IMP.SepValid">SepValid</a> P c Q)
+    (hR : ∀ ⦃s h s&#x27;⦄, R s h →
+      (∀ x, x ∉ c.modVars → s&#x27; x = s x) → R s&#x27; h) :
+    <a class="bp-lean-ref" href="#sep-valid" data-lean-name="Cslib.IMP.SepValid">SepValid</a> (P ⋆ R) c (Q ⋆ R)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.IMP.HAssertion">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> HAssertion := State → Heap → <span class="bp-lean-keyword">Prop</span></code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:39</p>
+</div>
+<div data-lean-name="Cslib.IMP.HeapCmd">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> HeapCmd <span class="bp-lean-keyword">where</span>
+  | skip
+  | assign (name : Nat) (value : AExp)
+  | seq (first second : HeapCmd)
+  | ite (guard : BExp) (thenBranch elseBranch : HeapCmd)
+  | while (guard : BExp) (body : HeapCmd)
+  | read (name : Nat) (addr : AExp)
+  | write (addr value : AExp)
+  | alloc (name : Nat) (value : AExp)
+  | free (addr : AExp)
+  <span class="bp-lean-keyword">deriving</span> DecidableEq, Repr</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/HeapStep.lean:40</p>
+</div>
+<div data-lean-name="Cslib.IMP.SepValid">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> SepValid (P : HAssertion) (c : HeapCmd) (Q : HAssertion) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s h⦄, P s h → Safe (c, s, h) ∧
+    ∀ ⦃s&#x27; h&#x27;⦄, HSteps (c, s, h) (.skip, s&#x27;, h&#x27;) → Q s&#x27; h&#x27;</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:251</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 15 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hassertion">Heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#star">Separating conjunction</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap">Heap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap-cmd">Heap commands</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#mod-vars">Modified variables of a heap command</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sep-valid">Separation-logic triple validity</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state">IMP program states</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#hconfig">Heap configurations</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#hstep">Small-step semantics of heap commands</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#exists-step-frame">Adding a frame heap preserves the ability to step</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#hsteps">Multi-step heap execution</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#decompose-of-safe">Frame decomposition of heap executions</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#store-agree-2">Heap executions only change assignable variables</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#disjoint">Disjoint heaps</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#safe">Safe heap configurations</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#of-valid-frame">Framed embedding of Hoare validity</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/program-logics-and-verification/separation-logic/of-valid">
+<h4 class="bp-thmheading" id="of-valid">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Hoare validity embeds into separation validity</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Languages/IMP/SeparationLogic.lean#L607" aria-label="View Cslib.IMP.SepValid.of_valid in Lean source" title="View Cslib.IMP.SepValid.of_valid in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#of-valid" aria-label="Link to Hoare validity embeds into separation validity" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.IMP.SepValid.of_valid</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(P\)</span> and <span class="arithmatex">\(Q\)</span> be store assertions and
+<span class="arithmatex">\(c\)</span> a command of plain IMP. If the partial-correctness Hoare triple with precondition <span class="arithmatex">\(P\)</span>, command
+<span class="arithmatex">\(c\)</span> and postcondition <span class="arithmatex">\(Q\)</span> is valid, then the separation-logic triple for the embedding of <span class="arithmatex">\(c\)</span> into
+heap IMP is valid with the precondition that holds of a store <span class="arithmatex">\(s\)</span> and any heap exactly when <span class="arithmatex">\(P(s)\)</span>
+holds and the postcondition that holds of a store <span class="arithmatex">\(s\)</span> and any heap exactly when <span class="arithmatex">\(Q(s)\)</span> holds.</p>
+<p>Embedded commands are always safe, never change the heap, and terminate exactly when the plain
+command does.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> of_valid {P Q : <a class="bp-lean-ref" href="../hoare-logic/index.html#assertion" data-lean-name="Cslib.IMP.Assertion">Assertion</a>} {c : <a class="bp-lean-ref" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#cmd" data-lean-name="Cslib.IMP.Cmd">Cmd</a>} (hvalid : <a class="bp-lean-ref" href="../hoare-logic/index.html#valid" data-lean-name="Cslib.IMP.Valid">Valid</a> P c Q) :
+    <a class="bp-lean-ref" href="#sep-valid" data-lean-name="Cslib.IMP.SepValid">SepValid</a> (<span class="bp-lean-keyword">fun</span> s _ =&gt; P s) c.toHeap (<span class="bp-lean-keyword">fun</span> s _ =&gt; Q s)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.IMP.Assertion">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Assertion := State → <span class="bp-lean-keyword">Prop</span></code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/Hoare.lean:35</p>
+</div>
+<div data-lean-name="Cslib.IMP.Cmd">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> Cmd <span class="bp-lean-keyword">where</span>
+  | skip
+  | assign (name : Nat) (value : AExp)
+  | seq (first second : Cmd)
+  | ite (guard : BExp) (thenBranch elseBranch : Cmd)
+  | while (guard : BExp) (body : Cmd)
+  <span class="bp-lean-keyword">deriving</span> DecidableEq, Repr</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/Syntax.lean:55</p>
+</div>
+<div data-lean-name="Cslib.IMP.Valid">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Valid (pre : Assertion) (command : Cmd) (post : Assertion) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃initial final⦄, pre initial → BigStep command initial final → post final</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/Hoare.lean:57</p>
+</div>
+<div data-lean-name="Cslib.IMP.SepValid">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> SepValid (P : HAssertion) (c : HeapCmd) (Q : HAssertion) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s h⦄, P s h → Safe (c, s, h) ∧
+    ∀ ⦃s&#x27; h&#x27;⦄, HSteps (c, s, h) (.skip, s&#x27;, h&#x27;) → Q s&#x27; h&#x27;</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:251</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 17 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../hoare-logic/index.html#assertion">Assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#cmd">Commands of IMP</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#to-heap">Embedding of IMP into the heap language</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap">Heap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sep-valid">Separation-logic triple validity</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state">IMP program states</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../hoare-logic/index.html#valid">Validity of a Hoare triple</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#aexp">Arithmetic expressions of IMP</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#bexp">Boolean expressions of IMP</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#hsteps">Multi-step heap execution</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#of-to-heap">Executions of embedded commands are plain executions</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap-cmd">Heap commands</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#safe">Safe heap configurations</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#steps">IMP multi-step relation</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#terminates">Termination of an IMP command</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#iff-terminates">Hoare validity via small-step termination</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#safe-to-heap">Embedded plain commands are safe</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#of-valid-frame">Framed embedding of Hoare validity</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/program-logics-and-verification/separation-logic/of-valid-frame">
+<h4 class="bp-thmheading" id="of-valid-frame">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Framed embedding of Hoare validity</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Languages/IMP/SeparationLogic.lean#L619" aria-label="View Cslib.IMP.SepValid.of_valid_frame in Lean source" title="View Cslib.IMP.SepValid.of_valid_frame in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#of-valid-frame" aria-label="Link to Framed embedding of Hoare validity" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.IMP.SepValid.of_valid_frame</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(P\)</span> and <span class="arithmatex">\(Q\)</span> be store assertions, <span class="arithmatex">\(R\)</span> a heap
+assertion and <span class="arithmatex">\(c\)</span> a command of plain IMP, and write <span class="arithmatex">\(\hat c\)</span> for the embedding of <span class="arithmatex">\(c\)</span> into heap
+IMP. Suppose the partial-correctness Hoare triple with precondition <span class="arithmatex">\(P\)</span>, command <span class="arithmatex">\(c\)</span> and
+postcondition <span class="arithmatex">\(Q\)</span> is valid, and suppose that whenever <span class="arithmatex">\(R\)</span> holds of a store <span class="arithmatex">\(s\)</span> and a heap <span class="arithmatex">\(h\)</span>, it
+also holds of <span class="arithmatex">\(s'\)</span> and <span class="arithmatex">\(h\)</span> for every store <span class="arithmatex">\(s'\)</span> that agrees with <span class="arithmatex">\(s\)</span> on every variable outside the
+set of variables that <span class="arithmatex">\(\hat c\)</span> may assign to. Write <span class="arithmatex">\(\tilde P\)</span> and <span class="arithmatex">\(\tilde Q\)</span> for the heap
+assertions that hold of a store <span class="arithmatex">\(s\)</span> and any heap exactly when <span class="arithmatex">\(P(s)\)</span>, respectively <span class="arithmatex">\(Q(s)\)</span>, holds.
+Then the separation-logic triple with precondition <span class="arithmatex">\(\tilde P \star R\)</span>, command <span class="arithmatex">\(\hat c\)</span> and
+postcondition <span class="arithmatex">\(\tilde Q \star R\)</span> is valid, where <span class="arithmatex">\(\star\)</span> denotes separating conjunction.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> of_valid_frame {P Q : <a class="bp-lean-ref" href="../hoare-logic/index.html#assertion" data-lean-name="Cslib.IMP.Assertion">Assertion</a>} {R : <a class="bp-lean-ref" href="#hassertion" data-lean-name="Cslib.IMP.HAssertion">HAssertion</a>} {c : <a class="bp-lean-ref" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#cmd" data-lean-name="Cslib.IMP.Cmd">Cmd</a>}
+    (h : <a class="bp-lean-ref" href="../hoare-logic/index.html#valid" data-lean-name="Cslib.IMP.Valid">Valid</a> P c Q)
+    (hR : ∀ ⦃s h s&#x27;⦄, R s h →
+      (∀ x, x ∉ c.toHeap.modVars → s&#x27; x = s x) → R s&#x27; h) :
+    <a class="bp-lean-ref" href="#sep-valid" data-lean-name="Cslib.IMP.SepValid">SepValid</a> ((<span class="bp-lean-keyword">fun</span> s _ =&gt; P s) ⋆ R) c.toHeap ((<span class="bp-lean-keyword">fun</span> s _ =&gt; Q s) ⋆ R)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.IMP.Assertion">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Assertion := State → <span class="bp-lean-keyword">Prop</span></code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/Hoare.lean:35</p>
+</div>
+<div data-lean-name="Cslib.IMP.HAssertion">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> HAssertion := State → Heap → <span class="bp-lean-keyword">Prop</span></code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:39</p>
+</div>
+<div data-lean-name="Cslib.IMP.Cmd">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> Cmd <span class="bp-lean-keyword">where</span>
+  | skip
+  | assign (name : Nat) (value : AExp)
+  | seq (first second : Cmd)
+  | ite (guard : BExp) (thenBranch elseBranch : Cmd)
+  | while (guard : BExp) (body : Cmd)
+  <span class="bp-lean-keyword">deriving</span> DecidableEq, Repr</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/Syntax.lean:55</p>
+</div>
+<div data-lean-name="Cslib.IMP.Valid">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> Valid (pre : Assertion) (command : Cmd) (post : Assertion) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃initial final⦄, pre initial → BigStep command initial final → post final</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/Hoare.lean:57</p>
+</div>
+<div data-lean-name="Cslib.IMP.SepValid">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> SepValid (P : HAssertion) (c : HeapCmd) (Q : HAssertion) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s h⦄, P s h → Safe (c, s, h) ∧
+    ∀ ⦃s&#x27; h&#x27;⦄, HSteps (c, s, h) (.skip, s&#x27;, h&#x27;) → Q s&#x27; h&#x27;</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:251</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 12</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../hoare-logic/index.html#assertion">Assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#cmd">Commands of IMP</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#to-heap">Embedding of IMP into the heap language</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hassertion">Heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#star">Separating conjunction</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap">Heap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#mod-vars">Modified variables of a heap command</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sep-valid">Separation-logic triple validity</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state">IMP program states</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../hoare-logic/index.html#valid">Validity of a Hoare triple</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#frame">Frame rule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#of-valid">Hoare validity embeds into separation validity</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/program-logics-and-verification/separation-logic/store-irrel">
+<h4 class="bp-thmheading" id="store-irrel">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Store-irrelevant heap assertions</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Languages/IMP/SeparationAPI.lean#L40" aria-label="View Cslib.IMP.StoreIrrel in Lean source" title="View Cslib.IMP.StoreIrrel in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#store-irrel" aria-label="Link to Store-irrelevant heap assertions" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.IMP.StoreIrrel</div>
+<div class="bp-thmcontent">
+<p>A heap assertion <span class="arithmatex">\(P\)</span> is store-irrelevant when for all
+stores <span class="arithmatex">\(s, s'\)</span> and every heap <span class="arithmatex">\(h\)</span>, <span class="arithmatex">\(P(s, h)\)</span> implies <span class="arithmatex">\(P(s', h)\)</span>; that is, whether <span class="arithmatex">\(P\)</span> holds
+does not depend on the store.</p>
+<p>The empty-heap and points-to assertions are store-irrelevant, and so is the separating
+conjunction of two store-irrelevant assertions.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> StoreIrrel (P : <a class="bp-lean-ref" href="#hassertion" data-lean-name="Cslib.IMP.HAssertion">HAssertion</a>) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ (s s&#x27; : <a class="bp-lean-ref" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state" data-lean-name="Cslib.IMP.State">State</a>) (h : <a class="bp-lean-ref" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap" data-lean-name="Cslib.IMP.Heap">Heap</a>), P s h → P s&#x27; h</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.IMP.HAssertion">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> HAssertion := State → Heap → <span class="bp-lean-keyword">Prop</span></code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:39</p>
+</div>
+<div data-lean-name="Cslib.IMP.State">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> State := Nat → Nat</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/Syntax.lean:34</p>
+</div>
+<div data-lean-name="Cslib.IMP.Heap">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Heap := Finmap (<span class="bp-lean-keyword">fun</span> _ : Nat =&gt; Nat)</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/Heap.lean:35</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hassertion">Heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap">Heap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state">IMP program states</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#assign-step">Assignment rule with a store-irrelevant heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#frame-of-store-irrel">Store-irrelevant frames satisfy the frame-rule side condition</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/program-logics-and-verification/separation-logic/frame-of-store-irrel">
+<h4 class="bp-thmheading" id="frame-of-store-irrel">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Store-irrelevant frames satisfy the frame-rule side condition</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Languages/IMP/SeparationAPI.lean#L55" aria-label="View Cslib.IMP.frame_of_storeIrrel in Lean source" title="View Cslib.IMP.frame_of_storeIrrel in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#frame-of-store-irrel" aria-label="Link to Store-irrelevant frames satisfy the frame-rule side condition" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.IMP.frame_of_storeIrrel</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(R\)</span> be a
+store-irrelevant heap assertion and <span class="arithmatex">\(c\)</span> a heap command. For all stores <span class="arithmatex">\(s, s'\)</span> and every heap
+<span class="arithmatex">\(h\)</span>, if <span class="arithmatex">\(R(s, h)\)</span> holds and <span class="arithmatex">\(s'(x) = s(x)\)</span> for every variable <span class="arithmatex">\(x\)</span> outside the set of variables
+that <span class="arithmatex">\(c\)</span> may assign to, then <span class="arithmatex">\(R(s', h)\)</span> holds.</p>
+<p>This is the side condition on the frame in the frame rule.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> frame_of_storeIrrel {R : <a class="bp-lean-ref" href="#hassertion" data-lean-name="Cslib.IMP.HAssertion">HAssertion</a>} (hR : <a class="bp-lean-ref" href="#store-irrel" data-lean-name="Cslib.IMP.StoreIrrel">StoreIrrel</a> R)
+    (c : <a class="bp-lean-ref" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap-cmd" data-lean-name="Cslib.IMP.HeapCmd">HeapCmd</a>) :
+    ∀ ⦃s : <a class="bp-lean-ref" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state" data-lean-name="Cslib.IMP.State">State</a>⦄ ⦃h : <a class="bp-lean-ref" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap" data-lean-name="Cslib.IMP.Heap">Heap</a>⦄ ⦃s&#x27; : <a class="bp-lean-ref" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state" data-lean-name="Cslib.IMP.State">State</a>⦄, R s h →
+      (∀ x, x ∉ c.modVars → s&#x27; x = s x) → R s&#x27; h</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.IMP.HAssertion">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> HAssertion := State → Heap → <span class="bp-lean-keyword">Prop</span></code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:39</p>
+</div>
+<div data-lean-name="Cslib.IMP.StoreIrrel">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> StoreIrrel (P : HAssertion) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ (s s&#x27; : State) (h : Heap), P s h → P s&#x27; h</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationAPI.lean:40</p>
+</div>
+<div data-lean-name="Cslib.IMP.HeapCmd">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> HeapCmd <span class="bp-lean-keyword">where</span>
+  | skip
+  | assign (name : Nat) (value : AExp)
+  | seq (first second : HeapCmd)
+  | ite (guard : BExp) (thenBranch elseBranch : HeapCmd)
+  | while (guard : BExp) (body : HeapCmd)
+  | read (name : Nat) (addr : AExp)
+  | write (addr value : AExp)
+  | alloc (name : Nat) (value : AExp)
+  | free (addr : AExp)
+  <span class="bp-lean-keyword">deriving</span> DecidableEq, Repr</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/HeapStep.lean:40</p>
+</div>
+<div data-lean-name="Cslib.IMP.State">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> State := Nat → Nat</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/Syntax.lean:34</p>
+</div>
+<div data-lean-name="Cslib.IMP.Heap">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Heap := Finmap (<span class="bp-lean-keyword">fun</span> _ : Nat =&gt; Nat)</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/Heap.lean:35</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 6</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hassertion">Heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap">Heap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap-cmd">Heap commands</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#mod-vars">Modified variables of a heap command</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state">IMP program states</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#store-irrel">Store-irrelevant heap assertions</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/program-logics-and-verification/separation-logic/star-and-left">
+<h4 class="bp-thmheading" id="star-and-left">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Pulling a store fact out of a separating conjunction</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Languages/IMP/SeparationAPI.lean#L70" aria-label="View Cslib.IMP.star_and_left in Lean source" title="View Cslib.IMP.star_and_left in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#star-and-left" aria-label="Link to Pulling a store fact out of a separating conjunction" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.IMP.star_and_left</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(p\)</span> be a predicate on
+stores and <span class="arithmatex">\(P\)</span>, <span class="arithmatex">\(R\)</span> heap assertions. Write <span class="arithmatex">\(A \star B\)</span> for the separating conjunction of heap
+assertions <span class="arithmatex">\(A\)</span> and <span class="arithmatex">\(B\)</span> (the heap splits into two disjoint parts satisfying <span class="arithmatex">\(A\)</span> and <span class="arithmatex">\(B\)</span>,
+respectively, at the same store), and <span class="arithmatex">\(p \land P\)</span> for the heap assertion that holds at store
+<span class="arithmatex">\(s\)</span> and heap <span class="arithmatex">\(h\)</span> when <span class="arithmatex">\(p(s)\)</span> and <span class="arithmatex">\(P(s, h)\)</span> both hold. Then
+<span class="arithmatex">\((p \land P) \star R = p \land (P \star R)\)</span>.</p>
+<p>This lets framed local triples be stated with the store facts kept outside the separating
+conjunction.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> star_and_left {p : <a class="bp-lean-ref" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state" data-lean-name="Cslib.IMP.State">State</a> → <span class="bp-lean-keyword">Prop</span>} {P R : <a class="bp-lean-ref" href="#hassertion" data-lean-name="Cslib.IMP.HAssertion">HAssertion</a>} :
+    ((<span class="bp-lean-keyword">fun</span> s h =&gt; p s ∧ P s h) ⋆ R) = (<span class="bp-lean-keyword">fun</span> s h =&gt; p s ∧ (P ⋆ R) s h)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.IMP.State">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> State := Nat → Nat</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/Syntax.lean:34</p>
+</div>
+<div data-lean-name="Cslib.IMP.HAssertion">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> HAssertion := State → Heap → <span class="bp-lean-keyword">Prop</span></code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:39</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hassertion">Heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#star">Separating conjunction</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap">Heap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state">IMP program states</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#disjoint">Disjoint heaps</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/program-logics-and-verification/separation-logic/star-swap-right">
+<h4 class="bp-thmheading" id="star-swap-right">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Rearranging a separating conjunction</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Languages/IMP/SeparationAPI.lean#L89" aria-label="View Cslib.IMP.star_swap_right in Lean source" title="View Cslib.IMP.star_swap_right in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#star-swap-right" aria-label="Link to Rearranging a separating conjunction" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.IMP.star_swap_right</div>
+<div class="bp-thmcontent">
+<p>For heap assertions <span class="arithmatex">\(P\)</span>, <span class="arithmatex">\(Q\)</span> and <span class="arithmatex">\(R\)</span>, write
+<span class="arithmatex">\(A \star B\)</span> for the separating conjunction of heap assertions <span class="arithmatex">\(A\)</span> and <span class="arithmatex">\(B\)</span> (the heap splits into
+two disjoint parts satisfying <span class="arithmatex">\(A\)</span> and <span class="arithmatex">\(B\)</span>, respectively, at the same store). Then
+<span class="arithmatex">\(P \star (Q \star R)\)</span> entails <span class="arithmatex">\((P \star R) \star Q\)</span>: every store and heap satisfying the first
+assertion satisfy the second.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> star_swap_right {P Q R : <a class="bp-lean-ref" href="#hassertion" data-lean-name="Cslib.IMP.HAssertion">HAssertion</a>} :
+    (P ⋆ (Q ⋆ R)).Entails ((P ⋆ R) ⋆ Q)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.IMP.HAssertion">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> HAssertion := State → Heap → <span class="bp-lean-keyword">Prop</span></code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:39</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 7</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hassertion">Heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#entails">Entailment of heap assertions</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#star">Separating conjunction</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap">Heap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#disjoint">Disjoint heaps</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#symm">Symmetry of heap disjointness</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state">IMP program states</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/program-logics-and-verification/separation-logic/read-local">
+<h4 class="bp-thmheading" id="read-local">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Local rule for a heap read</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Languages/IMP/SeparationAPI.lean#L104" aria-label="View Cslib.IMP.read_local in Lean source" title="View Cslib.IMP.read_local in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#read-local" aria-label="Link to Local rule for a heap read" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.IMP.read_local</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span> be variables, let <span class="arithmatex">\(a\)</span> and <span class="arithmatex">\(v\)</span> be natural
+numbers, and let <span class="arithmatex">\(p\)</span> and <span class="arithmatex">\(q\)</span> be predicates on stores. Write <span class="arithmatex">\(s[x := n]\)</span> for the store that agrees
+with <span class="arithmatex">\(s\)</span> except that it maps <span class="arithmatex">\(x\)</span> to <span class="arithmatex">\(n\)</span>, and <span class="arithmatex">\(a \mapsto v\)</span> for the heap assertion that holds when
+the heap is the single cell at address <span class="arithmatex">\(a\)</span> holding <span class="arithmatex">\(v\)</span>. If every store <span class="arithmatex">\(s\)</span> satisfying <span class="arithmatex">\(p\)</span> has
+<span class="arithmatex">\(s(y) = a\)</span> and <span class="arithmatex">\(q(s[x := v])\)</span>, then the separation-logic triple for the heap read <span class="arithmatex">\(x := [y]\)</span>
+(which loads into <span class="arithmatex">\(x\)</span> the value stored at the address held in <span class="arithmatex">\(y\)</span>) is valid with precondition
+"<span class="arithmatex">\(p(s)\)</span> and <span class="arithmatex">\(a \mapsto v\)</span> holds at <span class="arithmatex">\((s, h)\)</span>" and postcondition "<span class="arithmatex">\(q(s)\)</span> and <span class="arithmatex">\(a \mapsto v\)</span> holds at
+<span class="arithmatex">\((s, h)\)</span>", where <span class="arithmatex">\(s\)</span> is the store and <span class="arithmatex">\(h\)</span> the heap.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> read_local {name addrName a v : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a>} {p q : <a class="bp-lean-ref" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state" data-lean-name="Cslib.IMP.State">State</a> → <span class="bp-lean-keyword">Prop</span>}
+    (hpq : ∀ s, p s → s addrName = a ∧
+      q (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Function.update#doc" title="Function.update">Function.update</a> s name v)) :
+    <a class="bp-lean-ref" href="#sep-valid" data-lean-name="Cslib.IMP.SepValid">SepValid</a> (<span class="bp-lean-keyword">fun</span> s h =&gt; p s ∧ <a class="bp-lean-ref" href="#points-to" data-lean-name="Cslib.IMP.HAssertion.pointsTo">pointsTo</a> a v s h)
+      (.read name (.var addrName))
+      (<span class="bp-lean-keyword">fun</span> s h =&gt; q s ∧ <a class="bp-lean-ref" href="#points-to" data-lean-name="Cslib.IMP.HAssertion.pointsTo">pointsTo</a> a v s h)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.IMP.State">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> State := Nat → Nat</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/Syntax.lean:34</p>
+</div>
+<div data-lean-name="Cslib.IMP.SepValid">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> SepValid (P : HAssertion) (c : HeapCmd) (Q : HAssertion) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s h⦄, P s h → Safe (c, s, h) ∧
+    ∀ ⦃s&#x27; h&#x27;⦄, HSteps (c, s, h) (.skip, s&#x27;, h&#x27;) → Q s&#x27; h&#x27;</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:251</p>
+</div>
+<div data-lean-name="Cslib.IMP.HAssertion.pointsTo">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> pointsTo (a v : Nat) : HAssertion :=
+  <span class="bp-lean-keyword">fun</span> _ h =&gt; h = Finmap.singleton a v</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:61</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 15</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#aexp">Arithmetic expressions of IMP</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#points-to">Points-to assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap">Heap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap-cmd">Heap commands</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sep-valid">Separation-logic triple validity</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state">IMP program states</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#eval">Evaluation of IMP arithmetic expressions</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#bexp">Boolean expressions of IMP</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#eval-2">Evaluation of IMP Boolean expressions</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#hassertion">Heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#entails">Entailment of heap assertions</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#hconfig">Heap configurations</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#hstep">Small-step semantics of heap commands</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#hsteps">Multi-step heap execution</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#safe">Safe heap configurations</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/program-logics-and-verification/separation-logic/assign-step">
+<h4 class="bp-thmheading" id="assign-step">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Assignment rule with a store-irrelevant heap assertion</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Languages/IMP/SeparationAPI.lean#L158" aria-label="View Cslib.IMP.assign_step in Lean source" title="View Cslib.IMP.assign_step in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#assign-step" aria-label="Link to Assignment rule with a store-irrelevant heap assertion" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.IMP.assign_step</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(y\)</span> be variables,
+let <span class="arithmatex">\(p\)</span> and <span class="arithmatex">\(q\)</span> be predicates on stores, and let <span class="arithmatex">\(H\)</span> be a store-irrelevant heap assertion.
+Write <span class="arithmatex">\(s[x := n]\)</span> for the store that agrees with <span class="arithmatex">\(s\)</span> except that it maps <span class="arithmatex">\(x\)</span> to <span class="arithmatex">\(n\)</span>. If every
+store <span class="arithmatex">\(s\)</span> satisfying <span class="arithmatex">\(p\)</span> has <span class="arithmatex">\(q(s[x := s(y)])\)</span>, then the separation-logic triple for the
+assignment <span class="arithmatex">\(x := y\)</span> is valid with precondition "<span class="arithmatex">\(p(s)\)</span> and <span class="arithmatex">\(H(s, h)\)</span>" and postcondition
+"<span class="arithmatex">\(q(s)\)</span> and <span class="arithmatex">\(H(s, h)\)</span>", where <span class="arithmatex">\(s\)</span> is the store and <span class="arithmatex">\(h\)</span> the heap.</p>
+<p>An assignment leaves the heap untouched, so no framing is needed.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> assign_step {name src : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nat#doc" title="Nat">Nat</a>} {p q : <a class="bp-lean-ref" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state" data-lean-name="Cslib.IMP.State">State</a> → <span class="bp-lean-keyword">Prop</span>}
+    {H : <a class="bp-lean-ref" href="#hassertion" data-lean-name="Cslib.IMP.HAssertion">HAssertion</a>} (hH : <a class="bp-lean-ref" href="#store-irrel" data-lean-name="Cslib.IMP.StoreIrrel">StoreIrrel</a> H)
+    (hpq : ∀ s, p s → q (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Function.update#doc" title="Function.update">Function.update</a> s name (s src))) :
+    <a class="bp-lean-ref" href="#sep-valid" data-lean-name="Cslib.IMP.SepValid">SepValid</a> (<span class="bp-lean-keyword">fun</span> s h =&gt; p s ∧ H s h) (.assign name (.var src))
+      (<span class="bp-lean-keyword">fun</span> s h =&gt; q s ∧ H s h)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.IMP.State">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> State := Nat → Nat</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/Syntax.lean:34</p>
+</div>
+<div data-lean-name="Cslib.IMP.HAssertion">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> HAssertion := State → Heap → <span class="bp-lean-keyword">Prop</span></code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:39</p>
+</div>
+<div data-lean-name="Cslib.IMP.StoreIrrel">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> StoreIrrel (P : HAssertion) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ (s s&#x27; : State) (h : Heap), P s h → P s&#x27; h</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationAPI.lean:40</p>
+</div>
+<div data-lean-name="Cslib.IMP.SepValid">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> SepValid (P : HAssertion) (c : HeapCmd) (Q : HAssertion) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s h⦄, P s h → Safe (c, s, h) ∧
+    ∀ ⦃s&#x27; h&#x27;⦄, HSteps (c, s, h) (.skip, s&#x27;, h&#x27;) → Q s&#x27; h&#x27;</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:251</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 15</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#aexp">Arithmetic expressions of IMP</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hassertion">Heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap">Heap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap-cmd">Heap commands</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sep-valid">Separation-logic triple validity</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state">IMP program states</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#store-irrel">Store-irrelevant heap assertions</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#eval">Evaluation of IMP arithmetic expressions</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#bexp">Boolean expressions of IMP</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#eval-2">Evaluation of IMP Boolean expressions</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#entails">Entailment of heap assertions</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#hconfig">Heap configurations</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#hstep">Small-step semantics of heap commands</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#hsteps">Multi-step heap execution</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#safe">Safe heap configurations</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/program-logics-and-verification/separation-logic/exists">
+<h4 class="bp-thmheading" id="exists">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Existential rule for separation-logic triples</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Languages/IMP/SeparationAPI.lean#L173" aria-label="View Cslib.IMP.SepValid.exists in Lean source" title="View Cslib.IMP.SepValid.exists in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#exists" aria-label="Link to Existential rule for separation-logic triples" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.IMP.SepValid.exists</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(c\)</span> be a heap command, let <span class="arithmatex">\(\iota\)</span> be
+an arbitrary index (any type or proposition), and let <span class="arithmatex">\(P_i\)</span> and <span class="arithmatex">\(Q_i\)</span> be heap assertions for
+each <span class="arithmatex">\(i\)</span> in <span class="arithmatex">\(\iota\)</span>. If for every <span class="arithmatex">\(i\)</span> the triple with precondition <span class="arithmatex">\(P_i\)</span>, command <span class="arithmatex">\(c\)</span> and
+postcondition <span class="arithmatex">\(Q_i\)</span> is valid, then the triple with precondition "there is <span class="arithmatex">\(i\)</span> with <span class="arithmatex">\(P_i\)</span>",
+command <span class="arithmatex">\(c\)</span> and postcondition "there is <span class="arithmatex">\(i\)</span> with <span class="arithmatex">\(Q_i\)</span>" is valid.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> SepValid.exists {ι : <span class="bp-lean-keyword">Sort</span>*} {P Q : ι → <a class="bp-lean-ref" href="#hassertion" data-lean-name="Cslib.IMP.HAssertion">HAssertion</a>} {c : <a class="bp-lean-ref" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap-cmd" data-lean-name="Cslib.IMP.HeapCmd">HeapCmd</a>}
+    (hstep : ∀ i, <a class="bp-lean-ref" href="#sep-valid" data-lean-name="Cslib.IMP.SepValid">SepValid</a> (P i) c (Q i)) :
+    <a class="bp-lean-ref" href="#sep-valid" data-lean-name="Cslib.IMP.SepValid">SepValid</a> (<span class="bp-lean-keyword">fun</span> s h =&gt; ∃ i, P i s h) c (<span class="bp-lean-keyword">fun</span> s h =&gt; ∃ i, Q i s h)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.IMP.HAssertion">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> HAssertion := State → Heap → <span class="bp-lean-keyword">Prop</span></code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:39</p>
+</div>
+<div data-lean-name="Cslib.IMP.HeapCmd">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">inductive</span> HeapCmd <span class="bp-lean-keyword">where</span>
+  | skip
+  | assign (name : Nat) (value : AExp)
+  | seq (first second : HeapCmd)
+  | ite (guard : BExp) (thenBranch elseBranch : HeapCmd)
+  | while (guard : BExp) (body : HeapCmd)
+  | read (name : Nat) (addr : AExp)
+  | write (addr value : AExp)
+  | alloc (name : Nat) (value : AExp)
+  | free (addr : AExp)
+  <span class="bp-lean-keyword">deriving</span> DecidableEq, Repr</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/HeapStep.lean:40</p>
+</div>
+<div data-lean-name="Cslib.IMP.SepValid">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> SepValid (P : HAssertion) (c : HeapCmd) (Q : HAssertion) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃s h⦄, P s h → Safe (c, s, h) ∧
+    ∀ ⦃s&#x27; h&#x27;⦄, HSteps (c, s, h) (.skip, s&#x27;, h&#x27;) → Q s&#x27; h&#x27;</code></pre>
+<p class="bp-lean-where">CSLibExt/Languages/IMP/SeparationLogic.lean:251</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 7</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hassertion">Heap assertion</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap">Heap</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#heap-cmd">Heap commands</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sep-valid">Separation-logic triple validity</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../programming-language-semantics/operational-semantics-of-imp/index.html#state">IMP program states</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#hsteps">Multi-step heap execution</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../programming-language-semantics/heap-semantics-of-imp/index.html#safe">Safe heap configurations</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>20</strong> fully proved</span></div>
+</div>
+</div>
+<p><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../dependencies/index.json" data-graph-src="../../../../dependencies/scopes/ComputerScience/program-logics-and-verification/separation-logic.json" data-page-href="index.html" data-scope-id="ComputerScience/program-logics-and-verification/separation-logic">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>

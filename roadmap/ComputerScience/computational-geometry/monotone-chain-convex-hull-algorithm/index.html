@@ -1,0 +1,5501 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../orientation-and-segment-intersection-tests/index.html">
+      
+      
+        <link rel="next" href="../sweep-line-segment-intersection-detection/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Monotone chain convex hull algorithm - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Monotone chain convex hull algorithm
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23" id="__nav_2_1_23_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_23_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Computer Science
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../data-structures/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data structures
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../graph-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../process-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Process calculi and behavioural equivalence
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../type-systems-and-lambda-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Type systems and lambda calculi
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../programming-language-semantics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programming language semantics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../machine-learning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Machine learning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../sorting-and-searching/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sorting and searching
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../dynamic-programming/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic programming
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../greedy-algorithms-and-matroids/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Greedy algorithms and matroids
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../approximation-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Approximation algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../online-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Online algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../randomized-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Randomized algorithms and probabilistic analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../parallel-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../algebraic-and-numerical-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic and numerical algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23_16" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computational geometry
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23_16" id="__nav_2_1_23_16_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_23_16_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23_16">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Computational geometry
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../closest-pair-of-points-problem/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Closest pair of points problem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../orientation-and-segment-intersection-tests/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Orientation and segment intersection tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monotone chain convex hull algorithm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sweep-line-segment-intersection-detection/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sweep-line segment intersection detection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../string-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    String algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../heuristic-search-and-planning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heuristic search and planning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../cryptography/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cryptography
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../databases/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Databases
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../quantum-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../concurrent-systems-and-protocols/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concurrent systems and protocols
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../program-logics-and-verification/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Program logics and verification
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../index.html" tabindex="-1">Computer Science</a></li><li><a href="../index.html" tabindex="-1">Computational geometry</a></li><li aria-current="page">Monotone chain convex hull algorithm</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Monotone chain convex hull algorithm</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm" data-page-title="Monotone chain convex hull algorithm">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="monotone-chain-convex-hull-algorithm">Monotone chain convex hull algorithm</h1>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/pop-non-left">
+<h4 class="bp-thmheading" id="pop-non-left">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Pop step of the monotone-chain scan</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean#L71" aria-label="View Cslib.Algorithms.Lean.Geometry.popNonLeft in Lean source" title="View Cslib.Algorithms.Lean.Geometry.popNonLeft in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#pop-non-left" aria-label="Link to Pop step of the monotone-chain scan" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.popNonLeft</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\Bbbk\)</span> be a linearly ordered field, let
+<span class="arithmatex">\(p \in \Bbbk^2\)</span>, and write <span class="arithmatex">\(u \times v = u_1 v_2 - v_1 u_2\)</span> for the cross product. Given a
+stack of points of <span class="arithmatex">\(\Bbbk^2\)</span> listed top first, while the stack has at least two points, with
+top <span class="arithmatex">\(a\)</span> and next point <span class="arithmatex">\(b\)</span>, and <span class="arithmatex">\((a - b) \times (p - b) \le 0\)</span> (so <span class="arithmatex">\(b \to a \to p\)</span> is not a
+strict left turn), remove <span class="arithmatex">\(a\)</span>. The result is the first stack reached that has fewer than two
+points or whose top two points <span class="arithmatex">\(a, b\)</span> satisfy <span class="arithmatex">\((a - b) \times (p - b) &gt; 0\)</span>; that stack is
+returned unchanged. Each test of the sign of <span class="arithmatex">\((a - b) \times (p - b)\)</span> costs one unit, and
+nothing else is charged.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> popNonLeft (p : 𝕜 × 𝕜) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜) → TimeM ℕ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜))
+  | a :: b :: rest =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      <span class="bp-lean-keyword">if</span> <a class="bp-lean-ref" href="../orientation-and-segment-intersection-tests/index.html#cross" data-lean-name="Cslib.Algorithms.Lean.Geometry.cross">cross</a> (a - b) (p - b) ≤ 0 <span class="bp-lean-keyword">then</span> popNonLeft p (b :: rest) <span class="bp-lean-keyword">else</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> (a :: b :: rest)
+  | st =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> st</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.cross">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> cross (p q : 𝕜 × 𝕜) : 𝕜 := p.1 * q.2 - q.1 * p.2</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/SegmentIntersection.lean:51</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 8</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../orientation-and-segment-intersection-tests/index.html#cross">Cross product of plane vectors</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#chain-scan">Monotone chain scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-get-last">The lower chain ends at the last point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-head">The lower chain starts at the first point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-left-of-edges">Every input point lies on or left of each lower-chain edge</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-sublist">The lower chain is a sublist of the input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-time-le">The lower-chain scan makes linearly many tests</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-turn-left">The lower chain turns strictly left</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-eq">The upper chain is a reflected lower chain</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/chain-scan">
+<h4 class="bp-thmheading" id="chain-scan">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Monotone chain scan</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean#L79" aria-label="View Cslib.Algorithms.Lean.Geometry.chainScan in Lean source" title="View Cslib.Algorithms.Lean.Geometry.chainScan in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#chain-scan" aria-label="Link to Monotone chain scan" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.chainScan</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\Bbbk\)</span> be a field with a linear order. Given a stack <span class="arithmatex">\(S\)</span> of
+points of <span class="arithmatex">\(\Bbbk^2\)</span>, listed top first, and a list of points <span class="arithmatex">\(p_1, \dots, p_n\)</span> of <span class="arithmatex">\(\Bbbk^2\)</span>, the
+scan processes <span class="arithmatex">\(p_1, \dots, p_n\)</span> in order: for each point <span class="arithmatex">\(p = p_i\)</span> it removes the top <span class="arithmatex">\(a\)</span> of the
+stack as long as the stack has a second element <span class="arithmatex">\(b\)</span> with
+<span class="arithmatex">\((a_x - b_x)(p_y - b_y) - (p_x - b_x)(a_y - b_y) \le 0\)</span>, and then pushes <span class="arithmatex">\(p\)</span>. Starting from <span class="arithmatex">\(S\)</span>,
+the result is the final stack, top first. Each evaluation of this inequality costs one unit;
+nothing else is counted.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> chainScan : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜) → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜) → TimeM ℕ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜))
+  | st, [] =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> st
+  | st, p :: ps =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> st&#x27; ← <a class="bp-lean-ref" href="#pop-non-left" data-lean-name="Cslib.Algorithms.Lean.Geometry.popNonLeft">popNonLeft</a> p st
+      chainScan (p :: st&#x27;) ps</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.popNonLeft">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> popNonLeft (p : 𝕜 × 𝕜) : List (𝕜 × 𝕜) → TimeM ℕ (List (𝕜 × 𝕜))
+  | a :: b :: rest =&gt; <span class="bp-lean-keyword">do</span>
+      ✓
+      <span class="bp-lean-keyword">if</span> cross (a - b) (p - b) ≤ 0 <span class="bp-lean-keyword">then</span> popNonLeft p (b :: rest) <span class="bp-lean-keyword">else</span> pure (a :: b :: rest)
+  | st =&gt; pure st</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean:71</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 8</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#pop-non-left">Pop step of the monotone-chain scan</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lower-hull">Lower chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-get-last">The lower chain ends at the last point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-head">The lower chain starts at the first point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-left-of-edges">Every input point lies on or left of each lower-chain edge</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-sublist">The lower chain is a sublist of the input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-time-le">The lower-chain scan makes linearly many tests</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-turn-left">The lower chain turns strictly left</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-eq">The upper chain is a reflected lower chain</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/lower-hull">
+<h4 class="bp-thmheading" id="lower-hull">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Lower chain</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean#L86" aria-label="View Cslib.Algorithms.Lean.Geometry.lowerHull in Lean source" title="View Cslib.Algorithms.Lean.Geometry.lowerHull in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#lower-hull" aria-label="Link to Lower chain" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.lowerHull</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\Bbbk\)</span> be a field with a linear order. The lower chain of a list of
+points <span class="arithmatex">\(p_1, \dots, p_n\)</span> of <span class="arithmatex">\(\Bbbk^2\)</span> is computed by Andrew's monotone chain scan: start with an
+empty stack and process <span class="arithmatex">\(p_1, \dots, p_n\)</span> in order; for each point <span class="arithmatex">\(p = p_i\)</span>, remove the top <span class="arithmatex">\(a\)</span>
+of the stack as long as the stack has a second element <span class="arithmatex">\(b\)</span> with
+<span class="arithmatex">\((a_x - b_x)(p_y - b_y) - (p_x - b_x)(a_y - b_y) \le 0\)</span>, then push <span class="arithmatex">\(p\)</span>. The lower chain is the
+final stack read from bottom to top. Each evaluation of the inequality costs one unit; nothing
+else is counted.</p>
+<p>The scan is meant for points sorted strictly in lexicographic <span class="arithmatex">\((x, y)\)</span> order; the chain then runs
+from left to right.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> lowerHull (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) : TimeM ℕ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> st ← <a class="bp-lean-ref" href="#chain-scan" data-lean-name="Cslib.Algorithms.Lean.Geometry.chainScan">chainScan</a> [] ps
+  <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> st.reverse</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.chainScan">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> chainScan : List (𝕜 × 𝕜) → List (𝕜 × 𝕜) → TimeM ℕ (List (𝕜 × 𝕜))
+  | st, [] =&gt; pure st
+  | st, p :: ps =&gt; <span class="bp-lean-keyword">do</span>
+      <span class="bp-lean-keyword">let</span> st&#x27; ← popNonLeft p st
+      chainScan (p :: st&#x27;) ps</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean:79</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 21</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#chain-scan">Monotone chain scan</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#convex-hull">Convex hull by the monotone chain algorithm</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-left-of-edges">The hull polygon contains every input point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-subset">The hull&#x27;s vertices are input points</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-time-le">The monotone chain hull makes at most <span class="arithmatex">\(4n\)</span> orientation tests</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-turns-left">The monotone chain hull of non-collinear points turns strictly left at every vertex</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lower-hull-get-last">The lower chain ends at the last point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lower-hull-head">The lower chain starts at the first point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lower-hull-left-of-edges">Every input point lies on or left of each lower-chain edge</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lower-hull-of-points">Lower chain of unsorted points</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-of-points-spec">Correctness of the lower chain for unsorted input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lower-hull-sublist">The lower chain is a sublist of the input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lower-hull-time-le">The lower-chain scan makes linearly many tests</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lower-hull-turn-left">The lower chain turns strictly left</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#upper-hull">Upper chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#upper-hull-eq">The upper chain is a reflected lower chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-get-last">The upper chain ends at the first point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-head">The upper chain starts at the last point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-left-of-edges">Every input point lies left of the upper chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-sublist">The upper chain is a subsequence of the reversed input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-time-le">Running time of the upper chain scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-turn-left">The upper chain turns strictly left</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/lower-hull-of-points">
+<h4 class="bp-thmheading" id="lower-hull-of-points">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Lower chain of unsorted points</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean#L91" aria-label="View Cslib.Algorithms.Lean.Geometry.lowerHullOfPoints in Lean source" title="View Cslib.Algorithms.Lean.Geometry.lowerHullOfPoints in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#lower-hull-of-points" aria-label="Link to Lower chain of unsorted points" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.lowerHullOfPoints</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\Bbbk\)</span> be a field with a linear order. For a list
+<span class="arithmatex">\(P\)</span> of points of <span class="arithmatex">\(\Bbbk^2\)</span>, sort <span class="arithmatex">\(P\)</span> by merge sort into nondecreasing lexicographic <span class="arithmatex">\((x, y)\)</span>
+order and return the lower chain of the sorted list. Only the orientation tests of the lower
+chain are counted; sorting costs nothing.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> lowerHullOfPoints (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) : TimeM ℕ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) :=
+  <a class="bp-lean-ref" href="#lower-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">lowerHull</a> (ps.mergeSort <span class="bp-lean-keyword">fun</span> a b =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Decidable.decide#doc" title="Decidable.decide">decide</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> a ≤ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> b))</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> lowerHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> st ← chainScan [] ps
+  pure st.reverse</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean:86</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lower-hull">Lower chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lower-hull-of-points-spec">Correctness of the lower chain for unsorted input</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/lower-hull-sublist">
+<h4 class="bp-thmheading" id="lower-hull-sublist">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The lower chain is a sublist of the input</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean#L513" aria-label="View Cslib.Algorithms.Lean.Geometry.lowerHull_sublist in Lean source" title="View Cslib.Algorithms.Lean.Geometry.lowerHull_sublist in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#lower-hull-sublist" aria-label="Link to The lower chain is a sublist of the input" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.lowerHull_sublist</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\Bbbk\)</span> be a linearly ordered field and
+let <span class="arithmatex">\(p_1, \dots, p_n\)</span> be points of <span class="arithmatex">\(\Bbbk^2\)</span> that are strictly increasing in lexicographic
+<span class="arithmatex">\((x, y)\)</span> order. Then the lower chain of <span class="arithmatex">\(p_1, \dots, p_n\)</span> is a sublist of <span class="arithmatex">\(p_1, \dots, p_n\)</span>: it
+is <span class="arithmatex">\(p_{i_1}, \dots, p_{i_m}\)</span> for some indices <span class="arithmatex">\(i_1 &lt; \dots &lt; i_m\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> lowerHull_sublist (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) (hs : ps.Pairwise <span class="bp-lean-keyword">fun</span> a b =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> a &lt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> b) :
+    (<a class="bp-lean-ref" href="#lower-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">lowerHull</a> ps).ret &lt;+ ps</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> lowerHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> st ← chainScan [] ps
+  pure st.reverse</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean:86</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lower-hull">Lower chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#chain-scan">Monotone chain scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../orientation-and-segment-intersection-tests/index.html#cross">Cross product of plane vectors</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#pop-non-left">Pop step of the monotone-chain scan</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-subset">The hull&#x27;s vertices are input points</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-turns-left">The monotone chain hull of non-collinear points turns strictly left at every vertex</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-of-points-spec">Correctness of the lower chain for unsorted input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-sublist">The upper chain is a subsequence of the reversed input</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/lower-hull-head">
+<h4 class="bp-thmheading" id="lower-hull-head">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The lower chain starts at the first point</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean#L518" aria-label="View Cslib.Algorithms.Lean.Geometry.lowerHull_head? in Lean source" title="View Cslib.Algorithms.Lean.Geometry.lowerHull_head? in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#lower-hull-head" aria-label="Link to The lower chain starts at the first point" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.lowerHull_head?</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\Bbbk\)</span> be a linearly ordered field and
+let <span class="arithmatex">\(p_1, \dots, p_n\)</span> be points of <span class="arithmatex">\(\Bbbk^2\)</span> that are strictly increasing in lexicographic
+<span class="arithmatex">\((x, y)\)</span> order. If <span class="arithmatex">\(n \ge 1\)</span>, the lower chain of <span class="arithmatex">\(p_1, \dots, p_n\)</span> starts at <span class="arithmatex">\(p_1\)</span>; if <span class="arithmatex">\(n = 0\)</span>,
+the lower chain is empty.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> lowerHull_head? (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) (hs : ps.Pairwise <span class="bp-lean-keyword">fun</span> a b =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> a &lt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> b) :
+    (<a class="bp-lean-ref" href="#lower-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">lowerHull</a> ps).ret.head? = ps.head?</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> lowerHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> st ← chainScan [] ps
+  pure st.reverse</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean:86</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lower-hull">Lower chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#chain-scan">Monotone chain scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../orientation-and-segment-intersection-tests/index.html#cross">Cross product of plane vectors</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#pop-non-left">Pop step of the monotone-chain scan</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-left-of-edges">The hull polygon contains every input point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-turns-left">The monotone chain hull of non-collinear points turns strictly left at every vertex</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-of-points-spec">Correctness of the lower chain for unsorted input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-head">The upper chain starts at the last point</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/lower-hull-get-last">
+<h4 class="bp-thmheading" id="lower-hull-get-last">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The lower chain ends at the last point</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean#L523" aria-label="View Cslib.Algorithms.Lean.Geometry.lowerHull_getLast? in Lean source" title="View Cslib.Algorithms.Lean.Geometry.lowerHull_getLast? in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#lower-hull-get-last" aria-label="Link to The lower chain ends at the last point" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.lowerHull_getLast?</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\Bbbk\)</span> be a linearly ordered field and let
+<span class="arithmatex">\(p_1, \dots, p_n\)</span> be points of <span class="arithmatex">\(\Bbbk^2\)</span> that are strictly increasing in lexicographic
+<span class="arithmatex">\((x, y)\)</span> order. If <span class="arithmatex">\(n \ge 1\)</span>, the lower chain of <span class="arithmatex">\(p_1, \dots, p_n\)</span> ends at <span class="arithmatex">\(p_n\)</span>; if <span class="arithmatex">\(n = 0\)</span>,
+the lower chain is empty.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> lowerHull_getLast? (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) (hs : ps.Pairwise <span class="bp-lean-keyword">fun</span> a b =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> a &lt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> b) :
+    (<a class="bp-lean-ref" href="#lower-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">lowerHull</a> ps).ret.getLast? = ps.getLast?</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> lowerHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> st ← chainScan [] ps
+  pure st.reverse</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean:86</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lower-hull">Lower chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#chain-scan">Monotone chain scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../orientation-and-segment-intersection-tests/index.html#cross">Cross product of plane vectors</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#pop-non-left">Pop step of the monotone-chain scan</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-left-of-edges">The hull polygon contains every input point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-turns-left">The monotone chain hull of non-collinear points turns strictly left at every vertex</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-of-points-spec">Correctness of the lower chain for unsorted input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-get-last">The upper chain ends at the first point</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/lower-hull-turn-left">
+<h4 class="bp-thmheading" id="lower-hull-turn-left">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The lower chain turns strictly left</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean#L528" aria-label="View Cslib.Algorithms.Lean.Geometry.lowerHull_turn_left in Lean source" title="View Cslib.Algorithms.Lean.Geometry.lowerHull_turn_left in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#lower-hull-turn-left" aria-label="Link to The lower chain turns strictly left" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.lowerHull_turn_left</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\Bbbk\)</span> be a linearly ordered field and let
+<span class="arithmatex">\(p_1, \dots, p_n\)</span> be points of <span class="arithmatex">\(\Bbbk^2\)</span> that are strictly increasing in lexicographic <span class="arithmatex">\((x, y)\)</span>
+order, with lower chain <span class="arithmatex">\(c_0, \dots, c_{m-1}\)</span>. Writing
+<span class="arithmatex">\(\operatorname{cross}(u, v) = u_x v_y - v_x u_y\)</span>, for every <span class="arithmatex">\(i\)</span> with <span class="arithmatex">\(i + 2 &lt; m\)</span> we have
+<span class="arithmatex">\(\operatorname{cross}(c_{i+1} - c_i, c_{i+2} - c_i) &gt; 0\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> lowerHull_turn_left (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) (hs : ps.Pairwise <span class="bp-lean-keyword">fun</span> a b =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> a &lt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> b)
+    (i : ℕ) (h : i + 2 &lt; (<a class="bp-lean-ref" href="#lower-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">lowerHull</a> ps).ret.length) :
+    0 &lt; <a class="bp-lean-ref" href="../orientation-and-segment-intersection-tests/index.html#cross" data-lean-name="Cslib.Algorithms.Lean.Geometry.cross">cross</a> ((<a class="bp-lean-ref" href="#lower-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">lowerHull</a> ps).ret[i + 1] - (<a class="bp-lean-ref" href="#lower-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">lowerHull</a> ps).ret[i])
+      ((<a class="bp-lean-ref" href="#lower-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">lowerHull</a> ps).ret[i + 2] - (<a class="bp-lean-ref" href="#lower-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">lowerHull</a> ps).ret[i])</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> lowerHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> st ← chainScan [] ps
+  pure st.reverse</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean:86</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.cross">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> cross (p q : 𝕜 × 𝕜) : 𝕜 := p.1 * q.2 - q.1 * p.2</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/SegmentIntersection.lean:51</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../orientation-and-segment-intersection-tests/index.html#cross">Cross product of plane vectors</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lower-hull">Lower chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#chain-scan">Monotone chain scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#pop-non-left">Pop step of the monotone-chain scan</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-turns-left">The monotone chain hull of non-collinear points turns strictly left at every vertex</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-of-points-spec">Correctness of the lower chain for unsorted input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-turn-left">The upper chain turns strictly left</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/lower-hull-left-of-edges">
+<h4 class="bp-thmheading" id="lower-hull-left-of-edges">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Every input point lies on or left of each lower-chain edge</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean#L548" aria-label="View Cslib.Algorithms.Lean.Geometry.lowerHull_left_of_edges in Lean source" title="View Cslib.Algorithms.Lean.Geometry.lowerHull_left_of_edges in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#lower-hull-left-of-edges" aria-label="Link to Every input point lies on or left of each lower-chain edge" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.lowerHull_left_of_edges</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\Bbbk\)</span> be a linearly
+ordered field and let <span class="arithmatex">\(p_1, \dots, p_n\)</span> be points of <span class="arithmatex">\(\Bbbk^2\)</span> that are strictly increasing in
+lexicographic <span class="arithmatex">\((x, y)\)</span> order, and write <span class="arithmatex">\(\operatorname{cross}(u, v) = u_x v_y - v_x u_y\)</span>. For
+every <span class="arithmatex">\(s \in \{p_1, \dots, p_n\}\)</span> and every pair of consecutive vertices <span class="arithmatex">\(a, b\)</span> of the lower chain
+of <span class="arithmatex">\(p_1, \dots, p_n\)</span> we have <span class="arithmatex">\(\operatorname{cross}(b - a, s - a) \ge 0\)</span>: the point <span class="arithmatex">\(s\)</span> lies on or
+to the left of the directed edge from <span class="arithmatex">\(a\)</span> to <span class="arithmatex">\(b\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> lowerHull_left_of_edges (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) (hs : ps.Pairwise <span class="bp-lean-keyword">fun</span> a b =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> a &lt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> b)
+    {s : 𝕜 × 𝕜} (hsps : s ∈ ps) :
+    (<a class="bp-lean-ref" href="#lower-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">lowerHull</a> ps).ret.IsChain <span class="bp-lean-keyword">fun</span> a b =&gt; 0 ≤ <a class="bp-lean-ref" href="../orientation-and-segment-intersection-tests/index.html#cross" data-lean-name="Cslib.Algorithms.Lean.Geometry.cross">cross</a> (b - a) (s - a)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> lowerHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> st ← chainScan [] ps
+  pure st.reverse</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean:86</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.cross">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> cross (p q : 𝕜 × 𝕜) : 𝕜 := p.1 * q.2 - q.1 * p.2</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/SegmentIntersection.lean:51</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../orientation-and-segment-intersection-tests/index.html#cross">Cross product of plane vectors</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lower-hull">Lower chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#chain-scan">Monotone chain scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#pop-non-left">Pop step of the monotone-chain scan</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-left-of-edges">The hull polygon contains every input point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-turns-left">The monotone chain hull of non-collinear points turns strictly left at every vertex</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-of-points-spec">Correctness of the lower chain for unsorted input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-left-of-edges">Every input point lies left of the upper chain</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/lower-hull-time-le">
+<h4 class="bp-thmheading" id="lower-hull-time-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The lower-chain scan makes linearly many tests</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean#L584" aria-label="View Cslib.Algorithms.Lean.Geometry.lowerHull_time_le in Lean source" title="View Cslib.Algorithms.Lean.Geometry.lowerHull_time_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#lower-hull-time-le" aria-label="Link to The lower-chain scan makes linearly many tests" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.lowerHull_time_le</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\Bbbk\)</span> be a field with a linear
+order. For every list of <span class="arithmatex">\(n\)</span> points of <span class="arithmatex">\(\Bbbk^2\)</span>, computing its lower chain makes at most <span class="arithmatex">\(2n\)</span>
+orientation tests (cross-product evaluations).</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> lowerHull_time_le (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) : (<a class="bp-lean-ref" href="#lower-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">lowerHull</a> ps).time ≤ 2 * ps.length</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> lowerHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> st ← chainScan [] ps
+  pure st.reverse</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean:86</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lower-hull">Lower chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#chain-scan">Monotone chain scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../orientation-and-segment-intersection-tests/index.html#cross">Cross product of plane vectors</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#pop-non-left">Pop step of the monotone-chain scan</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-time-le">The monotone chain hull makes at most <span class="arithmatex">\(4n\)</span> orientation tests</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-time-le">Running time of the upper chain scan</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/lower-hull-of-points-spec">
+<h4 class="bp-thmheading" id="lower-hull-of-points-spec">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Correctness of the lower chain for unsorted input</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean#L604" aria-label="View Cslib.Algorithms.Lean.Geometry.lowerHullOfPoints_spec in Lean source" title="View Cslib.Algorithms.Lean.Geometry.lowerHullOfPoints_spec in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#lower-hull-of-points-spec" aria-label="Link to Correctness of the lower chain for unsorted input" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.lowerHullOfPoints_spec</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\Bbbk\)</span> be a linearly ordered
+field, let <span class="arithmatex">\(P\)</span> be a list of pairwise distinct points of <span class="arithmatex">\(\Bbbk^2\)</span> in any order, write <span class="arithmatex">\(\preceq\)</span>
+for the lexicographic <span class="arithmatex">\((x, y)\)</span> order on <span class="arithmatex">\(\Bbbk^2\)</span>, and let <span class="arithmatex">\(C = c_0, \dots, c_{m-1}\)</span> be the
+lower chain of the list obtained by sorting <span class="arithmatex">\(P\)</span> into <span class="arithmatex">\(\preceq\)</span>-increasing order. Write
+<span class="arithmatex">\(\operatorname{cross}(u, v) = u_x v_y - v_x u_y\)</span>. Then every <span class="arithmatex">\(c_j\)</span> is a point of <span class="arithmatex">\(P\)</span>; if <span class="arithmatex">\(P\)</span> is
+nonempty then <span class="arithmatex">\(m \ge 1\)</span>; if <span class="arithmatex">\(m \ge 1\)</span> then <span class="arithmatex">\(c_0 \preceq s \preceq c_{m-1}\)</span> for every <span class="arithmatex">\(s \in P\)</span>;
+for every <span class="arithmatex">\(i\)</span> with <span class="arithmatex">\(i + 2 &lt; m\)</span> we have <span class="arithmatex">\(\operatorname{cross}(c_{i+1} - c_i, c_{i+2} - c_i) &gt; 0\)</span>;
+and for every <span class="arithmatex">\(s \in P\)</span> and every pair of consecutive vertices <span class="arithmatex">\(a, b\)</span> of <span class="arithmatex">\(C\)</span> we have
+<span class="arithmatex">\(\operatorname{cross}(b - a, s - a) \ge 0\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> lowerHullOfPoints_spec (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) (hnd : ps.Nodup) :
+    <span class="bp-lean-keyword">let</span> C := (<a class="bp-lean-ref" href="#lower-hull-of-points" data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHullOfPoints">lowerHullOfPoints</a> ps).ret
+    (∀ c ∈ C, c ∈ ps) ∧ (ps ≠ [] → C ≠ []) ∧
+    (∀ c ∈ C.head?, ∀ s ∈ ps, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> c ≤ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> s) ∧
+    (∀ c ∈ C.getLast?, ∀ s ∈ ps, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> s ≤ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> c) ∧
+    (∀ i (h : i + 2 &lt; C.length), 0 &lt; <a class="bp-lean-ref" href="../orientation-and-segment-intersection-tests/index.html#cross" data-lean-name="Cslib.Algorithms.Lean.Geometry.cross">cross</a> (C[i + 1] - C[i]) (C[i + 2] - C[i])) ∧
+    ∀ s ∈ ps, C.IsChain <span class="bp-lean-keyword">fun</span> a b =&gt; 0 ≤ <a class="bp-lean-ref" href="../orientation-and-segment-intersection-tests/index.html#cross" data-lean-name="Cslib.Algorithms.Lean.Geometry.cross">cross</a> (b - a) (s - a)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHullOfPoints">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> lowerHullOfPoints (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) :=
+  lowerHull (ps.mergeSort <span class="bp-lean-keyword">fun</span> a b =&gt; decide (toLex a ≤ toLex b))</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean:91</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.cross">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> cross (p q : 𝕜 × 𝕜) : 𝕜 := p.1 * q.2 - q.1 * p.2</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/SegmentIntersection.lean:51</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 8</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../orientation-and-segment-intersection-tests/index.html#cross">Cross product of plane vectors</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lower-hull-of-points">Lower chain of unsorted points</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull">Lower chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-get-last">The lower chain ends at the last point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-head">The lower chain starts at the first point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-left-of-edges">Every input point lies on or left of each lower-chain edge</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-sublist">The lower chain is a sublist of the input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-turn-left">The lower chain turns strictly left</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/upper-hull">
+<h4 class="bp-thmheading" id="upper-hull">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Upper chain</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean#L59" aria-label="View Cslib.Algorithms.Lean.Geometry.upperHull in Lean source" title="View Cslib.Algorithms.Lean.Geometry.upperHull in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#upper-hull" aria-label="Link to Upper chain" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.upperHull</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a field with a linear order. The upper chain of a list of points
+<span class="arithmatex">\(p_1, \dots, p_n \in K^2\)</span> is the lower chain of the reversed list <span class="arithmatex">\(p_n, \dots, p_1\)</span>, together with
+its cost: the same scan, counting the same orientation tests. For points sorted by <span class="arithmatex">\((x, y)\)</span> it
+runs from the last point back to the first.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> upperHull (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) : TimeM ℕ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) := <a class="bp-lean-ref" href="#lower-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">lowerHull</a> ps.reverse</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> lowerHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> st ← chainScan [] ps
+  pure st.reverse</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean:86</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 12</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lower-hull">Lower chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#convex-hull">Convex hull by the monotone chain algorithm</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-left-of-edges">The hull polygon contains every input point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-subset">The hull&#x27;s vertices are input points</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-time-le">The monotone chain hull makes at most <span class="arithmatex">\(4n\)</span> orientation tests</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-turns-left">The monotone chain hull of non-collinear points turns strictly left at every vertex</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#upper-hull-eq">The upper chain is a reflected lower chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#upper-hull-get-last">The upper chain ends at the first point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#upper-hull-head">The upper chain starts at the last point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#upper-hull-left-of-edges">Every input point lies left of the upper chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#upper-hull-sublist">The upper chain is a subsequence of the reversed input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#upper-hull-time-le">Running time of the upper chain scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#upper-hull-turn-left">The upper chain turns strictly left</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/convex-hull">
+<h4 class="bp-thmheading" id="convex-hull">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Convex hull by the monotone chain algorithm</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean#L63" aria-label="View Cslib.Algorithms.Lean.Geometry.convexHull in Lean source" title="View Cslib.Algorithms.Lean.Geometry.convexHull in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#convex-hull" aria-label="Link to Convex hull by the monotone chain algorithm" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.convexHull</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\Bbbk\)</span> be a field with a linear order.
+The convex hull of a list <span class="arithmatex">\(P\)</span> of points of <span class="arithmatex">\(\Bbbk^2\)</span> is the lower chain of <span class="arithmatex">\(P\)</span> followed by the
+upper chain of <span class="arithmatex">\(P\)</span> with its first and last points removed, together with its cost: the cost of
+computing the lower chain plus the cost of computing the upper chain.</p>
+<p>For points sorted strictly in lexicographic <span class="arithmatex">\((x, y)\)</span> order, the result runs counterclockwise from
+the first point.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> convexHull (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) : TimeM ℕ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> lower ← <a class="bp-lean-ref" href="#lower-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">lowerHull</a> ps
+  <span class="bp-lean-keyword">let</span> upper ← <a class="bp-lean-ref" href="#upper-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.upperHull">upperHull</a> ps
+  <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Pure.pure#doc" title="Pure.pure">pure</a> (lower ++ upper.tail.dropLast)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> lowerHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> st ← chainScan [] ps
+  pure st.reverse</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean:86</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.upperHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> upperHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := lowerHull ps.reverse</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean:59</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lower-hull">Lower chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#upper-hull">Upper chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#convex-hull-left-of-edges">The hull polygon contains every input point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#convex-hull-subset">The hull&#x27;s vertices are input points</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#convex-hull-time-le">The monotone chain hull makes at most <span class="arithmatex">\(4n\)</span> orientation tests</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#convex-hull-turns-left">The monotone chain hull of non-collinear points turns strictly left at every vertex</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/upper-hull-eq">
+<h4 class="bp-thmheading" id="upper-hull-eq">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The upper chain is a reflected lower chain</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean#L110" aria-label="View Cslib.Algorithms.Lean.Geometry.upperHull_eq in Lean source" title="View Cslib.Algorithms.Lean.Geometry.upperHull_eq in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#upper-hull-eq" aria-label="Link to The upper chain is a reflected lower chain" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.upperHull_eq</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\Bbbk\)</span> be a field with a linear order.
+For every list <span class="arithmatex">\(p_1, \dots, p_n\)</span> of points of <span class="arithmatex">\(\Bbbk^2\)</span>, the upper chain of the list is the image
+under <span class="arithmatex">\(p \mapsto -p\)</span> of the lower chain of <span class="arithmatex">\(-p_n, \dots, -p_1\)</span>, and the two computations have the
+same cost.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> upperHull_eq (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) :
+    (<a class="bp-lean-ref" href="#upper-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.upperHull">upperHull</a> ps).ret = (<a class="bp-lean-ref" href="#lower-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">lowerHull</a> (ps.reverse.map <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Neg.neg#doc" title="Neg.neg">Neg.neg</a>)).ret.map <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Neg.neg#doc" title="Neg.neg">Neg.neg</a> ∧
+      (<a class="bp-lean-ref" href="#upper-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.upperHull">upperHull</a> ps).time = (<a class="bp-lean-ref" href="#lower-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">lowerHull</a> (ps.reverse.map <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Neg.neg#doc" title="Neg.neg">Neg.neg</a>)).time</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.upperHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> upperHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := lowerHull ps.reverse</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean:59</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.lowerHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> lowerHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> st ← chainScan [] ps
+  pure st.reverse</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHull.lean:86</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 6</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lower-hull">Lower chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#upper-hull">Upper chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#chain-scan">Monotone chain scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../orientation-and-segment-intersection-tests/index.html#cross">Cross product of plane vectors</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#pop-non-left">Pop step of the monotone-chain scan</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-get-last">The upper chain ends at the first point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-head">The upper chain starts at the last point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-left-of-edges">Every input point lies left of the upper chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-sublist">The upper chain is a subsequence of the reversed input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-time-le">Running time of the upper chain scan</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-turn-left">The upper chain turns strictly left</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/upper-hull-sublist">
+<h4 class="bp-thmheading" id="upper-hull-sublist">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The upper chain is a subsequence of the reversed input</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean#L129" aria-label="View Cslib.Algorithms.Lean.Geometry.upperHull_sublist in Lean source" title="View Cslib.Algorithms.Lean.Geometry.upperHull_sublist in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#upper-hull-sublist" aria-label="Link to The upper chain is a subsequence of the reversed input" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.upperHull_sublist</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be an ordered field and
+let <span class="arithmatex">\(p_1, \dots, p_n \in K^2\)</span> be strictly increasing in the lexicographic <span class="arithmatex">\((x, y)\)</span> order. Then the
+upper chain of <span class="arithmatex">\(p_1, \dots, p_n\)</span> is a sublist of the reversed list <span class="arithmatex">\(p_n, \dots, p_1\)</span>: it is
+obtained from <span class="arithmatex">\(p_n, \dots, p_1\)</span> by deleting some of the entries.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> upperHull_sublist (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) (hs : ps.Pairwise <span class="bp-lean-keyword">fun</span> a b =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> a &lt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> b) :
+    (<a class="bp-lean-ref" href="#upper-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.upperHull">upperHull</a> ps).ret &lt;+ ps.reverse</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.upperHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> upperHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := lowerHull ps.reverse</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean:59</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#upper-hull">Upper chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull">Lower chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-sublist">The lower chain is a sublist of the input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-eq">The upper chain is a reflected lower chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-subset">The hull&#x27;s vertices are input points</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-turns-left">The monotone chain hull of non-collinear points turns strictly left at every vertex</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/upper-hull-head">
+<h4 class="bp-thmheading" id="upper-hull-head">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The upper chain starts at the last point</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean#L137" aria-label="View Cslib.Algorithms.Lean.Geometry.upperHull_head? in Lean source" title="View Cslib.Algorithms.Lean.Geometry.upperHull_head? in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#upper-hull-head" aria-label="Link to The upper chain starts at the last point" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.upperHull_head?</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(p_1, \dots, p_n\)</span> be points of <span class="arithmatex">\(\Bbbk^2\)</span>,
+for an ordered field <span class="arithmatex">\(\Bbbk\)</span>, strictly increasing in the lexicographic order on <span class="arithmatex">\((x, y)\)</span>. If
+<span class="arithmatex">\(n = 0\)</span> the upper chain is empty; otherwise its first vertex is <span class="arithmatex">\(p_n\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> upperHull_head? (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) (hs : ps.Pairwise <span class="bp-lean-keyword">fun</span> a b =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> a &lt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> b) :
+    (<a class="bp-lean-ref" href="#upper-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.upperHull">upperHull</a> ps).ret.head? = ps.getLast?</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.upperHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> upperHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := lowerHull ps.reverse</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean:59</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#upper-hull">Upper chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull">Lower chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-head">The lower chain starts at the first point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-eq">The upper chain is a reflected lower chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-left-of-edges">The hull polygon contains every input point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-turns-left">The monotone chain hull of non-collinear points turns strictly left at every vertex</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/upper-hull-get-last">
+<h4 class="bp-thmheading" id="upper-hull-get-last">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The upper chain ends at the first point</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean#L145" aria-label="View Cslib.Algorithms.Lean.Geometry.upperHull_getLast? in Lean source" title="View Cslib.Algorithms.Lean.Geometry.upperHull_getLast? in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#upper-hull-get-last" aria-label="Link to The upper chain ends at the first point" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.upperHull_getLast?</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(p_1, \dots, p_n\)</span> be points of <span class="arithmatex">\(\Bbbk^2\)</span>, for
+an ordered field <span class="arithmatex">\(\Bbbk\)</span>, strictly increasing in the lexicographic order on <span class="arithmatex">\((x, y)\)</span>. If <span class="arithmatex">\(n = 0\)</span>
+the upper chain is empty; otherwise its last vertex is <span class="arithmatex">\(p_1\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> upperHull_getLast? (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) (hs : ps.Pairwise <span class="bp-lean-keyword">fun</span> a b =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> a &lt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> b) :
+    (<a class="bp-lean-ref" href="#upper-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.upperHull">upperHull</a> ps).ret.getLast? = ps.head?</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.upperHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> upperHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := lowerHull ps.reverse</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean:59</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#upper-hull">Upper chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull">Lower chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-get-last">The lower chain ends at the last point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-eq">The upper chain is a reflected lower chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-left-of-edges">The hull polygon contains every input point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-turns-left">The monotone chain hull of non-collinear points turns strictly left at every vertex</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/upper-hull-turn-left">
+<h4 class="bp-thmheading" id="upper-hull-turn-left">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The upper chain turns strictly left</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean#L154" aria-label="View Cslib.Algorithms.Lean.Geometry.upperHull_turn_left in Lean source" title="View Cslib.Algorithms.Lean.Geometry.upperHull_turn_left in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#upper-hull-turn-left" aria-label="Link to The upper chain turns strictly left" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.upperHull_turn_left</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be an ordered field, let
+<span class="arithmatex">\(p_1, \dots, p_n \in K^2\)</span> be strictly increasing in the lexicographic <span class="arithmatex">\((x, y)\)</span> order, and let
+<span class="arithmatex">\(c_0, c_1, \dots, c_{m-1}\)</span> be the upper chain of <span class="arithmatex">\(p_1, \dots, p_n\)</span>. Then for every <span class="arithmatex">\(i\)</span> with
+<span class="arithmatex">\(i + 2 &lt; m\)</span>, we have <span class="arithmatex">\((c_{i+1} - c_i) \times (c_{i+2} - c_i) &gt; 0\)</span>, where
+<span class="arithmatex">\((u_1, u_2) \times (v_1, v_2) = u_1 v_2 - v_1 u_2\)</span> is the cross product: the vertices <span class="arithmatex">\(c_i\)</span>,
+<span class="arithmatex">\(c_{i+1}\)</span>, <span class="arithmatex">\(c_{i+2}\)</span> make a strict left turn.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> upperHull_turn_left (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) (hs : ps.Pairwise <span class="bp-lean-keyword">fun</span> a b =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> a &lt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> b)
+    (i : ℕ) (h : i + 2 &lt; (<a class="bp-lean-ref" href="#upper-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.upperHull">upperHull</a> ps).ret.length) :
+    0 &lt; <a class="bp-lean-ref" href="../orientation-and-segment-intersection-tests/index.html#cross" data-lean-name="Cslib.Algorithms.Lean.Geometry.cross">cross</a> ((<a class="bp-lean-ref" href="#upper-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.upperHull">upperHull</a> ps).ret[i + 1] - (<a class="bp-lean-ref" href="#upper-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.upperHull">upperHull</a> ps).ret[i])
+      ((<a class="bp-lean-ref" href="#upper-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.upperHull">upperHull</a> ps).ret[i + 2] - (<a class="bp-lean-ref" href="#upper-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.upperHull">upperHull</a> ps).ret[i])</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.upperHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> upperHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := lowerHull ps.reverse</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean:59</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.cross">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> cross (p q : 𝕜 × 𝕜) : 𝕜 := p.1 * q.2 - q.1 * p.2</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/SegmentIntersection.lean:51</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../orientation-and-segment-intersection-tests/index.html#cross">Cross product of plane vectors</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#upper-hull">Upper chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull">Lower chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-turn-left">The lower chain turns strictly left</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-eq">The upper chain is a reflected lower chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-turns-left">The monotone chain hull of non-collinear points turns strictly left at every vertex</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/upper-hull-left-of-edges">
+<h4 class="bp-thmheading" id="upper-hull-left-of-edges">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Every input point lies left of the upper chain</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean#L167" aria-label="View Cslib.Algorithms.Lean.Geometry.upperHull_left_of_edges in Lean source" title="View Cslib.Algorithms.Lean.Geometry.upperHull_left_of_edges in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#upper-hull-left-of-edges" aria-label="Link to Every input point lies left of the upper chain" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.upperHull_left_of_edges</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(p_1, \dots, p_n\)</span> be points of
+<span class="arithmatex">\(\Bbbk^2\)</span>, for an ordered field <span class="arithmatex">\(\Bbbk\)</span>, strictly increasing in the lexicographic order on
+<span class="arithmatex">\((x, y)\)</span>. Then for every input point <span class="arithmatex">\(s\)</span> and every two consecutive vertices <span class="arithmatex">\(a, b\)</span> of the upper
+chain, the cross product <span class="arithmatex">\((b - a) \times (s - a)\)</span> is nonnegative: <span class="arithmatex">\(s\)</span> lies on or to the left of
+the edge from <span class="arithmatex">\(a\)</span> to <span class="arithmatex">\(b\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> upperHull_left_of_edges (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜))
+    (hs : ps.Pairwise <span class="bp-lean-keyword">fun</span> a b =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> a &lt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> b) {s : 𝕜 × 𝕜} (hsps : s ∈ ps) :
+    (<a class="bp-lean-ref" href="#upper-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.upperHull">upperHull</a> ps).ret.IsChain <span class="bp-lean-keyword">fun</span> a b =&gt; 0 ≤ <a class="bp-lean-ref" href="../orientation-and-segment-intersection-tests/index.html#cross" data-lean-name="Cslib.Algorithms.Lean.Geometry.cross">cross</a> (b - a) (s - a)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.upperHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> upperHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := lowerHull ps.reverse</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean:59</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.cross">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> cross (p q : 𝕜 × 𝕜) : 𝕜 := p.1 * q.2 - q.1 * p.2</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/SegmentIntersection.lean:51</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../orientation-and-segment-intersection-tests/index.html#cross">Cross product of plane vectors</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#upper-hull">Upper chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull">Lower chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-left-of-edges">Every input point lies on or left of each lower-chain edge</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-eq">The upper chain is a reflected lower chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-left-of-edges">The hull polygon contains every input point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-turns-left">The monotone chain hull of non-collinear points turns strictly left at every vertex</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/upper-hull-time-le">
+<h4 class="bp-thmheading" id="upper-hull-time-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Running time of the upper chain scan</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean#L180" aria-label="View Cslib.Algorithms.Lean.Geometry.upperHull_time_le in Lean source" title="View Cslib.Algorithms.Lean.Geometry.upperHull_time_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#upper-hull-time-le" aria-label="Link to Running time of the upper chain scan" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.upperHull_time_le</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a field with a linear order and let
+<span class="arithmatex">\(p_1, \dots, p_n \in K^2\)</span> be any <span class="arithmatex">\(n\)</span> points, sorted or not. Computing the upper chain of
+<span class="arithmatex">\(p_1, \dots, p_n\)</span> costs at most <span class="arithmatex">\(2n\)</span>, where the cost counts one unit per orientation test (one
+cross-product comparison) and nothing else.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> upperHull_time_le (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) : (<a class="bp-lean-ref" href="#upper-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.upperHull">upperHull</a> ps).time ≤ 2 * ps.length</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.upperHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> upperHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := lowerHull ps.reverse</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean:59</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#upper-hull">Upper chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull">Lower chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-time-le">The lower-chain scan makes linearly many tests</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-eq">The upper chain is a reflected lower chain</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#convex-hull-time-le">The monotone chain hull makes at most <span class="arithmatex">\(4n\)</span> orientation tests</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/convex-hull-subset">
+<h4 class="bp-thmheading" id="convex-hull-subset">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The hull&#x27;s vertices are input points</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean#L191" aria-label="View Cslib.Algorithms.Lean.Geometry.convexHull_subset in Lean source" title="View Cslib.Algorithms.Lean.Geometry.convexHull_subset in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#convex-hull-subset" aria-label="Link to The hull&#x27;s vertices are input points" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.convexHull_subset</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(p_1, \dots, p_n\)</span> be points of <span class="arithmatex">\(\Bbbk^2\)</span>, for an
+ordered field <span class="arithmatex">\(\Bbbk\)</span>, strictly increasing in the lexicographic order on <span class="arithmatex">\((x, y)\)</span>. Then every
+vertex of their convex hull computed by the monotone chain algorithm is one of the <span class="arithmatex">\(p_i\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> convexHull_subset (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) (hs : ps.Pairwise <span class="bp-lean-keyword">fun</span> a b =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> a &lt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> b) :
+    ∀ c ∈ (<a class="bp-lean-ref" href="#convex-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.convexHull">convexHull</a> ps).ret, c ∈ ps</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.convexHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> convexHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> lower ← lowerHull ps
+  <span class="bp-lean-keyword">let</span> upper ← upperHull ps
+  pure (lower ++ upper.tail.dropLast)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean:63</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#convex-hull">Convex hull by the monotone chain algorithm</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull">Lower chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-sublist">The lower chain is a sublist of the input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull">Upper chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-sublist">The upper chain is a subsequence of the reversed input</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/convex-hull-left-of-edges">
+<h4 class="bp-thmheading" id="convex-hull-left-of-edges">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The hull polygon contains every input point</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean#L202" aria-label="View Cslib.Algorithms.Lean.Geometry.convexHull_left_of_edges in Lean source" title="View Cslib.Algorithms.Lean.Geometry.convexHull_left_of_edges in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#convex-hull-left-of-edges" aria-label="Link to The hull polygon contains every input point" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.convexHull_left_of_edges</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(p_1, \dots, p_n\)</span> be <span class="arithmatex">\(n \ge 2\)</span> points of
+<span class="arithmatex">\(\Bbbk^2\)</span>, for an ordered field <span class="arithmatex">\(\Bbbk\)</span>, strictly increasing in the lexicographic order on <span class="arithmatex">\((x, y)\)</span>,
+and let <span class="arithmatex">\(v_1, \dots, v_m\)</span> be the vertices of their convex hull computed by the monotone chain
+algorithm. Then for every input point <span class="arithmatex">\(s\)</span> and every edge <span class="arithmatex">\((a, b)\)</span> of the closed polygon
+<span class="arithmatex">\(v_1, \dots, v_m, v_1\)</span> (that is, <span class="arithmatex">\(a, b\)</span> consecutive in this sequence), the cross product
+<span class="arithmatex">\((b - a) \times (s - a)\)</span> is nonnegative: <span class="arithmatex">\(s\)</span> lies on or to the left of the edge from <span class="arithmatex">\(a\)</span> to <span class="arithmatex">\(b\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> convexHull_left_of_edges (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜))
+    (hs : ps.Pairwise <span class="bp-lean-keyword">fun</span> a b =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> a &lt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> b) (hlen : 2 ≤ ps.length) {s : 𝕜 × 𝕜}
+    (hsps : s ∈ ps) :
+    ((<a class="bp-lean-ref" href="#convex-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.convexHull">convexHull</a> ps).ret ++ (<a class="bp-lean-ref" href="#convex-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.convexHull">convexHull</a> ps).ret.take 1).IsChain <span class="bp-lean-keyword">fun</span> a b =&gt;
+      0 ≤ <a class="bp-lean-ref" href="../orientation-and-segment-intersection-tests/index.html#cross" data-lean-name="Cslib.Algorithms.Lean.Geometry.cross">cross</a> (b - a) (s - a)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.convexHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> convexHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> lower ← lowerHull ps
+  <span class="bp-lean-keyword">let</span> upper ← upperHull ps
+  pure (lower ++ upper.tail.dropLast)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean:63</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.cross">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> cross (p q : 𝕜 × 𝕜) : 𝕜 := p.1 * q.2 - q.1 * p.2</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/SegmentIntersection.lean:51</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 10</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#convex-hull">Convex hull by the monotone chain algorithm</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../orientation-and-segment-intersection-tests/index.html#cross">Cross product of plane vectors</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull">Lower chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-get-last">The lower chain ends at the last point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-head">The lower chain starts at the first point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-left-of-edges">Every input point lies on or left of each lower-chain edge</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull">Upper chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-get-last">The upper chain ends at the first point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-head">The upper chain starts at the last point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-left-of-edges">Every input point lies left of the upper chain</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/convex-hull-time-le">
+<h4 class="bp-thmheading" id="convex-hull-time-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The monotone chain hull makes at most <span class="arithmatex">\(4n\)</span> orientation tests</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean#L261" aria-label="View Cslib.Algorithms.Lean.Geometry.convexHull_time_le in Lean source" title="View Cslib.Algorithms.Lean.Geometry.convexHull_time_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#convex-hull-time-le" aria-label="Link to The monotone chain hull makes at most 4n orientation tests" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.convexHull_time_le</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\Bbbk\)</span> be a field with
+a linear order. For every list of <span class="arithmatex">\(n\)</span> points of <span class="arithmatex">\(\Bbbk^2\)</span>, computing their convex hull by the
+monotone chain algorithm costs at most <span class="arithmatex">\(4n\)</span>, where each orientation test costs one unit.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> convexHull_time_le (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜)) : (<a class="bp-lean-ref" href="#convex-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.convexHull">convexHull</a> ps).time ≤ 4 * ps.length</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.convexHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> convexHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> lower ← lowerHull ps
+  <span class="bp-lean-keyword">let</span> upper ← upperHull ps
+  pure (lower ++ upper.tail.dropLast)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean:63</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#convex-hull">Convex hull by the monotone chain algorithm</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull">Lower chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-time-le">The lower-chain scan makes linearly many tests</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull">Upper chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-time-le">Running time of the upper chain scan</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/turns-left">
+<h4 class="bp-thmheading" id="turns-left">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Lists of points turning strictly left</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean#L270" aria-label="View Cslib.Algorithms.Lean.Geometry.TurnsLeft in Lean source" title="View Cslib.Algorithms.Lean.Geometry.TurnsLeft in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#turns-left" aria-label="Link to Lists of points turning strictly left" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.TurnsLeft</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\Bbbk\)</span> be a field with a linear order and write
+<span class="arithmatex">\((u_1, u_2) \times (v_1, v_2) = u_1 v_2 - v_1 u_2\)</span> for the cross product on <span class="arithmatex">\(\Bbbk^2\)</span>. A list
+<span class="arithmatex">\(q_1, \dots, q_k\)</span> of points of <span class="arithmatex">\(\Bbbk^2\)</span> turns strictly left when every three consecutive points
+do: <span class="arithmatex">\((q_{i+1} - q_i) \times (q_{i+2} - q_i) &gt; 0\)</span> for every <span class="arithmatex">\(i\)</span> with <span class="arithmatex">\(1 \le i \le k - 2\)</span>. In
+particular, every list of fewer than three points turns strictly left.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> TurnsLeft : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜) → <span class="bp-lean-keyword">Prop</span>
+  | a :: b :: c :: rest =&gt; 0 &lt; <a class="bp-lean-ref" href="../orientation-and-segment-intersection-tests/index.html#cross" data-lean-name="Cslib.Algorithms.Lean.Geometry.cross">cross</a> (b - a) (c - a) ∧ TurnsLeft (b :: c :: rest)
+  | _ =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=True#doc" title="True">True</a></code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.cross">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> cross (p q : 𝕜 × 𝕜) : 𝕜 := p.1 * q.2 - q.1 * p.2</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/SegmentIntersection.lean:51</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../orientation-and-segment-intersection-tests/index.html#cross">Cross product of plane vectors</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#convex-hull-turns-left">The monotone chain hull of non-collinear points turns strictly left at every vertex</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm/convex-hull-turns-left">
+<h4 class="bp-thmheading" id="convex-hull-turns-left">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The monotone chain hull of non-collinear points turns strictly left at every vertex</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean#L470" aria-label="View Cslib.Algorithms.Lean.Geometry.convexHull_turnsLeft in Lean source" title="View Cslib.Algorithms.Lean.Geometry.convexHull_turnsLeft in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#convex-hull-turns-left" aria-label="Link to The monotone chain hull of non-collinear points turns strictly left at every vertex" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.Geometry.convexHull_turnsLeft</div>
+<div class="bp-thmcontent">
+<p>Let
+<span class="arithmatex">\(\Bbbk\)</span> be a linearly ordered field and write <span class="arithmatex">\((u_1, u_2) \times (v_1, v_2) = u_1 v_2 - v_1 u_2\)</span>
+for the cross product on <span class="arithmatex">\(\Bbbk^2\)</span>. Let <span class="arithmatex">\(P\)</span> be a list of points of <span class="arithmatex">\(\Bbbk^2\)</span> that is strictly
+increasing in the lexicographic order on <span class="arithmatex">\((x, y)\)</span>, and suppose the points of <span class="arithmatex">\(P\)</span> are not all
+collinear: there are points <span class="arithmatex">\(a, b, c\)</span> of <span class="arithmatex">\(P\)</span> with <span class="arithmatex">\((b - a) \times (c - a) \ne 0\)</span>. Let <span class="arithmatex">\(H\)</span> be the
+list of points returned by the monotone chain convex hull algorithm on <span class="arithmatex">\(P\)</span>. Then the list
+obtained from <span class="arithmatex">\(H\)</span> by appending its first two points (all of <span class="arithmatex">\(H\)</span> if <span class="arithmatex">\(H\)</span> has fewer than two points)
+turns strictly left: any three consecutive points <span class="arithmatex">\(q, r, s\)</span> of it satisfy
+<span class="arithmatex">\((r - q) \times (s - q) &gt; 0\)</span>.</p>
+<p>Read cyclically, this says the hull polygon turns strictly left at every vertex, including the
+two vertices where the lower and upper chains meet.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> convexHull_turnsLeft (ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (𝕜 × 𝕜))
+    (hs : ps.Pairwise <span class="bp-lean-keyword">fun</span> a b =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> a &lt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=toLex#doc" title="toLex">toLex</a> b)
+    (hncol : ∃ a ∈ ps, ∃ b ∈ ps, ∃ c ∈ ps, <a class="bp-lean-ref" href="../orientation-and-segment-intersection-tests/index.html#cross" data-lean-name="Cslib.Algorithms.Lean.Geometry.cross">cross</a> (b - a) (c - a) ≠ 0) :
+    <a class="bp-lean-ref" href="#turns-left" data-lean-name="Cslib.Algorithms.Lean.Geometry.TurnsLeft">TurnsLeft</a> ((<a class="bp-lean-ref" href="#convex-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.convexHull">convexHull</a> ps).ret ++ (<a class="bp-lean-ref" href="#convex-hull" data-lean-name="Cslib.Algorithms.Lean.Geometry.convexHull">convexHull</a> ps).ret.take 2)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.cross">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> cross (p q : 𝕜 × 𝕜) : 𝕜 := p.1 * q.2 - q.1 * p.2</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/SegmentIntersection.lean:51</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.TurnsLeft">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> TurnsLeft : List (𝕜 × 𝕜) → <span class="bp-lean-keyword">Prop</span>
+  | a :: b :: c :: rest =&gt; 0 &lt; cross (b - a) (c - a) ∧ TurnsLeft (b :: c :: rest)
+  | _ =&gt; True</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean:270</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.Geometry.convexHull">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> convexHull (ps : List (𝕜 × 𝕜)) : TimeM ℕ (List (𝕜 × 𝕜)) := <span class="bp-lean-keyword">do</span>
+  <span class="bp-lean-keyword">let</span> lower ← lowerHull ps
+  <span class="bp-lean-keyword">let</span> upper ← upperHull ps
+  pure (lower ++ upper.tail.dropLast)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/Geometry/ConvexHullPolygon.lean:63</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 15</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#turns-left">Lists of points turning strictly left</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#convex-hull">Convex hull by the monotone chain algorithm</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../orientation-and-segment-intersection-tests/index.html#cross">Cross product of plane vectors</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull">Lower chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-get-last">The lower chain ends at the last point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-head">The lower chain starts at the first point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-left-of-edges">Every input point lies on or left of each lower-chain edge</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-sublist">The lower chain is a sublist of the input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lower-hull-turn-left">The lower chain turns strictly left</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull">Upper chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-get-last">The upper chain ends at the first point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-head">The upper chain starts at the last point</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-left-of-edges">Every input point lies left of the upper chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-sublist">The upper chain is a subsequence of the reversed input</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#upper-hull-turn-left">The upper chain turns strictly left</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>25</strong> fully proved</span></div>
+</div>
+</div>
+<p><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../dependencies/index.json" data-graph-src="../../../../dependencies/scopes/ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm.json" data-page-href="index.html" data-scope-id="ComputerScience/computational-geometry/monotone-chain-convex-hull-algorithm">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>

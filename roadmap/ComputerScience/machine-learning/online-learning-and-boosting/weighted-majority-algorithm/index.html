@@ -1,0 +1,5661 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../adaboost/index.html">
+      
+      
+        <link rel="next" href="../../supervised-learning/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Weighted majority algorithm - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Weighted majority algorithm
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23" id="__nav_2_1_23_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_23_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Computer Science
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../data-structures/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data structures
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../graph-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../process-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Process calculi and behavioural equivalence
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../type-systems-and-lambda-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Type systems and lambda calculi
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../programming-language-semantics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programming language semantics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23_7" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Machine learning
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23_7" id="__nav_2_1_23_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_23_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Machine learning
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23_7_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Online learning and boosting
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23_7_2" id="__nav_2_1_23_7_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_2_1_23_7_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23_7_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Online learning and boosting
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hedge-algorithm/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hedge algorithm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../perceptron/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Perceptron
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adaboost/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AdaBoost
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Weighted majority algorithm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../supervised-learning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Supervised learning and regression
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../unsupervised-learning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Unsupervised learning and matrix factorization
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../probabilistic-graphical-models/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probabilistic graphical models
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../bayesian-inference-and-sampling/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bayesian inference and sampling
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../sorting-and-searching/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sorting and searching
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../dynamic-programming/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic programming
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../greedy-algorithms-and-matroids/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Greedy algorithms and matroids
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../approximation-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Approximation algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../online-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Online algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../randomized-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Randomized algorithms and probabilistic analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../parallel-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../algebraic-and-numerical-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic and numerical algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../computational-geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computational geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../string-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    String algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../heuristic-search-and-planning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heuristic search and planning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../cryptography/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cryptography
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../databases/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Databases
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../quantum-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../concurrent-systems-and-protocols/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concurrent systems and protocols
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../program-logics-and-verification/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Program logics and verification
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../../index.html" tabindex="-1">Computer Science</a></li><li><a href="../../index.html" tabindex="-1">Machine learning</a></li><li><a href="../index.html" tabindex="-1">Online learning and boosting</a></li><li aria-current="page">Weighted majority algorithm</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Weighted majority algorithm</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="ComputerScience/machine-learning/online-learning-and-boosting/weighted-majority-algorithm" data-page-title="Weighted majority algorithm">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="weighted-majority-algorithm">Weighted majority algorithm</h1>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/online-learning-and-boosting/weighted-majority-algorithm/round">
+<h4 class="bp-thmheading" id="round">
+<span class="bp-thmcaption" data-search-exclude>Abbreviation</span><span class="bp-thmtitle">Round of prediction with expert advice</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/MachineLearning/WeightedMajority.lean#L73" aria-label="View Cslib.MachineLearning.WeightedMajority.Round in Lean source" title="View Cslib.MachineLearning.WeightedMajority.Round in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#round" aria-label="Link to Round of prediction with expert advice" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.MachineLearning.WeightedMajority.Round</div>
+<div class="bp-thmcontent">
+<p>A round with <span class="arithmatex">\(n\)</span> experts is a pair <span class="arithmatex">\((a, y)\)</span>, where
+<span class="arithmatex">\(a\)</span> assigns to each expert <span class="arithmatex">\(i \in \{0, \dots, n - 1\}\)</span> its binary advice (true or false) and the
+binary value <span class="arithmatex">\(y\)</span> is the true outcome.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Round (n : ℕ) := (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) × <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a></code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 14</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#expert-mistakes">Mistakes of an expert</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mistake-bound">Mistake bound for the penalty <span class="arithmatex">\(1/2\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mistake-bound-general">Littlestone–Warmuth mistake bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mistake-bound-nat">Mistake bound for the penalty <span class="arithmatex">\(1/2\)</span> in integers</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mistakes">Mistakes of the weighted majority algorithm</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mistakes-append">Mistakes split over concatenated runs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#total-update">Total weight after an update</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#total-update-le">An update never increases the total weight</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#total-update-of-mistake">A mistake costs weight</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#total-weights-mul-le">Total weight bound in terms of mistakes</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#update">Weighted majority update</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#weights">Weights after a run</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#weights-append">Weights over a concatenated run</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#weights-apply">Final weight of an expert</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/online-learning-and-boosting/weighted-majority-algorithm/weight-on">
+<h4 class="bp-thmheading" id="weight-on">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Weight on an answer</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/MachineLearning/WeightedMajority.lean#L76" aria-label="View Cslib.MachineLearning.WeightedMajority.weightOn in Lean source" title="View Cslib.MachineLearning.WeightedMajority.weightOn in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#weight-on" aria-label="Link to Weight on an answer" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.MachineLearning.WeightedMajority.weightOn</div>
+<div class="bp-thmcontent">
+<p>Given weights <span class="arithmatex">\(w_0, \dots, w_{n-1}\)</span> in a field <span class="arithmatex">\(K\)</span>, advice
+<span class="arithmatex">\(a \in \{\mathrm{true}, \mathrm{false}\}^n\)</span> and an answer <span class="arithmatex">\(b \in \{\mathrm{true}, \mathrm{false}\}\)</span>,
+the weight on <span class="arithmatex">\(b\)</span> is <span class="arithmatex">\(\sum_{i : a_i = b} w_i\)</span>, the total weight of the experts advising <span class="arithmatex">\(b\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> weightOn (w : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → K) (advice : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) (b : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) : K :=
+  ∑ i ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.univ#doc" title="Finset.univ">univ</a>.filter (<span class="bp-lean-keyword">fun</span> i =&gt; advice i = b), w i</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#predict">Weighted majority vote</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#total-update">Total weight after an update</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#total-update-le">An update never increases the total weight</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#total-update-of-mistake">A mistake costs weight</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/online-learning-and-boosting/weighted-majority-algorithm/predict">
+<h4 class="bp-thmheading" id="predict">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Weighted majority vote</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/MachineLearning/WeightedMajority.lean#L80" aria-label="View Cslib.MachineLearning.WeightedMajority.predict in Lean source" title="View Cslib.MachineLearning.WeightedMajority.predict in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#predict" aria-label="Link to Weighted majority vote" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.MachineLearning.WeightedMajority.predict</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a field with a linear order. Given weights in <span class="arithmatex">\(K\)</span> on
+<span class="arithmatex">\(n\)</span> experts and a binary advice (true or false) from each expert, the weighted majority vote is
+true when the total weight of the experts advising false is at most the total weight of the
+experts advising true, and false otherwise. In particular ties go to true.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> predict (w : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → K) (advice : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a>) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool#doc" title="Bool">Bool</a> :=
+  <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Decidable.decide#doc" title="Decidable.decide">decide</a> (<a class="bp-lean-ref" href="#weight-on" data-lean-name="Cslib.MachineLearning.WeightedMajority.weightOn">weightOn</a> w advice <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.false#doc" title="Bool.false">false</a> ≤ <a class="bp-lean-ref" href="#weight-on" data-lean-name="Cslib.MachineLearning.WeightedMajority.weightOn">weightOn</a> w advice <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bool.true#doc" title="Bool.true">true</a>)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.weightOn">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> weightOn (w : Fin n → K) (advice : Fin n → Bool) (b : Bool) : K :=
+  ∑ i ∈ univ.filter (<span class="bp-lean-keyword">fun</span> i =&gt; advice i = b), w i</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:76</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#weight-on">Weight on an answer</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mistakes">Mistakes of the weighted majority algorithm</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mistakes-append">Mistakes split over concatenated runs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#total-update-of-mistake">A mistake costs weight</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#total-weights-mul-le">Total weight bound in terms of mistakes</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/online-learning-and-boosting/weighted-majority-algorithm/update">
+<h4 class="bp-thmheading" id="update">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Weighted majority update</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/MachineLearning/WeightedMajority.lean#L85" aria-label="View Cslib.MachineLearning.WeightedMajority.update in Lean source" title="View Cslib.MachineLearning.WeightedMajority.update in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#update" aria-label="Link to Weighted majority update" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.MachineLearning.WeightedMajority.update</div>
+<div class="bp-thmcontent">
+<p>Given a penalty factor <span class="arithmatex">\(\beta\)</span> and weights <span class="arithmatex">\(w_0, \dots, w_{n-1}\)</span>
+in a field <span class="arithmatex">\(K\)</span>, and a round with advice <span class="arithmatex">\(a \in \{\mathrm{true}, \mathrm{false}\}^n\)</span> and outcome
+<span class="arithmatex">\(y\)</span>, the updated weight of expert <span class="arithmatex">\(i\)</span> is <span class="arithmatex">\(w_i\)</span> if <span class="arithmatex">\(a_i = y\)</span> and <span class="arithmatex">\(\beta w_i\)</span> otherwise: after the
+outcome is revealed, every expert that was wrong has its weight multiplied by <span class="arithmatex">\(\beta\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> update (β : K) (w : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → K) (r : <a class="bp-lean-ref" href="#round" data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">Round</a> n) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → K :=
+  <span class="bp-lean-keyword">fun</span> i =&gt; <span class="bp-lean-keyword">if</span> r.1 i = r.2 <span class="bp-lean-keyword">then</span> w i <span class="bp-lean-keyword">else</span> β * w i</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Round (n : ℕ) := (Fin n → Bool) × Bool</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:73</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 10</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#round">Round of prediction with expert advice</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mistake-bound-general">Littlestone–Warmuth mistake bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mistakes">Mistakes of the weighted majority algorithm</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mistakes-append">Mistakes split over concatenated runs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#total-update">Total weight after an update</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#total-update-le">An update never increases the total weight</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#total-update-of-mistake">A mistake costs weight</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#total-weights-mul-le">Total weight bound in terms of mistakes</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#weights">Weights after a run</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#weights-append">Weights over a concatenated run</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#weights-apply">Final weight of an expert</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/online-learning-and-boosting/weighted-majority-algorithm/weights">
+<h4 class="bp-thmheading" id="weights">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Weights after a run</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/MachineLearning/WeightedMajority.lean#L89" aria-label="View Cslib.MachineLearning.WeightedMajority.weights in Lean source" title="View Cslib.MachineLearning.WeightedMajority.weights in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#weights" aria-label="Link to Weights after a run" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.MachineLearning.WeightedMajority.weights</div>
+<div class="bp-thmcontent">
+<p>For a penalty factor <span class="arithmatex">\(\beta\)</span> in a field <span class="arithmatex">\(K\)</span>, the weights after a
+sequence of rounds <span class="arithmatex">\(r_1, \dots, r_k\)</span> starting from weights <span class="arithmatex">\(w\)</span> in <span class="arithmatex">\(K\)</span> are obtained by applying the
+weighted majority update with penalty <span class="arithmatex">\(\beta\)</span> for <span class="arithmatex">\(r_1\)</span>, then for <span class="arithmatex">\(r_2\)</span>, and so on up to <span class="arithmatex">\(r_k\)</span>;
+for the empty sequence they are <span class="arithmatex">\(w\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> weights (β : K) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#round" data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">Round</a> n) → (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → K) → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → K
+  | [], w =&gt; w
+  | r :: rs, w =&gt; weights β rs (<a class="bp-lean-ref" href="#update" data-lean-name="Cslib.MachineLearning.WeightedMajority.update">update</a> β w r)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Round (n : ℕ) := (Fin n → Bool) × Bool</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:73</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.update">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> update (β : K) (w : Fin n → K) (r : Round n) : Fin n → K :=
+  <span class="bp-lean-keyword">fun</span> i =&gt; <span class="bp-lean-keyword">if</span> r.1 i = r.2 <span class="bp-lean-keyword">then</span> w i <span class="bp-lean-keyword">else</span> β * w i</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:85</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#round">Round of prediction with expert advice</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#update">Weighted majority update</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mistake-bound-general">Littlestone–Warmuth mistake bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mistakes-append">Mistakes split over concatenated runs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#total-weights-mul-le">Total weight bound in terms of mistakes</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#weights-append">Weights over a concatenated run</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#weights-apply">Final weight of an expert</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/online-learning-and-boosting/weighted-majority-algorithm/mistakes">
+<h4 class="bp-thmheading" id="mistakes">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Mistakes of the weighted majority algorithm</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/MachineLearning/WeightedMajority.lean#L94" aria-label="View Cslib.MachineLearning.WeightedMajority.mistakes in Lean source" title="View Cslib.MachineLearning.WeightedMajority.mistakes in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#mistakes" aria-label="Link to Mistakes of the weighted majority algorithm" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.MachineLearning.WeightedMajority.mistakes</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a field with a linear order, let
+<span class="arithmatex">\(\beta \in K\)</span> be a penalty and let <span class="arithmatex">\(w\)</span> be initial weights in <span class="arithmatex">\(K\)</span> on <span class="arithmatex">\(n\)</span> experts. The weighted
+majority algorithm processes a list of rounds in order: in each round it predicts the weighted
+majority vote of the experts' advice under the current weights, and then multiplies the weight of
+every expert whose advice differed from the true outcome by <span class="arithmatex">\(\beta\)</span>. Its number of mistakes is the
+number of rounds in which its prediction differs from the true outcome.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> mistakes (β : K) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#round" data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">Round</a> n) → (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → K) → ℕ
+  | [], _ =&gt; 0
+  | r :: rs, w =&gt; (<span class="bp-lean-keyword">if</span> <a class="bp-lean-ref" href="#predict" data-lean-name="Cslib.MachineLearning.WeightedMajority.predict">predict</a> w r.1 = r.2 <span class="bp-lean-keyword">then</span> 0 <span class="bp-lean-keyword">else</span> 1) + mistakes β rs (<a class="bp-lean-ref" href="#update" data-lean-name="Cslib.MachineLearning.WeightedMajority.update">update</a> β w r)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Round (n : ℕ) := (Fin n → Bool) × Bool</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:73</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.predict">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> predict (w : Fin n → K) (advice : Fin n → Bool) : Bool :=
+  decide (weightOn w advice false ≤ weightOn w advice true)</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:80</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.update">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> update (β : K) (w : Fin n → K) (r : Round n) : Fin n → K :=
+  <span class="bp-lean-keyword">fun</span> i =&gt; <span class="bp-lean-keyword">if</span> r.1 i = r.2 <span class="bp-lean-keyword">then</span> w i <span class="bp-lean-keyword">else</span> β * w i</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:85</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#round">Round of prediction with expert advice</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#predict">Weighted majority vote</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#update">Weighted majority update</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mistake-bound">Mistake bound for the penalty <span class="arithmatex">\(1/2\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mistake-bound-general">Littlestone–Warmuth mistake bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mistake-bound-nat">Mistake bound for the penalty <span class="arithmatex">\(1/2\)</span> in integers</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mistakes-append">Mistakes split over concatenated runs</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#total-weights-mul-le">Total weight bound in terms of mistakes</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/online-learning-and-boosting/weighted-majority-algorithm/expert-mistakes">
+<h4 class="bp-thmheading" id="expert-mistakes">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Mistakes of an expert</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/MachineLearning/WeightedMajority.lean#L99" aria-label="View Cslib.MachineLearning.WeightedMajority.expertMistakes in Lean source" title="View Cslib.MachineLearning.WeightedMajority.expertMistakes in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#expert-mistakes" aria-label="Link to Mistakes of an expert" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.MachineLearning.WeightedMajority.expertMistakes</div>
+<div class="bp-thmcontent">
+<p>Given a list of rounds with <span class="arithmatex">\(n\)</span> experts and an expert <span class="arithmatex">\(i\)</span>, the
+number of mistakes of <span class="arithmatex">\(i\)</span> is the number of rounds in the list in which the advice of expert <span class="arithmatex">\(i\)</span>
+differs from the true outcome.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> expertMistakes (i : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n) (rs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#round" data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">Round</a> n)) : ℕ := (rs.filter <span class="bp-lean-keyword">fun</span> r =&gt; r.1 i ≠ r.2).length</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Round (n : ℕ) := (Fin n → Bool) × Bool</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:73</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#round">Round of prediction with expert advice</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mistake-bound">Mistake bound for the penalty <span class="arithmatex">\(1/2\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mistake-bound-general">Littlestone–Warmuth mistake bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mistake-bound-nat">Mistake bound for the penalty <span class="arithmatex">\(1/2\)</span> in integers</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#weights-apply">Final weight of an expert</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/online-learning-and-boosting/weighted-majority-algorithm/total">
+<h4 class="bp-thmheading" id="total">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Total weight</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/MachineLearning/WeightedMajority.lean#L102" aria-label="View Cslib.MachineLearning.WeightedMajority.total in Lean source" title="View Cslib.MachineLearning.WeightedMajority.total in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#total" aria-label="Link to Total weight" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.MachineLearning.WeightedMajority.total</div>
+<div class="bp-thmcontent">
+<p>The total weight of weights <span class="arithmatex">\(w_0, \dots, w_{n-1}\)</span> in a field <span class="arithmatex">\(K\)</span> is
+<span class="arithmatex">\(\sum_{i &lt; n} w_i\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> total (w : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → K) : K := ∑ i, w i</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mistake-bound-general">Littlestone–Warmuth mistake bound</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#total-update">Total weight after an update</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#total-update-le">An update never increases the total weight</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#total-update-of-mistake">A mistake costs weight</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#total-weights-mul-le">Total weight bound in terms of mistakes</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/online-learning-and-boosting/weighted-majority-algorithm/total-update">
+<h4 class="bp-thmheading" id="total-update">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Total weight after an update</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/MachineLearning/WeightedMajority.lean#L112" aria-label="View Cslib.MachineLearning.WeightedMajority.total_update in Lean source" title="View Cslib.MachineLearning.WeightedMajority.total_update in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#total-update" aria-label="Link to Total weight after an update" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.MachineLearning.WeightedMajority.total_update</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\beta\)</span> be an element of a linearly ordered field <span class="arithmatex">\(K\)</span>,
+let <span class="arithmatex">\(w_0, \dots, w_{n-1} \in K\)</span> be weights on <span class="arithmatex">\(n\)</span> experts, and let <span class="arithmatex">\(r\)</span> be a round with advice
+<span class="arithmatex">\(a \in \{\mathrm{true}, \mathrm{false}\}^n\)</span> and outcome <span class="arithmatex">\(y\)</span>. If <span class="arithmatex">\(w'\)</span> are the weights after the
+update with penalty <span class="arithmatex">\(\beta\)</span> on <span class="arithmatex">\(r\)</span>, then
+<span class="arithmatex">\(\sum_{i &lt; n} w'_i = \sum_{i &lt; n} w_i - (1 - \beta) \sum_{i : a_i = \lnot y} w_i\)</span>: the experts
+that advised wrongly keep a <span class="arithmatex">\(\beta\)</span> fraction of their weight.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> total_update (β : K) (w : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → K) (r : <a class="bp-lean-ref" href="#round" data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">Round</a> n) :
+    <a class="bp-lean-ref" href="#total" data-lean-name="Cslib.MachineLearning.WeightedMajority.total">total</a> (<a class="bp-lean-ref" href="#update" data-lean-name="Cslib.MachineLearning.WeightedMajority.update">update</a> β w r) = <a class="bp-lean-ref" href="#total" data-lean-name="Cslib.MachineLearning.WeightedMajority.total">total</a> w - (1 - β) * <a class="bp-lean-ref" href="#weight-on" data-lean-name="Cslib.MachineLearning.WeightedMajority.weightOn">weightOn</a> w r.1 (!r.2)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Round (n : ℕ) := (Fin n → Bool) × Bool</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:73</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.total">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> total (w : Fin n → K) : K := ∑ i, w i</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:102</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.update">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> update (β : K) (w : Fin n → K) (r : Round n) : Fin n → K :=
+  <span class="bp-lean-keyword">fun</span> i =&gt; <span class="bp-lean-keyword">if</span> r.1 i = r.2 <span class="bp-lean-keyword">then</span> w i <span class="bp-lean-keyword">else</span> β * w i</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:85</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.weightOn">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> weightOn (w : Fin n → K) (advice : Fin n → Bool) (b : Bool) : K :=
+  ∑ i ∈ univ.filter (<span class="bp-lean-keyword">fun</span> i =&gt; advice i = b), w i</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:76</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#round">Round of prediction with expert advice</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#total">Total weight</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#update">Weighted majority update</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#weight-on">Weight on an answer</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#total-update-le">An update never increases the total weight</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#total-update-of-mistake">A mistake costs weight</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/online-learning-and-boosting/weighted-majority-algorithm/total-update-of-mistake">
+<h4 class="bp-thmheading" id="total-update-of-mistake">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">A mistake costs weight</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/MachineLearning/WeightedMajority.lean#L134" aria-label="View Cslib.MachineLearning.WeightedMajority.total_update_of_mistake in Lean source" title="View Cslib.MachineLearning.WeightedMajority.total_update_of_mistake in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#total-update-of-mistake" aria-label="Link to A mistake costs weight" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.MachineLearning.WeightedMajority.total_update_of_mistake</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field, let <span class="arithmatex">\(\beta \in K\)</span> with
+<span class="arithmatex">\(\beta \le 1\)</span>, let <span class="arithmatex">\(w\)</span> be weights in <span class="arithmatex">\(K\)</span> on <span class="arithmatex">\(n\)</span> experts, and let <span class="arithmatex">\(r\)</span> be a round on which the
+weighted majority vote under <span class="arithmatex">\(w\)</span> differs from the true outcome. If <span class="arithmatex">\(W\)</span> is the total weight of <span class="arithmatex">\(w\)</span>
+and <span class="arithmatex">\(W'\)</span> is the total weight after updating <span class="arithmatex">\(w\)</span> on <span class="arithmatex">\(r\)</span> with penalty <span class="arithmatex">\(\beta\)</span>, then
+<span class="arithmatex">\(2 W' \le (1 + \beta) W\)</span>.</p>
+<p>At least half of the weight was on the wrong side, and that side keeps only a <span class="arithmatex">\(\beta\)</span> fraction of
+its weight.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> total_update_of_mistake {β : K} (hβ1 : β ≤ 1) {w : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → K} {r : <a class="bp-lean-ref" href="#round" data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">Round</a> n}
+    (h : <a class="bp-lean-ref" href="#predict" data-lean-name="Cslib.MachineLearning.WeightedMajority.predict">predict</a> w r.1 ≠ r.2) : 2 * <a class="bp-lean-ref" href="#total" data-lean-name="Cslib.MachineLearning.WeightedMajority.total">total</a> (<a class="bp-lean-ref" href="#update" data-lean-name="Cslib.MachineLearning.WeightedMajority.update">update</a> β w r) ≤ (1 + β) * <a class="bp-lean-ref" href="#total" data-lean-name="Cslib.MachineLearning.WeightedMajority.total">total</a> w</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Round (n : ℕ) := (Fin n → Bool) × Bool</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:73</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.predict">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> predict (w : Fin n → K) (advice : Fin n → Bool) : Bool :=
+  decide (weightOn w advice false ≤ weightOn w advice true)</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:80</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.total">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> total (w : Fin n → K) : K := ∑ i, w i</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:102</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.update">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> update (β : K) (w : Fin n → K) (r : Round n) : Fin n → K :=
+  <span class="bp-lean-keyword">fun</span> i =&gt; <span class="bp-lean-keyword">if</span> r.1 i = r.2 <span class="bp-lean-keyword">then</span> w i <span class="bp-lean-keyword">else</span> β * w i</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:85</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 6 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#round">Round of prediction with expert advice</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#predict">Weighted majority vote</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#total">Total weight</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#update">Weighted majority update</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#total-update">Total weight after an update</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#weight-on">Weight on an answer</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#total-weights-mul-le">Total weight bound in terms of mistakes</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/online-learning-and-boosting/weighted-majority-algorithm/total-update-le">
+<h4 class="bp-thmheading" id="total-update-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">An update never increases the total weight</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/MachineLearning/WeightedMajority.lean#L152" aria-label="View Cslib.MachineLearning.WeightedMajority.total_update_le in Lean source" title="View Cslib.MachineLearning.WeightedMajority.total_update_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#total-update-le" aria-label="Link to An update never increases the total weight" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.MachineLearning.WeightedMajority.total_update_le</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field, let
+<span class="arithmatex">\(\beta \in K\)</span> with <span class="arithmatex">\(\beta \le 1\)</span>, and let <span class="arithmatex">\(w\)</span> be nonnegative weights in <span class="arithmatex">\(K\)</span> on <span class="arithmatex">\(n\)</span> experts. For
+every round <span class="arithmatex">\(r\)</span>, the total weight after updating <span class="arithmatex">\(w\)</span> on <span class="arithmatex">\(r\)</span> with penalty <span class="arithmatex">\(\beta\)</span> is at most the
+total weight of <span class="arithmatex">\(w\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> total_update_le {β : K} (hβ1 : β ≤ 1) {w : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → K} (hw : ∀ i, 0 ≤ w i)
+    (r : <a class="bp-lean-ref" href="#round" data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">Round</a> n) : <a class="bp-lean-ref" href="#total" data-lean-name="Cslib.MachineLearning.WeightedMajority.total">total</a> (<a class="bp-lean-ref" href="#update" data-lean-name="Cslib.MachineLearning.WeightedMajority.update">update</a> β w r) ≤ <a class="bp-lean-ref" href="#total" data-lean-name="Cslib.MachineLearning.WeightedMajority.total">total</a> w</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Round (n : ℕ) := (Fin n → Bool) × Bool</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:73</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.total">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> total (w : Fin n → K) : K := ∑ i, w i</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:102</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.update">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> update (β : K) (w : Fin n → K) (r : Round n) : Fin n → K :=
+  <span class="bp-lean-keyword">fun</span> i =&gt; <span class="bp-lean-keyword">if</span> r.1 i = r.2 <span class="bp-lean-keyword">then</span> w i <span class="bp-lean-keyword">else</span> β * w i</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:85</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#round">Round of prediction with expert advice</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#total">Total weight</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#update">Weighted majority update</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#total-update">Total weight after an update</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#weight-on">Weight on an answer</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#total-weights-mul-le">Total weight bound in terms of mistakes</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/online-learning-and-boosting/weighted-majority-algorithm/total-weights-mul-le">
+<h4 class="bp-thmheading" id="total-weights-mul-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Total weight bound in terms of mistakes</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/MachineLearning/WeightedMajority.lean#L167" aria-label="View Cslib.MachineLearning.WeightedMajority.total_weights_mul_le in Lean source" title="View Cslib.MachineLearning.WeightedMajority.total_weights_mul_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#total-weights-mul-le" aria-label="Link to Total weight bound in terms of mistakes" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.MachineLearning.WeightedMajority.total_weights_mul_le</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(0 \le \beta \le 1\)</span> in a linearly ordered
+field <span class="arithmatex">\(K\)</span>, let <span class="arithmatex">\(w\)</span> be nonnegative weights in <span class="arithmatex">\(K\)</span> on <span class="arithmatex">\(n\)</span> experts, and let <span class="arithmatex">\(\rho\)</span> be a sequence of
+rounds. Let <span class="arithmatex">\(M\)</span> be the number of mistakes the weighted majority algorithm with penalty <span class="arithmatex">\(\beta\)</span>
+makes on <span class="arithmatex">\(\rho\)</span> starting from <span class="arithmatex">\(w\)</span>, and let <span class="arithmatex">\(W\)</span> and <span class="arithmatex">\(W'\)</span> be the total weights before and after
+<span class="arithmatex">\(\rho\)</span>. Then <span class="arithmatex">\(W' \cdot 2^M \le (1 + \beta)^M \cdot W\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> total_weights_mul_le {β : K} (hβ0 : 0 ≤ β) (hβ1 : β ≤ 1) :
+    ∀ (rs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#round" data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">Round</a> n)) (w : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → K), (∀ i, 0 ≤ w i) →
+    <a class="bp-lean-ref" href="#total" data-lean-name="Cslib.MachineLearning.WeightedMajority.total">total</a> (<a class="bp-lean-ref" href="#weights" data-lean-name="Cslib.MachineLearning.WeightedMajority.weights">weights</a> β rs w) * 2 ^ <a class="bp-lean-ref" href="#mistakes" data-lean-name="Cslib.MachineLearning.WeightedMajority.mistakes">mistakes</a> β rs w ≤ (1 + β) ^ <a class="bp-lean-ref" href="#mistakes" data-lean-name="Cslib.MachineLearning.WeightedMajority.mistakes">mistakes</a> β rs w * <a class="bp-lean-ref" href="#total" data-lean-name="Cslib.MachineLearning.WeightedMajority.total">total</a> w</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Round (n : ℕ) := (Fin n → Bool) × Bool</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:73</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.total">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> total (w : Fin n → K) : K := ∑ i, w i</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:102</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.weights">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> weights (β : K) : List (Round n) → (Fin n → K) → Fin n → K
+  | [], w =&gt; w
+  | r :: rs, w =&gt; weights β rs (update β w r)</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:89</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.mistakes">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> mistakes (β : K) : List (Round n) → (Fin n → K) → ℕ
+  | [], _ =&gt; 0
+  | r :: rs, w =&gt; (<span class="bp-lean-keyword">if</span> predict w r.1 = r.2 <span class="bp-lean-keyword">then</span> 0 <span class="bp-lean-keyword">else</span> 1) + mistakes β rs (update β w r)</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:94</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 8 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#round">Round of prediction with expert advice</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mistakes">Mistakes of the weighted majority algorithm</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#total">Total weight</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#weights">Weights after a run</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#predict">Weighted majority vote</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#total-update-le">An update never increases the total weight</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#total-update-of-mistake">A mistake costs weight</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#update">Weighted majority update</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mistake-bound-general">Littlestone–Warmuth mistake bound</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/online-learning-and-boosting/weighted-majority-algorithm/weights-apply">
+<h4 class="bp-thmheading" id="weights-apply">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Final weight of an expert</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/MachineLearning/WeightedMajority.lean#L192" aria-label="View Cslib.MachineLearning.WeightedMajority.weights_apply in Lean source" title="View Cslib.MachineLearning.WeightedMajority.weights_apply in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#weights-apply" aria-label="Link to Final weight of an expert" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.MachineLearning.WeightedMajority.weights_apply</div>
+<div class="bp-thmcontent">
+<p>For a penalty factor <span class="arithmatex">\(\beta\)</span> in a field <span class="arithmatex">\(K\)</span>, initial weights
+<span class="arithmatex">\(w_0, \dots, w_{n-1} \in K\)</span> and a sequence of rounds, the weight of expert <span class="arithmatex">\(i\)</span> after these rounds
+is <span class="arithmatex">\(w_i \beta^{m_i}\)</span>, where <span class="arithmatex">\(m_i\)</span> is the number of rounds in which the advice of expert <span class="arithmatex">\(i\)</span>
+differs from the outcome.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> weights_apply (β : K) : ∀ (rs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#round" data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">Round</a> n)) (w : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → K) (i : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n),
+    <a class="bp-lean-ref" href="#weights" data-lean-name="Cslib.MachineLearning.WeightedMajority.weights">weights</a> β rs w i = w i * β ^ <a class="bp-lean-ref" href="#expert-mistakes" data-lean-name="Cslib.MachineLearning.WeightedMajority.expertMistakes">expertMistakes</a> i rs</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Round (n : ℕ) := (Fin n → Bool) × Bool</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:73</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.weights">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> weights (β : K) : List (Round n) → (Fin n → K) → Fin n → K
+  | [], w =&gt; w
+  | r :: rs, w =&gt; weights β rs (update β w r)</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:89</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.expertMistakes">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> expertMistakes (i : Fin n) (rs : List (Round n)) : ℕ := (rs.filter <span class="bp-lean-keyword">fun</span> r =&gt; r.1 i ≠ r.2).length</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:99</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#round">Round of prediction with expert advice</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#expert-mistakes">Mistakes of an expert</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#weights">Weights after a run</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#update">Weighted majority update</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mistake-bound-general">Littlestone–Warmuth mistake bound</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/online-learning-and-boosting/weighted-majority-algorithm/mistake-bound-general">
+<h4 class="bp-thmheading" id="mistake-bound-general">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Littlestone–Warmuth mistake bound</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/MachineLearning/WeightedMajority.lean#L212" aria-label="View Cslib.MachineLearning.WeightedMajority.mistake_bound_general in Lean source" title="View Cslib.MachineLearning.WeightedMajority.mistake_bound_general in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#mistake-bound-general" aria-label="Link to Littlestone–Warmuth mistake bound" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.MachineLearning.WeightedMajority.mistake_bound_general</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a linearly ordered field and let
+<span class="arithmatex">\(\beta \in K\)</span> with <span class="arithmatex">\(0 \le \beta \le 1\)</span>. Run the weighted majority algorithm with penalty <span class="arithmatex">\(\beta\)</span>
+on a list of rounds with <span class="arithmatex">\(n\)</span> experts, starting from weight <span class="arithmatex">\(1\)</span> on every expert, and let <span class="arithmatex">\(M\)</span> be its
+number of mistakes. Then every expert <span class="arithmatex">\(i\)</span>, with <span class="arithmatex">\(m\)</span> mistakes on these rounds, satisfies
+<span class="arithmatex">\(\beta^m 2^M \le n (1 + \beta)^M\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> mistake_bound_general {β : K} (hβ0 : 0 ≤ β) (hβ1 : β ≤ 1) (rs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#round" data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">Round</a> n))
+    (i : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n) :
+    β ^ <a class="bp-lean-ref" href="#expert-mistakes" data-lean-name="Cslib.MachineLearning.WeightedMajority.expertMistakes">expertMistakes</a> i rs * 2 ^ <a class="bp-lean-ref" href="#mistakes" data-lean-name="Cslib.MachineLearning.WeightedMajority.mistakes">mistakes</a> β rs (<span class="bp-lean-keyword">fun</span> _ =&gt; 1) ≤
+      n * (1 + β) ^ <a class="bp-lean-ref" href="#mistakes" data-lean-name="Cslib.MachineLearning.WeightedMajority.mistakes">mistakes</a> β rs (<span class="bp-lean-keyword">fun</span> _ =&gt; 1)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Round (n : ℕ) := (Fin n → Bool) × Bool</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:73</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.expertMistakes">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> expertMistakes (i : Fin n) (rs : List (Round n)) : ℕ := (rs.filter <span class="bp-lean-keyword">fun</span> r =&gt; r.1 i ≠ r.2).length</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:99</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.mistakes">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> mistakes (β : K) : List (Round n) → (Fin n → K) → ℕ
+  | [], _ =&gt; 0
+  | r :: rs, w =&gt; (<span class="bp-lean-keyword">if</span> predict w r.1 = r.2 <span class="bp-lean-keyword">then</span> 0 <span class="bp-lean-keyword">else</span> 1) + mistakes β rs (update β w r)</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:94</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 8 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#round">Round of prediction with expert advice</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#expert-mistakes">Mistakes of an expert</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mistakes">Mistakes of the weighted majority algorithm</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#total">Total weight</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#total-weights-mul-le">Total weight bound in terms of mistakes</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#update">Weighted majority update</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#weights">Weights after a run</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#weights-apply">Final weight of an expert</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mistake-bound">Mistake bound for the penalty <span class="arithmatex">\(1/2\)</span></a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/online-learning-and-boosting/weighted-majority-algorithm/mistake-bound">
+<h4 class="bp-thmheading" id="mistake-bound">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Mistake bound for the penalty <span class="arithmatex">\(1/2\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/MachineLearning/WeightedMajority.lean#L232" aria-label="View Cslib.MachineLearning.WeightedMajority.mistake_bound in Lean source" title="View Cslib.MachineLearning.WeightedMajority.mistake_bound in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#mistake-bound" aria-label="Link to Mistake bound for the penalty 1/2" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.MachineLearning.WeightedMajority.mistake_bound</div>
+<div class="bp-thmcontent">
+<p>Run the weighted majority algorithm with rational
+weights and penalty <span class="arithmatex">\(1/2\)</span> on a list of rounds with <span class="arithmatex">\(n\)</span> experts, starting from weight <span class="arithmatex">\(1\)</span> on every
+expert, and let <span class="arithmatex">\(M\)</span> be its number of mistakes. Then every expert <span class="arithmatex">\(i\)</span>, with <span class="arithmatex">\(m\)</span> mistakes on these
+rounds, satisfies <span class="arithmatex">\((4/3)^M \le n \cdot 2^m\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> mistake_bound (rs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#round" data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">Round</a> n)) (i : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n) :
+    (4 / 3 : ℚ) ^ <a class="bp-lean-ref" href="#mistakes" data-lean-name="Cslib.MachineLearning.WeightedMajority.mistakes">mistakes</a> (1 / 2 : ℚ) rs (<span class="bp-lean-keyword">fun</span> _ =&gt; 1) ≤ n * 2 ^ <a class="bp-lean-ref" href="#expert-mistakes" data-lean-name="Cslib.MachineLearning.WeightedMajority.expertMistakes">expertMistakes</a> i rs</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Round (n : ℕ) := (Fin n → Bool) × Bool</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:73</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.mistakes">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> mistakes (β : K) : List (Round n) → (Fin n → K) → ℕ
+  | [], _ =&gt; 0
+  | r :: rs, w =&gt; (<span class="bp-lean-keyword">if</span> predict w r.1 = r.2 <span class="bp-lean-keyword">then</span> 0 <span class="bp-lean-keyword">else</span> 1) + mistakes β rs (update β w r)</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:94</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.expertMistakes">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> expertMistakes (i : Fin n) (rs : List (Round n)) : ℕ := (rs.filter <span class="bp-lean-keyword">fun</span> r =&gt; r.1 i ≠ r.2).length</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:99</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#round">Round of prediction with expert advice</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#expert-mistakes">Mistakes of an expert</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mistakes">Mistakes of the weighted majority algorithm</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mistake-bound-general">Littlestone–Warmuth mistake bound</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mistake-bound-nat">Mistake bound for the penalty <span class="arithmatex">\(1/2\)</span> in integers</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/online-learning-and-boosting/weighted-majority-algorithm/mistake-bound-nat">
+<h4 class="bp-thmheading" id="mistake-bound-nat">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Mistake bound for the penalty <span class="arithmatex">\(1/2\)</span> in integers</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/MachineLearning/WeightedMajority.lean#L253" aria-label="View Cslib.MachineLearning.WeightedMajority.mistake_bound_nat in Lean source" title="View Cslib.MachineLearning.WeightedMajority.mistake_bound_nat in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#mistake-bound-nat" aria-label="Link to Mistake bound for the penalty 1/2 in integers" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.MachineLearning.WeightedMajority.mistake_bound_nat</div>
+<div class="bp-thmcontent">
+<p>Run the weighted majority algorithm
+with rational weights and penalty <span class="arithmatex">\(1/2\)</span> on a list of rounds with <span class="arithmatex">\(n\)</span> experts, starting from
+weight <span class="arithmatex">\(1\)</span> on every expert, and let <span class="arithmatex">\(M\)</span> be its number of mistakes. Then every expert <span class="arithmatex">\(i\)</span>, with
+<span class="arithmatex">\(m\)</span> mistakes on these rounds, satisfies <span class="arithmatex">\(4^M \le n \cdot 3^M \cdot 2^m\)</span> in the natural numbers.</p>
+<p>Taking logarithms, <span class="arithmatex">\(M \le (m + \log_2 n) / \log_2 (4/3) \approx 2.41 (m + \log_2 n)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> mistake_bound_nat (rs : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#round" data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">Round</a> n)) (i : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n) :
+    4 ^ <a class="bp-lean-ref" href="#mistakes" data-lean-name="Cslib.MachineLearning.WeightedMajority.mistakes">mistakes</a> (1 / 2 : ℚ) rs (<span class="bp-lean-keyword">fun</span> _ =&gt; 1) ≤
+      n * 3 ^ <a class="bp-lean-ref" href="#mistakes" data-lean-name="Cslib.MachineLearning.WeightedMajority.mistakes">mistakes</a> (1 / 2 : ℚ) rs (<span class="bp-lean-keyword">fun</span> _ =&gt; 1) * 2 ^ <a class="bp-lean-ref" href="#expert-mistakes" data-lean-name="Cslib.MachineLearning.WeightedMajority.expertMistakes">expertMistakes</a> i rs</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Round (n : ℕ) := (Fin n → Bool) × Bool</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:73</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.mistakes">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> mistakes (β : K) : List (Round n) → (Fin n → K) → ℕ
+  | [], _ =&gt; 0
+  | r :: rs, w =&gt; (<span class="bp-lean-keyword">if</span> predict w r.1 = r.2 <span class="bp-lean-keyword">then</span> 0 <span class="bp-lean-keyword">else</span> 1) + mistakes β rs (update β w r)</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:94</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.expertMistakes">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> expertMistakes (i : Fin n) (rs : List (Round n)) : ℕ := (rs.filter <span class="bp-lean-keyword">fun</span> r =&gt; r.1 i ≠ r.2).length</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:99</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#round">Round of prediction with expert advice</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#expert-mistakes">Mistakes of an expert</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mistakes">Mistakes of the weighted majority algorithm</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#mistake-bound">Mistake bound for the penalty <span class="arithmatex">\(1/2\)</span></a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/online-learning-and-boosting/weighted-majority-algorithm/weights-append">
+<h4 class="bp-thmheading" id="weights-append">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Weights over a concatenated run</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/MachineLearning/WeightedMajority.lean#L266" aria-label="View Cslib.MachineLearning.WeightedMajority.weights_append in Lean source" title="View Cslib.MachineLearning.WeightedMajority.weights_append in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#weights-append" aria-label="Link to Weights over a concatenated run" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.MachineLearning.WeightedMajority.weights_append</div>
+<div class="bp-thmcontent">
+<p>For a penalty factor <span class="arithmatex">\(\beta\)</span> in a field <span class="arithmatex">\(K\)</span>, initial
+weights <span class="arithmatex">\(w\)</span> in <span class="arithmatex">\(K\)</span> and sequences of rounds <span class="arithmatex">\(\rho\)</span> and <span class="arithmatex">\(\rho'\)</span>, the weights after running <span class="arithmatex">\(\rho\)</span>
+followed by <span class="arithmatex">\(\rho'\)</span> from <span class="arithmatex">\(w\)</span> equal the weights after running <span class="arithmatex">\(\rho'\)</span> from the weights obtained by
+running <span class="arithmatex">\(\rho\)</span> from <span class="arithmatex">\(w\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> weights_append (β : K) : ∀ (rs rs&#x27; : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#round" data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">Round</a> n)) (w : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → K),
+    <a class="bp-lean-ref" href="#weights" data-lean-name="Cslib.MachineLearning.WeightedMajority.weights">weights</a> β (rs ++ rs&#x27;) w = <a class="bp-lean-ref" href="#weights" data-lean-name="Cslib.MachineLearning.WeightedMajority.weights">weights</a> β rs&#x27; (<a class="bp-lean-ref" href="#weights" data-lean-name="Cslib.MachineLearning.WeightedMajority.weights">weights</a> β rs w)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Round (n : ℕ) := (Fin n → Bool) × Bool</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:73</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.weights">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> weights (β : K) : List (Round n) → (Fin n → K) → Fin n → K
+  | [], w =&gt; w
+  | r :: rs, w =&gt; weights β rs (update β w r)</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:89</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#round">Round of prediction with expert advice</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#weights">Weights after a run</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#update">Weighted majority update</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/online-learning-and-boosting/weighted-majority-algorithm/mistakes-append">
+<h4 class="bp-thmheading" id="mistakes-append">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Mistakes split over concatenated runs</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/5fc979ddeb0da987ad7506ee701dad41d9672aa4/CSLibExt/MachineLearning/WeightedMajority.lean#L274" aria-label="View Cslib.MachineLearning.WeightedMajority.mistakes_append in Lean source" title="View Cslib.MachineLearning.WeightedMajority.mistakes_append in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#mistakes-append" aria-label="Link to Mistakes split over concatenated runs" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.MachineLearning.WeightedMajority.mistakes_append</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(K\)</span> be a field with a linear order, let
+<span class="arithmatex">\(\beta \in K\)</span> be a penalty, let <span class="arithmatex">\(w\)</span> be weights in <span class="arithmatex">\(K\)</span> on <span class="arithmatex">\(n\)</span> experts, and let <span class="arithmatex">\(R\)</span> and <span class="arithmatex">\(R'\)</span> be
+lists of rounds. The number of mistakes of the weighted majority algorithm with penalty <span class="arithmatex">\(\beta\)</span>
+on <span class="arithmatex">\(R\)</span> followed by <span class="arithmatex">\(R'\)</span>, starting from <span class="arithmatex">\(w\)</span>, equals its number of mistakes on <span class="arithmatex">\(R\)</span> starting from
+<span class="arithmatex">\(w\)</span> plus its number of mistakes on <span class="arithmatex">\(R'\)</span> starting from the weights reached after <span class="arithmatex">\(R\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> mistakes_append (β : K) : ∀ (rs rs&#x27; : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=List#doc" title="List">List</a> (<a class="bp-lean-ref" href="#round" data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">Round</a> n)) (w : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → K),
+    <a class="bp-lean-ref" href="#mistakes" data-lean-name="Cslib.MachineLearning.WeightedMajority.mistakes">mistakes</a> β (rs ++ rs&#x27;) w = <a class="bp-lean-ref" href="#mistakes" data-lean-name="Cslib.MachineLearning.WeightedMajority.mistakes">mistakes</a> β rs w + <a class="bp-lean-ref" href="#mistakes" data-lean-name="Cslib.MachineLearning.WeightedMajority.mistakes">mistakes</a> β rs&#x27; (<a class="bp-lean-ref" href="#weights" data-lean-name="Cslib.MachineLearning.WeightedMajority.weights">weights</a> β rs w)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.Round">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> Round (n : ℕ) := (Fin n → Bool) × Bool</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:73</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.mistakes">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> mistakes (β : K) : List (Round n) → (Fin n → K) → ℕ
+  | [], _ =&gt; 0
+  | r :: rs, w =&gt; (<span class="bp-lean-keyword">if</span> predict w r.1 = r.2 <span class="bp-lean-keyword">then</span> 0 <span class="bp-lean-keyword">else</span> 1) + mistakes β rs (update β w r)</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:94</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.WeightedMajority.weights">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> weights (β : K) : List (Round n) → (Fin n → K) → Fin n → K
+  | [], w =&gt; w
+  | r :: rs, w =&gt; weights β rs (update β w r)</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/WeightedMajority.lean:89</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#round">Round of prediction with expert advice</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mistakes">Mistakes of the weighted majority algorithm</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#weights">Weights after a run</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#predict">Weighted majority vote</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#update">Weighted majority update</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>18</strong> fully proved</span></div>
+</div>
+</div>
+<p><link rel="stylesheet" href="../../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../../dependencies/index.json" data-graph-src="../../../../../dependencies/scopes/ComputerScience/machine-learning/online-learning-and-boosting/weighted-majority-algorithm.json" data-page-href="index.html" data-scope-id="ComputerScience/machine-learning/online-learning-and-boosting/weighted-majority-algorithm">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>
