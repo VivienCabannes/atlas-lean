@@ -19,3 +19,4 @@ Classes of matrices defined by their structure or entries: Toeplitz, Hankel and 
 - [The van der Waerden permanent bound](van-der-waerden-permanent.md)
 - [Semiseparable matrices](semiseparable-matrices/README.md)
 - [Generalized Householder matrices](generalized-householder-matrices/README.md)
+- [Real planar rotation matrices](real-planar-rotation-matrices.md)

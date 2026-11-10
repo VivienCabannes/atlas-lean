@@ -5,3 +5,6 @@ Linear algebra of recent methods for adapting and running transformer layers: lo
 - [Low-rank adaptation (LoRA)](low-rank-adaptation.md)
 - [Principal singular values and vectors adaptation (PiSSA)](principal-singular-adaptation.md)
 - [Delta-rule linear attention](delta-rule-linear-attention.md)
+- [Attention logits as bilinear forms](attention-logits-as-bilinear-forms.md)
+- [Rotary position embedding (RoPE)](rotary-position-embedding.md)
+- [Multi-head latent attention (MLA)](multi-head-latent-attention.md)
