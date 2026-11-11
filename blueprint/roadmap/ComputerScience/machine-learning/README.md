@@ -10,3 +10,4 @@ Mathematical theory of learning from data, including the probabilistic modelling
 - [Attention and low-rank adaptation](attention-and-low-rank-adaptation/README.md)
 - [Linear state-space sequence models](linear-state-space-sequence-models/README.md)
 - [Diffusion and flow-based generative models](diffusion-and-flow-generative-models/README.md)
+- [Generalization bounds and concentration](generalization-bounds-and-concentration/README.md)
