@@ -5,6 +5,7 @@
   "version": "3.2.2",
   "base": "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5",
   "bundle": "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js",
+  "integrity": "sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei",
   "load": [
     "ui/safe",
     "[tex]/boldsymbol",
@@ -481,6 +482,9 @@
     if (window.MathJax.version !== undefined) return;
     var script = document.createElement("script");
     script.src = SETTINGS.bundle;
+    // Only the bundle's pinned bytes run; the integrity check needs an anonymous CORS request.
+    script.integrity = SETTINGS.integrity;
+    script.crossOrigin = "anonymous";
     script.async = true;
     script.addEventListener("error", function () { stop("autoform: MathJax could not load; formulas are left as typed"); });
     document.head.appendChild(script);

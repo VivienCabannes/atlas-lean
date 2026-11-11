@@ -897,17 +897,221 @@
   window.AutoformMapLayout = api;
 })();
 
+/* A result's local dependency graph: pure, synchronous functions over the map's relations.json.
+ *
+ * relations.json lists what each result uses by its row in search.json. For one focus, the view is its reduced
+ * ancestry: the transitive reduction of everything the focus uses, directly or not, where a result's depth is its
+ * distance from the focus. Level 1 draws depth 2 and every direct use of the focus; level 2 adds depth 3; level 3 the
+ * whole ancestry. Each level draws at most CAP results, the nearest first. Among what the focus builds on, a hub, a
+ * result used by at least H others (the larger of 10 and the in-degree at the 98th percentile), is a chip, never a card.
+ * A drawn result that no drawn edge reaches hangs from the last drawn result on a shortest reduced path by a "via n"
+ * edge, n counting the results skipped. What the focus feeds into is its direct users, the most used first, up to FEEDS
+ * of them.
+ */
+(function () {
+  "use strict";
+
+  var CAP = 150, FEEDS = 8, HUB_FLOOR = 10, HUB_SHARE = 0.98;
+  // World units, as the map's result cards: columns of cards, the focus's column at x = 0 and its uses to the left.
+  var CARD_W = 200, CARD_H = 64, COLUMN_GAP = 96, ROW_GAP = 20;
+
+  // Each row's uses (statement links first, then links only in a proof) and its users, as flat arrays, and the hub
+  // threshold. A use of no row throws, so no walk below leaves the graph.
+  function graph(payload) {
+    var n = payload.status.length, start = new Int32Array(n + 1), total = 0, row, k;
+    for (row = 0; row < n; row++) { start[row] = total; total += payload.uses[row].length + payload.proof[row].length; }
+    start[n] = total;
+    var to = new Int32Array(total), proof = new Uint8Array(total), indegree = new Int32Array(n);
+    for (row = 0, k = 0; row < n; row++) {
+      [payload.uses[row], payload.proof[row]].forEach(function (list, only) {
+        list.forEach(function (used) {
+          if (!(Number.isInteger(used) && used >= 0 && used < n)) throw new RangeError("row " + row + " uses no row " + used);
+          to[k] = used; proof[k] = only; indegree[used]++; k++;
+        });
+      });
+    }
+    var userStart = new Int32Array(n + 1), users = new Int32Array(total), fill = new Int32Array(n);
+    for (row = 0; row < n; row++) userStart[row + 1] = userStart[row] + indegree[row];
+    for (row = 0; row < n; row++) for (k = start[row]; k < start[row + 1]; k++) users[userStart[to[k]] + fill[to[k]]++] = row;
+    var sorted = Int32Array.from(indegree).sort();
+    return {n: n, start: start, to: to, proof: proof, userStart: userStart, users: users, indegree: indegree,
+      hub: Math.max(HUB_FLOOR, n ? sorted[Math.ceil(HUB_SHARE * n) - 1] : 0), statuses: payload.statuses, status: payload.status,
+      digest: payload.rows_sha256, captions: payload.captions, caption: payload.caption,
+      seen: new Int32Array(n), at: new Int32Array(n), stamp: 0};
+  }
+
+  // The focus's ancestry in topological order (the focus first, every result before what it uses) with each row's
+  // position in it. An edge back to a result still being explored closes a cycle and is left out, so the published
+  // graph need not be acyclic.
+  function ancestry(g, focus) {
+    var stamp = ++g.stamp, post = [], stack = [focus], next = [g.start[focus]];
+    g.seen[focus] = stamp;
+    while (stack.length) {
+      var top = stack.length - 1, u = stack[top];
+      if (next[top] < g.start[u + 1]) {
+        var v = g.to[next[top]++];
+        if (g.seen[v] !== stamp) { g.seen[v] = stamp; stack.push(v); next.push(g.start[v]); }
+        continue;
+      }
+      post.push(u); stack.pop(); next.pop();
+    }
+    var order = post.reverse();
+    order.forEach(function (row, index) { g.at[row] = index; });
+    return order;
+  }
+
+  // The transitive reduction of the ancestry, and each result's depth and parent on a shortest path from the focus in
+  // it. Positions are indices into `order`. A result's children are taken nearest first, so a child some earlier child
+  // reaches is implied by it; the reach of each result is a bitset over the positions after its own.
+  function reduce(g, order) {
+    var k = order.length, words = (k + 31) >>> 5, reach = new Int32Array(k * words);
+    var kids = new Array(k), kind = new Array(k);
+    for (var i = k - 1; i >= 0; i--) {
+      var u = order[i], base = i * words, list = [];
+      for (var e = g.start[u]; e < g.start[u + 1]; e++) {
+        var p = g.at[g.to[e]];
+        if (p > i) list.push(p * 2 + g.proof[e]);
+      }
+      list.sort(function (a, b) { return a - b; });
+      var keep = [], kinds = [];
+      for (var j = 0; j < list.length; j++) {
+        var child = list[j] >> 1;
+        if (reach[base + (child >>> 5)] & (1 << (child & 31))) continue;
+        keep.push(child); kinds.push(list[j] & 1);
+        reach[base + (child >>> 5)] |= 1 << (child & 31);
+        for (var w = child >>> 5, other = child * words; w < words; w++) reach[base + w] |= reach[other + w];
+      }
+      kids[i] = keep; kind[i] = kinds;
+    }
+    var depth = new Int32Array(k).fill(-1), parent = new Int32Array(k).fill(-1), queue = [0];
+    depth[0] = 0;
+    for (var head = 0; head < queue.length; head++) {
+      var at = queue[head];
+      kids[at].forEach(function (c) { if (depth[c] < 0) { depth[c] = depth[at] + 1; parent[c] = at; queue.push(c); } });
+    }
+    return {kids: kids, kind: kind, depth: depth, parent: parent};
+  }
+
+  // The view of `focus` (a row) at `level` (1, 2 or 3), at most `cap` results drawn. Rows throughout:
+  // nodes [{row, depth}] (depth is the column: 1 for a direct use), edges [user, used, proof] between the focus, the
+  // drawn results and the feeds, via [user, used, skipped], chips and feeds (the most used first), the feeds' total,
+  // and `total`, every result the focus builds on, hubs too.
+  function view(g, focus, level, cap) {
+    if (!(Number.isInteger(focus) && focus >= 0 && focus < g.n)) throw new RangeError("relations.json has no row " + focus);
+    cap = cap || CAP;
+    var order = ancestry(g, focus), red = reduce(g, order), k = order.length, limit = level >= 3 ? Infinity : level + 1;
+    var direct = new Set();
+    for (var e = g.start[focus]; e < g.start[focus + 1]; e++) direct.add(g.at[g.to[e]]);
+    var wanted = [], chips = [];
+    for (var p = 1; p < k; p++) {
+      if (!direct.has(p) && red.depth[p] > limit) continue;
+      if (g.indegree[order[p]] >= g.hub) chips.push(order[p]); else wanted.push(p);
+    }
+    // Nearest first: direct uses, then by depth, then in search.json's order.
+    wanted.sort(function (a, b) { return direct.has(b) - direct.has(a) || red.depth[a] - red.depth[b] || order[a] - order[b]; });
+    var drawn = new Set(wanted.slice(0, cap)), edges = [], reached = new Set();
+    drawn.forEach(function (q) {
+      red.kids[q].forEach(function (c, index) { if (drawn.has(c)) { edges.push([order[q], order[c], red.kind[q][index]]); reached.add(c); } });
+    });
+    var kept = new Set(red.kids[0]);
+    red.kids[0].forEach(function (c, index) { if (drawn.has(c)) { edges.push([focus, order[c], red.kind[0][index]]); reached.add(c); } });
+    // A direct use the reduction routes the long way round keeps its own edge from the focus.
+    for (e = g.start[focus]; e < g.start[focus + 1]; e++) {
+      var used = g.at[g.to[e]];
+      if (drawn.has(used) && !kept.has(used)) { edges.push([focus, order[used], g.proof[e]]); reached.add(used); }
+    }
+    var via = [];
+    drawn.forEach(function (q) {
+      if (reached.has(q)) return;
+      var skipped = 0, up = red.parent[q];
+      while (up > 0 && !drawn.has(up)) { skipped++; up = red.parent[up]; }
+      via.push([order[up], order[q], skipped]);
+    });
+    var nodes = Array.from(drawn).sort(function (a, b) { return a - b; }).map(function (q) {
+      return {row: order[q], depth: direct.has(q) ? 1 : red.depth[q]};
+    });
+    // A user the focus also builds on (a cycle) is drawn in its column or listed as a chip, not again among the feeds.
+    var chipped = new Set(chips);
+    var users = Array.from(new Set(g.users.subarray(g.userStart[focus], g.userStart[focus + 1]))).filter(function (user) {
+      return !(chipped.has(user) || g.seen[user] === g.stamp && drawn.has(g.at[user]));
+    });
+    users.sort(function (a, b) { return g.indegree[b] - g.indegree[a] || a - b; });
+    var feeds = users.slice(0, FEEDS);
+    return {focus: focus, level: level, nodes: nodes, edges: edges.concat(feeds.map(function (user) {
+      for (var link = g.start[user]; link < g.start[user + 1] && g.to[link] !== focus; link++);
+      return [user, focus, g.proof[link]];
+    })), via: via, chips: chips.sort(function (a, b) { return g.indegree[b] - g.indegree[a] || a - b; }),
+    feeds: feeds, feedsTotal: users.length, total: k - 1, hub: g.hub};
+  }
+
+  // Cards in columns, right to left: what the focus feeds into, the focus, then each depth. A column taller than
+  // `rows` cards wraps into more columns beside it, further out. Barycentre sweeps keep linked cards level, so most
+  // edges run straight. Returns {boxes: {row: box}, more: the point under the feeds for "+n more", bounds}.
+  function layout(v) {
+    var columns = [], links = new Map();
+    function column(d) { return columns[d] || (columns[d] = []); }
+    function link(a, b) { (links.get(a) || links.set(a, []).get(a)).push(b); (links.get(b) || links.set(b, []).get(b)).push(a); }
+    v.nodes.forEach(function (node) { column(node.depth).push(node.row); });
+    v.edges.concat(v.via).forEach(function (edge) { link(edge[0], edge[1]); });
+    var rows = Math.max(6, Math.ceil(Math.sqrt(v.nodes.length * 1.5))), y = new Map([[v.focus, 0]]), x = new Map();
+    v.feeds.forEach(function (row, index) { y.set(row, (index - (v.feeds.length - 1) / 2) * (CARD_H + ROW_GAP)); });
+    function place(list) {
+      list.forEach(function (row, index) {
+        var height = Math.min(rows, list.length - Math.floor(index / rows) * rows);
+        y.set(row, (index % rows - (height - 1) / 2) * (CARD_H + ROW_GAP));
+      });
+    }
+    function centre(row) {
+      var near = (links.get(row) || []).filter(function (other) { return y.has(other); });
+      return near.length ? near.reduce(function (sum, other) { return sum + y.get(other); }, 0) / near.length : Infinity;
+    }
+    columns.forEach(function (list) { list.sort(function (a, b) { return a - b; }); place(list); });
+    // Outward from the focus, back in, and out again; ties keep search.json's order.
+    [1, -1, 1].forEach(function (way) {
+      var depths = columns.map(function (_list, d) { return d; }).filter(function (d) { return columns[d] && d > 0; });
+      if (way < 0) depths.reverse();
+      depths.forEach(function (d) {
+        var keys = new Map(columns[d].map(function (row) { return [row, centre(row)]; }));
+        columns[d].sort(function (a, b) { return keys.get(a) - keys.get(b) || a - b; });
+        place(columns[d]);
+      });
+    });
+    var step = CARD_W + COLUMN_GAP, left = 0;
+    x.set(v.focus, 0);
+    v.feeds.forEach(function (row) { x.set(row, step); });
+    columns.forEach(function (list, d) {
+      if (!d || !list) return;
+      list.forEach(function (row, index) { x.set(row, -step * (left + 1 + Math.floor(index / rows))); });
+      left += Math.ceil(list.length / rows);
+    });
+    var boxes = {}, x0 = 0, y0 = 0, x1 = CARD_W, y1 = CARD_H;
+    x.forEach(function (at, row) {
+      var box = boxes[row] = {x: at, y: y.get(row) - CARD_H / 2, w: CARD_W, h: CARD_H};
+      x0 = Math.min(x0, box.x); y0 = Math.min(y0, box.y); x1 = Math.max(x1, box.x + box.w); y1 = Math.max(y1, box.y + box.h);
+    });
+    var more = v.feedsTotal > v.feeds.length ? {x: step, y: (v.feeds.length / 2) * (CARD_H + ROW_GAP) + 4} : null;
+    if (more) y1 = Math.max(y1, more.y + 24);
+    var pad = 40;
+    return {boxes: boxes, more: more, bounds: {x: x0 - pad, y: y0 - pad, w: x1 - x0 + 2 * pad, h: y1 - y0 + 2 * pad}};
+  }
+
+  window.AutoformLocalGraph = {graph: graph, view: view, layout: layout,
+    constants: {CAP: CAP, FEEDS: FEEDS, CARD_W: CARD_W, CARD_H: CARD_H}};
+})();
+
 /* Whole-project map (prototype).
  *
  * One continuous map of the whole project. Regions hold the mathematical parts inside them, and parts hold their
  * results; zooming in opens a part in place, so its boundary and its neighbours stay on screen. Data arrives one level
  * at a time from map/data/: index.json (regions), parts/<shard>.json (a part's children, and its results when
- * it holds them) and search.json (titles and Lean names, loaded on first search).
+ * it holds them), search.json (titles and Lean names, loaded on first search) and relations.json (every result's uses,
+ * loaded when a result's local graph first opens).
  *
  * Geometry comes from window.AutoformMapLayout (project-map-layout.js, shipped ahead of this file): world units are
  * stage pixels at the opening pose, a part's children are packed when its file loads, prerequisites come first, and
- * routes run only through the gaps between boxes. This file is the controller: camera, drawing, search, selection,
- * history and the reading pane.
+ * routes run only through the gaps between boxes. A result's local graph, what it builds on, comes from
+ * window.AutoformLocalGraph (project-map-local.js, shipped ahead of this file too). This file is the controller: camera,
+ * drawing, search, selection, history and the reading pane.
  */
 (function () {
   "use strict";
@@ -923,7 +1127,7 @@
   }
   if (!host || host.dataset.pmMounted) return;
   host.dataset.pmMounted = "1";
-  var L = window.AutoformMapLayout;
+  var L = window.AutoformMapLayout, LG = window.AutoformLocalGraph;
   // Inside a book page the map draws in the book's stage. The book has the outline, search, trail and reading pane and
   // owns the address and history: the map tells it which result or part was picked, with an "autoform-map-select" event
   // from the host, and follows the book's host (`book`): data-map-start names the page's node or scope, and
@@ -1058,7 +1262,7 @@
     return cache.get(relative);
   }
 
-  var model = {index: null, parts: new Map(), results: new Map(), search: null, searchLoading: null};
+  var model = {index: null, parts: new Map(), results: new Map(), search: null, searchLoading: null, graph: null, graphLoading: null};
   function part(id) { return model.parts.get(id); }
   function register(summary, parentId) {
     var known = model.parts.get(summary.id);
@@ -1167,7 +1371,9 @@
   var mathLayer = el("div", "pm-tex-layer"); mathLayer.inert = true;
   var pin = el("div", "pm-pin"); pin.hidden = true;
   var hint = el("div", "pm-hint", "");
-  stage.append(canvas, mathLayer, pin, hint);
+  // A result's local graph names its focus and holds its level stepper, the hubs it shows as chips and the way back.
+  var localPanel = el("div", "pm-local"); localPanel.hidden = true; localPanel.setAttribute("role", "group");
+  stage.append(canvas, mathLayer, pin, hint, localPanel);
   var reader = el("aside", "pm-reader"); reader.setAttribute("aria-label", "Reading pane");
   var readerInner = el("div", "pm-reader-inner"); reader.append(readerInner);
   // Embedded, the book announces where the reader is.
@@ -1214,14 +1420,20 @@
   // The layout module's camera: the world point at the stage's top-left corner and the zoom.
   function cornerCamera() { return {x: camera.x - size.w / 2 / camera.k, y: camera.y - size.h / 2 / camera.k, z: camera.k}; }
   function limits() {
-    var box = part(ROOT).box;
-    return {low: Math.min(size.w / box.w, size.h / box.h) * 0.5, high: 60000};
+    var box = state.local ? state.local.layout.bounds : part(ROOT).box;
+    return {low: Math.min(size.w / box.w, size.h / box.h) * 0.5, high: state.local ? 8 : 60000};
   }
-  var flight = null;
+  // framed: the part whose page the view shows as the map framed it, until a flight, the reader or a repack takes the
+  // view elsewhere. A drag that turns the stage frames it again (repackInPlace). deselected: the statement the reader
+  // let go of while the view showed its card, until a flight, a pick or the reader takes the view elsewhere; a turn
+  // keeps it. dragPart: the part the view was in as a drag of the book's panes began with no flight under way, until a
+  // flight or the reader takes the view elsewhere.
+  var flight = null, framed = null, deselected = null, dragPart = null;
   function flyTo(target, done) {
+    framed = deselected = dragPart = null;
     var range = limits();
     target = {x: target.x, y: target.y, k: clamp(target.k, range.low, range.high)};
-    if (flight) cancelAnimationFrame(flight.frame);
+    if (flight) { cancelAnimationFrame(flight.frame); flight = null; }
     // The current entry takes the flight's end at once, so Back and Forward straight after a jump keep each place.
     clearTimeout(cameraTimer);
     try { if (history.state && history.state.pm) history.replaceState(Object.assign({}, history.state, {camera: target}), ""); } catch (_e) { /* ignore */ }
@@ -1244,12 +1456,13 @@
   }
   // Opening a part fits its content, not its whole box, or comes closer when most of its children would be too small
   // to label (the layout module decides); the layout module's camera holds the stage's top-left corner.
-  function flyToContent(record, done) {
+  function contentCamera(record) {
     var children = {};
     record.kids.forEach(function (id) { var child = part(id); if (child && child.box) children[id] = child.box; });
     var corner = L.focusCamera(record.box, children, size);
-    flyTo({x: corner.x + size.w / 2 / corner.z, y: corner.y + size.h / 2 / corner.z, k: corner.z}, done);
+    return {x: corner.x + size.w / 2 / corner.z, y: corner.y + size.h / 2 / corner.z, k: corner.z};
   }
+  function flyToContent(record, done) { flyTo(contentCamera(record), done); framed = record.id; }
   function zoomAt(factor, sx, sy) {
     var range = limits(), k = clamp(camera.k * factor, range.low, range.high);
     var world = factor > 1 ? towardContent(toWorld(sx, sy)) : toWorld(sx, sy);
@@ -1260,7 +1473,7 @@
   // point that stays under the pointer moves just inside the nearest child or card of the deepest part around it.
   function towardContent(at) {
     var record = part(ROOT);
-    if (!record.box || !inBox(record.box, at)) return at;
+    if (state.local || !record.box || !inBox(record.box, at)) return at;
     for (;;) {
       var targets = [];
       record.kids.forEach(function (id) { if (part(id).box) targets.push({box: part(id).box, part: part(id)}); });
@@ -1291,14 +1504,16 @@
   // move the map themselves; then both follow the part that fills the view.
   // picked: a part chosen with one click, shown where it is with its neighbours (a second click goes inside).
   // links: the shown part's neighbours by role (uses, used-by, both); linkHover: the neighbour under the pointer in the panel.
-  var state = {selected: null, related: null, focusPart: null, facets: null, picked: null, links: null, linkHover: null, error: null};
+  // local: the result whose local graph replaces the map on the stage, with its level, view and layout, and the map's
+  // camera and selection from before it opened, which Escape restores.
+  var state = {selected: null, related: null, focusPart: null, facets: null, picked: null, links: null, linkHover: null, error: null, local: null};
   var pending = false;
   function schedule() {
     if (pending) return;
     pending = true;
     requestAnimationFrame(function () { pending = false; render(); });
   }
-  function release() { if (state.focusPart && !state.selected) state.focusPart = null; }
+  function release() { framed = deselected = dragPart = null; if (state.focusPart && !state.selected) state.focusPart = null; }
 
   // ---------------------------------------------------------------- render
   var keyed = new Map(), used = new Set();
@@ -1372,6 +1587,7 @@
     if (!part(ROOT) || !part(ROOT).box || stageSize.w <= 1) return;
     measure();
     used = new Set(); mathUsed = new Set();
+    if (state.local) { drawLocal(); sweep(); return; }
     deepestAtCenter = part(ROOT);
     var onPath = state.selected && model.results.get(state.selected) ? new Set(chainOf(model.results.get(state.selected).home)) : null;
     var labelBoxes = {}, closed = {}, communities = [], drawn = new Set();
@@ -1402,11 +1618,15 @@
     drawLabels(slots);
     drawPin(pinnedPart);
     explainEmpty(drawn);
+    sweep();
+    if (!state.selected) showPart(currentPart());
+  }
+  // What the frame did not draw goes, new formulas are set, and the trail follows.
+  function sweep() {
     keyed.forEach(function (node, key) { if (!used.has(key)) { node.remove(); keyed.delete(key); } });
     mathNodes.forEach(function (node, key) { if (!mathUsed.has(key)) node.remove(); });
     if (mathPending) { mathPending = false; typesetHidden(mathLayer); }
     updateTrail();
-    if (!state.selected) showPart(currentPart());
   }
   function drawPart(record, b, open, onPath) {
     // A part as wide as the stage fills the view across: an outline on it would read as a rule across the stage.
@@ -1694,11 +1914,15 @@
     options = options || {};
     var leaving = viewState();
     if (id) state.picked = null;
+    deselected = !id && !state.picked && inView(model.results.get(state.selected)) ? state.selected : null;
     state.selected = id;
     state.related = id ? relatedSets(id) : null;
     // Embedded, the book's reading pane opens the result's page; a result the book sent is not sent back.
     if (embedded) {
-      if (id && id !== fromBook) { fromBook = id; host.dispatchEvent(new CustomEvent("autoform-map-select", {bubbles: true, detail: {id: id, history: "push", focus: "reading"}})); }
+      if (id && id !== fromBook) {
+        fromBook = id;
+        host.dispatchEvent(new CustomEvent("autoform-map-select", {bubbles: true, detail: {id: id, history: "push", focus: options.focus === false ? false : "reading"}}));
+      }
     }
     else if (id) showResult(id);
     if (!id) showPart(currentPart());
@@ -1744,7 +1968,7 @@
   // One click picks a part where it is: the reading pane and the map show what it builds on and what uses it. The
   // neighbours' parts load too, so the map can draw an arrow to each.
   function pick(id) {
-    navigation();
+    navigation(); leaveLocal();
     state.picked = id; shownPart = null;
     select(null, {history: false});
     return load(id).then(function () {
@@ -1798,6 +2022,7 @@
     return ensureChain(chainOf(id)).then(function () {
       if (epoch !== navEpoch) return;
       var record = part(id);
+      leaveLocal();
       state.focusPart = id;
       if (options.history !== false) remember(options.replace, options.leaving);
       flyToContent(record);
@@ -1811,19 +2036,21 @@
       if (epoch !== navEpoch) return;
       var homeId = chain[chain.length - 1], record = part(homeId), entry = model.results.get(resultId);
       if (!entry || !entry.box) throw new Error("Result not found in its part: " + resultId);
+      leaveLocal();
       state.focusPart = homeId;
       var leaving = viewState();
       select(resultId, {history: false});
       if (options.history !== false) remember(options.replace, leaving);
-      // Close enough that the result's card carries its title, with as much of its part around it as fits. The card
-      // sits in the upper third, under the pinned title, so its part's band scrolls off and more of its neighbours
-      // show below it. A card the layout left without area gets its part's view instead of an endless zoom.
-      if (entry.box.w > 0 && entry.box.h > 0) {
-        var at = centerOf(entry.box), k = Math.max(fitK(L.contentOf(record.box)), (CARD_TEXT_W * 1.9) / entry.box.w);
-        flyTo({x: at[0], y: at[1] + size.h * 0.2 / k, k: k});
-      } else flyToContent(record);
+      if (entry.box.w > 0 && entry.box.h > 0) flyTo(cardCamera(entry, record)); else flyToContent(record);
       live.textContent = "Showing " + plain(entry.row.title);
     });
+  }
+  // Close enough that the result's card carries its title, with as much of its part around it as fits. The card sits in
+  // the upper third, under the pinned title, so its part's band scrolls off and more of its neighbours show below it. A
+  // card the layout left without area gets its part's view instead of an endless zoom.
+  function cardCamera(entry, home) {
+    var at = centerOf(entry.box), k = Math.max(fitK(L.contentOf(home.box)), (CARD_TEXT_W * 1.9) / entry.box.w);
+    return {x: at[0], y: at[1] + size.h * 0.2 / k, k: k};
   }
   // A result the map has not loaded yet (from a list in the reading pane): find its path through search.
   function arriveById(resultId, options) {
@@ -1838,20 +2065,253 @@
     });
   }
 
+  // ---------------------------------------------------------------- a result's local graph
+  // Every result's uses, by search.json's rows, read when a local graph first opens.
+  function loadGraph() {
+    if (!model.graphLoading) {
+      model.graphLoading = fetchJSON("relations.json").then(function (data) { model.graph = LG.graph(data); return model.graph; },
+        function (error) { model.graphLoading = null; throw error; });
+    }
+    return model.graphLoading;
+  }
+  // The one way into a result's local graph, so another control could open it instead: a click on a result's card
+  // opens it at level 1 (activate), and a click on a card inside it moves the focus there at the same level. The
+  // result is selected as a click selects it, so the book or the reading pane shows it.
+  function openLocal(id, level, options) {
+    options = options || {};
+    var epoch = navigation(), leaving = viewState();
+    // page: the book's page then, which the book going back to restores the map; stage: the shape the world was packed
+    // for then.
+    var before = options.before || (state.local ? state.local.before : {camera: settled(), selected: state.selected,
+      focusPart: state.focusPart, picked: state.picked, page: embedded ? book.getAttribute("data-map-start") || "" : null,
+      stage: {w: stageSize.w, h: stageSize.h}});
+    return Promise.all([loadSearch(), loadGraph()]).then(function () {
+      if (epoch !== navEpoch) return;
+      // The two files go by row, so a pair from two builds, as when the site was deployed between the two downloads,
+      // opens no graph, and the click selects the result instead.
+      if (!model.graph.digest || model.graph.digest !== model.search.data.rows_sha256 || model.graph.n !== model.search.rows.length) {
+        throw new Error("relations.json and search.json are from different builds");
+      }
+      var row = model.search.rowOf.get(id);
+      if (row === undefined) throw new Error("Unknown result " + id);
+      var chain = partChainFromSearch(model.search.rows[row][2]);
+      return ensureChain(chain).then(function () {
+        if (epoch !== navEpoch) return;
+        var view = LG.view(model.graph, row, level);
+        // first: the result it opened on, which Back in the book leaves for the map.
+        state.local = {id: id, level: level, view: view, layout: LG.layout(view), before: before, first: state.local ? state.local.first : id};
+        state.focusPart = chain[chain.length - 1];
+        select(id, {history: false});
+        // The map's dimming of what the selection does not touch has nothing to say here.
+        state.related = null;
+        if (options.history !== false) remember(options.replace, leaving);
+        var fromPanel = localPanel.contains(document.activeElement);
+        showLocalPanel();
+        jumpTo(options.camera || localCamera());
+        // A chip pressed from the keyboard went with the panel it was in: focus goes to the new focus's card.
+        if (fromPanel && !localPanel.contains(document.activeElement)) focusCard(id);
+        live.textContent = localWords();
+      });
+    });
+  }
+  function setLevel(level) {
+    var local = state.local;
+    if (!local || local.level === level) return;
+    navigation();
+    var view = LG.view(model.graph, local.view.focus, level);
+    state.local = Object.assign({}, local, {level: level, view: view, layout: LG.layout(view)});
+    remember(true);
+    showLocalPanel();
+    jumpTo(localCamera());
+    live.textContent = localWords();
+  }
+  // Escape: the map as it was before the local graph opened, with its camera and selection. Where the world was packed
+  // again for a turned stage since, that camera looks at something else: the map goes to the selection, the pick or the
+  // part instead. Focus in the panel, or on a card the map does not draw, goes to the selection's card or the map.
+  function closeLocal(options) {
+    options = options || {};
+    var before = state.local.before, leaving = viewState(), active = document.activeElement;
+    var refocus = localPanel.contains(active) || resultLayer.contains(active);
+    navigation();
+    leaveLocal();
+    state.focusPart = before.focusPart || null;
+    state.picked = before.picked && part(before.picked) ? before.picked : null; shownPart = null;
+    var selected = "selected" in options ? options.selected : before.selected;
+    selected = selected && model.results.has(selected) ? selected : null;
+    select(selected, {history: false, focus: false});
+    if (options.history !== false) remember(false, leaving);
+    var entry = selected && model.results.get(selected), picked = state.picked && part(state.picked), at = part(state.focusPart);
+    if (!before.stage || before.stage.w === stageSize.w && before.stage.h === stageSize.h) jumpTo(before.camera);
+    else if (entry && entry.box && entry.box.w > 0 && part(entry.home)) jumpTo(cardCamera(entry, part(entry.home)));
+    else if (picked) flyToNeighbourhood(picked, part(picked.parent));
+    else if (at && at.id !== ROOT) flyToContent(at);
+    else fitProject(true);
+    if (refocus) focusCard(selected);
+  }
+  function focusCard(id) {
+    var node = id && keyed.get("result:" + id);
+    (node && node.isConnected ? node : canvas).focus({preventScroll: true});
+  }
+  // Going anywhere else on the map closes the local graph, with the camera back where the map was, so the map never
+  // draws at the graph's camera and a flight starts from the map.
+  function leaveLocal() {
+    if (!state.local) return;
+    // The graph's history entry keeps the graph's camera, which remember() leaves there, so Back draws it as it was.
+    var entry = !embedded && history.state;
+    if (entry && entry.pm && entry.local && entry.local.id === state.local.id) {
+      try { history.replaceState(Object.assign({}, entry, {camera: settled()}), ""); } catch (_e) { /* ignore */ }
+    }
+    camera = Object.assign({}, state.local.before.camera);
+    state.local = null; localPanel.hidden = true;
+  }
+  // The camera at once, as flyTo leaves it when motion is reduced; the transition is for a later change.
+  function jumpTo(target) {
+    if (flight) { cancelAnimationFrame(flight.frame); flight = null; }
+    clearTimeout(cameraTimer);
+    try { if (!embedded && history.state && history.state.pm) history.replaceState(Object.assign({}, history.state, {camera: target}), ""); } catch (_e) { /* ignore */ }
+    camera = {x: target.x, y: target.y, k: target.k};
+    render(); rememberCamera();
+  }
+  // The whole graph fitted to the stage, or, where its cards would be too small to carry titles, as close as carries
+  // them, with the focus and what it feeds into at the stage's right.
+  function localCamera() {
+    var layout = state.local.layout, b = layout.bounds, k = Math.min(1.25, fitK(b, 0.94)), at = centerOf(b);
+    var least = CARD_TEXT_W / LG.constants.CARD_W, focus = layout.boxes[state.local.view.focus];
+    if (k < least) { k = least; at = [b.x + b.w - size.w / 2 / k, focus.y + focus.h / 2]; }
+    return {x: at[0], y: at[1], k: k};
+  }
+  var LEVELS = {1: "Two steps back, and everything it uses directly", 2: "Three steps back",
+    3: "Everything it builds on, the nearest " + (LG ? LG.constants.CAP : "") + " at most"};
+  function localTitle(row) { return model.search.rows[row][0]; }
+  function localWords() {
+    var v = state.local.view;
+    return "Local graph of " + plain(localTitle(v.focus)) + ", level " + v.level + ". " + countWords(v);
+  }
+  // The chips count as shown: the panel lists them.
+  function countWords(v) {
+    return v.total ? "Showing " + num(v.nodes.length + v.chips.length) + " of " + num(v.total) + (v.total === 1 ? " result" : " results") +
+      " it builds on" : "It builds on no other result.";
+  }
+  // The panel on the stage: the focus, the level stepper, how much is shown, the hubs drawn as chips (the most used
+  // first), and the way back to the map.
+  var CHIPS = 12;
+  // The second press of a double-click lands on the panel the first one drew: it does nothing.
+  localPanel.addEventListener("click", function (event) { if (event.detail > 1) event.stopPropagation(); }, true);
+  function showLocalPanel() {
+    var v = state.local.view, focused = localPanel.contains(document.activeElement) ? document.activeElement.dataset.level : null;
+    localPanel.hidden = false;
+    localPanel.setAttribute("aria-label", "What " + plain(localTitle(v.focus)) + " builds on");
+    var heading = el("p", "pm-local-title");
+    heading.append(el("span", "pm-kicker", "Builds on"), titled(el("strong"), localTitle(v.focus)));
+    var levels = el("div", "pm-local-levels");
+    levels.append(el("span", "", "Level"));
+    [1, 2, 3].forEach(function (level) {
+      var button = el("button", "", String(level));
+      button.type = "button"; button.dataset.level = level; button.title = LEVELS[level];
+      button.setAttribute("aria-pressed", String(level === v.level));
+      button.setAttribute("aria-label", "Level " + level + ": " + LEVELS[level]);
+      button.addEventListener("click", function () { setLevel(level); });
+      levels.append(button);
+    });
+    var parts = [heading, levels, el("p", "pm-local-count", countWords(v))];
+    if (v.chips.length) {
+      var chips = el("p", "pm-local-chips");
+      chips.append(el("span", "", "Widely used, not drawn:"));
+      var chip = function (row) {
+        var button = el("button", "pm-hub"); button.type = "button";
+        button.title = "Used by " + num(model.graph.indegree[row]) + " results";
+        button.append(titled(el("span"), localTitle(row)));
+        button.addEventListener("click", function () { openLocal(model.search.rows[row][3], state.local ? state.local.level : 1).catch(report); });
+        return button;
+      };
+      chips.append.apply(chips, v.chips.slice(0, CHIPS).map(chip));
+      // The rest on request, so every hub stays reachable; the row scrolls.
+      if (v.chips.length > CHIPS) {
+        var more = el("button", "pm-chips-more", "+" + num(v.chips.length - CHIPS) + " more"); more.type = "button";
+        more.addEventListener("click", function () {
+          var rest = v.chips.slice(CHIPS).map(chip);
+          more.replaceWith.apply(more, rest);
+          typesetHidden(chips);
+          rest[0].focus();
+        });
+        chips.append(more);
+      }
+      parts.push(chips);
+    }
+    var close = el("button", "pm-local-close", "Back to the map");
+    close.type = "button"; close.title = "Back to the map (Escape)";
+    close.addEventListener("click", function () { if (state.local) closeLocal(); });
+    parts.push(close);
+    localPanel.replaceChildren.apply(localPanel, parts);
+    typesetHidden(localPanel);
+    var again = focused && localPanel.querySelector('[data-level="' + focused + '"]');
+    if (again) again.focus();
+  }
+  // Drawn instead of the map while open: the focus, what it builds on to its left in columns by depth, and what it
+  // feeds into to its right, as cards in the map's status colours. Arrows run from what is used to what uses it, and a
+  // dotted "via n" edge stands for n results between that are not drawn.
+  var NO_STUBS = {stubs: {}};
+  function drawLocal() {
+    var local = state.local, v = local.view, text = LG.constants.CARD_W * camera.k >= CARD_TEXT_W, g = model.graph;
+    [v.focus].concat(v.nodes.map(function (node) { return node.row; }), v.feeds).forEach(function (row) {
+      var search = model.search.rows[row];
+      drawCard({row: {id: search[3], title: search[0], status: g.statuses[g.status[row]], caption: g.captions && g.captions[g.caption[row]]},
+        box: local.layout.boxes[row]}, NO_STUBS, text);
+    });
+    v.edges.forEach(function (edge) {
+      var on = edge[0] === v.focus || edge[1] === v.focus;
+      localLink("lr:" + edge[0] + ">" + edge[1], edge, "pm-route pm-card-route" + (edge[2] ? " pm-proof" : "") + (on ? " pm-involved" : ""), on,
+        plain(localTitle(edge[0])) + " uses " + plain(localTitle(edge[1])) + (edge[2] ? " in its proof" : ""));
+    });
+    v.via.forEach(function (edge) {
+      var mid = localLink("lv:" + edge[0] + ">" + edge[1], edge, "pm-route pm-via", false, plain(localTitle(edge[0])) + " uses " +
+        plain(localTitle(edge[1])) + " through " + num(edge[2]) + (edge[2] === 1 ? " result" : " results") + " not drawn");
+      if (mid) setText(keep(labelLayer, "lvt:" + edge[0] + ">" + edge[1], "text", {x: mid[0], y: mid[1] - 5, class: "pm-via-label"}), "via " + num(edge[2]));
+    });
+    if (local.layout.more) {
+      var at = toScreen(local.layout.more.x, local.layout.more.y);
+      setText(keep(labelLayer, "lmore", "text", {x: cx(at[0] + 10), y: cy(at[1]), class: "pm-card-meta"}), "+" + num(v.feedsTotal - v.feeds.length) + " more");
+    }
+    drawPin(null);
+    // The stage's hint says only what went wrong here.
+    if (state.error && hint.textContent !== state.error) hint.textContent = state.error;
+    hint.classList.toggle("pm-hint-strong", Boolean(state.error));
+    hint.hidden = !state.error;
+  }
+  // A curve from the used card to its user, out of the side that faces the user and into the side that faces back, or
+  // round the left of both when they share a column. Returns its midpoint, or null when it is off the stage.
+  function localLink(key, edge, cls, on, words) {
+    var a = state.local.layout.boxes[edge[1]], b = state.local.layout.boxes[edge[0]];
+    if (!a || !b) return null;
+    a = screenBox(a); b = screenBox(b);
+    var forward = a.x + a.w <= b.x, back = b.x + b.w <= a.x;
+    var x1 = forward ? a.x + a.w : a.x, y1 = a.y + a.h / 2, x2 = back ? b.x + b.w : b.x, y2 = b.y + b.h / 2;
+    var bend = Math.max(24 * camera.k, Math.abs(x2 - x1) / 2), c1 = x1 + (forward ? bend : -bend), c2 = x2 + (back ? bend : -bend);
+    var x0 = Math.min(x1, x2, c1, c2);
+    if (!onScreen({x: x0, y: Math.min(y1, y2), w: Math.max(x1, x2, c1, c2) - x0, h: Math.abs(y2 - y1)})) return null;
+    var path = keep(cardRouteLayer, key, "path", {
+      d: "M" + cx(x1).toFixed(1) + "," + cy(y1).toFixed(1) + " C" + cx(c1).toFixed(1) + "," + cy(y1).toFixed(1) + " " +
+        cx(c2).toFixed(1) + "," + cy(y2).toFixed(1) + " " + cx(x2).toFixed(1) + "," + cy(y2).toFixed(1),
+      class: cls, "stroke-width": on ? 2 : 1.25, "marker-end": arrow(on)});
+    setText(path.firstChild || path.appendChild(svg("title")), words);
+    return [(x1 + 3 * c1 + 3 * c2 + x2) / 8, (y1 + y2) / 2];
+  }
+
   // ---------------------------------------------------------------- search
   function loadSearch() {
     if (model.search) return Promise.resolve(model.search);
     if (!model.searchLoading) {
       model.searchLoading = fetchJSON("search.json").then(function (data) {
-        var partById = new Map(), byId = new Map();
+        var partById = new Map(), byId = new Map(), rowOf = new Map();
         data.parts.forEach(function (row) { partById.set(row[0], row); });
-        var rows = data.rows.map(function (row) {
+        var rows = data.rows.map(function (row, index) {
           var id = typeof row[3] === "string" ? data.parts[row[2]][0] + "/" + row[3] : row[3][0];
           var entry = [row[0], row[1], row[2], id, String(row[0]).toLowerCase(), String(row[1]).toLowerCase()];
-          byId.set(id, entry);
+          byId.set(id, entry); rowOf.set(id, index);
           return entry;
         });
-        model.search = {data: data, rows: rows, partById: partById, byId: byId};
+        // rowOf: each result's row, which relations.json is indexed by.
+        model.search = {data: data, rows: rows, partById: partById, byId: byId, rowOf: rowOf};
         return model.search;
       });
     }
@@ -2257,7 +2717,8 @@
   function snapshot() {
     return {pm: 1, camera: settled(), selected: state.selected, focusPart: state.focusPart, picked: state.picked,
       chain: state.selected && model.results.get(state.selected) ? chainOf(model.results.get(state.selected).home) :
-        state.focusPart && state.focusPart !== ROOT ? chainOf(state.focusPart) : []};
+        state.focusPart && state.focusPart !== ROOT ? chainOf(state.focusPart) : [],
+      local: state.local ? {id: state.local.id, level: state.local.level, before: state.local.before} : null};
   }
   // What Back restores besides the camera and the selection.
   function viewState() {
@@ -2269,18 +2730,27 @@
     var snap = snapshot();
     var hash = snap.selected ? "#result=" + encodeURIComponent(snap.selected) :
       snap.focusPart && snap.focusPart !== ROOT ? "#part=" + encodeURIComponent(snap.focusPart) : location.pathname + location.search;
-    // The current entry keeps its camera, so Back returns to exactly where the reader was.
-    try { history.replaceState(Object.assign({}, history.state || {}, {pm: 1, camera: settled(), selected: history.state && history.state.selected, focusPart: history.state && history.state.focusPart, chain: history.state && history.state.chain}, leaving || viewState()), ""); } catch (_e) { /* ignore */ }
+    // The current entry keeps its camera, so Back returns to exactly where the reader was. A local graph's entry just
+    // left has the graph's already: the camera is the map's again.
+    var left = history.state && history.state.local && !state.local;
+    try { history.replaceState(Object.assign({}, history.state || {}, {pm: 1, camera: left ? history.state.camera : settled(), selected: history.state && history.state.selected, focusPart: history.state && history.state.focusPart, chain: history.state && history.state.chain}, leaving || viewState()), ""); } catch (_e) { /* ignore */ }
     // Going nowhere new (Whole project from the whole project, Escape with nothing chosen) is not a new entry.
     var current = history.state, same = current && current.pm && current.selected === snap.selected &&
-      current.focusPart === snap.focusPart && current.picked === snap.picked;
+      current.focusPart === snap.focusPart && current.picked === snap.picked && sameLocal(current.local, snap.local);
     if (replace || same) history.replaceState(Object.assign(snap, viewState()), "", hash); else history.pushState(snap, "", hash);
   }
+  function sameLocal(a, b) { return a ? Boolean(b) && a.id === b.id && a.level === b.level : !b; }
   window.addEventListener("popstate", function (event) {
     if (embedded) return;
     var snap = event.state;
     clearTimeout(cameraTimer);  // a camera write still pending belongs to the entry just left
+    if (snap && snap.pm && snap.local) {
+      search.value = snap.query || "";
+      openLocal(snap.local.id, snap.local.level, {history: false, camera: snap.camera, before: snap.local.before}).catch(report);
+      return;
+    }
     var epoch = navigation();
+    leaveLocal();
     if (!snap || !snap.pm) { state.picked = null; select(null, {history: false}); state.focusPart = ROOT; fitProject(true); live.textContent = "Whole project"; return; }
     ensureChain(snap.chain || []).then(function () {
       if (epoch !== navEpoch) return;
@@ -2346,7 +2816,11 @@
     touches.delete(event.pointerId);
     if (pinch && touches.size < 2) { pinch = null; rememberCamera(); }
   }
+  // The browser's count of quick presses in one place, from the mousedown that follows a pointerdown.
+  var presses = 0;
+  canvas.addEventListener("mousedown", function (event) { presses = event.detail; });
   canvas.addEventListener("pointerdown", function (event) {
+    presses = 0;
     if (event.button !== 0) return;
     if (event.pointerType === "touch") touches.set(event.pointerId, [event.clientX, event.clientY]);
     if (touches.size === 2) { drag = null; canvas.classList.remove("pm-dragging"); release(); pinch = spread(); return; }
@@ -2376,13 +2850,28 @@
     if (!drag || event.pointerId !== drag.id) return;
     var moved = drag.moved; drag = null; canvas.classList.remove("pm-dragging");
     if (moved) { rememberCamera(); return; }
+    // The second press of a double-click lands on the graph the first one drew, on another card: it opens nothing.
+    if (presses > 1 && state.local) return;
     activate(event.target);
   }
   canvas.addEventListener("pointerup", endDrag);
   canvas.addEventListener("pointercancel", function (event) { lift(event); drag = null; canvas.classList.remove("pm-dragging"); });
   function activate(target) {
     var resultNode = target.closest && target.closest("[data-result]");
-    if (resultNode) { navigation(); select(resultNode.getAttribute("data-result")); return; }
+    if (resultNode) {
+      var result = resultNode.getAttribute("data-result");
+      if (state.local && state.local.id === result) return;
+      // Without the relations file the click still selects the result, as it did before local graphs.
+      var opening = openLocal(result, state.local ? state.local.level : 1), epoch = navEpoch;
+      opening.catch(function (error) {
+        if (epoch !== navEpoch) return;
+        if (!state.local) { navigation(); select(result); }
+        report(error);
+      });
+      return;
+    }
+    // A click between the local graph's cards keeps it open.
+    if (state.local) return;
     var partNode = target.closest && target.closest("[data-part]");
     if (partNode) {
       var id = partNode.getAttribute("data-part"), inside = state.focusPart === id;
@@ -2419,11 +2908,12 @@
   zoomOut.addEventListener("click", function () { release(); zoomAt(1 / ZOOM_STEP, size.w / 2, size.h / 2); rememberCamera(); });
   function wholeProject() {
     var leaving = viewState();
-    navigation(); state.focusPart = ROOT; state.picked = null; select(null, {history: false}); remember(false, leaving); fitProject(); live.textContent = "Whole project";
+    navigation(); leaveLocal(); state.focusPart = ROOT; state.picked = null; select(null, {history: false}); remember(false, leaving); fitProject(); live.textContent = "Whole project";
   }
   fitAll.addEventListener("click", wholeProject);
   // One level up from where the reader is: from a result to its part, from a part to the part around it.
   function upOneLevel() {
+    if (state.local) { closeLocal(); return; }
     if (state.selected) {
       var home = model.results.get(state.selected) && model.results.get(state.selected).home;
       if (home) { tell(home); leaveFor(home).catch(report); } else select(null, {history: false});
@@ -2435,8 +2925,12 @@
     if (embedded && fromBook !== here.id && hasPage(here.id)) { tell(here.id); return; }
     if (here.parent === ROOT || !part(here.parent)) wholeProject(); else { tell(here.parent); flyToPart(here.parent).catch(report); }
   }
-  // Escape lets go of what is chosen first, then goes up a level.
-  function escape() { if (state.selected) select(null); else if (state.picked) unpick(); else upOneLevel(); }
+  // Escape closes a local graph first, then lets go of what is chosen, then goes up a level.
+  function escape() {
+    if (state.local) return closeLocal();
+    navigation();  // an opening still loading gives way too
+    if (state.selected) select(null); else if (state.picked) unpick(); else upOneLevel();
+  }
   upLevel.addEventListener("click", function () { unpick(); upOneLevel(); });
   document.addEventListener("keydown", function (event) {
     var active = document.activeElement, typing = !!active && /^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName);
@@ -2447,12 +2941,13 @@
     } else if (event.key === "Escape" && !typing && !event.defaultPrevented) { event.preventDefault(); escape(); }
   });
   // The world is packed for the stage's shape: a resize refits the camera, and turning between portrait and landscape repacks.
-  // A drag of the book's panes does neither: what the map shows stays where it is on the page (measure keeps it there), or
-  // the whole project, when that is the view, stays fitted, and nothing flies when the drag ends. Only a stage that was
-  // never packed for, or that the book hid, goes to the page's place then, and a stage the drag shut goes there when it
-  // shows again, at once if a drag opens it. One never packed for stays blank while a drag opens it, and is packed for
-  // the stage the drag leaves, not the 160px it opens at.
-  var dragged = false, settling = false, settledSize = null, landing = false, landingEpoch = -1;
+  // A drag of the book's panes does neither while it goes on: what the map shows stays where it is on the page (measure
+  // keeps it there), or the whole project, when that is the view, stays fitted. Nothing flies when it ends: a drag that
+  // turned the stage repacks the world at once, and the rules below place the view. Only a stage that was never packed
+  // for, or that the book hid, goes to the page's place then, and a stage the drag shut goes there when it shows again,
+  // at once if a drag opens it. One never packed for stays blank while a drag opens it, and is packed for the stage the
+  // drag leaves, not the 160px it opens at.
+  var dragged = false, settling = false, settledSize = null, landing = false, landingEpoch = -1, held = null;
   function wholeView() { return state.focusPart === ROOT && !state.selected && !state.picked; }
   // A drag sends the map to the page's place at once, however late the place's part loads, unless the reader goes
   // elsewhere first: the flight show() starts now, or the one its navigation starts later, lands where it is headed.
@@ -2480,11 +2975,13 @@
     if (late) return;
     // The book hides its stage while it lists statements, or the reader takes its room; the map waits until it shows again.
     if (size.w <= 1) { if (settling) missed = true; return; }
-    var repack = stageSize.w <= 1 || (!settling && (size.w >= size.h) !== (stageSize.w >= stageSize.h));
+    var turned = (size.w >= size.h) !== (stageSize.w >= stageSize.h);
+    if (settling && turned && stageSize.w > 1 && !missed) { repackInPlace(); schedule(); return; }
+    var repack = stageSize.w <= 1 || turned;
     if (repack) {
       stageSize = {w: size.w, h: size.h};
       packRoot();
-      if (!embedded) fitProject(true);
+      if (state.local) camera = localCamera(); else if (!embedded) fitProject(true);
     }
     // In the book, a stage that was hidden or repacked goes back to the page's place, and the reading pane opening or
     // closing refits the whole project when that is the view, once the first view is drawn.
@@ -2492,6 +2989,134 @@
     else if (embedded && (repack || missed)) { fromBook = null; show(book.getAttribute("data-map-start") || ""); }
     else if (embedded && !unpainted && wholeView()) fitProject(settling);
     schedule();
+  }
+  // As the world repacks for a turned stage, these rules place the view. The whole project, when that is the view, is
+  // fitted again, and so is a part's page the view still shows as the map framed it, while no result is selected and
+  // no part but the page's own is picked. The selected result's card, or else the picked part, if the map draws it with
+  // its middle on the stage as the drag began or now, keeps its scale and its place, moved only as far as it takes to
+  // show it whole, below a pinned title: a card larger than the stage shows from its top-left corner, and a part larger
+  // than the stage gives way. Otherwise a card stays where it is: the statement the reader let go of while the view
+  // showed it (until a flight, a pick or a move of the reader's; a turn keeps it), or else the card nearest the stage's
+  // centre, looked for inward from the picked part that gave way (from the part around it, where that is closed) or
+  // from the part the view is in, or a closed part where no card is nearer. The part the view is in is the one it was
+  // in as the drag began, where that holds the one it is in as the drag ends: a drag that narrows the stage from one
+  // side moves its middle, which can take a nudged whole project into one of its parts. The statement let go of keeps
+  // its width where it carries its title, as a held card does; else the part that search starts from keeps the scale
+  // its content is drawn at: a card that is only the nearest, kept at its width, would zoom the view by as much as the
+  // repack resized it. A share of a box would land elsewhere in content the repack lays out anew. Then each part from
+  // the one that holds the card out to the part the view is in, or to the whole project where that does not hold it,
+  // moves, card and all, only as far as it takes to show its content whole where it fits, or to leave no side of the
+  // stage empty while that content is cut off on the other; then the view moves only as far as it takes to show the
+  // statement let go of whole, as a held card is shown. A pinned title is the one that pins once the view is placed;
+  // where it covers the top of its own part's content, cut off at the foot so that settling moves nothing, that content
+  // moves down below it.
+  // The room left between a held card or part and the stage's edge (px), so its outline shows too.
+  var HELD_ROOM = 8;
+  function heldItem() { return state.selected ? model.results.get(state.selected) : state.picked ? part(state.picked) : null; }
+  function inView(item) {
+    return Boolean(item && item.box) && used.has(item.row ? "result:" + item.row.id : "part:" + item.id) &&
+      inBox({x: 0, y: 0, w: size.w, h: size.h}, centerOf(screenBox(item.box)));
+  }
+  // The world's length for one pixel of a part's content at its own size: its cards' scale where it holds results
+  // alone, which is below its fit where they share its box, else the unit its content is fitted to the stage the world
+  // was packed for at, which a part lays out its parts and its own results' box at; the root's is 1, as the layout
+  // packs its regions at the stage's own scale.
+  function drawUnit(record) {
+    var first = !record.kids.length && record.view && record.view.cards[record.results[0]];
+    return record.id === ROOT ? 1 : first ? first.unit : 1 / L.fitCamera(L.contentOf(record.box), stageSize).z;
+  }
+  // The card nearest the stage's centre, looked for from a part inward: the nearest of the part's own cards and parts,
+  // then, where that is an open part, the nearest of its, until a card or a closed part. With the part that holds it.
+  function anchorIn(record) {
+    var mid = toWorld(size.w / 2, size.h / 2);
+    for (;;) {
+      var best = null;
+      record.results.map(function (id) { return model.results.get(id); }).concat(record.kids.map(part)).forEach(function (item) {
+        if (item && item.box && (!best || distance(item.box, mid) < distance(best.box, mid))) best = item;
+      });
+      if (!best) return {item: record, owner: record};
+      if (!best.kids || !isOpen(best, screenBox(best.box))) return {item: best, owner: record};
+      record = best;
+    }
+  }
+  // The box around a part's own cards and parts, or its own box when it has none.
+  function contentBox(record) {
+    var boxes = record.results.map(function (id) { var entry = model.results.get(id); return entry && entry.box; })
+      .concat(record.kids.map(function (id) { return part(id) && part(id).box; })).filter(Boolean);
+    if (!boxes.length) return record.box;
+    var x0 = Math.min.apply(null, boxes.map(function (b) { return b.x; })), y0 = Math.min.apply(null, boxes.map(function (b) { return b.y; }));
+    var x1 = Math.max.apply(null, boxes.map(function (b) { return b.x + b.w; })), y1 = Math.max.apply(null, boxes.map(function (b) { return b.y + b.h; }));
+    return {x: x0, y: y0, w: x1 - x0, h: y1 - y0};
+  }
+  // How far a span on the stage moves so it is not cut off on one side while the stage is empty on the other.
+  function settle(start, length, low, high) {
+    var end = start + length;
+    return start < low && end < high ? Math.min(low - start, high - end) : start > low && end > high ? -Math.min(start - low, end - high) : 0;
+  }
+  function repackInPlace() {
+    // A flight under way lands first, so the place it was headed is the one kept, and what the view shows is found
+    // there.
+    if (flight) { cancelAnimationFrame(flight.frame); camera = flight.target; flight = null; }
+    // An open local graph's layout does not depend on the stage, so the graph stays where it is, as the map does. Only
+    // the map behind it packs for the turned stage, and closing the graph places the map in the new packing.
+    if (state.local) { stageSize = {w: size.w, h: size.h}; packRoot(); return; }
+    render();
+    // A page's part picked with one click, which leaves the view where it was, keeps the page framed.
+    var page = framed && framed === state.focusPart && !state.selected && (!state.picked || state.picked === framed) ?
+      part(framed) : null, item = heldItem();
+    if (item && held !== (state.selected || state.picked) && !inView(item)) item = null;
+    // A card's scale is its width; a part's is that of the content drawn around it, its own when it is open, else its
+    // parent's, where it is a tile.
+    var card = Boolean(item && state.selected), scaled = null;
+    if (item && !card) scaled = isOpen(item, screenBox(item.box)) ? item : part(item.parent) || part(ROOT);
+    var corner = item && toScreen(item.box.x, item.box.y), itemScale = item && camera.k * (card ? item.box.w : drawUnit(scaled));
+    var view = dragPart && (dragPart.id === ROOT || chainOf(deepestAtCenter.id).indexOf(dragPart.id) >= 0) ? dragPart : deepestAtCenter;
+    var from = scaled || view;
+    var gone = deselected && model.results.get(deselected);
+    if (gone && !gone.box) gone = null;
+    var anchor = gone ? {item: gone, owner: part(gone.home)} : anchorIn(from), b = anchor.item.box;
+    var legible = Boolean(gone) && b.w * camera.k >= CARD_TEXT_W;
+    var mid = toScreen(b.x + b.w / 2, b.y + b.h / 2), scale = camera.k * (legible ? b.w : drawUnit(from)), room = HELD_ROOM;
+    stageSize = {w: size.w, h: size.h};
+    packRoot();
+    var range = limits(), fit = page && page.box ? contentCamera(page) : null;
+    framed = fit ? page.id : null;
+    if (fit) { camera = {x: fit.x, y: fit.y, k: clamp(fit.k, range.low, range.high)}; return; }
+    if (wholeView()) return fitProject(true);
+    // place(top) sets the camera as the rule below says, taking the stage's top edge to be TOP px down.
+    var box = item && item.box, k = box && clamp(itemScale / (card ? box.w : drawUnit(scaled)), range.low, range.high);
+    var place;
+    if (box && box.w && (card || box.w * k <= size.w - 2 * room && box.h * k <= size.h - 2 * room)) {
+      place = function (top) {
+        var at = [clamp(corner[0], room, Math.max(room, size.w - room - box.w * k)),
+          clamp(corner[1], top, Math.max(top, size.h - room - box.h * k))];
+        camera = {x: box.x - (at[0] - size.w / 2) / k, y: box.y - (at[1] - size.h / 2) / k, k: k};
+      };
+    } else {
+      b = anchor.item.box;
+      if (!b || !b.w) return fitProject(true);
+      k = clamp(scale / (legible ? b.w : drawUnit(from)), range.low, range.high);
+      place = function (top, pin) {
+        camera = {x: b.x + b.w / 2 - (mid[0] - size.w / 2) / k, y: b.y + b.h / 2 - (mid[1] - size.h / 2) / k, k: k};
+        // Inner parts first. A move goes no further than the stage's empty side, so what an inner part showed whole
+        // stays so.
+        for (var level = anchor.owner; level; level = level === view ? null : part(level.parent)) {
+          var content = screenBox(contentBox(level)), dy = settle(content.y, content.h, top, size.h - room);
+          if (!dy && level === pin && content.y >= 0 && content.y < top) dy = top - content.y;
+          camera = {x: camera.x - settle(content.x, content.w, room, size.w - room) / k, y: camera.y - dy / k, k: k};
+        }
+        if (gone) {
+          var shown = screenBox(b);
+          camera = {x: camera.x - (clamp(shown.x, room, Math.max(room, size.w - room - shown.w)) - shown.x) / k,
+            y: camera.y - (clamp(shown.y, top, Math.max(top, size.h - room - shown.h)) - shown.y) / k, k: k};
+        }
+      };
+    }
+    // The title is judged on the view placed: the repack can pin a title that was not pinned, or free one that was.
+    place(room);
+    render();
+    var pin = pinned();
+    if (pin) place(L.constants.TITLE_ROOM + room, pin);
   }
   if (window.ResizeObserver) new ResizeObserver(resized).observe(stage);
   function report(error) {
@@ -2513,6 +3138,14 @@
     if (missed) return;
     if (id && id === fromBook && (state.selected === id || state.picked === id || state.focusPart === id)) return;
     fromBook = id || null; reading = null;
+    // While a local graph is open, the book's next result becomes its focus, and the book showing its focus again (a
+    // stage shown or packed again) is no move; anything else closes it. While it is still on the result it opened on,
+    // the book going back to the page it showed then, as Back does, restores the map as Escape does.
+    var local = state.local;
+    if (local && id === local.id) return;
+    if (local && local.id === local.first && id === local.before.page) return closeLocal({history: false});
+    if (local && model.search && model.search.rowOf.has(id)) return openLocal(id, local.level, {history: false}).catch(report);
+    leaveLocal();
     if (!id || id === "roadmap") return wholeProject();
     if (knownPart(id)) {
       if (state.selected) select(null, {history: false});
@@ -2556,13 +3189,18 @@
     var start = book.getAttribute("data-map-start") || "", selects = book.classList.contains("bp-dag-has-selection");
     var letGo = bookSelects && !selects, regained = !bookSelects && selects;
     bookSelects = selects;
+    // As a drag begins, before its first step changes the stage, the map notes what its view holds and the part it is in
+    // (above).
+    if (!dragged && book.classList.contains("bp-dag-resizing")) {
+      held = inView(heldItem()) ? state.selected || state.picked : null; dragPart = flight ? null : deepestAtCenter;
+    }
     if (dragged && !book.classList.contains("bp-dag-resizing")) {
       dragged = false; settling = true; resized(); settling = false; settledSize = {w: size.w, h: size.h};
     }
     if (changed("data-map-statuses")) { readStatuses(); schedule(); }
     if (!model.parts.has(ROOT)) return;
     if (changed("data-map-start")) show(start);
-    else if (letGo && state.selected === start) { fromBook = null; select(null, {history: false}); }
+    else if (letGo && state.selected === start) { fromBook = null; if (state.local) closeLocal({history: false, selected: null}); else select(null, {history: false}); }
     else if (regained && state.selected !== start) show(start);
   }).observe(book, {attributes: true, attributeFilter: ["data-map-start", "data-map-statuses", "class"]});
   if (embedded) readStatuses();
@@ -2589,7 +3227,7 @@
         if (id === reading) return;
         reading = id; schedule();
         var entry = id && model.results.get(id), b = !reflowed && size.w > 1 && entry && entry.box && screenBox(entry.box);
-        if (b && !flight && (b.x < 0 || b.y < 0 || b.x + b.w > size.w || b.y + b.h > size.h)) {
+        if (b && !flight && !state.local && (b.x < 0 || b.y < 0 || b.x + b.w > size.w || b.y + b.h > size.h)) {
           var at = centerOf(entry.box); flyTo({x: at[0], y: at[1], k: camera.k});
         }
       });

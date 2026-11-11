@@ -60,12 +60,19 @@
     }).observe(document.body, { attributes: true });
   }
 
-  if (typeof mermaid !== "undefined") {
+  // A heading "Mermaid" gets the id "mermaid", which the browser also exposes
+  // as window.mermaid, so only a global with Mermaid's API is the library.
+  if (typeof mermaid !== "undefined" && typeof mermaid.render === "function") {
     start();
     return;
   }
   var library = document.createElement("script");
   library.src = "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js";
+  library.integrity = "sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I";
+  library.crossOrigin = "anonymous";
   library.onload = start;
+  library.onerror = function () {
+    console.error("autoform: Mermaid could not load; diagrams are left as written");
+  };
   document.head.appendChild(library);
 })();
