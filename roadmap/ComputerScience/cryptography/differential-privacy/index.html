@@ -1,0 +1,5924 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../diffie-hellman-key-exchange/index.html">
+      
+      
+        <link rel="next" href="../elgamal-encryption/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Differential privacy - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#definition" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Differential privacy
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23" id="__nav_2_1_23_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_23_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Computer Science
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../data-structures/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data structures
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../graph-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../process-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Process calculi and behavioural equivalence
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../type-systems-and-lambda-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Type systems and lambda calculi
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../programming-language-semantics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programming language semantics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../machine-learning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Machine learning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../sorting-and-searching/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sorting and searching
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../dynamic-programming/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic programming
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../greedy-algorithms-and-matroids/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Greedy algorithms and matroids
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../approximation-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Approximation algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../online-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Online algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../randomized-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Randomized algorithms and probabilistic analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../parallel-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../algebraic-and-numerical-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic and numerical algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../computational-geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computational geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../string-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    String algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../heuristic-search-and-planning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heuristic search and planning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23_19" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cryptography
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23_19" id="__nav_2_1_23_19_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_23_19_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23_19">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cryptography
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../birthday-bound/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Birthday bound
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diffie-hellman-key-exchange/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diffie–Hellman key exchange
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Differential privacy
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Differential privacy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definition
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#post-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Post-processing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#group-privacy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Group privacy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Composition
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wanted-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wanted results
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-topics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related topics
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../elgamal-encryption/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ElGamal encryption
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lamport-signature/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lamport signature
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../laplace-and-exponential-mechanisms/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Laplace and exponential mechanisms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../merkle-damg-rd-construction/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Merkle–Damgård construction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../one-time-pad-over-a-finite-group/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    One-time pad over a finite group
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pseudorandom-functions/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pseudorandom functions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rsa-cryptosystem/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RSA cryptosystem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../schnorr-identification-scheme/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Schnorr identification scheme
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../databases/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Databases
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../quantum-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../concurrent-systems-and-protocols/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concurrent systems and protocols
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../program-logics-and-verification/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Program logics and verification
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definition
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#post-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Post-processing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#group-privacy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Group privacy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#composition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Composition
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wanted-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wanted results
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-topics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related topics
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../index.html" tabindex="-1">Computer Science</a></li><li><a href="../index.html" tabindex="-1">Cryptography</a></li><li aria-current="page">Differential privacy</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Differential privacy</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="ComputerScience/cryptography/differential-privacy" data-page-title="Differential privacy">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}var g = location.hash.slice(1), u = new URLSearchParams(g), q = Array.from(u), y = {};var d = u.get("node"), o = r.getAttribute("data-autoform-node-id");var l = d !== null ? d === o || d.replace(/^(?:scope|boundary):/, "") === o : q.length > 0 && q.every(function (e) {var n = e[0], v = e[1]; if (y[n]) return false; y[n] = 1;if (n === "view") return v === "graph" || v === "list";if (n === "direction") return ["both", "prerequisites", "dependents"].indexOf(v) >= 0;if (n === "isolates") return v === "0" || v === "1";return n === "status" && (v === "-" || v.split(",").every(function (t) { return /^(?:mathlib|fully_proved|proved|defined|conditional|can_prove|stated|can_state|not_ready|planned|inventory_checked|inventory_pending)$/.test(t); }));});var a = history.state && history.state.autoformNavigation, c = a && a.version === 1 && a.url === location.href && a.snapshot;var i = r.hasAttribute("data-reader-overview") && (!g || l), j = i && Boolean(c && c.readingOpen !== false);var z = f.querySelector(".bp-dag-sheet-handle"), e = f.querySelector("h1.bp-dag-sr-only");f.classList.toggle("bp-dag-overview-only", i); f.classList.toggle("bp-dag-sheet-open", j); if (j && z) z.textContent = "\u00d7";if (e) e.hidden = !i || j;f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="differential-privacy">Differential privacy</h1>
+<p>A randomized algorithm (a <em>mechanism</em>) is differentially private when changing one individual's data changes the probability of every output event by at most a factor <span class="arithmatex">\(e^\varepsilon\)</span>, up to an additive slack <span class="arithmatex">\(\delta\)</span> (Dwork, McSherry, Nissim and Smith 2006; Dwork and Roth 2014, Chapter 2). The definition is stated here for an arbitrary neighbouring relation on databases, with the histogram relation <span class="arithmatex">\(\|x - y\|_1 \le 1\)</span> of Dwork and Roth and the row (Hamming) relation as instances. Its basic properties are immunity to post-processing, graceful degradation for groups, and composition; the advanced composition theorem and the link with generalization in adaptive data analysis are recorded as wanted results.</p>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>16</strong> fully proved</span><span class="bp-progress-state" title="Statement is in Lean and nothing it needs is blocked, so the proof can start."><span class="bp-swatch bp-swatch-can_prove"></span><strong>3</strong> ready to prove</span></div>
+</div>
+<h2 id="definition">Definition</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/cryptography/differential-privacy/differentially-private">
+<h4 class="bp-thmheading" id="differentially-private">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Differential privacy</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fd6baaf811e6cc419fbd4382489f1d5526184f44/CSLibExt/Crypto/Privacy/Basic.lean#L62" aria-label="View Cslib.Crypto.Privacy.DifferentiallyPrivate in Lean source" title="View Cslib.Crypto.Privacy.DifferentiallyPrivate in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#differentially-private" aria-label="Link to Differential privacy" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Crypto.Privacy.DifferentiallyPrivate</div>
+<div class="bp-thmcontent">
+<p>A <em>mechanism</em> is a map <span class="arithmatex">\(M : X \to \mathcal{M}(\Omega)\)</span> sending a database <span class="arithmatex">\(x\)</span> to the law <span class="arithmatex">\(M(x)\)</span> of
+the released output. For a neighbouring relation <span class="arithmatex">\(\mathrm{Adj}\)</span> on databases, <span class="arithmatex">\(\varepsilon \in \mathbb{R}\)</span>
+and <span class="arithmatex">\(\delta \in [0, \infty]\)</span>, the mechanism is <span class="arithmatex">\((\varepsilon, \delta)\)</span>-differentially private if for
+all <span class="arithmatex">\(x, y\)</span> with <span class="arithmatex">\(\mathrm{Adj}(x, y)\)</span> and every measurable <span class="arithmatex">\(S \subseteq \Omega\)</span>,</p>
+<div class="arithmatex">\[
+M(x)(S) \le e^{\varepsilon} M(y)(S) + \delta .
+\]</div>
+<p>With <span class="arithmatex">\(\delta = 0\)</span> this is <span class="arithmatex">\(\varepsilon\)</span>-differential privacy. Dwork and Roth state the definition for
+histogram databases <span class="arithmatex">\(x \in \mathbb{N}^{|\mathcal{X}|}\)</span> with <span class="arithmatex">\(\|x - y\|_1 \le 1\)</span>, which is the
+relation <code>histogramAdj</code>; databases given as lists of rows use the Hamming relation <code>hammingAdj</code>.
+The probability is over the coins of the mechanism only: the database is fixed, not random.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DifferentiallyPrivate (Adj : X → X → <span class="bp-lean-keyword">Prop</span>) (M : X → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> Ω) (ε : ℝ) (δ : ℝ≥0∞) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃x y : X⦄, Adj x y → ∀ S : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set#doc" title="Set">Set</a> Ω, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasurableSet#doc" title="MeasurableSet">MeasurableSet</a> S →
+    M x S ≤ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ENNReal.ofReal#doc" title="ENNReal.ofReal">ENNReal.ofReal</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.exp#doc" title="Real.exp">Real.exp</a> ε) * M y S + δ</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="background">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="../../../Probability/convergence-of-measures/total-variation-distance/index.html#total-variation-dist">Total variation distance between finite measures</a>: for probability measures and a symmetric neighbouring relation, the case <span class="arithmatex">\(\varepsilon = 0\)</span> of the definition says that <span class="arithmatex">\(M(x)\)</span> and <span class="arithmatex">\(M(y)\)</span> are at total variation distance at most <span class="arithmatex">\(\delta\)</span>.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>C. Dwork and A. Roth, <em>The Algorithmic Foundations of Differential Privacy</em>, Foundations and Trends in Theoretical Computer Science 9(3–4), 2014, <a href="https://www.cis.upenn.edu/~aaroth/privacybook.html">https://www.cis.upenn.edu/~aaroth/privacybook.html</a>, Definition 2.4 (with Definition 2.2 for randomized algorithms and Definition 2.3 for the <span class="arithmatex">\(\ell_1\)</span> distance of histograms).</li>
+<li>C. Dwork, F. McSherry, K. Nissim and A. Smith, <em>Calibrating noise to sensitivity in private data analysis</em>, TCC 2006 (the original definition, cited in Dwork and Roth 2014, Section 2.4).</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="../../../Probability/convergence-of-measures/total-variation-distance/index.html#total-variation-dist"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 19</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#bind">Post-processing by a Markov kernel</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#comp-prod">Adaptive composition of pure differential privacy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#comp-prod-approx">Adaptive composition of approximate differential privacy, two mechanisms</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#differentially-private-pi">Basic composition</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-can_prove" title="1 statement dependency" href="#differentially-private-pi-advanced">Advanced composition</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-can_prove" title="1 statement dependency" href="#differentially-private-transfer">Transfer theorem for adaptive data analysis</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#differentially-private-zero-iff-le-smul">Pure differential privacy as a measure inequality</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-can_prove" title="1 statement dependency" href="#gaussian-mechanism-differentially-privat">The Gaussian mechanism</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#group">Group privacy along a chain</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#group-approx">Group privacy, approximate case</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#group-histogram">Group privacy for histograms</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#group-sum">Group privacy along a chain, approximate case</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#map">Post-processing by a measurable map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#mono">Monotonicity of the privacy parameters</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#prod">Composition of pure differential privacy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#prod-approx">Composition of approximate differential privacy, two mechanisms</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../laplace-and-exponential-mechanisms/index.html#exp-mechanism-differentially-private">The exponential mechanism is differentially private</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../laplace-and-exponential-mechanisms/index.html#laplace-mechanism-differentially-private">The Laplace mechanism is differentially private</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../laplace-and-exponential-mechanisms/index.html#laplace-mechanism-pi-differentially-priv">The Laplace mechanism for vector-valued queries</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/cryptography/differential-privacy/histogram-adj">
+<h4 class="bp-thmheading" id="histogram-adj">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Neighbouring histograms</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fd6baaf811e6cc419fbd4382489f1d5526184f44/CSLibExt/Crypto/Privacy/Basic.lean#L69" aria-label="View Cslib.Crypto.Privacy.histogramAdj in Lean source" title="View Cslib.Crypto.Privacy.histogramAdj in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#histogram-adj" aria-label="Link to Neighbouring histograms" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Crypto.Privacy.histogramAdj</div>
+<div class="bp-thmcontent">
+<p>A database over a finite universe <span class="arithmatex">\(U\)</span> of record types is a histogram <span class="arithmatex">\(x : U \to \mathbb{N}\)</span>, where
+<span class="arithmatex">\(x(u)\)</span> counts the records of type <span class="arithmatex">\(u\)</span>. Two histograms are neighbours when
+<span class="arithmatex">\(\|x - y\|_1 = \sum_{u} |x(u) - y(u)| \le 1\)</span>: they differ by adding or removing at most one record.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> histogramAdj {U : <span class="bp-lean-keyword">Type</span>*} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype#doc" title="Fintype">Fintype</a> U] (x y : U → ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∑ u, |(x u : ℤ) - y u| ≤ 1</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_1">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>C. Dwork and A. Roth, <em>The Algorithmic Foundations of Differential Privacy</em>, Foundations and Trends in Theoretical Computer Science 9(3–4), 2014, <a href="https://www.cis.upenn.edu/~aaroth/privacybook.html">https://www.cis.upenn.edu/~aaroth/privacybook.html</a>, Definition 2.3 and Definition 2.4.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#group-histogram">Group privacy for histograms</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/cryptography/differential-privacy/hamming-adj">
+<h4 class="bp-thmheading" id="hamming-adj">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Neighbouring row databases</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fd6baaf811e6cc419fbd4382489f1d5526184f44/CSLibExt/Crypto/Privacy/Basic.lean#L75" aria-label="View Cslib.Crypto.Privacy.hammingAdj in Lean source" title="View Cslib.Crypto.Privacy.hammingAdj in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#hamming-adj" aria-label="Link to Neighbouring row databases" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Crypto.Privacy.hammingAdj</div>
+<div class="bp-thmcontent">
+<p>A database of <span class="arithmatex">\(n\)</span> rows from a set <span class="arithmatex">\(U\)</span> is a list <span class="arithmatex">\(S : \{0, \dots, n - 1\} \to U\)</span>. Two such
+databases are neighbours when they differ in at most one row, i.e. their Hamming distance is at most
+<span class="arithmatex">\(1\)</span>. This is the relation used for data sets of i.i.d. samples, for instance in adaptive data
+analysis.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> hammingAdj {U : <span class="bp-lean-keyword">Type</span>*} {n : ℕ} (S S&#x27; : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → U) : <span class="bp-lean-keyword">Prop</span> :=
+  ∃ i, ∀ j, j ≠ i → S j = S&#x27; j</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_2">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>C. Dwork and A. Roth, <em>The Algorithmic Foundations of Differential Privacy</em>, Foundations and Trends in Theoretical Computer Science 9(3–4), 2014, <a href="https://www.cis.upenn.edu/~aaroth/privacybook.html">https://www.cis.upenn.edu/~aaroth/privacybook.html</a>, Section 2.3 (databases as ordered lists of rows, compared by Hamming distance).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-can_prove" title="1 statement dependency" href="#differentially-private-transfer">Transfer theorem for adaptive data analysis</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/cryptography/differential-privacy/mono">
+<h4 class="bp-thmheading" id="mono">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Monotonicity of the privacy parameters</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fd6baaf811e6cc419fbd4382489f1d5526184f44/CSLibExt/Crypto/Privacy/Basic.lean#L83" aria-label="View Cslib.Crypto.Privacy.DifferentiallyPrivate.mono in Lean source" title="View Cslib.Crypto.Privacy.DifferentiallyPrivate.mono in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#mono" aria-label="Link to Monotonicity of the privacy parameters" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Crypto.Privacy.DifferentiallyPrivate.mono</div>
+<div class="bp-thmcontent">
+<p>An <span class="arithmatex">\((\varepsilon, \delta)\)</span>-differentially private mechanism is <span class="arithmatex">\((\varepsilon', \delta')\)</span>-differentially
+private whenever <span class="arithmatex">\(\varepsilon \le \varepsilon'\)</span> and <span class="arithmatex">\(\delta \le \delta'\)</span>: the bound
+<span class="arithmatex">\(M(x)(S) \le e^{\varepsilon} M(y)(S) + \delta\)</span> only weakens.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> DifferentiallyPrivate.mono (h : <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj M ε δ) (hε : ε ≤ ε&#x27;)
+    (hδ : δ ≤ δ&#x27;) : <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj M ε&#x27; δ&#x27;</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DifferentiallyPrivate (Adj : X → X → <span class="bp-lean-keyword">Prop</span>) (M : X → Measure Ω) (ε : ℝ) (δ : ℝ≥0∞) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃x y : X⦄, Adj x y → ∀ S : Set Ω, MeasurableSet S →
+    M x S ≤ ENNReal.ofReal (Real.exp ε) * M y S + δ</code></pre>
+<p class="bp-lean-where">CSLibExt/Crypto/Privacy/Basic.lean:62</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_3">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>C. Dwork and A. Roth, <em>The Algorithmic Foundations of Differential Privacy</em>, Foundations and Trends in Theoretical Computer Science 9(3–4), 2014, <a href="https://www.cis.upenn.edu/~aaroth/privacybook.html">https://www.cis.upenn.edu/~aaroth/privacybook.html</a>, Definition 2.4 (immediate).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#differentially-private">Differential privacy</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/cryptography/differential-privacy/differentially-private-zero-iff-le-smul">
+<h4 class="bp-thmheading" id="differentially-private-zero-iff-le-smul">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Pure differential privacy as a measure inequality</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fd6baaf811e6cc419fbd4382489f1d5526184f44/CSLibExt/Crypto/Privacy/Basic.lean#L92" aria-label="View Cslib.Crypto.Privacy.differentiallyPrivate_zero_iff_le_smul in Lean source" title="View Cslib.Crypto.Privacy.differentiallyPrivate_zero_iff_le_smul in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#differentially-private-zero-iff-le-smul" aria-label="Link to Pure differential privacy as a measure inequality" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Crypto.Privacy.differentiallyPrivate_zero_iff_le_smul</div>
+<div class="bp-thmcontent">
+<p>A mechanism <span class="arithmatex">\(M\)</span> is <span class="arithmatex">\(\varepsilon\)</span>-differentially private if and only if <span class="arithmatex">\(M(x) \le e^{\varepsilon} M(y)\)</span>
+as measures for all neighbours <span class="arithmatex">\(x, y\)</span>. This form is what makes pure differential privacy pass
+through integrals: <span class="arithmatex">\(\int f \, dM(x) \le e^{\varepsilon} \int f \, dM(y)\)</span> for every nonnegative
+measurable <span class="arithmatex">\(f\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> differentiallyPrivate_zero_iff_le_smul :
+    <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj M ε 0 ↔
+      ∀ ⦃x y : X⦄, Adj x y → M x ≤ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ENNReal.ofReal#doc" title="ENNReal.ofReal">ENNReal.ofReal</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.exp#doc" title="Real.exp">Real.exp</a> ε) • M y</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DifferentiallyPrivate (Adj : X → X → <span class="bp-lean-keyword">Prop</span>) (M : X → Measure Ω) (ε : ℝ) (δ : ℝ≥0∞) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃x y : X⦄, Adj x y → ∀ S : Set Ω, MeasurableSet S →
+    M x S ≤ ENNReal.ofReal (Real.exp ε) * M y S + δ</code></pre>
+<p class="bp-lean-where">CSLibExt/Crypto/Privacy/Basic.lean:62</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_4">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>C. Dwork and A. Roth, <em>The Algorithmic Foundations of Differential Privacy</em>, Foundations and Trends in Theoretical Computer Science 9(3–4), 2014, <a href="https://www.cis.upenn.edu/~aaroth/privacybook.html">https://www.cis.upenn.edu/~aaroth/privacybook.html</a>, Definition 2.4 with <span class="arithmatex">\(\delta = 0\)</span>; compare Remark 3.2 (Section 3.5.1, after Definition 3.6), where the same condition is <span class="arithmatex">\(D_\infty(M(x) \| M(y)) \le \varepsilon\)</span>.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#differentially-private">Differential privacy</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#comp-prod">Adaptive composition of pure differential privacy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../laplace-and-exponential-mechanisms/index.html#laplace-mechanism-differentially-private">The Laplace mechanism is differentially private</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../laplace-and-exponential-mechanisms/index.html#laplace-mechanism-pi-differentially-priv">The Laplace mechanism for vector-valued queries</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="post-processing">Post-processing</h2>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/cryptography/differential-privacy/map">
+<h4 class="bp-thmheading" id="map">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Post-processing by a measurable map</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fd6baaf811e6cc419fbd4382489f1d5526184f44/CSLibExt/Crypto/Privacy/Basic.lean#L100" aria-label="View Cslib.Crypto.Privacy.DifferentiallyPrivate.map in Lean source" title="View Cslib.Crypto.Privacy.DifferentiallyPrivate.map in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#map" aria-label="Link to Post-processing by a measurable map" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Crypto.Privacy.DifferentiallyPrivate.map</div>
+<div class="bp-thmcontent">
+<p>If <span class="arithmatex">\(M\)</span> is <span class="arithmatex">\((\varepsilon, \delta)\)</span>-differentially private and <span class="arithmatex">\(f : \Omega \to \Omega'\)</span> is measurable,
+then <span class="arithmatex">\(x \mapsto f_* M(x)\)</span> is <span class="arithmatex">\((\varepsilon, \delta)\)</span>-differentially private. For an event
+<span class="arithmatex">\(S \subseteq \Omega'\)</span> apply the definition to the preimage <span class="arithmatex">\(T = f^{-1}(S)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> DifferentiallyPrivate.map (h : <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj M ε δ) {f : Ω → Ω&#x27;}
+    (hf : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Measurable#doc" title="Measurable">Measurable</a> f) : <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj (<span class="bp-lean-keyword">fun</span> x ↦ (M x).map f) ε δ</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DifferentiallyPrivate (Adj : X → X → <span class="bp-lean-keyword">Prop</span>) (M : X → Measure Ω) (ε : ℝ) (δ : ℝ≥0∞) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃x y : X⦄, Adj x y → ∀ S : Set Ω, MeasurableSet S →
+    M x S ≤ ENNReal.ofReal (Real.exp ε) * M y S + δ</code></pre>
+<p class="bp-lean-where">CSLibExt/Crypto/Privacy/Basic.lean:62</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="background_1">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="../../../InformationTheory/information-inequalities/data-processing-inequality/index.html#measure-mutual-information-map-le">Processing cannot increase information</a>: the analogous monotonicity for mutual information.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_5">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>C. Dwork and A. Roth, <em>The Algorithmic Foundations of Differential Privacy</em>, Foundations and Trends in Theoretical Computer Science 9(3–4), 2014, <a href="https://www.cis.upenn.edu/~aaroth/privacybook.html">https://www.cis.upenn.edu/~aaroth/privacybook.html</a>, Proposition 2.1, deterministic case of the proof.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="../../../InformationTheory/information-inequalities/data-processing-inequality/index.html#measure-mutual-information-map-le"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#differentially-private">Differential privacy</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#differentially-private-pi">Basic composition</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/cryptography/differential-privacy/bind">
+<h4 class="bp-thmheading" id="bind">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Post-processing by a Markov kernel</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fd6baaf811e6cc419fbd4382489f1d5526184f44/CSLibExt/Crypto/Privacy/Basic.lean#L148" aria-label="View Cslib.Crypto.Privacy.DifferentiallyPrivate.bind in Lean source" title="View Cslib.Crypto.Privacy.DifferentiallyPrivate.bind in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#bind" aria-label="Link to Post-processing by a Markov kernel" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Crypto.Privacy.DifferentiallyPrivate.bind</div>
+<div class="bp-thmcontent">
+<p>If <span class="arithmatex">\(M\)</span> is <span class="arithmatex">\((\varepsilon, \delta)\)</span>-differentially private and <span class="arithmatex">\(\kappa\)</span> is a Markov kernel from <span class="arithmatex">\(\Omega\)</span>
+to <span class="arithmatex">\(\Omega'\)</span> (a randomized map applied to the output, using no access to the database), then
+<span class="arithmatex">\(x \mapsto \int \kappa(\omega, \cdot) \, dM(x)(\omega)\)</span> is <span class="arithmatex">\((\varepsilon, \delta)\)</span>-differentially
+private. A data analyst who only sees the output cannot increase the privacy loss.</p>
+<p>Dwork and Roth prove the deterministic case and write a randomized map as a convex combination of
+deterministic ones. The Lean proof instead integrates the event bound: for a measurable
+<span class="arithmatex">\(g : \Omega \to [0, 1]\)</span>, the layer-cake formula <span class="arithmatex">\(\int g \, d\mu = \int_0^1 \mu\{g &gt; t\} \, dt\)</span> turns
+<span class="arithmatex">\(\mu\{g &gt; t\} \le e^{\varepsilon} \nu\{g &gt; t\} + \delta\)</span> into
+<span class="arithmatex">\(\int g \, d\mu \le e^{\varepsilon} \int g \, d\nu + \delta\)</span>, applied to <span class="arithmatex">\(g = \kappa(\cdot, S)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> DifferentiallyPrivate.bind (h : <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj M ε δ) (κ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.Kernel#doc" title="ProbabilityTheory.Kernel">Kernel</a> Ω Ω&#x27;)
+    [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.IsMarkovKernel#doc" title="ProbabilityTheory.IsMarkovKernel">IsMarkovKernel</a> κ] : <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj (<span class="bp-lean-keyword">fun</span> x ↦ (M x).bind κ) ε δ</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DifferentiallyPrivate (Adj : X → X → <span class="bp-lean-keyword">Prop</span>) (M : X → Measure Ω) (ε : ℝ) (δ : ℝ≥0∞) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃x y : X⦄, Adj x y → ∀ S : Set Ω, MeasurableSet S →
+    M x S ≤ ENNReal.ofReal (Real.exp ε) * M y S + δ</code></pre>
+<p class="bp-lean-where">CSLibExt/Crypto/Privacy/Basic.lean:62</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="#map">Post-processing by a measurable map</a>: the deterministic case, from which the source's proof obtains the randomized one by averaging.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_6">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>C. Dwork and A. Roth, <em>The Algorithmic Foundations of Differential Privacy</em>, Foundations and Trends in Theoretical Computer Science 9(3–4), 2014, <a href="https://www.cis.upenn.edu/~aaroth/privacybook.html">https://www.cis.upenn.edu/~aaroth/privacybook.html</a>, Proposition 2.1.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#map"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#differentially-private">Differential privacy</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="group-privacy">Group privacy</h2>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/cryptography/differential-privacy/group">
+<h4 class="bp-thmheading" id="group">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Group privacy along a chain</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fd6baaf811e6cc419fbd4382489f1d5526184f44/CSLibExt/Crypto/Privacy/Basic.lean#L161" aria-label="View Cslib.Crypto.Privacy.DifferentiallyPrivate.group in Lean source" title="View Cslib.Crypto.Privacy.DifferentiallyPrivate.group in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#group" aria-label="Link to Group privacy along a chain" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Crypto.Privacy.DifferentiallyPrivate.group</div>
+<div class="bp-thmcontent">
+<p>If <span class="arithmatex">\(M\)</span> is <span class="arithmatex">\(\varepsilon\)</span>-differentially private and <span class="arithmatex">\(z_0, z_1, \dots, z_k\)</span> is a chain of databases in
+which consecutive ones are neighbours, then for every measurable <span class="arithmatex">\(S\)</span>,</p>
+<div class="arithmatex">\[
+M(z_0)(S) \le e^{k \varepsilon} M(z_k)(S).
+\]</div>
+<p>Groups of <span class="arithmatex">\(k\)</span> individuals correspond to such chains: the guarantee degrades linearly in the size of
+the group, which is what one wants, since replacing a whole population should change the answers.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> DifferentiallyPrivate.group (h : <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj M ε 0) {k : ℕ} {z : ℕ → X}
+    (hz : ∀ i &lt; k, Adj (z i) (z (i + 1))) {S : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set#doc" title="Set">Set</a> Ω} (hS : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasurableSet#doc" title="MeasurableSet">MeasurableSet</a> S) :
+    M (z 0) S ≤ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ENNReal.ofReal#doc" title="ENNReal.ofReal">ENNReal.ofReal</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.exp#doc" title="Real.exp">Real.exp</a> (k * ε)) * M (z k) S</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DifferentiallyPrivate (Adj : X → X → <span class="bp-lean-keyword">Prop</span>) (M : X → Measure Ω) (ε : ℝ) (δ : ℝ≥0∞) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃x y : X⦄, Adj x y → ∀ S : Set Ω, MeasurableSet S →
+    M x S ≤ ENNReal.ofReal (Real.exp ε) * M y S + δ</code></pre>
+<p class="bp-lean-where">CSLibExt/Crypto/Privacy/Basic.lean:62</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_7">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>C. Dwork and A. Roth, <em>The Algorithmic Foundations of Differential Privacy</em>, Foundations and Trends in Theoretical Computer Science 9(3–4), 2014, <a href="https://www.cis.upenn.edu/~aaroth/privacybook.html">https://www.cis.upenn.edu/~aaroth/privacybook.html</a>, Theorem 2.2.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#differentially-private">Differential privacy</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#group-histogram">Group privacy for histograms</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/cryptography/differential-privacy/group-histogram">
+<h4 class="bp-thmheading" id="group-histogram">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Group privacy for histograms</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fd6baaf811e6cc419fbd4382489f1d5526184f44/CSLibExt/Crypto/Privacy/Basic.lean#L301" aria-label="View Cslib.Crypto.Privacy.DifferentiallyPrivate.group_histogram in Lean source" title="View Cslib.Crypto.Privacy.DifferentiallyPrivate.group_histogram in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#group-histogram" aria-label="Link to Group privacy for histograms" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Crypto.Privacy.DifferentiallyPrivate.group_histogram</div>
+<div class="bp-thmcontent">
+<p>If <span class="arithmatex">\(M\)</span> is <span class="arithmatex">\(\varepsilon\)</span>-differentially private for neighbouring histograms, then for all histograms
+with <span class="arithmatex">\(\|x - y\|_1 \le k\)</span> and every measurable <span class="arithmatex">\(S\)</span>, <span class="arithmatex">\(M(x)(S) \le e^{k\varepsilon} M(y)(S)\)</span>. Two
+histograms at <span class="arithmatex">\(\ell_1\)</span> distance at most <span class="arithmatex">\(k\)</span> are joined by a chain of at most <span class="arithmatex">\(k\)</span> single-record changes,
+to which group privacy along a chain applies.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> DifferentiallyPrivate.group_histogram {U : <span class="bp-lean-keyword">Type</span>*} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype#doc" title="Fintype">Fintype</a> U] {M : (U → ℕ) → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> Ω}
+    (h : <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> <a class="bp-lean-ref" href="#histogram-adj" data-lean-name="Cslib.Crypto.Privacy.histogramAdj">histogramAdj</a> M ε 0) {k : ℕ} {x y : U → ℕ}
+    (hxy : ∑ u, |(x u : ℤ) - y u| ≤ k) {S : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set#doc" title="Set">Set</a> Ω} (hS : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasurableSet#doc" title="MeasurableSet">MeasurableSet</a> S) :
+    M x S ≤ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ENNReal.ofReal#doc" title="ENNReal.ofReal">ENNReal.ofReal</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.exp#doc" title="Real.exp">Real.exp</a> (k * ε)) * M y S</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DifferentiallyPrivate (Adj : X → X → <span class="bp-lean-keyword">Prop</span>) (M : X → Measure Ω) (ε : ℝ) (δ : ℝ≥0∞) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃x y : X⦄, Adj x y → ∀ S : Set Ω, MeasurableSet S →
+    M x S ≤ ENNReal.ofReal (Real.exp ε) * M y S + δ</code></pre>
+<p class="bp-lean-where">CSLibExt/Crypto/Privacy/Basic.lean:62</p>
+</div>
+<div data-lean-name="Cslib.Crypto.Privacy.histogramAdj">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> histogramAdj {U : <span class="bp-lean-keyword">Type</span>*} [Fintype U] (x y : U → ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∑ u, |(x u : ℤ) - y u| ≤ 1</code></pre>
+<p class="bp-lean-where">CSLibExt/Crypto/Privacy/Basic.lean:69</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_8">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>C. Dwork and A. Roth, <em>The Algorithmic Foundations of Differential Privacy</em>, Foundations and Trends in Theoretical Computer Science 9(3–4), 2014, <a href="https://www.cis.upenn.edu/~aaroth/privacybook.html">https://www.cis.upenn.edu/~aaroth/privacybook.html</a>, Theorem 2.2.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#differentially-private">Differential privacy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#histogram-adj">Neighbouring histograms</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#group">Group privacy along a chain</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/cryptography/differential-privacy/group-sum">
+<h4 class="bp-thmheading" id="group-sum">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Group privacy along a chain, approximate case</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fd6baaf811e6cc419fbd4382489f1d5526184f44/CSLibExt/Crypto/Privacy/Basic.lean#L182" aria-label="View Cslib.Crypto.Privacy.DifferentiallyPrivate.group_sum in Lean source" title="View Cslib.Crypto.Privacy.DifferentiallyPrivate.group_sum in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#group-sum" aria-label="Link to Group privacy along a chain, approximate case" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Crypto.Privacy.DifferentiallyPrivate.group_sum</div>
+<div class="bp-thmcontent">
+<p>If <span class="arithmatex">\(M\)</span> is <span class="arithmatex">\((\varepsilon, \delta)\)</span>-differentially private and <span class="arithmatex">\(z_0, \dots, z_k\)</span> is a chain of
+neighbours, then for every measurable <span class="arithmatex">\(S\)</span>,</p>
+<div class="arithmatex">\[
+M(z_0)(S) \le e^{k\varepsilon} M(z_k)(S) + \Big(\sum_{i &lt; k} e^{i\varepsilon}\Big)\delta ,
+\]</div>
+<p>by iterating the definition along the chain.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> DifferentiallyPrivate.group_sum (h : <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj M ε δ) {k : ℕ}
+    {z : ℕ → X} (hz : ∀ i &lt; k, Adj (z i) (z (i + 1))) {S : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set#doc" title="Set">Set</a> Ω} (hS : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasurableSet#doc" title="MeasurableSet">MeasurableSet</a> S) :
+    M (z 0) S ≤ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ENNReal.ofReal#doc" title="ENNReal.ofReal">ENNReal.ofReal</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.exp#doc" title="Real.exp">Real.exp</a> (k * ε)) * M (z k) S +
+      (∑ i ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">Finset.range</a> k, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ENNReal.ofReal#doc" title="ENNReal.ofReal">ENNReal.ofReal</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.exp#doc" title="Real.exp">Real.exp</a> (i * ε))) * δ</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DifferentiallyPrivate (Adj : X → X → <span class="bp-lean-keyword">Prop</span>) (M : X → Measure Ω) (ε : ℝ) (δ : ℝ≥0∞) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃x y : X⦄, Adj x y → ∀ S : Set Ω, MeasurableSet S →
+    M x S ≤ ENNReal.ofReal (Real.exp ε) * M y S + δ</code></pre>
+<p class="bp-lean-where">CSLibExt/Crypto/Privacy/Basic.lean:62</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_9">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>C. Dwork and A. Roth, <em>The Algorithmic Foundations of Differential Privacy</em>, Foundations and Trends in Theoretical Computer Science 9(3–4), 2014, <a href="https://www.cis.upenn.edu/~aaroth/privacybook.html">https://www.cis.upenn.edu/~aaroth/privacybook.html</a>, footnote 1 to Theorem 2.2 (the approximation term grows along the chain).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#differentially-private">Differential privacy</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#group-approx">Group privacy, approximate case</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/cryptography/differential-privacy/group-approx">
+<h4 class="bp-thmheading" id="group-approx">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Group privacy, approximate case</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fd6baaf811e6cc419fbd4382489f1d5526184f44/CSLibExt/Crypto/Privacy/Basic.lean#L208" aria-label="View Cslib.Crypto.Privacy.DifferentiallyPrivate.group_approx in Lean source" title="View Cslib.Crypto.Privacy.DifferentiallyPrivate.group_approx in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#group-approx" aria-label="Link to Group privacy, approximate case" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Crypto.Privacy.DifferentiallyPrivate.group_approx</div>
+<div class="bp-thmcontent">
+<p>If <span class="arithmatex">\(M\)</span> is <span class="arithmatex">\((\varepsilon, \delta)\)</span>-differentially private with <span class="arithmatex">\(\varepsilon \ge 0\)</span>, then along a chain of
+<span class="arithmatex">\(k\)</span> neighbouring steps <span class="arithmatex">\(M(z_0)(S) \le e^{k\varepsilon} M(z_k)(S) + k e^{(k-1)\varepsilon}\delta\)</span>: the
+mechanism is <span class="arithmatex">\((k\varepsilon, k e^{(k-1)\varepsilon}\delta)\)</span>-differentially private for groups of size
+<span class="arithmatex">\(k\)</span>. The additive term "takes a big hit", unlike the pure case.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> DifferentiallyPrivate.group_approx (h : <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj M ε δ) (hε : 0 ≤ ε)
+    {k : ℕ} {z : ℕ → X} (hz : ∀ i &lt; k, Adj (z i) (z (i + 1))) {S : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set#doc" title="Set">Set</a> Ω}
+    (hS : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasurableSet#doc" title="MeasurableSet">MeasurableSet</a> S) :
+    M (z 0) S ≤ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ENNReal.ofReal#doc" title="ENNReal.ofReal">ENNReal.ofReal</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.exp#doc" title="Real.exp">Real.exp</a> (k * ε)) * M (z k) S +
+      k * <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ENNReal.ofReal#doc" title="ENNReal.ofReal">ENNReal.ofReal</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.exp#doc" title="Real.exp">Real.exp</a> ((k - 1 : ℝ) * ε)) * δ</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DifferentiallyPrivate (Adj : X → X → <span class="bp-lean-keyword">Prop</span>) (M : X → Measure Ω) (ε : ℝ) (δ : ℝ≥0∞) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃x y : X⦄, Adj x y → ∀ S : Set Ω, MeasurableSet S →
+    M x S ≤ ENNReal.ofReal (Real.exp ε) * M y S + δ</code></pre>
+<p class="bp-lean-where">CSLibExt/Crypto/Privacy/Basic.lean:62</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_10">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>C. Dwork and A. Roth, <em>The Algorithmic Foundations of Differential Privacy</em>, Foundations and Trends in Theoretical Computer Science 9(3–4), 2014, <a href="https://www.cis.upenn.edu/~aaroth/privacybook.html">https://www.cis.upenn.edu/~aaroth/privacybook.html</a>, footnote 1 to Theorem 2.2.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#differentially-private">Differential privacy</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#group-sum">Group privacy along a chain, approximate case</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="composition">Composition</h2>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/cryptography/differential-privacy/prod">
+<h4 class="bp-thmheading" id="prod">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Composition of pure differential privacy</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fd6baaf811e6cc419fbd4382489f1d5526184f44/CSLibExt/Crypto/Privacy/Basic.lean#L395" aria-label="View Cslib.Crypto.Privacy.DifferentiallyPrivate.prod in Lean source" title="View Cslib.Crypto.Privacy.DifferentiallyPrivate.prod in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#prod" aria-label="Link to Composition of pure differential privacy" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Crypto.Privacy.DifferentiallyPrivate.prod</div>
+<div class="bp-thmcontent">
+<p>If <span class="arithmatex">\(M_1\)</span> is <span class="arithmatex">\(\varepsilon_1\)</span>-differentially private and <span class="arithmatex">\(M_2\)</span> is <span class="arithmatex">\(\varepsilon_2\)</span>-differentially private
+(with <span class="arithmatex">\(s\)</span>-finite output laws), then releasing both, with independent coins, <span class="arithmatex">\(x \mapsto M_1(x) \otimes M_2(x)\)</span>,
+is <span class="arithmatex">\((\varepsilon_1 + \varepsilon_2)\)</span>-differentially private.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> DifferentiallyPrivate.prod {M₁ : X → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> Ω} {M₂ : X → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> Ω&#x27;} {ε₁ ε₂ : ℝ}
+    [∀ x, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.SFinite#doc" title="MeasureTheory.SFinite">SFinite</a> (M₁ x)] [∀ x, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.SFinite#doc" title="MeasureTheory.SFinite">SFinite</a> (M₂ x)]
+    (h₁ : <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj M₁ ε₁ 0) (h₂ : <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj M₂ ε₂ 0) :
+    <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj (<span class="bp-lean-keyword">fun</span> x ↦ (M₁ x).prod (M₂ x)) (ε₁ + ε₂) 0</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DifferentiallyPrivate (Adj : X → X → <span class="bp-lean-keyword">Prop</span>) (M : X → Measure Ω) (ε : ℝ) (δ : ℝ≥0∞) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃x y : X⦄, Adj x y → ∀ S : Set Ω, MeasurableSet S →
+    M x S ≤ ENNReal.ofReal (Real.exp ε) * M y S + δ</code></pre>
+<p class="bp-lean-where">CSLibExt/Crypto/Privacy/Basic.lean:62</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_11">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>C. Dwork and A. Roth, <em>The Algorithmic Foundations of Differential Privacy</em>, Foundations and Trends in Theoretical Computer Science 9(3–4), 2014, <a href="https://www.cis.upenn.edu/~aaroth/privacybook.html">https://www.cis.upenn.edu/~aaroth/privacybook.html</a>, Theorem 3.14.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#differentially-private">Differential privacy</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#comp-prod">Adaptive composition of pure differential privacy</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/cryptography/differential-privacy/comp-prod">
+<h4 class="bp-thmheading" id="comp-prod">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Adaptive composition of pure differential privacy</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fd6baaf811e6cc419fbd4382489f1d5526184f44/CSLibExt/Crypto/Privacy/Basic.lean#L314" aria-label="View Cslib.Crypto.Privacy.DifferentiallyPrivate.compProd in Lean source" title="View Cslib.Crypto.Privacy.DifferentiallyPrivate.compProd in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#comp-prod" aria-label="Link to Adaptive composition of pure differential privacy" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Crypto.Privacy.DifferentiallyPrivate.compProd</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(M_1\)</span> be <span class="arithmatex">\(\varepsilon_1\)</span>-differentially private, and let the second mechanism be chosen after
+seeing the first output <span class="arithmatex">\(\omega\)</span>: a kernel <span class="arithmatex">\(M_2(x)(\omega, \cdot)\)</span> such that for each <span class="arithmatex">\(\omega\)</span> the
+mechanism <span class="arithmatex">\(x \mapsto M_2(x)(\omega, \cdot)\)</span> is <span class="arithmatex">\(\varepsilon_2\)</span>-differentially private. Then releasing
+both outputs, <span class="arithmatex">\(x \mapsto M_1(x) \otimes M_2(x)\)</span>, is <span class="arithmatex">\((\varepsilon_1 + \varepsilon_2)\)</span>-differentially
+private. In measure form: <span class="arithmatex">\(M_1(x) \le e^{\varepsilon_1} M_1(y)\)</span> and
+<span class="arithmatex">\(M_2(x)(\omega, \cdot) \le e^{\varepsilon_2} M_2(y)(\omega, \cdot)\)</span> integrate to
+<span class="arithmatex">\(M_1(x) \otimes M_2(x) \le e^{\varepsilon_1 + \varepsilon_2} M_1(y) \otimes M_2(y)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> DifferentiallyPrivate.compProd {M₁ : X → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> Ω} {M₂ : X → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.Kernel#doc" title="ProbabilityTheory.Kernel">Kernel</a> Ω Ω&#x27;} {ε₁ ε₂ : ℝ}
+    [∀ x, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.SFinite#doc" title="MeasureTheory.SFinite">SFinite</a> (M₁ x)] [∀ x, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.IsSFiniteKernel#doc" title="ProbabilityTheory.IsSFiniteKernel">IsSFiniteKernel</a> (M₂ x)]
+    (h₁ : <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj M₁ ε₁ 0)
+    (h₂ : ∀ ω, <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj (<span class="bp-lean-keyword">fun</span> x ↦ M₂ x ω) ε₂ 0) :
+    <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj (<span class="bp-lean-keyword">fun</span> x ↦ M₁ x ⊗ₘ M₂ x) (ε₁ + ε₂) 0</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DifferentiallyPrivate (Adj : X → X → <span class="bp-lean-keyword">Prop</span>) (M : X → Measure Ω) (ε : ℝ) (δ : ℝ≥0∞) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃x y : X⦄, Adj x y → ∀ S : Set Ω, MeasurableSet S →
+    M x S ≤ ENNReal.ofReal (Real.exp ε) * M y S + δ</code></pre>
+<p class="bp-lean-where">CSLibExt/Crypto/Privacy/Basic.lean:62</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_12">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>C. Dwork and A. Roth, <em>The Algorithmic Foundations of Differential Privacy</em>, Foundations and Trends in Theoretical Computer Science 9(3–4), 2014, <a href="https://www.cis.upenn.edu/~aaroth/privacybook.html">https://www.cis.upenn.edu/~aaroth/privacybook.html</a>, Theorem 3.14 (stated for independent mechanisms) and Section 3.5 (composition with adaptively chosen mechanisms).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#differentially-private">Differential privacy</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#differentially-private-zero-iff-le-smul">Pure differential privacy as a measure inequality</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#prod">Composition of pure differential privacy</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/cryptography/differential-privacy/prod-approx">
+<h4 class="bp-thmheading" id="prod-approx">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Composition of approximate differential privacy, two mechanisms</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fd6baaf811e6cc419fbd4382489f1d5526184f44/CSLibExt/Crypto/Privacy/Basic.lean#L383" aria-label="View Cslib.Crypto.Privacy.DifferentiallyPrivate.prod_approx in Lean source" title="View Cslib.Crypto.Privacy.DifferentiallyPrivate.prod_approx in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#prod-approx" aria-label="Link to Composition of approximate differential privacy, two mechanisms" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Crypto.Privacy.DifferentiallyPrivate.prod_approx</div>
+<div class="bp-thmcontent">
+<p>If <span class="arithmatex">\(M_1\)</span> is <span class="arithmatex">\((\varepsilon_1, \delta_1)\)</span>-differentially private and <span class="arithmatex">\(M_2\)</span> is
+<span class="arithmatex">\((\varepsilon_2, \delta_2)\)</span>-differentially private, both with values in probability measures, then
+releasing both with independent coins is <span class="arithmatex">\((\varepsilon_1 + \varepsilon_2, \delta_1 + \delta_2)\)</span>-differentially
+private.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> DifferentiallyPrivate.prod_approx {M₁ : X → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> Ω} {M₂ : X → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> Ω&#x27;}
+    {ε₁ ε₂ : ℝ} {δ₁ δ₂ : ℝ≥0∞} [∀ x, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsProbabilityMeasure#doc" title="MeasureTheory.IsProbabilityMeasure">IsProbabilityMeasure</a> (M₁ x)]
+    [∀ x, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsProbabilityMeasure#doc" title="MeasureTheory.IsProbabilityMeasure">IsProbabilityMeasure</a> (M₂ x)]
+    (h₁ : <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj M₁ ε₁ δ₁) (h₂ : <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj M₂ ε₂ δ₂) :
+    <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj (<span class="bp-lean-keyword">fun</span> x ↦ (M₁ x).prod (M₂ x)) (ε₁ + ε₂) (δ₁ + δ₂)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DifferentiallyPrivate (Adj : X → X → <span class="bp-lean-keyword">Prop</span>) (M : X → Measure Ω) (ε : ℝ) (δ : ℝ≥0∞) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃x y : X⦄, Adj x y → ∀ S : Set Ω, MeasurableSet S →
+    M x S ≤ ENNReal.ofReal (Real.exp ε) * M y S + δ</code></pre>
+<p class="bp-lean-where">CSLibExt/Crypto/Privacy/Basic.lean:62</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_13">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>C. Dwork and A. Roth, <em>The Algorithmic Foundations of Differential Privacy</em>, Foundations and Trends in Theoretical Computer Science 9(3–4), 2014, <a href="https://www.cis.upenn.edu/~aaroth/privacybook.html">https://www.cis.upenn.edu/~aaroth/privacybook.html</a>, Theorem 3.16 for <span class="arithmatex">\(k = 2\)</span>.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#differentially-private">Differential privacy</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#comp-prod-approx">Adaptive composition of approximate differential privacy, two mechanisms</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#differentially-private-pi">Basic composition</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/cryptography/differential-privacy/comp-prod-approx">
+<h4 class="bp-thmheading" id="comp-prod-approx">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Adaptive composition of approximate differential privacy, two mechanisms</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fd6baaf811e6cc419fbd4382489f1d5526184f44/CSLibExt/Crypto/Privacy/Basic.lean#L338" aria-label="View Cslib.Crypto.Privacy.DifferentiallyPrivate.compProd_approx in Lean source" title="View Cslib.Crypto.Privacy.DifferentiallyPrivate.compProd_approx in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#comp-prod-approx" aria-label="Link to Adaptive composition of approximate differential privacy, two mechanisms" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Crypto.Privacy.DifferentiallyPrivate.compProd_approx</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(M_1\)</span> be <span class="arithmatex">\((\varepsilon_1, \delta_1)\)</span>-differentially private with values in probability measures,
+and let the second mechanism be a Markov kernel chosen after seeing the first output, such that for
+each first output <span class="arithmatex">\(\omega\)</span> the mechanism <span class="arithmatex">\(x \mapsto M_2(x)(\omega, \cdot)\)</span> is
+<span class="arithmatex">\((\varepsilon_2, \delta_2)\)</span>-differentially private. Then releasing both outputs is
+<span class="arithmatex">\((\varepsilon_1 + \varepsilon_2, \delta_1 + \delta_2)\)</span>-differentially private.</p>
+<p>Proof used in Lean (Dwork and Roth prove the <span class="arithmatex">\(k\)</span>-fold statement in their Appendix B by a different
+route): for an event <span class="arithmatex">\(S\)</span>, the probability of its section is at most
+<span class="arithmatex">\(h(\omega) + \delta_2\)</span> with <span class="arithmatex">\(h(\omega) = \min\{1, e^{\varepsilon_2} M_2(y)(\omega, S_\omega)\}\)</span>;
+since <span class="arithmatex">\(h\)</span> takes values in <span class="arithmatex">\([0, 1]\)</span>, the layer-cake form of the <span class="arithmatex">\((\varepsilon_1, \delta_1)\)</span> bound gives
+<span class="arithmatex">\(\int h \, dM_1(x) \le e^{\varepsilon_1} \int h \, dM_1(y) + \delta_1\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> DifferentiallyPrivate.compProd_approx {M₁ : X → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> Ω} {M₂ : X → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.Kernel#doc" title="ProbabilityTheory.Kernel">Kernel</a> Ω Ω&#x27;}
+    {ε₁ ε₂ : ℝ} {δ₁ δ₂ : ℝ≥0∞} [∀ x, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsProbabilityMeasure#doc" title="MeasureTheory.IsProbabilityMeasure">IsProbabilityMeasure</a> (M₁ x)] [∀ x, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.IsMarkovKernel#doc" title="ProbabilityTheory.IsMarkovKernel">IsMarkovKernel</a> (M₂ x)]
+    (h₁ : <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj M₁ ε₁ δ₁)
+    (h₂ : ∀ ω, <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj (<span class="bp-lean-keyword">fun</span> x ↦ M₂ x ω) ε₂ δ₂) :
+    <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj (<span class="bp-lean-keyword">fun</span> x ↦ M₁ x ⊗ₘ M₂ x) (ε₁ + ε₂) (δ₁ + δ₂)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DifferentiallyPrivate (Adj : X → X → <span class="bp-lean-keyword">Prop</span>) (M : X → Measure Ω) (ε : ℝ) (δ : ℝ≥0∞) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃x y : X⦄, Adj x y → ∀ S : Set Ω, MeasurableSet S →
+    M x S ≤ ENNReal.ofReal (Real.exp ε) * M y S + δ</code></pre>
+<p class="bp-lean-where">CSLibExt/Crypto/Privacy/Basic.lean:62</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_14">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>C. Dwork and A. Roth, <em>The Algorithmic Foundations of Differential Privacy</em>, Foundations and Trends in Theoretical Computer Science 9(3–4), 2014, <a href="https://www.cis.upenn.edu/~aaroth/privacybook.html">https://www.cis.upenn.edu/~aaroth/privacybook.html</a>, Theorem 3.16 for <span class="arithmatex">\(k = 2\)</span> and Section 3.5 (adaptive composition).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#differentially-private">Differential privacy</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#prod-approx">Composition of approximate differential privacy, two mechanisms</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/cryptography/differential-privacy/differentially-private-pi">
+<h4 class="bp-thmheading" id="differentially-private-pi">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Basic composition</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fd6baaf811e6cc419fbd4382489f1d5526184f44/CSLibExt/Crypto/Privacy/Basic.lean#L407" aria-label="View Cslib.Crypto.Privacy.differentiallyPrivate_pi in Lean source" title="View Cslib.Crypto.Privacy.differentiallyPrivate_pi in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#differentially-private-pi" aria-label="Link to Basic composition" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Crypto.Privacy.differentiallyPrivate_pi</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(M_i\)</span>, for <span class="arithmatex">\(i &lt; k\)</span>, be <span class="arithmatex">\((\varepsilon_i, \delta_i)\)</span>-differentially private mechanisms with values in
+probability measures. Running them independently and releasing all outputs, <span class="arithmatex">\(x \mapsto \prod_i M_i(x)\)</span>,
+is <span class="arithmatex">\(\big(\sum_i \varepsilon_i, \sum_i \delta_i\big)\)</span>-differentially private: "the epsilons and the deltas
+add up". Corollary 3.15 of the source is the case <span class="arithmatex">\(\delta_i = 0\)</span>. The privacy loss grows linearly in
+the number of mechanisms; the advanced composition theorem improves this to order <span class="arithmatex">\(\sqrt{k}\)</span> at the
+cost of an extra <span class="arithmatex">\(\delta'\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> differentiallyPrivate_pi : ∀ {k : ℕ} {Ω : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> k → <span class="bp-lean-keyword">Type</span> u} [∀ i, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasurableSpace#doc" title="MeasurableSpace">MeasurableSpace</a> (Ω i)]
+    {M : ∀ i, X → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> (Ω i)} [∀ i x, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsProbabilityMeasure#doc" title="MeasureTheory.IsProbabilityMeasure">IsProbabilityMeasure</a> (M i x)] {ε : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> k → ℝ}
+    {δ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> k → ℝ≥0∞}, (∀ i, <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj (M i) (ε i) (δ i)) →
+    <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj (<span class="bp-lean-keyword">fun</span> x ↦ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure.pi#doc" title="MeasureTheory.Measure.pi">Measure.pi</a> <span class="bp-lean-keyword">fun</span> i ↦ M i x) (∑ i, ε i) (∑ i, δ i)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DifferentiallyPrivate (Adj : X → X → <span class="bp-lean-keyword">Prop</span>) (M : X → Measure Ω) (ε : ℝ) (δ : ℝ≥0∞) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃x y : X⦄, Adj x y → ∀ S : Set Ω, MeasurableSet S →
+    M x S ≤ ENNReal.ofReal (Real.exp ε) * M y S + δ</code></pre>
+<p class="bp-lean-where">CSLibExt/Crypto/Privacy/Basic.lean:62</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_15">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>C. Dwork and A. Roth, <em>The Algorithmic Foundations of Differential Privacy</em>, Foundations and Trends in Theoretical Computer Science 9(3–4), 2014, <a href="https://www.cis.upenn.edu/~aaroth/privacybook.html">https://www.cis.upenn.edu/~aaroth/privacybook.html</a>, Theorem 3.16 and Corollary 3.15.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#differentially-private">Differential privacy</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#map">Post-processing by a measurable map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#prod-approx">Composition of approximate differential privacy, two mechanisms</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../laplace-and-exponential-mechanisms/index.html#laplace-mechanism-pi-differentially-priv">The Laplace mechanism for vector-valued queries</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="wanted-results">Wanted results</h2>
+<div class="bp-thmwrapper theorem-style-plain bp-can_prove" data-autoform-node-id="ComputerScience/cryptography/differential-privacy/differentially-private-pi-advanced">
+<h4 class="bp-thmheading" id="differentially-private-pi-advanced">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Advanced composition</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fd6baaf811e6cc419fbd4382489f1d5526184f44/WantedExt/ComputerScience/DifferentialPrivacyWanted.lean#L48" aria-label="View Cslib.Crypto.Privacy.differentiallyPrivate_pi_advanced in Lean source" title="View Cslib.Crypto.Privacy.differentiallyPrivate_pi_advanced in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#differentially-private-pi-advanced" aria-label="Link to Advanced composition" data-search-exclude>#</a><span class="bp-mark" title="ready to prove" data-search-exclude>●<span class="bp-mark-label">ready to prove</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Crypto.Privacy.differentiallyPrivate_pi_advanced</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\varepsilon, \delta \ge 0\)</span> and <span class="arithmatex">\(\delta' &gt; 0\)</span>. If each of <span class="arithmatex">\(k\)</span> mechanisms with values in probability
+measures is <span class="arithmatex">\((\varepsilon, \delta)\)</span>-differentially private, then running them independently is
+<span class="arithmatex">\((\varepsilon', k\delta + \delta')\)</span>-differentially private with</p>
+<div class="arithmatex">\[
+\varepsilon' = \sqrt{2k \ln(1/\delta')}\,\varepsilon + k\varepsilon(e^{\varepsilon} - 1).
+\]</div>
+<p>For small <span class="arithmatex">\(\varepsilon\)</span> the privacy loss grows like <span class="arithmatex">\(\sqrt{k}\,\varepsilon\)</span> instead of the <span class="arithmatex">\(k\varepsilon\)</span>
+of basic composition. The source proves it for <span class="arithmatex">\(k\)</span>-fold <em>adaptive</em> composition, where an adversary
+chooses each mechanism after seeing the previous outputs; the wanted statement records the special
+case of independent mechanisms. The proof bounds the expected privacy loss of each step by
+<span class="arithmatex">\(\varepsilon(e^{\varepsilon} - 1)\)</span> and concentrates the sum of the losses with Azuma's inequality.</p>
+<p>This is a wanted result: its proof is not yet formalized.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem_wanted</span> differentiallyPrivate_pi_advanced {k : ℕ} {Ω : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> k → <span class="bp-lean-keyword">Type</span>*}
+    [∀ i, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasurableSpace#doc" title="MeasurableSpace">MeasurableSpace</a> (Ω i)] {M : ∀ i, X → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> (Ω i)}
+    [∀ i x, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsProbabilityMeasure#doc" title="MeasureTheory.IsProbabilityMeasure">IsProbabilityMeasure</a> (M i x)] {ε δ&#x27; : ℝ} {δ : ℝ≥0∞} (hε : 0 ≤ ε) (hδ&#x27; : 0 &lt; δ&#x27;)
+    (h : ∀ i, <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj (M i) ε δ) :
+    <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj (<span class="bp-lean-keyword">fun</span> x ↦ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure.pi#doc" title="MeasureTheory.Measure.pi">Measure.pi</a> <span class="bp-lean-keyword">fun</span> i ↦ M i x)
+      (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.sqrt#doc" title="Real.sqrt">Real.sqrt</a> (2 * k * <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.log#doc" title="Real.log">Real.log</a> (1 / δ&#x27;)) * ε + k * ε * (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.exp#doc" title="Real.exp">Real.exp</a> ε - 1))
+      (k * δ + <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ENNReal.ofReal#doc" title="ENNReal.ofReal">ENNReal.ofReal</a> δ&#x27;)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DifferentiallyPrivate (Adj : X → X → <span class="bp-lean-keyword">Prop</span>) (M : X → Measure Ω) (ε : ℝ) (δ : ℝ≥0∞) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃x y : X⦄, Adj x y → ∀ S : Set Ω, MeasurableSet S →
+    M x S ≤ ENNReal.ofReal (Real.exp ε) * M y S + δ</code></pre>
+<p class="bp-lean-where">CSLibExt/Crypto/Privacy/Basic.lean:62</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="background_2">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="#differentially-private-pi">Basic composition</a>: the linear bound that advanced composition improves.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_16">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>C. Dwork and A. Roth, <em>The Algorithmic Foundations of Differential Privacy</em>, Foundations and Trends in Theoretical Computer Science 9(3–4), 2014, <a href="https://www.cis.upenn.edu/~aaroth/privacybook.html">https://www.cis.upenn.edu/~aaroth/privacybook.html</a>, Theorem 3.20 (advanced composition) with Section 3.5.1 (max divergence, Lemma 3.17) and Theorem 3.3 (Azuma's inequality).</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#differentially-private-pi"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#differentially-private">Differential privacy</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-can_prove" data-autoform-node-id="ComputerScience/cryptography/differential-privacy/gaussian-mechanism-differentially-privat">
+<h4 class="bp-thmheading" id="gaussian-mechanism-differentially-privat">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The Gaussian mechanism</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fd6baaf811e6cc419fbd4382489f1d5526184f44/WantedExt/ComputerScience/DifferentialPrivacyWanted.lean#L61" aria-label="View Cslib.Crypto.Privacy.gaussianMechanism_differentiallyPrivate in Lean source" title="View Cslib.Crypto.Privacy.gaussianMechanism_differentiallyPrivate in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#gaussian-mechanism-differentially-privat" aria-label="Link to The Gaussian mechanism" data-search-exclude>#</a><span class="bp-mark" title="ready to prove" data-search-exclude>●<span class="bp-mark-label">ready to prove</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Crypto.Privacy.gaussianMechanism_differentiallyPrivate</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(f : X \to \mathbb{R}^d\)</span> have <span class="arithmatex">\(\ell_2\)</span>-sensitivity at most <span class="arithmatex">\(\Delta_2 \ge 0\)</span>, i.e.
+<span class="arithmatex">\(\|f(x) - f(y)\|_2 \le \Delta_2\)</span> for all neighbours. Let <span class="arithmatex">\(\varepsilon \in (0, 1)\)</span>, <span class="arithmatex">\(\delta &gt; 0\)</span>, <span class="arithmatex">\(c &gt; 0\)</span>
+with <span class="arithmatex">\(c^2 &gt; 2\ln(1.25/\delta)\)</span>, and <span class="arithmatex">\(\sigma \ge c\Delta_2/\varepsilon\)</span>. Releasing <span class="arithmatex">\(f(x) + Z\)</span> with
+<span class="arithmatex">\(Z \sim N(0, \sigma^2 I_d)\)</span> is <span class="arithmatex">\((\varepsilon, \delta)\)</span>-differentially private. Calibrating to the
+<span class="arithmatex">\(\ell_2\)</span> rather than the <span class="arithmatex">\(\ell_1\)</span> sensitivity is what makes Gaussian noise attractive for
+high-dimensional queries.</p>
+<p>This is a wanted result: its proof is not yet formalized.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem_wanted</span> gaussianMechanism_differentiallyPrivate {d : ℕ} {f : X → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> d → ℝ}
+    {Δ₂ ε δ c σ : ℝ} (hΔ₂ : 0 ≤ Δ₂) (hε₀ : 0 &lt; ε) (hε₁ : ε &lt; 1) (hδ : 0 &lt; δ) (hc₀ : 0 &lt; c)
+    (hc : 2 * <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.log#doc" title="Real.log">Real.log</a> ((5 / 4) / δ) &lt; c ^ 2) (hσ : c * Δ₂ / ε ≤ σ)
+    (hf : ∀ ⦃x y⦄, Adj x y → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.sqrt#doc" title="Real.sqrt">Real.sqrt</a> (∑ i, (f x i - f y i) ^ 2) ≤ Δ₂) :
+    <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> Adj
+      (<span class="bp-lean-keyword">fun</span> x ↦ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure.pi#doc" title="MeasureTheory.Measure.pi">Measure.pi</a> <span class="bp-lean-keyword">fun</span> i ↦ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.gaussianReal#doc" title="ProbabilityTheory.gaussianReal">gaussianReal</a> (f x i) (σ ^ 2).toNNReal) ε (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ENNReal.ofReal#doc" title="ENNReal.ofReal">ENNReal.ofReal</a> δ)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DifferentiallyPrivate (Adj : X → X → <span class="bp-lean-keyword">Prop</span>) (M : X → Measure Ω) (ε : ℝ) (δ : ℝ≥0∞) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃x y : X⦄, Adj x y → ∀ S : Set Ω, MeasurableSet S →
+    M x S ≤ ENNReal.ofReal (Real.exp ε) * M y S + δ</code></pre>
+<p class="bp-lean-where">CSLibExt/Crypto/Privacy/Basic.lean:62</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="background_3">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="../laplace-and-exponential-mechanisms/index.html">Laplace and exponential mechanisms</a>: the pure-privacy mechanisms; the Gaussian mechanism trades the <span class="arithmatex">\(\delta\)</span> for <span class="arithmatex">\(\ell_2\)</span> calibration.</li>
+<li><a href="../../../Probability/distributions/multivariate-normal-distribution/index.html">Multivariate normal distribution</a>: the law of the noise, <span class="arithmatex">\(N(0, \sigma^2 I_d)\)</span>.</li>
+<li><a href="../../../Probability/distributions/laplace-distribution/index.html">Laplace distribution</a>: the noise law of the pure-privacy mechanism it is compared with.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_17">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>C. Dwork and A. Roth, <em>The Algorithmic Foundations of Differential Privacy</em>, Foundations and Trends in Theoretical Computer Science 9(3–4), 2014, <a href="https://www.cis.upenn.edu/~aaroth/privacybook.html">https://www.cis.upenn.edu/~aaroth/privacybook.html</a>, Appendix A, Theorem A.1.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="../laplace-and-exponential-mechanisms/index.html"> </a></p>
+<p><a href="../../../Probability/distributions/multivariate-normal-distribution/index.html"> </a></p>
+<p><a href="../../../Probability/distributions/laplace-distribution/index.html"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#differentially-private">Differential privacy</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-can_prove" data-autoform-node-id="ComputerScience/cryptography/differential-privacy/differentially-private-transfer">
+<h4 class="bp-thmheading" id="differentially-private-transfer">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Transfer theorem for adaptive data analysis</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fd6baaf811e6cc419fbd4382489f1d5526184f44/WantedExt/ComputerScience/DifferentialPrivacyWanted.lean#L79" aria-label="View Cslib.Crypto.Privacy.differentiallyPrivate_transfer in Lean source" title="View Cslib.Crypto.Privacy.differentiallyPrivate_transfer in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#differentially-private-transfer" aria-label="Link to Transfer theorem for adaptive data analysis" data-search-exclude>#</a><span class="bp-mark" title="ready to prove" data-search-exclude>●<span class="bp-mark-label">ready to prove</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Crypto.Privacy.differentiallyPrivate_transfer</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(P\)</span> be a distribution on <span class="arithmatex">\(\mathcal{X}\)</span> and <span class="arithmatex">\(S = (S_1, \dots, S_n)\)</span> i.i.d. samples from <span class="arithmatex">\(P\)</span>. Let the
+analyst's algorithm <span class="arithmatex">\(A\)</span> map a data set to a query <span class="arithmatex">\(\varphi : \mathcal{X} \to [0, 1]\)</span> and be
+<span class="arithmatex">\(\varepsilon\)</span>-differentially private for data sets differing in one element. If <span class="arithmatex">\(\beta, \tau &gt; 0\)</span>,
+<span class="arithmatex">\(n \ge 12\ln(4/\beta)/\tau^2\)</span> and <span class="arithmatex">\(\varepsilon \le \tau/2\)</span>, then</p>
+<div class="arithmatex">\[
+\Pr\Big[\Big|\mathbb{E}_P[\varphi] - \frac{1}{n}\sum_{i=1}^n \varphi(S_i)\Big| &gt; \tau\Big] \le \beta
+\qquad \text{for } \varphi = A(S),
+\]</div>
+<p>over both the sample and the coins of <span class="arithmatex">\(A\)</span>. A query chosen by looking at the data generalizes as if it
+had been fixed in advance, provided it was chosen privately; composition of differential privacy then
+lets an analyst ask many adaptively chosen queries with statistical validity. In Lean the queries are
+indexed by a measurable space <span class="arithmatex">\(Q\)</span>, with <span class="arithmatex">\(\varphi\)</span> jointly measurable, and <span class="arithmatex">\(A\)</span> is a Markov kernel; this
+setting is the formalization's choice, since the source lets the algorithm output any function from
+<span class="arithmatex">\(\mathcal{X}\)</span> to <span class="arithmatex">\([0, 1]\)</span>.</p>
+<p>This is a wanted result: its proof is not yet formalized.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">public</span> <span class="bp-lean-keyword">theorem_wanted</span> differentiallyPrivate_transfer {𝒳 Q : <span class="bp-lean-keyword">Type</span>*} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasurableSpace#doc" title="MeasurableSpace">MeasurableSpace</a> 𝒳]
+    [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasurableSpace#doc" title="MeasurableSpace">MeasurableSpace</a> Q] {P : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> 𝒳} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsProbabilityMeasure#doc" title="MeasureTheory.IsProbabilityMeasure">IsProbabilityMeasure</a> P] {n : ℕ}
+    (A : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.Kernel#doc" title="ProbabilityTheory.Kernel">Kernel</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → 𝒳) Q) [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.IsMarkovKernel#doc" title="ProbabilityTheory.IsMarkovKernel">IsMarkovKernel</a> A] (φ : Q → 𝒳 → ℝ)
+    (hφ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Measurable#doc" title="Measurable">Measurable</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Function.uncurry#doc" title="Function.uncurry">Function.uncurry</a> φ)) (hφ01 : ∀ q z, φ q z ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.Icc#doc" title="Set.Icc">Set.Icc</a> (0 : ℝ) 1)
+    {ε β τ : ℝ} (hβ : 0 &lt; β) (hτ : 0 &lt; τ) (hn : 12 * <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.log#doc" title="Real.log">Real.log</a> (4 / β) / τ ^ 2 ≤ n)
+    (hε₀ : 0 ≤ ε) (hε : ε ≤ τ / 2) (hA : <a class="bp-lean-ref" href="#differentially-private" data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">DifferentiallyPrivate</a> <a class="bp-lean-ref" href="#hamming-adj" data-lean-name="Cslib.Crypto.Privacy.hammingAdj">hammingAdj</a> (<span class="bp-lean-keyword">fun</span> S ↦ A S) ε 0) :
+    ((<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure.pi#doc" title="MeasureTheory.Measure.pi">Measure.pi</a> <span class="bp-lean-keyword">fun</span> _ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n ↦ P) ⊗ₘ A)
+        {p | τ &lt; |∫ z, φ p.2 z ∂P - (1 / n : ℝ) * ∑ i, φ p.2 (p.1 i)|} ≤ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ENNReal.ofReal#doc" title="ENNReal.ofReal">ENNReal.ofReal</a> β</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Crypto.Privacy.DifferentiallyPrivate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> DifferentiallyPrivate (Adj : X → X → <span class="bp-lean-keyword">Prop</span>) (M : X → Measure Ω) (ε : ℝ) (δ : ℝ≥0∞) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ ⦃x y : X⦄, Adj x y → ∀ S : Set Ω, MeasurableSet S →
+    M x S ≤ ENNReal.ofReal (Real.exp ε) * M y S + δ</code></pre>
+<p class="bp-lean-where">CSLibExt/Crypto/Privacy/Basic.lean:62</p>
+</div>
+<div data-lean-name="Cslib.Crypto.Privacy.hammingAdj">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> hammingAdj {U : <span class="bp-lean-keyword">Type</span>*} {n : ℕ} (S S&#x27; : Fin n → U) : <span class="bp-lean-keyword">Prop</span> :=
+  ∃ i, ∀ j, j ≠ i → S j = S&#x27; j</code></pre>
+<p class="bp-lean-where">CSLibExt/Crypto/Privacy/Basic.lean:75</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="background_4">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="../../../Probability/concentration-inequalities/hoeffding-s-inequality/index.html#hoeffding-bernoulli-sum-abs-tail">Two-sided Hoeffding inequality for Bernoulli sums</a>: the bound for a query fixed in advance, which the theorem extends to privately chosen queries at the cost of a larger constant in the sample size.</li>
+<li><a href="../../machine-learning/generalization-bounds-and-concentration/finite-class-uniform-deviation.html">Uniform deviation for a finite class</a>: the classical alternative, a union bound over a fixed class, which does not apply when the class is chosen adaptively.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_18">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>C. Dwork, V. Feldman, M. Hardt, T. Pitassi, O. Reingold and A. Roth, <em>Preserving statistical validity in adaptive data analysis</em>, arXiv:1411.2664v3 (identical in v2), Theorem 9, with Theorem 10 the <span class="arithmatex">\((\varepsilon, \delta)\)</span> version; preliminary version in STOC 2015.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#differentially-private">Differential privacy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#hamming-adj">Neighbouring row databases</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="related-topics">Related topics</h2>
+<ul>
+<li><a href="../laplace-and-exponential-mechanisms/index.html">Laplace and exponential mechanisms</a>: the basic mechanisms that achieve pure differential privacy, built on this definition.</li>
+<li><a href="../../../Probability/convergence-of-measures/total-variation-distance/index.html">Total variation distance</a>: for a symmetric neighbouring relation and probability measures, <span class="arithmatex">\((0, \delta)\)</span>-differential privacy says exactly that the output laws on neighbouring databases are at total variation distance at most <span class="arithmatex">\(\delta\)</span> (Dwork and Roth 2014, Section 3.5.1, statistical distance).</li>
+<li><a href="../../../InformationTheory/information-inequalities/data-processing-inequality/index.html">Data-processing inequality</a>: the information-theoretic counterpart of post-processing; processing an output cannot make two inputs easier to distinguish.</li>
+<li><a href="../../machine-learning/generalization-bounds-and-concentration/index.html">Generalization bounds and concentration</a>: differential privacy of an adaptive analyst gives generalization for adaptively chosen queries (Dwork, Feldman, Hardt, Pitassi, Reingold and Roth 2015), where union bounds over a fixed class do not apply.</li>
+</ul>
+</div>
+<p><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../dependencies/index.json" data-graph-src="../../../../dependencies/scopes/ComputerScience/cryptography/differential-privacy.json" data-page-href="index.html" data-scope-id="ComputerScience/cryptography/differential-privacy">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>
