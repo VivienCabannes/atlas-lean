@@ -1,0 +1,5179 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../newton-s-method/index.html">
+      
+      
+        <link rel="next" href="../quasi-newton-methods/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Nonlinear conjugate gradient methods - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#related-topics" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Nonlinear conjugate gradient methods
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_16" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_16" id="__nav_2_1_16_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_16_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_16">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Analysis
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../operator-theory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operator theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../complex-analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Complex analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../harmonic-analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Harmonic analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../banach-spaces/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Banach space theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../special-functions/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Special functions
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../real-functions/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Real functions and calculus
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../sequences-and-series/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sequences, series and summability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_16_9" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Numerical analysis
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_16_9" id="__nav_2_1_16_9_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_16_9_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_16_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Numerical analysis
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aubin-nitsche-lemma/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Aubin–Nitsche lemma
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../banach-ne-as-babu-ka-theorem/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Banach–Nečas–Babuška theorem
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../barzilai-borwein-step-size/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Barzilai–Borwein step size
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bisection-method/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bisection method
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../c-a-s-lemma/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Céa&#39;s lemma
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../euler-method/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Euler method
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../finite-element-method-in-one-dimension/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Finite element method in one dimension
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../line-search-methods/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Line search methods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../newton-s-method/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Newton&#39;s method
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nonlinear conjugate gradient methods
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nonlinear conjugate gradient methods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#related-topics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related topics
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quasi-newton-methods/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quasi-Newton methods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../runge-kutta-methods/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runge–Kutta methods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../strang-s-lemma/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Strang&#39;s lemma
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trust-region-methods/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trust-region methods
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../inequalities/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inequalities
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../asymptotic-analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Asymptotic analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../potential-theory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Potential theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../hilbert-spaces/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hilbert spaces
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../operator-algebras/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Banach and operator algebras
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../function-spaces/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Function spaces and Sobolev inequalities
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../distributions/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Distributions
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../ordinary-differential-equations/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ordinary differential equations
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../partial-differential-equations/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Partial differential equations
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../convex-analysis-and-variations/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Convex analysis and calculus of variations
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../fixed-point-theory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fixed-point theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../approximation-theory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Approximation theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../ComputerScience/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#related-topics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related topics
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../index.html" tabindex="-1">Analysis</a></li><li><a href="../index.html" tabindex="-1">Numerical analysis</a></li><li aria-current="page">Nonlinear conjugate gradient methods</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Nonlinear conjugate gradient methods</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="Analysis/numerical-analysis/nonlinear-conjugate-gradient-methods" data-page-title="Nonlinear conjugate gradient methods">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}var g = location.hash.slice(1), u = new URLSearchParams(g), q = Array.from(u), y = {};var d = u.get("node"), o = r.getAttribute("data-autoform-node-id");var l = d !== null ? d === o || d.replace(/^(?:scope|boundary):/, "") === o : q.length > 0 && q.every(function (e) {var n = e[0], v = e[1]; if (y[n]) return false; y[n] = 1;if (n === "view") return v === "graph" || v === "list";if (n === "direction") return ["both", "prerequisites", "dependents"].indexOf(v) >= 0;if (n === "isolates") return v === "0" || v === "1";return n === "status" && (v === "-" || v.split(",").every(function (t) { return /^(?:mathlib|fully_proved|proved|defined|conditional|can_prove|stated|can_state|not_ready|planned|inventory_checked|inventory_pending)$/.test(t); }));});var a = history.state && history.state.autoformNavigation, c = a && a.version === 1 && a.url === location.href && a.snapshot;var i = r.hasAttribute("data-reader-overview") && (!g || l), j = i && Boolean(c && c.readingOpen !== false);var z = f.querySelector(".bp-dag-sheet-handle"), e = f.querySelector("h1.bp-dag-sr-only");f.classList.toggle("bp-dag-overview-only", i); f.classList.toggle("bp-dag-sheet-open", j); if (j && z) z.textContent = "\u00d7";if (e) e.hidden = !i || j;f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="nonlinear-conjugate-gradient-methods">Nonlinear conjugate gradient methods</h1>
+<p>Nonlinear conjugate gradient methods extend the linear conjugate gradient method to smooth unconstrained minimisation: <span class="arithmatex">\(d_0 = -g_0\)</span> and <span class="arithmatex">\(d_{k+1} = -g_{k+1} + \beta_k d_k\)</span>, where <span class="arithmatex">\(g_k = \nabla f(x_k)\)</span> and the scalar <span class="arithmatex">\(\beta_k\)</span> is chosen so that the method reduces to linear conjugate gradients on a strictly convex quadratic with exact line searches. The Fletcher–Reeves, Polak–Ribière–Polyak and Hestenes–Stiefel choices are analysed under the strong Wolfe conditions; the Dai–Yuan choice <span class="arithmatex">\(\beta_k = \|g_{k+1}\|^2 / d_k^\top (g_{k+1} - g_k)\)</span> converges globally under the standard Wolfe conditions.</p>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Analysis/numerical-analysis/nonlinear-conjugate-gradient-methods/dai-yuan-beta">
+<h4 class="bp-thmheading" id="dai-yuan-beta">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Dai–Yuan conjugate gradient parameter</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/77c22f8f04da7715088e1a4d8f774110fdb30644/MathlibExt/Analysis/Optimization/DaiYuan.lean#L46" aria-label="View MathlibExt.Analysis.Optimization.DaiYuan.daiYuanBeta in Lean source" title="View MathlibExt.Analysis.Optimization.DaiYuan.daiYuanBeta in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#dai-yuan-beta" aria-label="Link to Dai–Yuan conjugate gradient parameter" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Analysis.Optimization.DaiYuan.daiYuanBeta</div>
+<div class="bp-thmcontent">
+<p>For the gradient <span class="arithmatex">\(g\)</span> at the current point, the gradient <span class="arithmatex">\(g'\)</span> at the next point and the current
+search direction <span class="arithmatex">\(d\)</span>, the Dai–Yuan parameter is
+$<span class="arithmatex">\(\beta^{DY} = \frac{\|g'\|^2}{d^\top (g' - g)} .\)</span>$
+It has the numerator of the Fletcher–Reeves formula <span class="arithmatex">\(\|g'\|^2 / \|g\|^2\)</span> and the denominator of the
+Hestenes–Stiefel formula <span class="arithmatex">\(g'^\top (g' - g) / d^\top (g' - g)\)</span>, and it coincides with the
+Fletcher–Reeves formula when the line searches are exact. When <span class="arithmatex">\(d\)</span> is a descent direction and the
+Wolfe curvature condition holds with <span class="arithmatex">\(\sigma &lt; 1\)</span>, <span class="arithmatex">\(d^\top (g' - g) &gt; 0\)</span>, so the parameter is well
+defined and positive.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> daiYuanBeta (g g&#x27; d : E) : ℝ :=
+  ‖g&#x27;‖ ^ 2 / ⟪d, g&#x27; - g⟫</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="background">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="../../../LinearAlgebra/matrix-decompositions/conjugate-gradient-method/index.html#step">One Hestenes–Stiefel conjugate gradient step</a>: the linear conjugate gradient
+  method for <span class="arithmatex">\(Ax = b\)</span> that the nonlinear methods reduce to on strictly convex quadratics with exact
+  line searches.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Y. H. Dai and Y. Yuan, <em>A nonlinear conjugate gradient method with a strong global convergence property</em>, SIAM J. Optim. 10 (1999), 177–182, formula (2.4).</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="../../../LinearAlgebra/matrix-decompositions/conjugate-gradient-method/index.html#step"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#dai-yuan-liminf-norm-gradient">Global convergence of the Dai–Yuan method</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#inner-dai-yuan-direction">The Dai–Yuan identity</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#inner-dai-yuan-direction-neg">Descent of the Dai–Yuan direction</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Analysis/numerical-analysis/nonlinear-conjugate-gradient-methods/inner-dai-yuan-direction">
+<h4 class="bp-thmheading" id="inner-dai-yuan-direction">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The Dai–Yuan identity</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/77c22f8f04da7715088e1a4d8f774110fdb30644/MathlibExt/Analysis/Optimization/DaiYuan.lean#L53" aria-label="View MathlibExt.Analysis.Optimization.DaiYuan.inner_daiYuan_direction in Lean source" title="View MathlibExt.Analysis.Optimization.DaiYuan.inner_daiYuan_direction in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#inner-dai-yuan-direction" aria-label="Link to The Dai–Yuan identity" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Analysis.Optimization.DaiYuan.inner_daiYuan_direction</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(g, g', d\)</span> be vectors of a real inner product space with <span class="arithmatex">\(d^\top (g' - g) \ne 0\)</span>, and let
+<span class="arithmatex">\(d' = -g' + \beta d\)</span> with the <a href="#dai-yuan-beta">Dai–Yuan parameter</a>
+<span class="arithmatex">\(\beta = \|g'\|^2 / d^\top (g' - g)\)</span>. Then
+$<span class="arithmatex">\(g'^\top d' = \beta\, g^\top d .\)</span>$
+Equivalently <span class="arithmatex">\(\beta = g'^\top d' / g^\top d\)</span>. The identity propagates the sign of the directional
+derivative from one search direction to the next, and the source calls it "very important in our
+convergence analysis".</p>
+<p>Proof: <span class="arithmatex">\(g'^\top d' = -\|g'\|^2 + \beta\, g'^\top d\)</span> and
+<span class="arithmatex">\(\beta\, g^\top d = \beta\, g'^\top d - \beta\, d^\top (g' - g) = \beta\, g'^\top d - \|g'\|^2\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> inner_daiYuan_direction {g g&#x27; d : E} (h : ⟪d, g&#x27; - g⟫ ≠ 0) :
+    ⟪g&#x27;, -g&#x27; + <a class="bp-lean-ref" href="#dai-yuan-beta" data-lean-name="MathlibExt.Analysis.Optimization.DaiYuan.daiYuanBeta">daiYuanBeta</a> g g&#x27; d • d⟫ = <a class="bp-lean-ref" href="#dai-yuan-beta" data-lean-name="MathlibExt.Analysis.Optimization.DaiYuan.daiYuanBeta">daiYuanBeta</a> g g&#x27; d * ⟪g, d⟫</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Analysis.Optimization.DaiYuan.daiYuanBeta">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> daiYuanBeta (g g&#x27; d : E) : ℝ :=
+  ‖g&#x27;‖ ^ 2 / ⟪d, g&#x27; - g⟫</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Optimization/DaiYuan.lean:46</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_1">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Y. H. Dai and Y. Yuan, <em>A nonlinear conjugate gradient method with a strong global convergence property</em>, SIAM J. Optim. 10 (1999), 177–182, equations (2.5) and (2.6).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#dai-yuan-beta">Dai–Yuan conjugate gradient parameter</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#dai-yuan-liminf-norm-gradient">Global convergence of the Dai–Yuan method</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#inner-dai-yuan-direction-neg">Descent of the Dai–Yuan direction</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Analysis/numerical-analysis/nonlinear-conjugate-gradient-methods/inner-dai-yuan-direction-neg">
+<h4 class="bp-thmheading" id="inner-dai-yuan-direction-neg">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Descent of the Dai–Yuan direction</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/77c22f8f04da7715088e1a4d8f774110fdb30644/MathlibExt/Analysis/Optimization/DaiYuan.lean#L66" aria-label="View MathlibExt.Analysis.Optimization.DaiYuan.inner_daiYuan_direction_neg in Lean source" title="View MathlibExt.Analysis.Optimization.DaiYuan.inner_daiYuan_direction_neg in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#inner-dai-yuan-direction-neg" aria-label="Link to Descent of the Dai–Yuan direction" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Analysis.Optimization.DaiYuan.inner_daiYuan_direction_neg</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(d\)</span> be a descent direction at a point with gradient <span class="arithmatex">\(g\)</span> (<span class="arithmatex">\(g^\top d &lt; 0\)</span>), and let the gradient
+<span class="arithmatex">\(g' \ne 0\)</span> at the next point satisfy the Wolfe curvature condition <span class="arithmatex">\(g'^\top d \ge \sigma\, g^\top d\)</span>
+with <span class="arithmatex">\(\sigma &lt; 1\)</span>. Then <span class="arithmatex">\(d^\top (g' - g) \ge (\sigma - 1)\, g^\top d &gt; 0\)</span>, and the Dai–Yuan direction
+<span class="arithmatex">\(d' = -g' + \beta^{DY} d\)</span> is again a descent direction: <span class="arithmatex">\(g'^\top d' &lt; 0\)</span>.</p>
+<p>This is the induction step showing that the Dai–Yuan method produces descent directions at every
+iteration under standard Wolfe line searches, whereas the Fletcher–Reeves method needs strong Wolfe
+steps with <span class="arithmatex">\(\sigma \le 1/2\)</span> for this.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> inner_daiYuan_direction_neg {g g&#x27; d : E} {σ : ℝ} (hσ : σ &lt; 1) (hdesc : ⟪g, d⟫ &lt; 0)
+    (hcurv : σ * ⟪g, d⟫ ≤ ⟪g&#x27;, d⟫) (hg&#x27; : g&#x27; ≠ 0) :
+    0 &lt; ⟪d, g&#x27; - g⟫ ∧ ⟪g&#x27;, -g&#x27; + <a class="bp-lean-ref" href="#dai-yuan-beta" data-lean-name="MathlibExt.Analysis.Optimization.DaiYuan.daiYuanBeta">daiYuanBeta</a> g g&#x27; d • d⟫ &lt; 0</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Analysis.Optimization.DaiYuan.daiYuanBeta">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> daiYuanBeta (g g&#x27; d : E) : ℝ :=
+  ‖g&#x27;‖ ^ 2 / ⟪d, g&#x27; - g⟫</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Optimization/DaiYuan.lean:46</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="#inner-dai-yuan-direction">The Dai–Yuan identity</a>: <span class="arithmatex">\(g'^\top d' = \beta\, g^\top d\)</span> with
+  <span class="arithmatex">\(\beta &gt; 0\)</span>.</li>
+<li><a href="../line-search-methods/index.html#curvature-condition">Wolfe curvature condition</a>: gives
+  <span class="arithmatex">\(d^\top (g' - g) &gt; 0\)</span>, inequality (3.10) of the source.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_2">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Y. H. Dai and Y. Yuan, <em>A nonlinear conjugate gradient method with a strong global convergence property</em>, SIAM J. Optim. 10 (1999), 177–182, proof of Theorem 3.3, inequality (3.10).</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#inner-dai-yuan-direction"> </a></p>
+<p><a href="../line-search-methods/index.html#curvature-condition"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#dai-yuan-beta">Dai–Yuan conjugate gradient parameter</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#inner-dai-yuan-direction">The Dai–Yuan identity</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#dai-yuan-liminf-norm-gradient">Global convergence of the Dai–Yuan method</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Analysis/numerical-analysis/nonlinear-conjugate-gradient-methods/dai-yuan-liminf-norm-gradient">
+<h4 class="bp-thmheading" id="dai-yuan-liminf-norm-gradient">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Global convergence of the Dai–Yuan method</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/77c22f8f04da7715088e1a4d8f774110fdb30644/MathlibExt/Analysis/Optimization/DaiYuan.lean#L101" aria-label="View MathlibExt.Analysis.Optimization.DaiYuan.daiYuan_liminf_norm_gradient in Lean source" title="View MathlibExt.Analysis.Optimization.DaiYuan.daiYuan_liminf_norm_gradient in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#dai-yuan-liminf-norm-gradient" aria-label="Link to Global convergence of the Dai–Yuan method" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Analysis.Optimization.DaiYuan.daiYuan_liminf_norm_gradient</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(E\)</span> be a real Hilbert space and <span class="arithmatex">\(f : E \to \mathbb{R}\)</span>, differentiable at the iterates (the Lean
+statement needs no such assumption), and write <span class="arithmatex">\(g_k = \nabla f(x_k)\)</span>. Run
+<span class="arithmatex">\(x_{k+1} = x_k + \alpha_k d_k\)</span> with <span class="arithmatex">\(\alpha_k &gt; 0\)</span>, <span class="arithmatex">\(d_0 = -g_0\)</span> and
+<span class="arithmatex">\(d_{k+1} = -g_{k+1} + \beta_k d_k\)</span> with the <a href="#dai-yuan-beta">Dai–Yuan parameter</a>
+<span class="arithmatex">\(\beta_k = \|g_{k+1}\|^2 / d_k^\top (g_{k+1} - g_k)\)</span>, every step length satisfying the
+<a href="../line-search-methods/index.html#wolfe-conditions">standard Wolfe conditions</a> with constants <span class="arithmatex">\(\delta &gt; 0\)</span>
+and <span class="arithmatex">\(\sigma &lt; 1\)</span>. Suppose <span class="arithmatex">\(f(x_k)\)</span> is bounded below,
+<span class="arithmatex">\(\|g_{k+1} - g_k\| \le L \|x_{k+1} - x_k\|\)</span> for some <span class="arithmatex">\(L &gt; 0\)</span>, and no <span class="arithmatex">\(g_k\)</span> vanishes (otherwise
+the method stops at a stationary point). Then
+$<span class="arithmatex">\(\liminf_{k \to \infty} \|g_k\| = 0 .\)</span>$</p>
+<p>As for the <a href="../line-search-methods/index.html#zoutendijk">Zoutendijk condition</a>, the source assumes <span class="arithmatex">\(f\)</span>
+bounded below and <span class="arithmatex">\(\nabla f\)</span> Lipschitz near the level set (Assumption 3.1); these imply the
+hypotheses used here. The point of the theorem is that, unlike the Fletcher–Reeves,
+Polak–Ribière–Polyak and Hestenes–Stiefel methods, no strong Wolfe condition and no sufficient
+descent condition is needed.</p>
+<p>Proof (the source's): every <span class="arithmatex">\(d_k\)</span> is a descent direction. Squaring
+<span class="arithmatex">\(d_{k+1} + g_{k+1} = \beta_k d_k\)</span> and dividing by <span class="arithmatex">\((g_{k+1}^\top d_{k+1})^2 = \beta_k^2 (g_k^\top d_k)^2\)</span>
+gives
+$<span class="arithmatex">\(\frac{\|d_{k+1}\|^2}{(g_{k+1}^\top d_{k+1})^2} \le \frac{\|d_k\|^2}{(g_k^\top d_k)^2} + \frac{1}{\|g_{k+1}\|^2},\)</span>$
+so <span class="arithmatex">\(\|d_k\|^2 / (g_k^\top d_k)^2 \le \sum_{i \le k} \|g_i\|^{-2}\)</span>. If <span class="arithmatex">\(\|g_k\| \ge c &gt; 0\)</span> for all <span class="arithmatex">\(k\)</span>,
+the terms of the Zoutendijk series are at least <span class="arithmatex">\(c^2 / (k + 1)\)</span>, and the series diverges.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#dai-yuan-beta"> </a></p>
+<p><a href="../line-search-methods/index.html#wolfe-conditions"> </a></p>
+<p><a href="../line-search-methods/index.html#zoutendijk"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> daiYuan_liminf_norm_gradient [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=CompleteSpace#doc" title="CompleteSpace">CompleteSpace</a> E] {f : E → ℝ} {δ σ L : ℝ} (hδ : 0 &lt; δ)
+    (hσ : σ &lt; 1) (hL : 0 &lt; L) {x d : ℕ → E} {α : ℕ → ℝ}
+    (hx : ∀ k, x (k + 1) = x k + α k • d k) (hα : ∀ k, 0 &lt; α k)
+    (hd0 : d 0 = -<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=gradient#doc" title="gradient">gradient</a> f (x 0))
+    (hd : ∀ k, d (k + 1) =
+      -<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=gradient#doc" title="gradient">gradient</a> f (x (k + 1)) +
+        <a class="bp-lean-ref" href="#dai-yuan-beta" data-lean-name="MathlibExt.Analysis.Optimization.DaiYuan.daiYuanBeta">daiYuanBeta</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=gradient#doc" title="gradient">gradient</a> f (x k)) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=gradient#doc" title="gradient">gradient</a> f (x (k + 1))) (d k) • d k)
+    (hwolfe : ∀ k, <a class="bp-lean-ref" href="../line-search-methods/index.html#wolfe-conditions" data-lean-name="MathlibExt.Analysis.Optimization.LineSearch.WolfeConditions">WolfeConditions</a> f δ σ (x k) (d k) (α k))
+    (hlip : ∀ k, ‖<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=gradient#doc" title="gradient">gradient</a> f (x (k + 1)) - <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=gradient#doc" title="gradient">gradient</a> f (x k)‖ ≤ L * ‖x (k + 1) - x k‖)
+    (hbdd : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=BddBelow#doc" title="BddBelow">BddBelow</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.range#doc" title="Set.range">Set.range</a> <span class="bp-lean-keyword">fun</span> k =&gt; f (x k)))
+    (hg : ∀ k, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=gradient#doc" title="gradient">gradient</a> f (x k) ≠ 0) :
+    ∀ ε &gt; 0, ∀ N : ℕ, ∃ k ≥ N, ‖<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=gradient#doc" title="gradient">gradient</a> f (x k)‖ &lt; ε</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Analysis.Optimization.DaiYuan.daiYuanBeta">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> daiYuanBeta (g g&#x27; d : E) : ℝ :=
+  ‖g&#x27;‖ ^ 2 / ⟪d, g&#x27; - g⟫</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Optimization/DaiYuan.lean:46</p>
+</div>
+<div data-lean-name="MathlibExt.Analysis.Optimization.LineSearch.WolfeConditions">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> WolfeConditions (f : E → ℝ) (δ σ : ℝ) (x d : E) (α : ℝ) : <span class="bp-lean-keyword">Prop</span> :=
+  ArmijoCondition f δ x d α ∧ CurvatureCondition f σ x d α</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Optimization/LineSearch.lean:54</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses_1">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="../line-search-methods/index.html#zoutendijk">Zoutendijk condition</a>: the summability that the recurrence
+  contradicts (Lemma 3.2 of the source).</li>
+<li><a href="#inner-dai-yuan-direction">The Dai–Yuan identity</a>: equation (2.6), used to divide the squared
+  recurrence.</li>
+<li><a href="#inner-dai-yuan-direction-neg">Descent of the Dai–Yuan direction</a>: the induction showing that
+  every direction is a descent direction, (3.9)–(3.10).</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_3">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Y. H. Dai and Y. Yuan, <em>A nonlinear conjugate gradient method with a strong global convergence property</em>, SIAM J. Optim. 10 (1999), 177–182, Theorem 3.3.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="../line-search-methods/index.html#zoutendijk"> </a></p>
+<p><a href="#inner-dai-yuan-direction"> </a></p>
+<p><a href="#inner-dai-yuan-direction-neg"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 7</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#dai-yuan-beta">Dai–Yuan conjugate gradient parameter</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../line-search-methods/index.html#wolfe-conditions">Standard Wolfe conditions</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#inner-dai-yuan-direction">The Dai–Yuan identity</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#inner-dai-yuan-direction-neg">Descent of the Dai–Yuan direction</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../line-search-methods/index.html#armijo-condition">Armijo sufficient decrease condition</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../line-search-methods/index.html#curvature-condition">Wolfe curvature condition</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../line-search-methods/index.html#zoutendijk">Zoutendijk condition</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-can_prove" data-autoform-node-id="Analysis/numerical-analysis/nonlinear-conjugate-gradient-methods/fletcher-reeves-liminf-norm-gradient">
+<h4 class="bp-thmheading" id="fletcher-reeves-liminf-norm-gradient">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Global convergence of the Fletcher–Reeves method under strong Wolfe steps</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/77c22f8f04da7715088e1a4d8f774110fdb30644/WantedExt/Analysis/Optimization/FletcherReevesWanted.lean#L39" aria-label="View WantedExt.Analysis.Optimization.FletcherReevesWanted.fletcherReeves_liminf_norm_gradient in Lean source" title="View WantedExt.Analysis.Optimization.FletcherReevesWanted.fletcherReeves_liminf_norm_gradient in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#fletcher-reeves-liminf-norm-gradient" aria-label="Link to Global convergence of the Fletcher–Reeves method under strong Wolfe steps" data-search-exclude>#</a><span class="bp-mark" title="ready to prove" data-search-exclude>●<span class="bp-mark-label">ready to prove</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">WantedExt.Analysis.Optimization.FletcherReevesWanted.fletcherReeves_liminf_norm_gradient</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(f\)</span> be a function on a finite-dimensional real inner product space whose level set
+<span class="arithmatex">\(\{y : f(y) \le f(x_0)\}\)</span> is bounded and which, on an open neighbourhood <span class="arithmatex">\(U\)</span> of it, is
+differentiable with <span class="arithmatex">\(L\)</span>-Lipschitz gradient. Run <span class="arithmatex">\(x_{k+1} = x_k + \alpha_k d_k\)</span> with
+<span class="arithmatex">\(d_0 = -\nabla f(x_0)\)</span> and
+$<span class="arithmatex">\(d_{k+1} = -\nabla f(x_{k+1}) + \frac{\|\nabla f(x_{k+1})\|^2}{\|\nabla f(x_k)\|^2}\, d_k ,\)</span>$
+every step length <span class="arithmatex">\(\alpha_k &gt; 0\)</span> satisfying the
+<a href="../line-search-methods/index.html#strong-wolfe-conditions">strong Wolfe conditions</a> with
+<span class="arithmatex">\(0 &lt; \delta &lt; \sigma \le 1/2\)</span>. If no gradient vanishes, then <span class="arithmatex">\(\liminf_k \|\nabla f(x_k)\| = 0\)</span>.</p>
+<p>The bound <span class="arithmatex">\(\sigma \le 1/2\)</span> is what makes every Fletcher–Reeves direction a descent direction
+(Lemma 4.1 of the source, whose proof it refers to Al-Baali). Al-Baali (1985) proved the
+convergence for <span class="arithmatex">\(\sigma &lt; 1/2\)</span>; the endpoint <span class="arithmatex">\(\sigma = 1/2\)</span> is due to Liu, Han and Yin (1993) and to
+Dai and Yuan (1996). Compare the
+<a href="#dai-yuan-liminf-norm-gradient">Dai–Yuan method</a>, which needs only standard Wolfe steps.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="../line-search-methods/index.html#strong-wolfe-conditions"> </a></p>
+<p><a href="#dai-yuan-liminf-norm-gradient"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem_wanted</span> fletcherReeves_liminf_norm_gradient {E : <span class="bp-lean-keyword">Type</span>*} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=NormedAddCommGroup#doc" title="NormedAddCommGroup">NormedAddCommGroup</a> E]
+    [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=InnerProductSpace#doc" title="InnerProductSpace">InnerProductSpace</a> ℝ E] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=FiniteDimensional#doc" title="FiniteDimensional">FiniteDimensional</a> ℝ E] {f : E → ℝ} {δ σ L : ℝ} (hδ : 0 &lt; δ)
+    (hδσ : δ &lt; σ) (hσ : σ ≤ 1 / 2) {x d : ℕ → E} {α : ℕ → ℝ}
+    (hlevel : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Bornology.IsBounded#doc" title="Bornology.IsBounded">Bornology.IsBounded</a> {y | f y ≤ f (x 0)}) {U : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set#doc" title="Set">Set</a> E} (hU : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=IsOpen#doc" title="IsOpen">IsOpen</a> U)
+    (hlevelU : {y | f y ≤ f (x 0)} ⊆ U) (hdiff : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=DifferentiableOn#doc" title="DifferentiableOn">DifferentiableOn</a> ℝ f U)
+    (hlip : ∀ y ∈ U, ∀ z ∈ U, ‖<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=gradient#doc" title="gradient">gradient</a> f y - <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=gradient#doc" title="gradient">gradient</a> f z‖ ≤ L * ‖y - z‖)
+    (hx : ∀ k, x (k + 1) = x k + α k • d k) (hα : ∀ k, 0 &lt; α k)
+    (hd0 : d 0 = -<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=gradient#doc" title="gradient">gradient</a> f (x 0))
+    (hd : ∀ k, d (k + 1) = -<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=gradient#doc" title="gradient">gradient</a> f (x (k + 1)) +
+      (‖<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=gradient#doc" title="gradient">gradient</a> f (x (k + 1))‖ ^ 2 / ‖<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=gradient#doc" title="gradient">gradient</a> f (x k)‖ ^ 2) • d k)
+    (hwolfe : ∀ k, <a class="bp-lean-ref" href="../line-search-methods/index.html#strong-wolfe-conditions" data-lean-name="MathlibExt.Analysis.Optimization.LineSearch.StrongWolfeConditions">StrongWolfeConditions</a> f δ σ (x k) (d k) (α k))
+    (hg : ∀ k, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=gradient#doc" title="gradient">gradient</a> f (x k) ≠ 0) :
+    ∀ ε &gt; 0, ∀ N : ℕ, ∃ k ≥ N, ‖<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=gradient#doc" title="gradient">gradient</a> f (x k)‖ &lt; ε</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Analysis.Optimization.LineSearch.StrongWolfeConditions">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> StrongWolfeConditions (f : E → ℝ) (δ σ : ℝ) (x d : E) (α : ℝ) : <span class="bp-lean-keyword">Prop</span> :=
+  ArmijoCondition f δ x d α ∧ |⟪gradient f (x + α • d), d⟫| ≤ -σ * ⟪gradient f x, d⟫</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Optimization/LineSearch.lean:60</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="background_1">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="../line-search-methods/index.html#zoutendijk">Zoutendijk condition</a>: the summability (Lemma 2.2 of the
+  source) on which its general convergence criteria, Lemmas 2.3 and 3.1, rest.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_4">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>Y. H. Dai and Y. Yuan, <em>A note on the nonlinear conjugate gradient method</em>, J. Comput. Math. 20 (2002); https://lsec.cc.ac.cn/pub/yyx/papers/jcm1290.pdf, Theorem 4.2 under Assumption 2.1.</li>
+<li>M. Al-Baali, <em>Descent property and global convergence of the Fletcher–Reeves method with inexact
+  line search</em>, IMA J. Numer. Anal. 5 (1985), 121–124 (the case <span class="arithmatex">\(\sigma &lt; 1/2\)</span>).</li>
+<li>G. H. Liu, J. Y. Han and H. X. Yin, <em>Global convergence of the Fletcher–Reeves algorithm with an
+  inexact line search</em>, report, Institute of Applied Mathematics, Chinese Academy of Sciences (1993),
+  and Y. H. Dai and Y. Yuan, <em>Convergence properties of the Fletcher–Reeves method</em>, IMA J. Numer.
+  Anal. 16 (1996), 155–164 (the case <span class="arithmatex">\(\sigma = 1/2\)</span>); references as listed in Dai and Yuan,
+  SIAM J. Optim. 10 (1999).</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="../line-search-methods/index.html#zoutendijk"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../line-search-methods/index.html#strong-wolfe-conditions">Strong Wolfe conditions</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>4</strong> fully proved</span><span class="bp-progress-state" title="Statement is in Lean and nothing it needs is blocked, so the proof can start."><span class="bp-swatch bp-swatch-can_prove"></span><strong>1</strong> ready to prove</span></div>
+</div>
+<h2 id="related-topics">Related topics</h2>
+<ul>
+<li><a href="../../../LinearAlgebra/matrix-decompositions/conjugate-gradient-method/index.html">Conjugate gradient method</a>: the linear method for symmetric positive definite systems,
+  to which these methods reduce on strictly convex quadratics with exact line searches.</li>
+<li><a href="../line-search-methods/index.html">Line search methods</a>: the Wolfe conditions and the Zoutendijk
+  condition used in every convergence proof here.</li>
+</ul>
+</div>
+<p><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../dependencies/index.json" data-graph-src="../../../../dependencies/scopes/Analysis/numerical-analysis/nonlinear-conjugate-gradient-methods.json" data-page-href="index.html" data-scope-id="Analysis/numerical-analysis/nonlinear-conjugate-gradient-methods">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>
