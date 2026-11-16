@@ -1,0 +1,6160 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../rademacher-complexity/index.html">
+      
+      
+        <link rel="next" href="../../../sorting-and-searching/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Algorithmic stability - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#stability-of-stochastic-gradient-descent" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Algorithmic stability
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23" id="__nav_2_1_23_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_23_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Computer Science
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../data-structures/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data structures
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../graph-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../process-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Process calculi and behavioural equivalence
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../type-systems-and-lambda-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Type systems and lambda calculi
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../programming-language-semantics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programming language semantics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23_7" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Machine learning
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23_7" id="__nav_2_1_23_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_23_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Machine learning
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../pac-learning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PAC learning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../online-learning-and-boosting/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Online learning and boosting
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../reinforcement-learning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reinforcement learning theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../supervised-learning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Supervised learning and regression
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../unsupervised-learning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Unsupervised learning and matrix factorization
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../probabilistic-graphical-models/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probabilistic graphical models
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../bayesian-inference-and-sampling/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bayesian inference and sampling
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../attention-and-low-rank-adaptation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Attention and low-rank adaptation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../linear-state-space-sequence-models/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear state-space sequence models
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../diffusion-and-flow-generative-models/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diffusion and flow-based generative models
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23_7_12" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Generalization bounds and concentration
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23_7_12" id="__nav_2_1_23_7_12_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_2_1_23_7_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23_7_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Generalization bounds and concentration
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pac-bayes-bounds/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PAC-Bayes bounds
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../finite-class-uniform-deviation.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Uniform deviation for a finite class
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bounded-differences-uniform-deviation.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concentration of the uniform deviation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rademacher-complexity/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rademacher complexity
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algorithmic stability
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algorithmic stability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#stability-of-stochastic-gradient-descent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stability of stochastic gradient descent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-topics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related topics
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../sorting-and-searching/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sorting and searching
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../dynamic-programming/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic programming
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../greedy-algorithms-and-matroids/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Greedy algorithms and matroids
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../approximation-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Approximation algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../online-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Online algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../randomized-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Randomized algorithms and probabilistic analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../parallel-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../algebraic-and-numerical-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic and numerical algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../computational-geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computational geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../string-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    String algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../heuristic-search-and-planning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heuristic search and planning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../cryptography/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cryptography
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../databases/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Databases
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../quantum-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../concurrent-systems-and-protocols/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concurrent systems and protocols
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../program-logics-and-verification/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Program logics and verification
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#stability-of-stochastic-gradient-descent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stability of stochastic gradient descent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-topics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related topics
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../../index.html" tabindex="-1">Computer Science</a></li><li><a href="../../index.html" tabindex="-1">Machine learning</a></li><li><a href="../index.html" tabindex="-1">Generalization bounds and concentration</a></li><li aria-current="page">Algorithmic stability</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Algorithmic stability</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="ComputerScience/machine-learning/generalization-bounds-and-concentration/algorithmic-stability" data-page-title="Algorithmic stability">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}var g = location.hash.slice(1), u = new URLSearchParams(g), q = Array.from(u), y = {};var d = u.get("node"), o = r.getAttribute("data-autoform-node-id");var l = d !== null ? d === o || d.replace(/^(?:scope|boundary):/, "") === o : q.length > 0 && q.every(function (e) {var n = e[0], v = e[1]; if (y[n]) return false; y[n] = 1;if (n === "view") return v === "graph" || v === "list";if (n === "direction") return ["both", "prerequisites", "dependents"].indexOf(v) >= 0;if (n === "isolates") return v === "0" || v === "1";return n === "status" && (v === "-" || v.split(",").every(function (t) { return /^(?:mathlib|fully_proved|proved|defined|conditional|can_prove|stated|can_state|not_ready|planned|inventory_checked|inventory_pending)$/.test(t); }));});var a = history.state && history.state.autoformNavigation, c = a && a.version === 1 && a.url === location.href && a.snapshot;var i = r.hasAttribute("data-reader-overview") && (!g || l), j = i && Boolean(c && c.readingOpen !== false);var z = f.querySelector(".bp-dag-sheet-handle"), e = f.querySelector("h1.bp-dag-sr-only");f.classList.toggle("bp-dag-overview-only", i); f.classList.toggle("bp-dag-sheet-open", j); if (j && z) z.textContent = "\u00d7";if (e) e.hidden = !i || j;f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="algorithmic-stability">Algorithmic stability</h1>
+<p>An algorithm is uniformly stable if replacing one example of its training sample changes the loss of its output at every test example by at most <span class="arithmatex">\(\varepsilon\)</span>. Uniform stability bounds the expected generalization gap by <span class="arithmatex">\(\varepsilon\)</span>, with no reference to the size or complexity of the class of predictors the algorithm may output (Bousquet and Elisseeff 2002; Hardt, Recht and Singer 2016, Theorem 2.2). The proof is an exchange argument: replacing a training example by a fresh one does not change the law of the sample. The generalization bound is formalized for a bounded, jointly measurable loss.</p>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/generalization-bounds-and-concentration/algorithmic-stability/is-uniformly-stable">
+<h4 class="bp-thmheading" id="is-uniformly-stable">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Uniform stability</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/37f7760ac4a415bfe3691cbd2719c06c7402a68a/CSLibExt/MachineLearning/GeneralizationBounds/Stability.lean#L72" aria-label="View CSLibExt.MachineLearning.GeneralizationBounds.IsUniformlyStable in Lean source" title="View CSLibExt.MachineLearning.GeneralizationBounds.IsUniformlyStable in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#is-uniformly-stable" aria-label="Link to Uniform stability" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">CSLibExt.MachineLearning.GeneralizationBounds.IsUniformlyStable</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(A\)</span> be an algorithm that maps a sample <span class="arithmatex">\(S = (z_1, \dots, z_n) \in \mathcal{Z}^n\)</span> to a predictor <span class="arithmatex">\(A(S)\)</span>, and let <span class="arithmatex">\(L(h, z)\)</span> be the loss of a predictor <span class="arithmatex">\(h\)</span> at an example <span class="arithmatex">\(z\)</span>. For <span class="arithmatex">\(i \in \{1, \dots, n\}\)</span> and <span class="arithmatex">\(z' \in \mathcal{Z}\)</span>, write <span class="arithmatex">\(S^{(i, z')}\)</span> for the sample <span class="arithmatex">\(S\)</span> with its <span class="arithmatex">\(i\)</span>-th example replaced by <span class="arithmatex">\(z'\)</span>. The algorithm is <strong><span class="arithmatex">\(\varepsilon\)</span>-uniformly stable</strong> if for every sample <span class="arithmatex">\(S\)</span>, index <span class="arithmatex">\(i\)</span>, replacement <span class="arithmatex">\(z'\)</span> and test example <span class="arithmatex">\(z\)</span>,</p>
+<div class="arithmatex">\[
+L\big(A(S^{(i, z')}), z\big) - L\big(A(S), z\big) \le \varepsilon .
+\]</div>
+<p>The pairs <span class="arithmatex">\((S, S^{(i, z')})\)</span> are exactly the pairs of samples that differ in at most one example. Since <span class="arithmatex">\(S\)</span> is itself <span class="arithmatex">\((S^{(i, z')})^{(i, z_i)}\)</span>, the one-sided bound of the definition also holds with the two samples exchanged, so <span class="arithmatex">\(\lvert L(A(S^{(i, z')}), z) - L(A(S), z)\rvert \le \varepsilon\)</span>.</p>
+<p>The Lean definition covers algorithms without internal randomness. For a randomized algorithm, Definition 2.1 of the source takes the expectation over the internal randomness inside the supremum; this is the deterministic definition applied to the expected loss <span class="arithmatex">\((S, z) \mapsto \mathbb{E}_A L(A(S), z)\)</span>, which is how <a href="#is-uniformly-stable-sgm">the stability of SGM</a> is stated.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsUniformlyStable {n : ℕ} (L : H → 𝒵 → ℝ) (A : (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → 𝒵) → H) (ε : ℝ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ (S : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → 𝒵) (i : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n) (z&#x27; z : 𝒵), L (A (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Function.update#doc" title="Function.update">Function.update</a> S i z&#x27;)) z - L (A S) z ≤ ε</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>M. Hardt, B. Recht and Y. Singer, <em>Train faster, generalize better: stability of stochastic gradient descent</em>, ICML 2016, arXiv:1509.01240, Definition 2.1.</li>
+<li>O. Bousquet and A. Elisseeff, <em>Stability and generalization</em>, Journal of Machine Learning Research 2 (2002), 499–526 (uniform stability).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#abs-integral-empirical-risk-sub-risk-le">Uniform stability implies generalization in expectation</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-uniformly-stable-sgm">SGM is uniformly stable</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/generalization-bounds-and-concentration/algorithmic-stability/map-update-prod-pi">
+<h4 class="bp-thmheading" id="map-update-prod-pi">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Replace-one sampling preserves the law of an i.i.d. sample</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/37f7760ac4a415bfe3691cbd2719c06c7402a68a/CSLibExt/MachineLearning/GeneralizationBounds/Stability.lean#L82" aria-label="View CSLibExt.MachineLearning.GeneralizationBounds.map_update_prod_pi in Lean source" title="View CSLibExt.MachineLearning.GeneralizationBounds.map_update_prod_pi in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#map-update-prod-pi" aria-label="Link to Replace-one sampling preserves the law of an i.i.d. sample" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">CSLibExt.MachineLearning.GeneralizationBounds.map_update_prod_pi</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\nu\)</span> be a probability measure on <span class="arithmatex">\(\mathcal{Z}\)</span>, let <span class="arithmatex">\(S = (z_1, \dots, z_n) \sim \nu^{\otimes n}\)</span> and <span class="arithmatex">\(z \sim \nu\)</span> be independent, and let <span class="arithmatex">\(S^{(i, z)}\)</span> be the sample <span class="arithmatex">\(S\)</span> with its <span class="arithmatex">\(i\)</span>-th example replaced by <span class="arithmatex">\(z\)</span>. Then <span class="arithmatex">\(S^{(i, z)}\)</span> has law <span class="arithmatex">\(\nu^{\otimes n}\)</span>: the image of <span class="arithmatex">\(\nu^{\otimes n} \otimes \nu\)</span> under <span class="arithmatex">\((S, z) \mapsto S^{(i, z)}\)</span> is <span class="arithmatex">\(\nu^{\otimes n}\)</span>.</p>
+<p>Proof: on a box <span class="arithmatex">\(\prod_j B_j\)</span>, the preimage is <span class="arithmatex">\(\big(\prod_{j \ne i} B_j \times \mathcal{Z}\big) \times B_i\)</span>, of measure <span class="arithmatex">\(\prod_{j \ne i} \nu(B_j) \cdot \nu(\mathcal{Z}) \cdot \nu(B_i) = \prod_j \nu(B_j)\)</span>, and boxes determine a product measure.</p>
+<p>This is the exchange step of the stability argument: the loss of <span class="arithmatex">\(A(S)\)</span> at the training example <span class="arithmatex">\(z_i\)</span> has the same law as the loss of <span class="arithmatex">\(A(S^{(i, z)})\)</span> at the fresh example <span class="arithmatex">\(z\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> map_update_prod_pi {n : ℕ} (ν : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> 𝒵) [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsProbabilityMeasure#doc" title="MeasureTheory.IsProbabilityMeasure">IsProbabilityMeasure</a> ν] (i : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n) :
+    ((<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure.pi#doc" title="MeasureTheory.Measure.pi">Measure.pi</a> <span class="bp-lean-keyword">fun</span> _ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n =&gt; ν).prod ν).map (<span class="bp-lean-keyword">fun</span> p =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Function.update#doc" title="Function.update">Function.update</a> p.1 i p.2) =
+      <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure.pi#doc" title="MeasureTheory.Measure.pi">Measure.pi</a> <span class="bp-lean-keyword">fun</span> _ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n =&gt; ν</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_1">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>M. Hardt, B. Recht and Y. Singer, <em>Train faster, generalize better: stability of stochastic gradient descent</em>, ICML 2016, arXiv:1509.01240, proof of Theorem 2.2 (the sample <span class="arithmatex">\(S^{(i)}\)</span> built from two independent samples <span class="arithmatex">\(S\)</span> and <span class="arithmatex">\(S'\)</span>).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-integral-empirical-risk-sub-risk-le">Uniform stability implies generalization in expectation</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/generalization-bounds-and-concentration/algorithmic-stability/abs-integral-empirical-risk-sub-risk-le">
+<h4 class="bp-thmheading" id="abs-integral-empirical-risk-sub-risk-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Uniform stability implies generalization in expectation</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/37f7760ac4a415bfe3691cbd2719c06c7402a68a/CSLibExt/MachineLearning/GeneralizationBounds/Stability.lean#L124" aria-label="View CSLibExt.MachineLearning.GeneralizationBounds.abs_integral_empiricalRisk_sub_risk_le in Lean source" title="View CSLibExt.MachineLearning.GeneralizationBounds.abs_integral_empiricalRisk_sub_risk_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#abs-integral-empirical-risk-sub-risk-le" aria-label="Link to Uniform stability implies generalization in expectation" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">CSLibExt.MachineLearning.GeneralizationBounds.abs_integral_empiricalRisk_sub_risk_le</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\nu\)</span> be a probability measure on the example space <span class="arithmatex">\(\mathcal{Z}\)</span>, let <span class="arithmatex">\(S = (z_1, \dots, z_n) \sim \nu^{\otimes n}\)</span> with <span class="arithmatex">\(n \ge 1\)</span>, and let <span class="arithmatex">\(A\)</span> be an <a href="#is-uniformly-stable"><span class="arithmatex">\(\varepsilon\)</span>-uniformly stable</a> algorithm for a loss <span class="arithmatex">\(L\)</span>. Assume that <span class="arithmatex">\((S, z) \mapsto L(A(S), z)\)</span> is jointly measurable and bounded. Then</p>
+<div class="arithmatex">\[
+\Big\lvert\, \mathbb{E}_S\big[\hat R_S(A(S)) - R(A(S))\big] \Big\rvert \le \varepsilon,
+\]</div>
+<p>where <span class="arithmatex">\(\hat R_S(h) = \frac1n \sum_{i=1}^n L(h, z_i)\)</span> is the <a href="../index.html#empirical-risk">empirical risk</a> and <span class="arithmatex">\(R(h) = \mathbb{E}_{z \sim \nu} L(h, z)\)</span> the <a href="../index.html#risk">expected risk</a>.</p>
+<p>Proof: by <a href="#map-update-prod-pi">replace-one sampling</a>, <span class="arithmatex">\(\mathbb{E}\, L(A(S), z_i) = \mathbb{E}\, L(A(S^{(i, z)}), z)\)</span> for an independent <span class="arithmatex">\(z \sim \nu\)</span>, while <span class="arithmatex">\(\mathbb{E}\, R(A(S)) = \mathbb{E}\, L(A(S), z)\)</span> by Fubini. Each of the <span class="arithmatex">\(n\)</span> differences <span class="arithmatex">\(L(A(S^{(i, z)}), z) - L(A(S), z)\)</span> lies in <span class="arithmatex">\([-\varepsilon, \varepsilon]\)</span> by stability, and averaging over <span class="arithmatex">\(i\)</span> gives the bound.</p>
+<p>The source states the theorem without regularity hypotheses. Joint measurability makes the loss at a training example, <span class="arithmatex">\(S \mapsto L(A(S), z_i)\)</span>, measurable, and boundedness makes every expectation in the proof finite; both are added here. The bound holds in expectation only.</p>
+<p>Unlike the <a href="../index.html#measure-real-exists-abs-empirical-risk-s">uniform deviation bounds</a> of the parent topic and <a href="../rademacher-complexity/index.html">Rademacher complexity</a>, the bound involves no complexity of a class of predictors: only the sensitivity of the algorithm to one example. Combined with <a href="#integral-abs-sgm-output-sub-le">the uniform stability of stochastic gradient descent</a>, it bounds the <a href="#abs-integral-empirical-risk-sub-risk-sgm">generalization gap of SGD</a> by <span class="arithmatex">\(2L^2/n\)</span> times the sum of its step sizes, for a loss bounded at the starting point.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> abs_integral_empiricalRisk_sub_risk_le {ν : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> 𝒵} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsProbabilityMeasure#doc" title="MeasureTheory.IsProbabilityMeasure">IsProbabilityMeasure</a> ν] {n : ℕ}
+    (hn : 0 &lt; n) {L : H → 𝒵 → ℝ} {A : (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → 𝒵) → H}
+    (hmeas : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Measurable#doc" title="Measurable">Measurable</a> <span class="bp-lean-keyword">fun</span> p : (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → 𝒵) × 𝒵 =&gt; L (A p.1) p.2) {M : ℝ}
+    (hbdd : ∀ S z, |L (A S) z| ≤ M) {ε : ℝ} (hstab : <a class="bp-lean-ref" href="#is-uniformly-stable" data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.IsUniformlyStable">IsUniformlyStable</a> L A ε) :
+    |∫ S, (<a class="bp-lean-ref" href="../index.html#empirical-risk" data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.empiricalRisk">empiricalRisk</a> L S (A S) - <a class="bp-lean-ref" href="../index.html#risk" data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.risk">risk</a> L ν (A S)) ∂(<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure.pi#doc" title="MeasureTheory.Measure.pi">Measure.pi</a> <span class="bp-lean-keyword">fun</span> _ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n =&gt; ν)| ≤ ε</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.IsUniformlyStable">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsUniformlyStable {n : ℕ} (L : H → 𝒵 → ℝ) (A : (Fin n → 𝒵) → H) (ε : ℝ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ (S : Fin n → 𝒵) (i : Fin n) (z&#x27; z : 𝒵), L (A (Function.update S i z&#x27;)) z - L (A S) z ≤ ε</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/GeneralizationBounds/Stability.lean:72</p>
+</div>
+<div data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.empiricalRisk">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> empiricalRisk {n : ℕ} (L : F → 𝒵 → ℝ) (z : Fin n → 𝒵) (f : F) : ℝ :=
+  (1 / n : ℝ) * ∑ i, L f (z i)</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/GeneralizationBounds/FiniteClass.lean:58</p>
+</div>
+<div data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.risk">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> risk (L : F → 𝒵 → ℝ) (ν : Measure 𝒵) (f : F) : ℝ :=
+  ∫ z, L f z ∂ν</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/GeneralizationBounds/FiniteClass.lean:52</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_2">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>M. Hardt, B. Recht and Y. Singer, <em>Train faster, generalize better: stability of stochastic gradient descent</em>, ICML 2016, arXiv:1509.01240, Theorem 2.2 (proof via a ghost sample <span class="arithmatex">\(S'\)</span> and the replace-one samples <span class="arithmatex">\(S^{(i)}\)</span>; the source attributes the argument to Lemma 7 of Bousquet and Elisseeff).</li>
+<li>O. Bousquet and A. Elisseeff, <em>Stability and generalization</em>, Journal of Machine Learning Research 2 (2002), 499–526.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-uniformly-stable">Uniform stability</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../index.html#empirical-risk">Empirical risk</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../index.html#risk">Expected risk</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#map-update-prod-pi">Replace-one sampling preserves the law of an i.i.d. sample</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-integral-empirical-risk-sub-risk-sgm">Generalization of SGM in expectation</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>12</strong> fully proved</span></div>
+</div>
+<h2 id="stability-of-stochastic-gradient-descent">Stability of stochastic gradient descent</h2>
+<p>Stochastic gradient descent on convex, <span class="arithmatex">\(\beta\)</span>-smooth, <span class="arithmatex">\(L\)</span>-Lipschitz losses with steps <span class="arithmatex">\(\alpha_t \le 2/\beta\)</span> is uniformly stable with <span class="arithmatex">\(\varepsilon \le (2L^2/n)\sum_t \alpha_t\)</span> (Hardt, Recht and Singer, Theorem 3.8). The proof couples the runs on two samples that differ in one example through the same random indices: a step on a shared example applies the same non-expansive gradient update to both runs, and a step on the differing example, which happens with probability <span class="arithmatex">\(1/n\)</span>, moves them apart by at most <span class="arithmatex">\(2\alpha_t L\)</span>. With the generalization bound above, applied to a loss bounded at the starting point (each step moves the iterate by at most <span class="arithmatex">\(\alpha_t L\)</span>, so the losses along the run stay bounded), the expected generalization gap of SGD is at most <span class="arithmatex">\(2L^2/n\)</span> times its total step length, whatever the number of passes over the data: training faster generalizes better.</p>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/generalization-bounds-and-concentration/algorithmic-stability/sgm-iterate">
+<h4 class="bp-thmheading" id="sgm-iterate">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Iterates of the stochastic gradient method</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/37f7760ac4a415bfe3691cbd2719c06c7402a68a/CSLibExt/MachineLearning/GeneralizationBounds/SGDStability.lean#L104" aria-label="View CSLibExt.MachineLearning.GeneralizationBounds.sgmIterate in Lean source" title="View CSLibExt.MachineLearning.GeneralizationBounds.sgmIterate in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#sgm-iterate" aria-label="Link to Iterates of the stochastic gradient method" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">CSLibExt.MachineLearning.GeneralizationBounds.sgmIterate</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\ell(w, z)\)</span> be the loss of a parameter <span class="arithmatex">\(w\)</span> in a real Hilbert space at an example <span class="arithmatex">\(z\)</span>, let <span class="arithmatex">\(S = (z_1, \dots, z_n)\)</span> be a sample, <span class="arithmatex">\((\alpha_t)_{t \ge 0}\)</span> step sizes and <span class="arithmatex">\(\iota : \mathbb{N} \to \{1, \dots, n\}\)</span> an index sequence. The stochastic gradient method (SGM) starts at <span class="arithmatex">\(w_0\)</span> and updates</p>
+<div class="arithmatex">\[
+w_{t+1} = w_t - \alpha_t\, \nabla_w \ell(w_t, z_{\iota(t)}) .
+\]</div>
+<p>Each step is the gradient update of the loss at one example of the sample; the index sequence is random in the algorithm (<a href="#index-measure">random selection rule</a>) and fixed here.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> sgmIterate {n : ℕ} (ℓ : E → 𝒵 → ℝ) (α : ℕ → ℝ) (w₀ : E) (S : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → 𝒵)
+    (ι : ℕ → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n) : ℕ → E
+  | 0 =&gt; w₀
+  | t + 1 =&gt; sgmIterate ℓ α w₀ S ι t -
+      α t • <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=gradient#doc" title="gradient">gradient</a> (<span class="bp-lean-keyword">fun</span> w =&gt; ℓ w (S (ι t))) (sgmIterate ℓ α w₀ S ι t)</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_3">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>M. Hardt, B. Recht and Y. Singer, <em>Train faster, generalize better: stability of stochastic gradient descent</em>, ICML 2016, arXiv:1509.01240, Section 3 (the stochastic gradient update <span class="arithmatex">\(w_{t+1} = w_t - \alpha_t \nabla_w f(w_t; z_{i_t})\)</span>).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-integral-empirical-risk-sub-risk-sgm">Generalization of SGM in expectation</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#integral-abs-sgm-output-sub-le">Uniform stability of SGM for convex, smooth, Lipschitz losses</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#norm-sgm-iterate-sub-le">Coupled distance of SGM along a fixed index sequence</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#norm-sgm-iterate-sub-start-le">SGM moves at most <span class="arithmatex">\(L \sum_t \alpha_t\)</span> from its start</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sgm-output">Output of the stochastic gradient method</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/generalization-bounds-and-concentration/algorithmic-stability/sgm-output">
+<h4 class="bp-thmheading" id="sgm-output">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Output of the stochastic gradient method</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/37f7760ac4a415bfe3691cbd2719c06c7402a68a/CSLibExt/MachineLearning/GeneralizationBounds/SGDStability.lean#L116" aria-label="View CSLibExt.MachineLearning.GeneralizationBounds.sgmOutput in Lean source" title="View CSLibExt.MachineLearning.GeneralizationBounds.sgmOutput in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#sgm-output" aria-label="Link to Output of the stochastic gradient method" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">CSLibExt.MachineLearning.GeneralizationBounds.sgmOutput</div>
+<div class="bp-thmcontent">
+<p>For a finite index sequence <span class="arithmatex">\(\kappa : \{0, \dots, T - 1\} \to \{1, \dots, n\}\)</span>, the output of <span class="arithmatex">\(T\)</span> steps of the stochastic gradient method on the sample <span class="arithmatex">\(S\)</span> is the <a href="#sgm-iterate">iterate</a> <span class="arithmatex">\(w_T\)</span> along <span class="arithmatex">\(\kappa\)</span>. In Lean, <span class="arithmatex">\(\kappa\)</span> is extended by an arbitrary index after step <span class="arithmatex">\(T\)</span>, which does not affect <span class="arithmatex">\(w_T\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> sgmOutput {n : ℕ} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=NeZero#doc" title="NeZero">NeZero</a> n] (ℓ : E → 𝒵 → ℝ) (α : ℕ → ℝ) (w₀ : E)
+    (S : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → 𝒵) (T : ℕ) (κ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> T → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n) : E :=
+  <a class="bp-lean-ref" href="#sgm-iterate" data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.sgmIterate">sgmIterate</a> ℓ α w₀ S (<span class="bp-lean-keyword">fun</span> t =&gt; <span class="bp-lean-keyword">if</span> h : t &lt; T <span class="bp-lean-keyword">then</span> κ ⟨t, h⟩ <span class="bp-lean-keyword">else</span> 0) T</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.sgmIterate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> sgmIterate {n : ℕ} (ℓ : E → 𝒵 → ℝ) (α : ℕ → ℝ) (w₀ : E) (S : Fin n → 𝒵)
+    (ι : ℕ → Fin n) : ℕ → E
+  | 0 =&gt; w₀
+  | t + 1 =&gt; sgmIterate ℓ α w₀ S ι t -
+      α t • gradient (<span class="bp-lean-keyword">fun</span> w =&gt; ℓ w (S (ι t))) (sgmIterate ℓ α w₀ S ι t)</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/GeneralizationBounds/SGDStability.lean:104</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_4">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>M. Hardt, B. Recht and Y. Singer, <em>Train faster, generalize better: stability of stochastic gradient descent</em>, ICML 2016, arXiv:1509.01240, Section 3.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sgm-iterate">Iterates of the stochastic gradient method</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#abs-integral-empirical-risk-sub-risk-sgm">Generalization of SGM in expectation</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#integral-abs-sgm-output-sub-le">Uniform stability of SGM for convex, smooth, Lipschitz losses</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-uniformly-stable-sgm">SGM is uniformly stable</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/generalization-bounds-and-concentration/algorithmic-stability/index-measure">
+<h4 class="bp-thmheading" id="index-measure">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Random selection rule</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/37f7760ac4a415bfe3691cbd2719c06c7402a68a/CSLibExt/MachineLearning/GeneralizationBounds/SGDStability.lean#L125" aria-label="View CSLibExt.MachineLearning.GeneralizationBounds.indexMeasure in Lean source" title="View CSLibExt.MachineLearning.GeneralizationBounds.indexMeasure in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#index-measure" aria-label="Link to Random selection rule" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">CSLibExt.MachineLearning.GeneralizationBounds.indexMeasure</div>
+<div class="bp-thmcontent">
+<p>The random selection rule of the stochastic gradient method draws the indices <span class="arithmatex">\(i_0, \dots, i_{T-1}\)</span> independently and uniformly from <span class="arithmatex">\(\{1, \dots, n\}\)</span>. Its law is the product of <span class="arithmatex">\(T\)</span> uniform distributions on <span class="arithmatex">\(\{1, \dots, n\}\)</span>, a probability measure on the index sequences <span class="arithmatex">\(\kappa : \{0, \dots, T-1\} \to \{1, \dots, n\}\)</span> when <span class="arithmatex">\(n \ge 1\)</span>. Under it, each step selects a given index with probability <span class="arithmatex">\(1/n\)</span>.</p>
+<p>The source also analyses the random permutation rule (one pass over a random permutation of the sample); it is not formalized here.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> indexMeasure (n T : ℕ) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> T → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n) :=
+  <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure.pi#doc" title="MeasureTheory.Measure.pi">Measure.pi</a> <span class="bp-lean-keyword">fun</span> _ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> T =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.uniformOn#doc" title="ProbabilityTheory.uniformOn">uniformOn</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.univ#doc" title="Set.univ">Set.univ</a> : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set#doc" title="Set">Set</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n))</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_5">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>M. Hardt, B. Recht and Y. Singer, <em>Train faster, generalize better: stability of stochastic gradient descent</em>, ICML 2016, arXiv:1509.01240, Section 3 (random selection rule).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#abs-integral-empirical-risk-sub-risk-sgm">Generalization of SGM in expectation</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#integral-abs-sgm-output-sub-le">Uniform stability of SGM for convex, smooth, Lipschitz losses</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-uniformly-stable-sgm">SGM is uniformly stable</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/generalization-bounds-and-concentration/algorithmic-stability/norm-sub-le-min-mul-add-two-mul">
+<h4 class="bp-thmheading" id="norm-sub-le-min-mul-add-two-mul">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Growth recursion for two bounded updates</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/37f7760ac4a415bfe3691cbd2719c06c7402a68a/CSLibExt/MachineLearning/GeneralizationBounds/SGDStability.lean#L71" aria-label="View CSLibExt.MachineLearning.GeneralizationBounds.norm_sub_le_min_mul_add_two_mul in Lean source" title="View CSLibExt.MachineLearning.GeneralizationBounds.norm_sub_le_min_mul_add_two_mul in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#norm-sub-le-min-mul-add-two-mul" aria-label="Link to Growth recursion for two bounded updates" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">CSLibExt.MachineLearning.GeneralizationBounds.norm_sub_le_min_mul_add_two_mul</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(G\)</span> and <span class="arithmatex">\(G'\)</span> be maps of a normed space into itself. Suppose <span class="arithmatex">\(G\)</span> is <span class="arithmatex">\(\eta\)</span>-expansive, <span class="arithmatex">\(\lVert G(v) - G(w)\rVert \le \eta \lVert v - w\rVert\)</span>, and that both are <span class="arithmatex">\(\sigma\)</span>-bounded, <span class="arithmatex">\(\lVert w - G(w)\rVert \le \sigma\)</span> and <span class="arithmatex">\(\lVert w - G'(w)\rVert \le \sigma\)</span> for all <span class="arithmatex">\(w\)</span>. Then for all <span class="arithmatex">\(v, w\)</span>,</p>
+<div class="arithmatex">\[
+\lVert G(v) - G'(w) \rVert \le \min(\eta, 1)\, \lVert v - w \rVert + 2\sigma .
+\]</div>
+<p>Proof: <span class="arithmatex">\(G(v) - G'(w) = (v - w) - (v - G(v)) + (w - G'(w))\)</span> gives the bound with <span class="arithmatex">\(1\)</span>, and <span class="arithmatex">\(G(v) - G'(w) = (G(v) - G(w)) - (w - G(w)) + (w - G'(w))\)</span> gives the bound with <span class="arithmatex">\(\eta\)</span>.</p>
+<p>Along two runs <span class="arithmatex">\(w_{t+1} = G_t(w_t)\)</span>, <span class="arithmatex">\(w'_{t+1} = G'_t(w'_t)\)</span> from the same start, the distance <span class="arithmatex">\(\delta_t = \lVert w_t - w'_t\rVert\)</span> thus satisfies <span class="arithmatex">\(\delta_{t+1} \le \eta\, \delta_t\)</span> when <span class="arithmatex">\(G_t = G'_t\)</span>, and <span class="arithmatex">\(\delta_{t+1} \le \min(\eta, 1)\,\delta_t + 2\sigma\)</span> otherwise. This recursion is the engine of <a href="#integral-abs-sgm-output-sub-le">the stability of SGM</a>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> norm_sub_le_min_mul_add_two_mul {G G&#x27; : E → E} {η σ : ℝ}
+    (hG : ∀ v w, ‖G v - G w‖ ≤ η * ‖v - w‖) (hσ : ∀ w, ‖w - G w‖ ≤ σ)
+    (hσ&#x27; : ∀ w, ‖w - G&#x27; w‖ ≤ σ) (v w : E) :
+    ‖G v - G&#x27; w‖ ≤ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Min.min#doc" title="Min.min">min</a> η 1 * ‖v - w‖ + 2 * σ</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_6">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>M. Hardt, B. Recht and Y. Singer, <em>Train faster, generalize better: stability of stochastic gradient descent</em>, ICML 2016, arXiv:1509.01240, Lemma 2.5 (second case; the first case is the definition of expansiveness), with Definitions 2.3 and 2.4 (<span class="arithmatex">\(\eta\)</span>-expansive and <span class="arithmatex">\(\sigma\)</span>-bounded update rules).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#norm-sgm-iterate-sub-le">Coupled distance of SGM along a fixed index sequence</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/generalization-bounds-and-concentration/algorithmic-stability/norm-sgm-iterate-sub-le">
+<h4 class="bp-thmheading" id="norm-sgm-iterate-sub-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Coupled distance of SGM along a fixed index sequence</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/37f7760ac4a415bfe3691cbd2719c06c7402a68a/CSLibExt/MachineLearning/GeneralizationBounds/SGDStability.lean#L139" aria-label="View CSLibExt.MachineLearning.GeneralizationBounds.norm_sgmIterate_sub_le in Lean source" title="View CSLibExt.MachineLearning.GeneralizationBounds.norm_sgmIterate_sub_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#norm-sgm-iterate-sub-le" aria-label="Link to Coupled distance of SGM along a fixed index sequence" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">CSLibExt.MachineLearning.GeneralizationBounds.norm_sgmIterate_sub_le</div>
+<div class="bp-thmcontent">
+<p>Let every loss <span class="arithmatex">\(\ell(\cdot, z)\)</span> be convex, differentiable and <span class="arithmatex">\(L\)</span>-Lipschitz on a real Hilbert space, with <span class="arithmatex">\(\beta\)</span>-Lipschitz gradient, and let <span class="arithmatex">\(0 \le \alpha_t \le 2/\beta\)</span>. Let <span class="arithmatex">\(S\)</span> and <span class="arithmatex">\(S'\)</span> be samples that differ only in their <span class="arithmatex">\(k\)</span>-th example, and run the stochastic gradient method from the same <span class="arithmatex">\(w_0\)</span> on <span class="arithmatex">\(S\)</span> and on <span class="arithmatex">\(S'\)</span> with the same index sequence <span class="arithmatex">\(\iota\)</span>. Then after <span class="arithmatex">\(t\)</span> steps</p>
+<div class="arithmatex">\[
+\lVert w_t - w'_t \rVert \le \sum_{s &lt; t,\ \iota(s) = k} 2\, \alpha_s L .
+\]</div>
+<p>Proof: by induction with the <a href="#norm-sub-le-min-mul-add-two-mul">growth recursion</a>. When <span class="arithmatex">\(\iota(s) \ne k\)</span>, both runs apply the same gradient update, which is <a href="../../../../Analysis/convex-analysis-and-variations/gradient-descent/index.html#norm-gradient-step-sub-le">non-expansive</a>; when <span class="arithmatex">\(\iota(s) = k\)</span>, both updates are <a href="../../../../Analysis/convex-analysis-and-variations/gradient-descent/index.html#norm-smul-gradient-le"><span class="arithmatex">\(\alpha_s L\)</span>-bounded</a> and the distance grows by at most <span class="arithmatex">\(2\alpha_s L\)</span>.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#norm-sub-le-min-mul-add-two-mul"> </a></p>
+<p><a href="../../../../Analysis/convex-analysis-and-variations/gradient-descent/index.html#norm-gradient-step-sub-le"> </a></p>
+<p><a href="../../../../Analysis/convex-analysis-and-variations/gradient-descent/index.html#norm-smul-gradient-le"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> norm_sgmIterate_sub_le {n : ℕ} {ℓ : E → 𝒵 → ℝ} {β : ℝ} (hβ : 0 &lt; β) {L : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=NNReal#doc" title="NNReal">NNReal</a>}
+    (hconv : ∀ z, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ConvexOn#doc" title="ConvexOn">ConvexOn</a> ℝ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.univ#doc" title="Set.univ">Set.univ</a> <span class="bp-lean-keyword">fun</span> w =&gt; ℓ w z)
+    (hdiff : ∀ z, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Differentiable#doc" title="Differentiable">Differentiable</a> ℝ <span class="bp-lean-keyword">fun</span> w =&gt; ℓ w z)
+    (hsmooth : ∀ z, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LipschitzWith#doc" title="LipschitzWith">LipschitzWith</a> ⟨β, hβ.le⟩ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=gradient#doc" title="gradient">gradient</a> <span class="bp-lean-keyword">fun</span> w =&gt; ℓ w z))
+    (hlip : ∀ z, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LipschitzWith#doc" title="LipschitzWith">LipschitzWith</a> L <span class="bp-lean-keyword">fun</span> w =&gt; ℓ w z) {α : ℕ → ℝ} (hα0 : ∀ t, 0 ≤ α t)
+    (hα : ∀ t, α t ≤ 2 / β) (w₀ : E) (S : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → 𝒵) (k : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n) (z&#x27; : 𝒵) (ι : ℕ → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n)
+    (t : ℕ) :
+    ‖<a class="bp-lean-ref" href="#sgm-iterate" data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.sgmIterate">sgmIterate</a> ℓ α w₀ S ι t - <a class="bp-lean-ref" href="#sgm-iterate" data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.sgmIterate">sgmIterate</a> ℓ α w₀ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Function.update#doc" title="Function.update">Function.update</a> S k z&#x27;) ι t‖ ≤
+      ∑ s ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">Finset.range</a> t, <span class="bp-lean-keyword">if</span> ι s = k <span class="bp-lean-keyword">then</span> 2 * α s * L <span class="bp-lean-keyword">else</span> 0</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.sgmIterate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> sgmIterate {n : ℕ} (ℓ : E → 𝒵 → ℝ) (α : ℕ → ℝ) (w₀ : E) (S : Fin n → 𝒵)
+    (ι : ℕ → Fin n) : ℕ → E
+  | 0 =&gt; w₀
+  | t + 1 =&gt; sgmIterate ℓ α w₀ S ι t -
+      α t • gradient (<span class="bp-lean-keyword">fun</span> w =&gt; ℓ w (S (ι t))) (sgmIterate ℓ α w₀ S ι t)</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/GeneralizationBounds/SGDStability.lean:104</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_7">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>M. Hardt, B. Recht and Y. Singer, <em>Train faster, generalize better: stability of stochastic gradient descent</em>, ICML 2016, arXiv:1509.01240, proof of Theorem 3.8 (Lemma 2.5 with Lemmas 3.3 and 3.7.2), along a fixed realization of the indices.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sgm-iterate">Iterates of the stochastic gradient method</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#norm-sub-le-min-mul-add-two-mul">Growth recursion for two bounded updates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../../Analysis/convex-analysis-and-variations/gradient-descent/index.html#norm-gradient-step-sub-le">The gradient update of a convex smooth function is non-expansive</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../../Analysis/convex-analysis-and-variations/gradient-descent/index.html#norm-smul-gradient-le">The gradient update of a Lipschitz function is <span class="arithmatex">\(\alpha L\)</span>-bounded</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#integral-abs-sgm-output-sub-le">Uniform stability of SGM for convex, smooth, Lipschitz losses</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/generalization-bounds-and-concentration/algorithmic-stability/integral-abs-sgm-output-sub-le">
+<h4 class="bp-thmheading" id="integral-abs-sgm-output-sub-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Uniform stability of SGM for convex, smooth, Lipschitz losses</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/37f7760ac4a415bfe3691cbd2719c06c7402a68a/CSLibExt/MachineLearning/GeneralizationBounds/SGDStability.lean#L192" aria-label="View CSLibExt.MachineLearning.GeneralizationBounds.integral_abs_sgmOutput_sub_le in Lean source" title="View CSLibExt.MachineLearning.GeneralizationBounds.integral_abs_sgmOutput_sub_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#integral-abs-sgm-output-sub-le" aria-label="Link to Uniform stability of SGM for convex, smooth, Lipschitz losses" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">CSLibExt.MachineLearning.GeneralizationBounds.integral_abs_sgmOutput_sub_le</div>
+<div class="bp-thmcontent">
+<p>Let every loss <span class="arithmatex">\(\ell(\cdot, z)\)</span> be convex, differentiable and <span class="arithmatex">\(L\)</span>-Lipschitz on a real Hilbert space, with <span class="arithmatex">\(\beta\)</span>-Lipschitz gradient (<span class="arithmatex">\(\beta &gt; 0\)</span>), and let the steps satisfy <span class="arithmatex">\(0 \le \alpha_t \le 2/\beta\)</span>. Let <span class="arithmatex">\(S\)</span> and <span class="arithmatex">\(S'\)</span> be samples of size <span class="arithmatex">\(n \ge 1\)</span> that differ in one example, and let <span class="arithmatex">\(w_T\)</span> and <span class="arithmatex">\(w'_T\)</span> be the outputs of <span class="arithmatex">\(T\)</span> steps of the stochastic gradient method from the same <span class="arithmatex">\(w_0\)</span>, with the same indices drawn by the <a href="#index-measure">random selection rule</a>. Then for every test example <span class="arithmatex">\(z\)</span>,</p>
+<div class="arithmatex">\[
+\mathbb{E}\, \big\lvert \ell(w_T, z) - \ell(w'_T, z) \big\rvert \le \frac{2 L^2}{n} \sum_{t=0}^{T-1} \alpha_t .
+\]</div>
+<p>Proof: since <span class="arithmatex">\(\ell(\cdot, z)\)</span> is <span class="arithmatex">\(L\)</span>-Lipschitz, the left side is at most <span class="arithmatex">\(L\, \mathbb{E}\lVert w_T - w'_T\rVert\)</span>. Along each index sequence the <a href="#norm-sgm-iterate-sub-le">coupled distance</a> is at most <span class="arithmatex">\(\sum_t 2\alpha_t L \cdot \mathbf{1}[\text{step } t \text{ selects the differing example}]\)</span>, and each step selects it with probability <span class="arithmatex">\(1/n\)</span>.</p>
+<p>The bound does not depend on the number of passes over the data, only on the total step length <span class="arithmatex">\(\sum_t \alpha_t\)</span>: SGD that is stopped early, or run with decreasing steps, is stable. Combined with <a href="#abs-integral-empirical-risk-sub-risk-le">the generalization bound for stable algorithms</a>, this gives the <a href="#abs-integral-empirical-risk-sub-risk-sgm">generalization bound for SGM</a>, for a loss bounded at the starting point, the "train faster, generalize better" principle. It complements the optimization rate of <a href="../../../../Analysis/convex-analysis-and-variations/gradient-descent/index.html#integral-sgd-average-sub-le">stochastic gradient descent</a>: the optimization error decreases and the stability bound increases with <span class="arithmatex">\(\sum_t \alpha_t\)</span>.</p>
+<p>The source states the theorem for steps <span class="arithmatex">\(\alpha_t &gt; 0\)</span> indexed from <span class="arithmatex">\(1\)</span> to <span class="arithmatex">\(T\)</span>; here the steps are indexed from <span class="arithmatex">\(0\)</span> and may vanish. Its strongly convex (Theorem 3.9) and non-convex (Theorem 3.12) versions are not formalized here.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> integral_abs_sgmOutput_sub_le {n : ℕ} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=NeZero#doc" title="NeZero">NeZero</a> n] {ℓ : E → 𝒵 → ℝ} {β : ℝ} (hβ : 0 &lt; β)
+    {L : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=NNReal#doc" title="NNReal">NNReal</a>} (hconv : ∀ z, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ConvexOn#doc" title="ConvexOn">ConvexOn</a> ℝ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.univ#doc" title="Set.univ">Set.univ</a> <span class="bp-lean-keyword">fun</span> w =&gt; ℓ w z)
+    (hdiff : ∀ z, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Differentiable#doc" title="Differentiable">Differentiable</a> ℝ <span class="bp-lean-keyword">fun</span> w =&gt; ℓ w z)
+    (hsmooth : ∀ z, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LipschitzWith#doc" title="LipschitzWith">LipschitzWith</a> ⟨β, hβ.le⟩ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=gradient#doc" title="gradient">gradient</a> <span class="bp-lean-keyword">fun</span> w =&gt; ℓ w z))
+    (hlip : ∀ z, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LipschitzWith#doc" title="LipschitzWith">LipschitzWith</a> L <span class="bp-lean-keyword">fun</span> w =&gt; ℓ w z) {α : ℕ → ℝ} (hα0 : ∀ t, 0 ≤ α t)
+    (hα : ∀ t, α t ≤ 2 / β) (w₀ : E) (T : ℕ) (S : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → 𝒵) (k : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n) (z&#x27; z : 𝒵) :
+    ∫ κ, |ℓ (<a class="bp-lean-ref" href="#sgm-output" data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.sgmOutput">sgmOutput</a> ℓ α w₀ S T κ) z - ℓ (<a class="bp-lean-ref" href="#sgm-output" data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.sgmOutput">sgmOutput</a> ℓ α w₀ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Function.update#doc" title="Function.update">Function.update</a> S k z&#x27;) T κ) z|
+        ∂(<a class="bp-lean-ref" href="#index-measure" data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.indexMeasure">indexMeasure</a> n T) ≤
+      2 * (L : ℝ) ^ 2 / n * ∑ t ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">Finset.range</a> T, α t</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.sgmOutput">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> sgmOutput {n : ℕ} [NeZero n] (ℓ : E → 𝒵 → ℝ) (α : ℕ → ℝ) (w₀ : E)
+    (S : Fin n → 𝒵) (T : ℕ) (κ : Fin T → Fin n) : E :=
+  sgmIterate ℓ α w₀ S (<span class="bp-lean-keyword">fun</span> t =&gt; <span class="bp-lean-keyword">if</span> h : t &lt; T <span class="bp-lean-keyword">then</span> κ ⟨t, h⟩ <span class="bp-lean-keyword">else</span> 0) T</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/GeneralizationBounds/SGDStability.lean:116</p>
+</div>
+<div data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.indexMeasure">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> indexMeasure (n T : ℕ) : Measure (Fin T → Fin n) :=
+  Measure.pi <span class="bp-lean-keyword">fun</span> _ : Fin T =&gt; uniformOn (Set.univ : Set (Fin n))</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/GeneralizationBounds/SGDStability.lean:125</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_8">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>M. Hardt, B. Recht and Y. Singer, <em>Train faster, generalize better: stability of stochastic gradient descent</em>, ICML 2016, arXiv:1509.01240, Theorem 3.8 (inequality (3.3) and the recursion (3.4), unrolled).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#index-measure">Random selection rule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sgm-output">Output of the stochastic gradient method</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#norm-sgm-iterate-sub-le">Coupled distance of SGM along a fixed index sequence</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#sgm-iterate">Iterates of the stochastic gradient method</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-uniformly-stable-sgm">SGM is uniformly stable</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/generalization-bounds-and-concentration/algorithmic-stability/is-uniformly-stable-sgm">
+<h4 class="bp-thmheading" id="is-uniformly-stable-sgm">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">SGM is uniformly stable</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/37f7760ac4a415bfe3691cbd2719c06c7402a68a/CSLibExt/MachineLearning/GeneralizationBounds/SGDStability.lean#L260" aria-label="View CSLibExt.MachineLearning.GeneralizationBounds.isUniformlyStable_sgm in Lean source" title="View CSLibExt.MachineLearning.GeneralizationBounds.isUniformlyStable_sgm in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#is-uniformly-stable-sgm" aria-label="Link to SGM is uniformly stable" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">CSLibExt.MachineLearning.GeneralizationBounds.isUniformlyStable_sgm</div>
+<div class="bp-thmcontent">
+<p>Under the hypotheses of <a href="#integral-abs-sgm-output-sub-le">the stability bound for SGM</a>, the stochastic gradient method is <span class="arithmatex">\(\varepsilon\)</span>-<a href="#is-uniformly-stable">uniformly stable</a> with</p>
+<div class="arithmatex">\[
+\varepsilon = \frac{2 L^2}{n} \sum_{t=0}^{T-1} \alpha_t ,
+\]</div>
+<p>in the sense of Definition 2.1 of the source, where the expectation is over the internal randomness: for samples <span class="arithmatex">\(S, S'\)</span> differing in one example and every <span class="arithmatex">\(z\)</span>, <span class="arithmatex">\(\mathbb{E}_\kappa\, \ell(w_T(S', \kappa), z) - \mathbb{E}_\kappa\, \ell(w_T(S, \kappa), z) \le \varepsilon\)</span>. In Lean, the randomized algorithm is encoded as the identity algorithm on samples with the loss averaged over the index sequence, <span class="arithmatex">\((S, z) \mapsto \mathbb{E}_\kappa\, \ell(w_T(S, \kappa), z)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> isUniformlyStable_sgm {n : ℕ} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=NeZero#doc" title="NeZero">NeZero</a> n] {ℓ : E → 𝒵 → ℝ} {β : ℝ} (hβ : 0 &lt; β)
+    {L : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=NNReal#doc" title="NNReal">NNReal</a>} (hconv : ∀ z, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ConvexOn#doc" title="ConvexOn">ConvexOn</a> ℝ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.univ#doc" title="Set.univ">Set.univ</a> <span class="bp-lean-keyword">fun</span> w =&gt; ℓ w z)
+    (hdiff : ∀ z, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Differentiable#doc" title="Differentiable">Differentiable</a> ℝ <span class="bp-lean-keyword">fun</span> w =&gt; ℓ w z)
+    (hsmooth : ∀ z, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LipschitzWith#doc" title="LipschitzWith">LipschitzWith</a> ⟨β, hβ.le⟩ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=gradient#doc" title="gradient">gradient</a> <span class="bp-lean-keyword">fun</span> w =&gt; ℓ w z))
+    (hlip : ∀ z, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LipschitzWith#doc" title="LipschitzWith">LipschitzWith</a> L <span class="bp-lean-keyword">fun</span> w =&gt; ℓ w z) {α : ℕ → ℝ} (hα0 : ∀ t, 0 ≤ α t)
+    (hα : ∀ t, α t ≤ 2 / β) (w₀ : E) (T : ℕ) :
+    <a class="bp-lean-ref" href="#is-uniformly-stable" data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.IsUniformlyStable">IsUniformlyStable</a> (<span class="bp-lean-keyword">fun</span> (S : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → 𝒵) z =&gt; ∫ κ, ℓ (<a class="bp-lean-ref" href="#sgm-output" data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.sgmOutput">sgmOutput</a> ℓ α w₀ S T κ) z
+        ∂(<a class="bp-lean-ref" href="#index-measure" data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.indexMeasure">indexMeasure</a> n T)) <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=id#doc" title="id">id</a> (2 * (L : ℝ) ^ 2 / n * ∑ t ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">Finset.range</a> T, α t)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.IsUniformlyStable">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsUniformlyStable {n : ℕ} (L : H → 𝒵 → ℝ) (A : (Fin n → 𝒵) → H) (ε : ℝ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ (S : Fin n → 𝒵) (i : Fin n) (z&#x27; z : 𝒵), L (A (Function.update S i z&#x27;)) z - L (A S) z ≤ ε</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/GeneralizationBounds/Stability.lean:72</p>
+</div>
+<div data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.sgmOutput">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> sgmOutput {n : ℕ} [NeZero n] (ℓ : E → 𝒵 → ℝ) (α : ℕ → ℝ) (w₀ : E)
+    (S : Fin n → 𝒵) (T : ℕ) (κ : Fin T → Fin n) : E :=
+  sgmIterate ℓ α w₀ S (<span class="bp-lean-keyword">fun</span> t =&gt; <span class="bp-lean-keyword">if</span> h : t &lt; T <span class="bp-lean-keyword">then</span> κ ⟨t, h⟩ <span class="bp-lean-keyword">else</span> 0) T</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/GeneralizationBounds/SGDStability.lean:116</p>
+</div>
+<div data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.indexMeasure">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> indexMeasure (n T : ℕ) : Measure (Fin T → Fin n) :=
+  Measure.pi <span class="bp-lean-keyword">fun</span> _ : Fin T =&gt; uniformOn (Set.univ : Set (Fin n))</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/GeneralizationBounds/SGDStability.lean:125</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_9">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>M. Hardt, B. Recht and Y. Singer, <em>Train faster, generalize better: stability of stochastic gradient descent</em>, ICML 2016, arXiv:1509.01240, Theorem 3.8 with Definition 2.1.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-uniformly-stable">Uniform stability</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#index-measure">Random selection rule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sgm-output">Output of the stochastic gradient method</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#integral-abs-sgm-output-sub-le">Uniform stability of SGM for convex, smooth, Lipschitz losses</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-integral-empirical-risk-sub-risk-sgm">Generalization of SGM in expectation</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/generalization-bounds-and-concentration/algorithmic-stability/norm-sgm-iterate-sub-start-le">
+<h4 class="bp-thmheading" id="norm-sgm-iterate-sub-start-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">SGM moves at most <span class="arithmatex">\(L \sum_t \alpha_t\)</span> from its start</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/37f7760ac4a415bfe3691cbd2719c06c7402a68a/CSLibExt/MachineLearning/GeneralizationBounds/SGDStability.lean#L288" aria-label="View CSLibExt.MachineLearning.GeneralizationBounds.norm_sgmIterate_sub_start_le in Lean source" title="View CSLibExt.MachineLearning.GeneralizationBounds.norm_sgmIterate_sub_start_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#norm-sgm-iterate-sub-start-le" aria-label="Link to SGM moves at most L ∑ₜ αₜ from its start" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">CSLibExt.MachineLearning.GeneralizationBounds.norm_sgmIterate_sub_start_le</div>
+<div class="bp-thmcontent">
+<p>Let every loss <span class="arithmatex">\(\ell(\cdot, z)\)</span> be <span class="arithmatex">\(L\)</span>-Lipschitz on a real Hilbert space and let the steps satisfy <span class="arithmatex">\(\alpha_t \ge 0\)</span>. Then along every index sequence the <a href="#sgm-iterate">iterates of the stochastic gradient method</a> satisfy</p>
+<div class="arithmatex">\[
+\lVert w_t - w_0 \rVert \le L \sum_{s &lt; t} \alpha_s .
+\]</div>
+<p>Proof: each step <span class="arithmatex">\(w_{s+1} = w_s - \alpha_s \nabla_w \ell(w_s, z_{i_s})\)</span> moves the iterate by at most <span class="arithmatex">\(\alpha_s L\)</span>, since <a href="../../../../Analysis/convex-analysis-and-variations/gradient-descent/index.html#norm-smul-gradient-le">the gradient update of a Lipschitz function is <span class="arithmatex">\(\alpha L\)</span>-bounded</a>; sum over the steps.</p>
+<p>Consequently, if the loss is bounded at the start, <span class="arithmatex">\(\lvert \ell(w_0, z)\rvert \le M\)</span>, then every loss along the run satisfies <span class="arithmatex">\(\lvert \ell(w_t, z)\rvert \le M + L^2 \sum_{s&lt;t} \alpha_s\)</span>, which is what <a href="#abs-integral-empirical-risk-sub-risk-sgm">the generalization bound for SGM</a> needs.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#sgm-iterate"> </a></p>
+<p><a href="../../../../Analysis/convex-analysis-and-variations/gradient-descent/index.html#norm-smul-gradient-le"> </a></p>
+<p><a href="#abs-integral-empirical-risk-sub-risk-sgm"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> norm_sgmIterate_sub_start_le {n : ℕ} {ℓ : E → 𝒵 → ℝ} {L : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=NNReal#doc" title="NNReal">NNReal</a>}
+    (hlip : ∀ z, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LipschitzWith#doc" title="LipschitzWith">LipschitzWith</a> L <span class="bp-lean-keyword">fun</span> w =&gt; ℓ w z) {α : ℕ → ℝ} (hα0 : ∀ t, 0 ≤ α t) (w₀ : E)
+    (S : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → 𝒵) (ι : ℕ → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n) (t : ℕ) :
+    ‖<a class="bp-lean-ref" href="#sgm-iterate" data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.sgmIterate">sgmIterate</a> ℓ α w₀ S ι t - w₀‖ ≤ L * ∑ s ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">Finset.range</a> t, α s</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.sgmIterate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> sgmIterate {n : ℕ} (ℓ : E → 𝒵 → ℝ) (α : ℕ → ℝ) (w₀ : E) (S : Fin n → 𝒵)
+    (ι : ℕ → Fin n) : ℕ → E
+  | 0 =&gt; w₀
+  | t + 1 =&gt; sgmIterate ℓ α w₀ S ι t -
+      α t • gradient (<span class="bp-lean-keyword">fun</span> w =&gt; ℓ w (S (ι t))) (sgmIterate ℓ α w₀ S ι t)</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/GeneralizationBounds/SGDStability.lean:104</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_10">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>M. Hardt, B. Recht and Y. Singer, <em>Train faster, generalize better: stability of stochastic gradient descent</em>, ICML 2016, arXiv:1509.01240, Lemma 3.3 (each gradient update is <span class="arithmatex">\(\alpha L\)</span>-bounded), summed over the steps.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sgm-iterate">Iterates of the stochastic gradient method</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../../Analysis/convex-analysis-and-variations/gradient-descent/index.html#norm-smul-gradient-le">The gradient update of a Lipschitz function is <span class="arithmatex">\(\alpha L\)</span>-bounded</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-integral-empirical-risk-sub-risk-sgm">Generalization of SGM in expectation</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/generalization-bounds-and-concentration/algorithmic-stability/abs-integral-empirical-risk-sub-risk-sgm">
+<h4 class="bp-thmheading" id="abs-integral-empirical-risk-sub-risk-sgm">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Generalization of SGM in expectation</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/37f7760ac4a415bfe3691cbd2719c06c7402a68a/CSLibExt/MachineLearning/GeneralizationBounds/SGDStability.lean#L333" aria-label="View CSLibExt.MachineLearning.GeneralizationBounds.abs_integral_empiricalRisk_sub_risk_sgm_le in Lean source" title="View CSLibExt.MachineLearning.GeneralizationBounds.abs_integral_empiricalRisk_sub_risk_sgm_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#abs-integral-empirical-risk-sub-risk-sgm" aria-label="Link to Generalization of SGM in expectation" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">CSLibExt.MachineLearning.GeneralizationBounds.abs_integral_empiricalRisk_sub_risk_sgm_le</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\nu\)</span> be a probability measure on the example space and <span class="arithmatex">\(S \sim \nu^{\otimes n}\)</span> an i.i.d. sample of size <span class="arithmatex">\(n \ge 1\)</span>. Let every loss <span class="arithmatex">\(\ell(\cdot, z)\)</span> be convex, differentiable and <span class="arithmatex">\(L\)</span>-Lipschitz on a real Hilbert space, with <span class="arithmatex">\(\beta\)</span>-Lipschitz gradient, let <span class="arithmatex">\(0 \le \alpha_t \le 2/\beta\)</span>, and let <span class="arithmatex">\(w_T\)</span> be the output of <span class="arithmatex">\(T\)</span> steps of the stochastic gradient method with the random selection rule. Assume moreover that the loss is bounded at the starting point, <span class="arithmatex">\(\lvert \ell(w_0, z)\rvert \le M\)</span> for every <span class="arithmatex">\(z\)</span>, and that, for every index sequence <span class="arithmatex">\(\kappa\)</span>, <span class="arithmatex">\((S, z) \mapsto \ell(w_T(S, \kappa), z)\)</span> is jointly measurable. Then</p>
+<div class="arithmatex">\[
+\Big\lvert\, \mathbb{E}_{S, \kappa}\big[\hat R_S(w_T) - R(w_T)\big] \Big\rvert \le \frac{2 L^2}{n} \sum_{t=0}^{T-1} \alpha_t ,
+\]</div>
+<p>with <span class="arithmatex">\(\hat R_S(w) = \frac1n \sum_i \ell(w, z_i)\)</span> and <span class="arithmatex">\(R(w) = \mathbb{E}_{z \sim \nu}\, \ell(w, z)\)</span>. In Lean the expectation over <span class="arithmatex">\(\kappa\)</span> is taken inside the empirical and expected risks, as in <a href="#is-uniformly-stable-sgm">the uniform stability of SGM</a>.</p>
+<p>Proof: <a href="#is-uniformly-stable-sgm">SGM is uniformly stable</a>, and <a href="#abs-integral-empirical-risk-sub-risk-le">uniform stability implies generalization in expectation</a>. That theorem needs a bounded loss: since each step moves the iterate by at most <span class="arithmatex">\(\alpha_t L\)</span>, <a href="#norm-sgm-iterate-sub-start-le">the run stays within <span class="arithmatex">\(L \sum_t \alpha_t\)</span> of <span class="arithmatex">\(w_0\)</span></a>, so every loss along the run is at most <span class="arithmatex">\(M + L^2 \sum_{t&lt;T} \alpha_t\)</span> in absolute value. The bound at <span class="arithmatex">\(w_0\)</span> and the measurability make the expectations defined; the source does not state them. A bound on the whole space would not do: a convex function bounded on the whole space is constant.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#is-uniformly-stable-sgm"> </a></p>
+<p><a href="#abs-integral-empirical-risk-sub-risk-le"> </a></p>
+<p><a href="#norm-sgm-iterate-sub-start-le"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> abs_integral_empiricalRisk_sub_risk_sgm_le [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasurableSpace#doc" title="MeasurableSpace">MeasurableSpace</a> 𝒵] {ν : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> 𝒵}
+    [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsProbabilityMeasure#doc" title="MeasureTheory.IsProbabilityMeasure">IsProbabilityMeasure</a> ν] {n : ℕ} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=NeZero#doc" title="NeZero">NeZero</a> n] {ℓ : E → 𝒵 → ℝ} {β : ℝ} (hβ : 0 &lt; β)
+    {L : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=NNReal#doc" title="NNReal">NNReal</a>} (hconv : ∀ z, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ConvexOn#doc" title="ConvexOn">ConvexOn</a> ℝ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set.univ#doc" title="Set.univ">Set.univ</a> <span class="bp-lean-keyword">fun</span> w =&gt; ℓ w z)
+    (hdiff : ∀ z, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Differentiable#doc" title="Differentiable">Differentiable</a> ℝ <span class="bp-lean-keyword">fun</span> w =&gt; ℓ w z)
+    (hsmooth : ∀ z, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LipschitzWith#doc" title="LipschitzWith">LipschitzWith</a> ⟨β, hβ.le⟩ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=gradient#doc" title="gradient">gradient</a> <span class="bp-lean-keyword">fun</span> w =&gt; ℓ w z))
+    (hlip : ∀ z, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=LipschitzWith#doc" title="LipschitzWith">LipschitzWith</a> L <span class="bp-lean-keyword">fun</span> w =&gt; ℓ w z) {α : ℕ → ℝ} (hα0 : ∀ t, 0 ≤ α t)
+    (hα : ∀ t, α t ≤ 2 / β) (w₀ : E) (T : ℕ) {M : ℝ} (hbdd₀ : ∀ z, |ℓ w₀ z| ≤ M)
+    (hmeas : ∀ κ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> T → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n,
+      <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Measurable#doc" title="Measurable">Measurable</a> <span class="bp-lean-keyword">fun</span> p : (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → 𝒵) × 𝒵 =&gt; ℓ (<a class="bp-lean-ref" href="#sgm-output" data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.sgmOutput">sgmOutput</a> ℓ α w₀ p.1 T κ) p.2) :
+    |∫ S, (<a class="bp-lean-ref" href="../index.html#empirical-risk" data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.empiricalRisk">empiricalRisk</a> (<span class="bp-lean-keyword">fun</span> (S : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → 𝒵) z =&gt; ∫ κ, ℓ (<a class="bp-lean-ref" href="#sgm-output" data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.sgmOutput">sgmOutput</a> ℓ α w₀ S T κ) z
+          ∂(<a class="bp-lean-ref" href="#index-measure" data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.indexMeasure">indexMeasure</a> n T)) S S -
+        <a class="bp-lean-ref" href="../index.html#risk" data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.risk">risk</a> (<span class="bp-lean-keyword">fun</span> (S : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → 𝒵) z =&gt; ∫ κ, ℓ (<a class="bp-lean-ref" href="#sgm-output" data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.sgmOutput">sgmOutput</a> ℓ α w₀ S T κ) z
+          ∂(<a class="bp-lean-ref" href="#index-measure" data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.indexMeasure">indexMeasure</a> n T)) ν S) ∂(<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure.pi#doc" title="MeasureTheory.Measure.pi">Measure.pi</a> <span class="bp-lean-keyword">fun</span> _ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n =&gt; ν)| ≤
+      2 * (L : ℝ) ^ 2 / n * ∑ t ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">Finset.range</a> T, α t</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.sgmOutput">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> sgmOutput {n : ℕ} [NeZero n] (ℓ : E → 𝒵 → ℝ) (α : ℕ → ℝ) (w₀ : E)
+    (S : Fin n → 𝒵) (T : ℕ) (κ : Fin T → Fin n) : E :=
+  sgmIterate ℓ α w₀ S (<span class="bp-lean-keyword">fun</span> t =&gt; <span class="bp-lean-keyword">if</span> h : t &lt; T <span class="bp-lean-keyword">then</span> κ ⟨t, h⟩ <span class="bp-lean-keyword">else</span> 0) T</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/GeneralizationBounds/SGDStability.lean:116</p>
+</div>
+<div data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.empiricalRisk">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> empiricalRisk {n : ℕ} (L : F → 𝒵 → ℝ) (z : Fin n → 𝒵) (f : F) : ℝ :=
+  (1 / n : ℝ) * ∑ i, L f (z i)</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/GeneralizationBounds/FiniteClass.lean:58</p>
+</div>
+<div data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.indexMeasure">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> indexMeasure (n T : ℕ) : Measure (Fin T → Fin n) :=
+  Measure.pi <span class="bp-lean-keyword">fun</span> _ : Fin T =&gt; uniformOn (Set.univ : Set (Fin n))</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/GeneralizationBounds/SGDStability.lean:125</p>
+</div>
+<div data-lean-name="CSLibExt.MachineLearning.GeneralizationBounds.risk">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> risk (L : F → 𝒵 → ℝ) (ν : Measure 𝒵) (f : F) : ℝ :=
+  ∫ z, L f z ∂ν</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/GeneralizationBounds/FiniteClass.lean:52</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_11">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>M. Hardt, B. Recht and Y. Singer, <em>Train faster, generalize better: stability of stochastic gradient descent</em>, ICML 2016, arXiv:1509.01240, Theorem 2.2 applied to Theorem 3.8 (Section 3, "train faster, generalize better").</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 8</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../index.html#empirical-risk">Empirical risk</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#index-measure">Random selection rule</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../index.html#risk">Expected risk</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sgm-output">Output of the stochastic gradient method</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#abs-integral-empirical-risk-sub-risk-le">Uniform stability implies generalization in expectation</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-uniformly-stable-sgm">SGM is uniformly stable</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#norm-sgm-iterate-sub-start-le">SGM moves at most <span class="arithmatex">\(L \sum_t \alpha_t\)</span> from its start</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#sgm-iterate">Iterates of the stochastic gradient method</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="related-topics">Related topics</h2>
+<ul>
+<li><a href="../rademacher-complexity/index.html">Rademacher complexity</a>: the uniform-convergence route to generalization, which bounds the deviation of every predictor of a class at once, where stability bounds only that of the predictor the algorithm returns.</li>
+<li><a href="../../../../Analysis/convex-analysis-and-variations/gradient-descent/index.html">Gradient descent</a>: the expansiveness of the gradient step (co-coercivity, non-expansiveness for steps up to <span class="arithmatex">\(2/\beta\)</span>, the <span class="arithmatex">\(\alpha L\)</span> bound) used by the stability of SGD, and the convergence rates of SGD, which improve with the total step length while the stability bound degrades.</li>
+</ul>
+</div>
+<p><link rel="stylesheet" href="../../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../../dependencies/index.json" data-graph-src="../../../../../dependencies/scopes/ComputerScience/machine-learning/generalization-bounds-and-concentration/algorithmic-stability.json" data-page-href="index.html" data-scope-id="ComputerScience/machine-learning/generalization-bounds-and-concentration/algorithmic-stability">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>
