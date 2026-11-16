@@ -1,0 +1,6280 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../greedy-policies-of-approximate-values/index.html">
+      
+      
+        <link rel="next" href="../policy-gradients-for-softmax-policies/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Natural policy gradient - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#softmax-policies" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Natural policy gradient
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23" id="__nav_2_1_23_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_23_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Computer Science
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../data-structures/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data structures
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../graph-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../process-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Process calculi and behavioural equivalence
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../type-systems-and-lambda-calculi/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Type systems and lambda calculi
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../programming-language-semantics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programming language semantics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23_7" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Machine learning
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23_7" id="__nav_2_1_23_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_23_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Machine learning
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../online-learning-and-boosting/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Online learning and boosting
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_23_7_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reinforcement learning theory
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_23_7_3" id="__nav_2_1_23_7_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_2_1_23_7_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_23_7_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reinforcement learning theory
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stochastic-policies-and-discounted-occupancy/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stochastic policies and discounted occupancy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../performance-difference-lemma/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Performance difference lemma
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../simulation-lemma/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Simulation lemma
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../greedy-policies-of-approximate-values/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Greedy policies of approximate values
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Natural policy gradient
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Natural policy gradient
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#softmax-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Softmax policies
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#natural-policy-gradient_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Natural policy gradient
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-topics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related topics
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../policy-gradients-for-softmax-policies/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Policy gradients for softmax policies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../supervised-learning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Supervised learning and regression
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../unsupervised-learning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Unsupervised learning and matrix factorization
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../probabilistic-graphical-models/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probabilistic graphical models
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../bayesian-inference-and-sampling/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bayesian inference and sampling
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../attention-and-low-rank-adaptation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Attention and low-rank adaptation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../linear-state-space-sequence-models/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear state-space sequence models
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../diffusion-and-flow-generative-models/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diffusion and flow-based generative models
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../generalization-bounds-and-concentration/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Generalization bounds and concentration
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../sorting-and-searching/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sorting and searching
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../dynamic-programming/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamic programming
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../greedy-algorithms-and-matroids/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Greedy algorithms and matroids
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../approximation-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Approximation algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../online-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Online algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../randomized-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Randomized algorithms and probabilistic analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../parallel-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parallel algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../algebraic-and-numerical-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic and numerical algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../computational-geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computational geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../string-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    String algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../heuristic-search-and-planning/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Heuristic search and planning
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../cryptography/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cryptography
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../databases/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Databases
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../quantum-algorithms/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum algorithms
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../concurrent-systems-and-protocols/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concurrent systems and protocols
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../program-logics-and-verification/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Program logics and verification
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#softmax-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Softmax policies
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#natural-policy-gradient_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Natural policy gradient
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-topics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related topics
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../../index.html" tabindex="-1">Computer Science</a></li><li><a href="../../index.html" tabindex="-1">Machine learning</a></li><li><a href="../index.html" tabindex="-1">Reinforcement learning theory</a></li><li aria-current="page">Natural policy gradient</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Natural policy gradient</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="ComputerScience/machine-learning/reinforcement-learning/natural-policy-gradient" data-page-title="Natural policy gradient">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}var g = location.hash.slice(1), u = new URLSearchParams(g), q = Array.from(u), y = {};var d = u.get("node"), o = r.getAttribute("data-autoform-node-id");var l = d !== null ? d === o || d.replace(/^(?:scope|boundary):/, "") === o : q.length > 0 && q.every(function (e) {var n = e[0], v = e[1]; if (y[n]) return false; y[n] = 1;if (n === "view") return v === "graph" || v === "list";if (n === "direction") return ["both", "prerequisites", "dependents"].indexOf(v) >= 0;if (n === "isolates") return v === "0" || v === "1";return n === "status" && (v === "-" || v.split(",").every(function (t) { return /^(?:mathlib|fully_proved|proved|defined|conditional|can_prove|stated|can_state|not_ready|planned|inventory_checked|inventory_pending)$/.test(t); }));});var a = history.state && history.state.autoformNavigation, c = a && a.version === 1 && a.url === location.href && a.snapshot;var i = r.hasAttribute("data-reader-overview") && (!g || l), j = i && Boolean(c && c.readingOpen !== false);var z = f.querySelector(".bp-dag-sheet-handle"), e = f.querySelector("h1.bp-dag-sr-only");f.classList.toggle("bp-dag-overview-only", i); f.classList.toggle("bp-dag-sheet-open", j); if (j && z) z.textContent = "\u00d7";if (e) e.hidden = !i || j;f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="natural-policy-gradient">Natural policy gradient</h1>
+<p>Softmax policies and the natural policy gradient iteration, which for softmax policies is multiplicative weights on the advantages in every state, with its improvement lower bound and its dimension-free global convergence rate (Agarwal, Kakade, Lee and Mahajan 2021, Section 5.3).</p>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>18</strong> fully proved</span></div>
+</div>
+<h2 id="softmax-policies">Softmax policies</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/reinforcement-learning/natural-policy-gradient/lse">
+<h4 class="bp-thmheading" id="lse">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Log-partition function</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/b5f4b5b4a5850d8c6b1f1a702b7d273d470785d4/CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean#L63" aria-label="View Cslib.Algorithms.Lean.MarkovDecision.lse in Lean source" title="View Cslib.Algorithms.Lean.MarkovDecision.lse in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#lse" aria-label="Link to Log-partition function" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MarkovDecision.lse</div>
+<div class="bp-thmcontent">
+<p>For logits <span class="arithmatex">\(\theta : S \times A \to \mathbb{R}\)</span> with <span class="arithmatex">\(A\)</span> finite, <span class="arithmatex">\(\operatorname{lse}_\theta(s) = \log \sum_b \exp \theta(s,b)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> lse (θ : S → A → ℝ) (s : S) : ℝ := <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.log#doc" title="Real.log">log</a> (∑ b, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.exp#doc" title="Real.exp">exp</a> (θ s b))</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 7</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#log-softmax-prob">Logarithm of a softmax probability</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lse-npg-logits-succ-sub-le">The NPG normalizer is bounded by the next policy&#x27;s advantage</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lse-npg-logits-succ-sub-nonneg">The NPG normalizer is at least one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#npg-improvement">Improvement lower bound for natural policy gradient</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#optimal-value-sub-stoch-value-npg-policy">Global convergence of natural policy gradient</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#stoch-value-npg-policy-mono">Natural policy gradient never decreases the value</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sum-softmax-prob-mul-sub-le-lse-sub">Convexity of the log-partition function</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/reinforcement-learning/natural-policy-gradient/sum-exp-pos">
+<h4 class="bp-thmheading" id="sum-exp-pos">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The partition function is positive</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/b5f4b5b4a5850d8c6b1f1a702b7d273d470785d4/CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean#L67" aria-label="View Cslib.Algorithms.Lean.MarkovDecision.sum_exp_pos in Lean source" title="View Cslib.Algorithms.Lean.MarkovDecision.sum_exp_pos in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#sum-exp-pos" aria-label="Link to The partition function is positive" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MarkovDecision.sum_exp_pos</div>
+<div class="bp-thmcontent">
+<p>For a finite nonempty action set, <span class="arithmatex">\(\sum_b \exp\theta(s,b) &gt; 0\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> sum_exp_pos (θ : S → A → ℝ) (s : S) : 0 &lt; ∑ b, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.exp#doc" title="Real.exp">exp</a> (θ s b)</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#log-softmax-prob">Logarithm of a softmax probability</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#softmax">Softmax policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#softmax-prob-le-one">Softmax probabilities are at most one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#softmax-prob-pos">Softmax policies charge every action</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#sum-softmax-prob-mul-sub-le-lse-sub">Convexity of the log-partition function</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/reinforcement-learning/natural-policy-gradient/softmax">
+<h4 class="bp-thmheading" id="softmax">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Softmax policy</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/b5f4b5b4a5850d8c6b1f1a702b7d273d470785d4/CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean#L75" aria-label="View Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax in Lean source" title="View Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#softmax" aria-label="Link to Softmax policy" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax</div>
+<div class="bp-thmcontent">
+<p>The softmax policy of logits <span class="arithmatex">\(\theta : S \times A \to \mathbb{R}\)</span> (with <span class="arithmatex">\(A\)</span> finite and nonempty) is <span class="arithmatex">\(\pi_\theta(a \mid s) = \exp\theta(s,a) / \sum_b \exp\theta(s,b)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> softmax (θ : S → A → ℝ) : <a class="bp-lean-ref" href="../stochastic-policies-and-discounted-occupancy/index.html#stochastic-policy" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy">StochasticPolicy</a> S A :=
+  <span class="bp-lean-keyword">fun</span> s =&gt;
+    { weights := <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finsupp.equivFunOnFinite#doc" title="Finsupp.equivFunOnFinite">Finsupp.equivFunOnFinite</a>.symm <span class="bp-lean-keyword">fun</span> a =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.exp#doc" title="Real.exp">exp</a> (θ s a) / ∑ b, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.exp#doc" title="Real.exp">exp</a> (θ s b)
+      nonneg := <span class="bp-lean-keyword">fun</span> a =&gt; <span class="bp-lean-keyword">by</span>
+        simpa using div_nonneg (exp_pos (θ s a)).le (sum_exp_pos θ s).le
+      total := <span class="bp-lean-keyword">by</span>
+        rw [Finsupp.sum_fintype _ _ (<span class="bp-lean-keyword">by</span> simp)]
+        simp [← Finset.sum_div, div_self (sum_exp_pos θ s).ne&#x27;] }</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> StochasticPolicy (S A : <span class="bp-lean-keyword">Type</span>*) := S → StdSimplex ℝ A</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/StochasticPolicy.lean:276</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>A. Agarwal, S. M. Kakade, J. D. Lee, G. Mahajan, <em>On the Theory of Policy Gradient Methods: Optimality, Approximation, and Distribution Shift</em>, JMLR 22(98), 2021, arXiv:1908.00261, equation (3)</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 15</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#stochastic-policy">Stochastic policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sum-exp-pos">The partition function is positive</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#log-softmax-prob">Logarithm of a softmax probability</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lse-npg-logits-succ-sub-le">The NPG normalizer is bounded by the next policy&#x27;s advantage</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lse-npg-logits-succ-sub-nonneg">The NPG normalizer is at least one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#npg-logits">Natural policy gradient iterates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#npg-policy">Natural policy gradient policies</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#optimal-value-sub-stoch-value-npg-policy">Global convergence of natural policy gradient</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#softmax-prob">Action probabilities of a softmax policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#softmax-prob-le-one">Softmax probabilities are at most one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#softmax-prob-pos">Softmax policies charge every action</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#softmax-zero-prob">The softmax policy of zero logits is uniform</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sum-softmax-mul-log-sub-nonneg">Gibbs&#x27; inequality for softmax policies</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sum-softmax-prob-mul-sub-le-lse-sub">Convexity of the log-partition function</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../policy-gradients-for-softmax-policies/index.html#softmax-objective">Softmax policy objective</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../policy-gradients-for-softmax-policies/index.html#softmax-policy-gradient">Softmax policy gradient</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-can_prove" title="1 statement dependency" href="../policy-gradients-for-softmax-policies/index.html#tendsto-stoch-value-softmax-pglogits">Global convergence of softmax policy gradient</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/reinforcement-learning/natural-policy-gradient/softmax-prob">
+<h4 class="bp-thmheading" id="softmax-prob">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Action probabilities of a softmax policy</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/b5f4b5b4a5850d8c6b1f1a702b7d273d470785d4/CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean#L87" aria-label="View Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax_prob in Lean source" title="View Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax_prob in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#softmax-prob" aria-label="Link to Action probabilities of a softmax policy" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax_prob</div>
+<div class="bp-thmcontent">
+<p><span class="arithmatex">\(\pi_\theta(a \mid s) = \exp\theta(s,a) / \sum_b \exp\theta(s,b)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> softmax_prob (θ : S → A → ℝ) (s : S) (a : A) :
+    (<a class="bp-lean-ref" href="#softmax" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax">softmax</a> θ).prob s a = <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.exp#doc" title="Real.exp">exp</a> (θ s a) / ∑ b, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.exp#doc" title="Real.exp">exp</a> (θ s b)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> softmax (θ : S → A → ℝ) : StochasticPolicy S A :=
+  <span class="bp-lean-keyword">fun</span> s =&gt;
+    { weights := Finsupp.equivFunOnFinite.symm <span class="bp-lean-keyword">fun</span> a =&gt; exp (θ s a) / ∑ b, exp (θ s b)
+      nonneg := <span class="bp-lean-keyword">fun</span> a =&gt; <span class="bp-lean-keyword">by</span>
+        simpa using div_nonneg (exp_pos (θ s a)).le (sum_exp_pos θ s).le
+      total := <span class="bp-lean-keyword">by</span>
+        rw [Finsupp.sum_fintype _ _ (<span class="bp-lean-keyword">by</span> simp)]
+        simp [← Finset.sum_div, div_self (sum_exp_pos θ s).ne&#x27;] }</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:75</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#prob">Action probability of a stochastic policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#softmax">Softmax policy</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#log-softmax-prob">Logarithm of a softmax probability</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#softmax-prob-le-one">Softmax probabilities are at most one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#softmax-prob-pos">Softmax policies charge every action</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#softmax-zero-prob">The softmax policy of zero logits is uniform</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#sum-softmax-prob-mul-sub-le-lse-sub">Convexity of the log-partition function</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/reinforcement-learning/natural-policy-gradient/softmax-prob-pos">
+<h4 class="bp-thmheading" id="softmax-prob-pos">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Softmax policies charge every action</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/b5f4b5b4a5850d8c6b1f1a702b7d273d470785d4/CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean#L93" aria-label="View Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax_prob_pos in Lean source" title="View Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax_prob_pos in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#softmax-prob-pos" aria-label="Link to Softmax policies charge every action" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax_prob_pos</div>
+<div class="bp-thmcontent">
+<p>For all logits <span class="arithmatex">\(\theta\)</span>, states <span class="arithmatex">\(s\)</span> and actions <span class="arithmatex">\(a\)</span>, <span class="arithmatex">\(\pi_\theta(a \mid s) &gt; 0\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> softmax_prob_pos (θ : S → A → ℝ) (s : S) (a : A) : 0 &lt; (<a class="bp-lean-ref" href="#softmax" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax">softmax</a> θ).prob s a</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> softmax (θ : S → A → ℝ) : StochasticPolicy S A :=
+  <span class="bp-lean-keyword">fun</span> s =&gt;
+    { weights := Finsupp.equivFunOnFinite.symm <span class="bp-lean-keyword">fun</span> a =&gt; exp (θ s a) / ∑ b, exp (θ s b)
+      nonneg := <span class="bp-lean-keyword">fun</span> a =&gt; <span class="bp-lean-keyword">by</span>
+        simpa using div_nonneg (exp_pos (θ s a)).le (sum_exp_pos θ s).le
+      total := <span class="bp-lean-keyword">by</span>
+        rw [Finsupp.sum_fintype _ _ (<span class="bp-lean-keyword">by</span> simp)]
+        simp [← Finset.sum_div, div_self (sum_exp_pos θ s).ne&#x27;] }</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:75</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#prob">Action probability of a stochastic policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#softmax">Softmax policy</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#softmax-prob">Action probabilities of a softmax policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#sum-exp-pos">The partition function is positive</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#optimal-value-sub-stoch-value-npg-policy">Global convergence of natural policy gradient</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#sum-softmax-mul-log-sub-nonneg">Gibbs&#x27; inequality for softmax policies</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/reinforcement-learning/natural-policy-gradient/softmax-prob-le-one">
+<h4 class="bp-thmheading" id="softmax-prob-le-one">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Softmax probabilities are at most one</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/b5f4b5b4a5850d8c6b1f1a702b7d273d470785d4/CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean#L99" aria-label="View Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax_prob_le_one in Lean source" title="View Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax_prob_le_one in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#softmax-prob-le-one" aria-label="Link to Softmax probabilities are at most one" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax_prob_le_one</div>
+<div class="bp-thmcontent">
+<p>For all logits <span class="arithmatex">\(\theta\)</span>, states <span class="arithmatex">\(s\)</span> and actions <span class="arithmatex">\(a\)</span>, <span class="arithmatex">\(\pi_\theta(a \mid s) \le 1\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> softmax_prob_le_one (θ : S → A → ℝ) (s : S) (a : A) : (<a class="bp-lean-ref" href="#softmax" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax">softmax</a> θ).prob s a ≤ 1</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> softmax (θ : S → A → ℝ) : StochasticPolicy S A :=
+  <span class="bp-lean-keyword">fun</span> s =&gt;
+    { weights := Finsupp.equivFunOnFinite.symm <span class="bp-lean-keyword">fun</span> a =&gt; exp (θ s a) / ∑ b, exp (θ s b)
+      nonneg := <span class="bp-lean-keyword">fun</span> a =&gt; <span class="bp-lean-keyword">by</span>
+        simpa using div_nonneg (exp_pos (θ s a)).le (sum_exp_pos θ s).le
+      total := <span class="bp-lean-keyword">by</span>
+        rw [Finsupp.sum_fintype _ _ (<span class="bp-lean-keyword">by</span> simp)]
+        simp [← Finset.sum_div, div_self (sum_exp_pos θ s).ne&#x27;] }</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:75</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#prob">Action probability of a stochastic policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#softmax">Softmax policy</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#softmax-prob">Action probabilities of a softmax policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#sum-exp-pos">The partition function is positive</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#optimal-value-sub-stoch-value-npg-policy">Global convergence of natural policy gradient</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/reinforcement-learning/natural-policy-gradient/log-softmax-prob">
+<h4 class="bp-thmheading" id="log-softmax-prob">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Logarithm of a softmax probability</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/b5f4b5b4a5850d8c6b1f1a702b7d273d470785d4/CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean#L105" aria-label="View Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.log_softmax_prob in Lean source" title="View Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.log_softmax_prob in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#log-softmax-prob" aria-label="Link to Logarithm of a softmax probability" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.log_softmax_prob</div>
+<div class="bp-thmcontent">
+<p><span class="arithmatex">\(\log \pi_\theta(a \mid s) = \theta(s,a) - \operatorname{lse}_\theta(s)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> log_softmax_prob (θ : S → A → ℝ) (s : S) (a : A) :
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.log#doc" title="Real.log">log</a> ((<a class="bp-lean-ref" href="#softmax" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax">softmax</a> θ).prob s a) = θ s a - <a class="bp-lean-ref" href="#lse" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.lse">lse</a> θ s</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> softmax (θ : S → A → ℝ) : StochasticPolicy S A :=
+  <span class="bp-lean-keyword">fun</span> s =&gt;
+    { weights := Finsupp.equivFunOnFinite.symm <span class="bp-lean-keyword">fun</span> a =&gt; exp (θ s a) / ∑ b, exp (θ s b)
+      nonneg := <span class="bp-lean-keyword">fun</span> a =&gt; <span class="bp-lean-keyword">by</span>
+        simpa using div_nonneg (exp_pos (θ s a)).le (sum_exp_pos θ s).le
+      total := <span class="bp-lean-keyword">by</span>
+        rw [Finsupp.sum_fintype _ _ (<span class="bp-lean-keyword">by</span> simp)]
+        simp [← Finset.sum_div, div_self (sum_exp_pos θ s).ne&#x27;] }</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:75</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.lse">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> lse (θ : S → A → ℝ) (s : S) : ℝ := log (∑ b, exp (θ s b))</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:63</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#prob">Action probability of a stochastic policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#softmax">Softmax policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lse">Log-partition function</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#softmax-prob">Action probabilities of a softmax policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#sum-exp-pos">The partition function is positive</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lse-npg-logits-succ-sub-le">The NPG normalizer is bounded by the next policy&#x27;s advantage</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#optimal-value-sub-stoch-value-npg-policy">Global convergence of natural policy gradient</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/reinforcement-learning/natural-policy-gradient/softmax-zero-prob">
+<h4 class="bp-thmheading" id="softmax-zero-prob">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The softmax policy of zero logits is uniform</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/b5f4b5b4a5850d8c6b1f1a702b7d273d470785d4/CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean#L111" aria-label="View Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax_zero_prob in Lean source" title="View Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax_zero_prob in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#softmax-zero-prob" aria-label="Link to The softmax policy of zero logits is uniform" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax_zero_prob</div>
+<div class="bp-thmcontent">
+<p>For <span class="arithmatex">\(\theta = 0\)</span>, <span class="arithmatex">\(\pi_\theta(a \mid s) = 1/|A|\)</span> for every state <span class="arithmatex">\(s\)</span> and action <span class="arithmatex">\(a\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> softmax_zero_prob (s : S) (a : A) :
+    (<a class="bp-lean-ref" href="#softmax" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax">softmax</a> (0 : S → A → ℝ)).prob s a = 1 / <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype.card#doc" title="Fintype.card">Fintype.card</a> A</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> softmax (θ : S → A → ℝ) : StochasticPolicy S A :=
+  <span class="bp-lean-keyword">fun</span> s =&gt;
+    { weights := Finsupp.equivFunOnFinite.symm <span class="bp-lean-keyword">fun</span> a =&gt; exp (θ s a) / ∑ b, exp (θ s b)
+      nonneg := <span class="bp-lean-keyword">fun</span> a =&gt; <span class="bp-lean-keyword">by</span>
+        simpa using div_nonneg (exp_pos (θ s a)).le (sum_exp_pos θ s).le
+      total := <span class="bp-lean-keyword">by</span>
+        rw [Finsupp.sum_fintype _ _ (<span class="bp-lean-keyword">by</span> simp)]
+        simp [← Finset.sum_div, div_self (sum_exp_pos θ s).ne&#x27;] }</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:75</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#prob">Action probability of a stochastic policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#softmax">Softmax policy</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#softmax-prob">Action probabilities of a softmax policy</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#optimal-value-sub-stoch-value-npg-policy">Global convergence of natural policy gradient</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/reinforcement-learning/natural-policy-gradient/sum-softmax-prob-mul-sub-le-lse-sub">
+<h4 class="bp-thmheading" id="sum-softmax-prob-mul-sub-le-lse-sub">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Convexity of the log-partition function</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/b5f4b5b4a5850d8c6b1f1a702b7d273d470785d4/CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean#L122" aria-label="View Cslib.Algorithms.Lean.MarkovDecision.sum_softmax_prob_mul_sub_le_lse_sub in Lean source" title="View Cslib.Algorithms.Lean.MarkovDecision.sum_softmax_prob_mul_sub_le_lse_sub in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#sum-softmax-prob-mul-sub-le-lse-sub" aria-label="Link to Convexity of the log-partition function" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MarkovDecision.sum_softmax_prob_mul_sub_le_lse_sub</div>
+<div class="bp-thmcontent">
+<p>For logits <span class="arithmatex">\(\theta, \theta'\)</span> and a state <span class="arithmatex">\(s\)</span>,</p>
+<div class="arithmatex">\[\sum_b \pi_\theta(b \mid s)\bigl(\theta'(s,b) - \theta(s,b)\bigr) \le \operatorname{lse}_{\theta'}(s) - \operatorname{lse}_\theta(s),\]</div>
+<p>by Jensen's inequality for <span class="arithmatex">\(\exp\)</span>: the gradient of <span class="arithmatex">\(\operatorname{lse}\)</span> at <span class="arithmatex">\(\theta\)</span> is <span class="arithmatex">\(\pi_\theta\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> sum_softmax_prob_mul_sub_le_lse_sub (θ θ&#x27; : S → A → ℝ) (s : S) :
+    ∑ b, (<a class="bp-lean-ref" href="#softmax" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax">softmax</a> θ).prob s b * (θ&#x27; s b - θ s b) ≤ <a class="bp-lean-ref" href="#lse" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.lse">lse</a> θ&#x27; s - <a class="bp-lean-ref" href="#lse" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.lse">lse</a> θ s</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> softmax (θ : S → A → ℝ) : StochasticPolicy S A :=
+  <span class="bp-lean-keyword">fun</span> s =&gt;
+    { weights := Finsupp.equivFunOnFinite.symm <span class="bp-lean-keyword">fun</span> a =&gt; exp (θ s a) / ∑ b, exp (θ s b)
+      nonneg := <span class="bp-lean-keyword">fun</span> a =&gt; <span class="bp-lean-keyword">by</span>
+        simpa using div_nonneg (exp_pos (θ s a)).le (sum_exp_pos θ s).le
+      total := <span class="bp-lean-keyword">by</span>
+        rw [Finsupp.sum_fintype _ _ (<span class="bp-lean-keyword">by</span> simp)]
+        simp [← Finset.sum_div, div_self (sum_exp_pos θ s).ne&#x27;] }</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:75</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.lse">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> lse (θ : S → A → ℝ) (s : S) : ℝ := log (∑ b, exp (θ s b))</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:63</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 7 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#prob">Action probability of a stochastic policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#softmax">Softmax policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lse">Log-partition function</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#prob-nonneg">Action probabilities are nonnegative</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#softmax-prob">Action probabilities of a softmax policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#sum-prob">Action probabilities sum to one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#sum-exp-pos">The partition function is positive</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lse-npg-logits-succ-sub-nonneg">The NPG normalizer is at least one</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/reinforcement-learning/natural-policy-gradient/sum-softmax-mul-log-sub-nonneg">
+<h4 class="bp-thmheading" id="sum-softmax-mul-log-sub-nonneg">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Gibbs&#x27; inequality for softmax policies</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/b5f4b5b4a5850d8c6b1f1a702b7d273d470785d4/CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean#L142" aria-label="View Cslib.Algorithms.Lean.MarkovDecision.sum_softmax_mul_log_sub_nonneg in Lean source" title="View Cslib.Algorithms.Lean.MarkovDecision.sum_softmax_mul_log_sub_nonneg in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#sum-softmax-mul-log-sub-nonneg" aria-label="Link to Gibbs&#x27; inequality for softmax policies" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MarkovDecision.sum_softmax_mul_log_sub_nonneg</div>
+<div class="bp-thmcontent">
+<p>For logits <span class="arithmatex">\(\theta, \theta'\)</span> and a state <span class="arithmatex">\(s\)</span>, the relative entropy <span class="arithmatex">\(\sum_a \pi_{\theta'}(a \mid s)\bigl(\log \pi_{\theta'}(a \mid s) - \log \pi_\theta(a \mid s)\bigr)\)</span> is nonnegative.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> sum_softmax_mul_log_sub_nonneg (θ θ&#x27; : S → A → ℝ) (s : S) :
+    0 ≤ ∑ a, (<a class="bp-lean-ref" href="#softmax" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax">softmax</a> θ&#x27;).prob s a *
+      (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.log#doc" title="Real.log">log</a> ((<a class="bp-lean-ref" href="#softmax" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax">softmax</a> θ&#x27;).prob s a) - <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.log#doc" title="Real.log">log</a> ((<a class="bp-lean-ref" href="#softmax" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax">softmax</a> θ).prob s a))</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> softmax (θ : S → A → ℝ) : StochasticPolicy S A :=
+  <span class="bp-lean-keyword">fun</span> s =&gt;
+    { weights := Finsupp.equivFunOnFinite.symm <span class="bp-lean-keyword">fun</span> a =&gt; exp (θ s a) / ∑ b, exp (θ s b)
+      nonneg := <span class="bp-lean-keyword">fun</span> a =&gt; <span class="bp-lean-keyword">by</span>
+        simpa using div_nonneg (exp_pos (θ s a)).le (sum_exp_pos θ s).le
+      total := <span class="bp-lean-keyword">by</span>
+        rw [Finsupp.sum_fintype _ _ (<span class="bp-lean-keyword">by</span> simp)]
+        simp [← Finset.sum_div, div_self (sum_exp_pos θ s).ne&#x27;] }</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:75</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#prob">Action probability of a stochastic policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#softmax">Softmax policy</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#softmax-prob-pos">Softmax policies charge every action</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#sum-prob">Action probabilities sum to one</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lse-npg-logits-succ-sub-le">The NPG normalizer is bounded by the next policy&#x27;s advantage</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="natural-policy-gradient_1">Natural policy gradient</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/reinforcement-learning/natural-policy-gradient/npg-logits">
+<h4 class="bp-thmheading" id="npg-logits">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Natural policy gradient iterates</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/b5f4b5b4a5850d8c6b1f1a702b7d273d470785d4/CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean#L173" aria-label="View Cslib.Algorithms.Lean.MarkovDecision.npgLogits in Lean source" title="View Cslib.Algorithms.Lean.MarkovDecision.npgLogits in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#npg-logits" aria-label="Link to Natural policy gradient iterates" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MarkovDecision.npgLogits</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(M\)</span> be a Markov decision process with a finite set of states <span class="arithmatex">\(S\)</span>, a finite set of actions <span class="arithmatex">\(A\)</span>, real rewards <span class="arithmatex">\(r(s,a)\)</span> and transition probabilities <span class="arithmatex">\(P(s,a,s')\)</span> that are nonnegative and sum to <span class="arithmatex">\(1\)</span> over <span class="arithmatex">\(s'\)</span>, and let <span class="arithmatex">\(0 \le \gamma &lt; 1\)</span>. For a step size <span class="arithmatex">\(\eta\)</span>, natural policy gradient with softmax policies starts from <span class="arithmatex">\(\theta_0 = 0\)</span> and updates</p>
+<div class="arithmatex">\[\theta_{t+1} = \theta_t + \frac{\eta}{1-\gamma} A^{\pi_{\theta_t}},\]</div>
+<p>equivalently <span class="arithmatex">\(\pi_{t+1}(a \mid s) \propto \pi_t(a \mid s) \exp\bigl(\eta A^{\pi_t}(s,a)/(1-\gamma)\bigr)\)</span>: multiplicative weights in every state, with the advantages as gains, as in the <a href="../../online-learning-and-boosting/hedge-algorithm/index.html">Hedge algorithm</a>. This is the closed form that the Fisher-preconditioned update <span class="arithmatex">\(\theta \leftarrow \theta + \eta F(\theta)^\dagger \nabla V^{\pi_\theta}\)</span> takes for softmax policies on the states reachable from the start distribution <span class="arithmatex">\(\rho\)</span> (AKLM, Lemma 5.1 and footnote 6), up to a state-dependent offset that the softmax ignores (AJKS Lemma 12.6). Here the soft policy iteration is applied at every state; the derivation from the Fisher update is not formalized, and the iteration is defined by its closed form.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="../../online-learning-and-boosting/hedge-algorithm/index.html"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> npgLogits (η : ℝ) : ℕ → S → A → ℝ
+  | 0 =&gt; 0
+  | t + 1 =&gt; <span class="bp-lean-keyword">fun</span> s a =&gt;
+      npgLogits η t s a + η / (1 - γ) * <a class="bp-lean-ref" href="../performance-difference-lemma/index.html#advantage" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.advantage">advantage</a> hM hγ0 hγ1 (<a class="bp-lean-ref" href="#softmax" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax">softmax</a> (npgLogits η t)) s a</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.advantage">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> advantage (π : StochasticPolicy S A) (s : S) (a : A) : ℝ :=
+  stochQValue hM hγ0 hγ1 π s a - stochValue M γ hM hγ0 hγ1 π s</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/PerformanceDifference.lean:62</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> softmax (θ : S → A → ℝ) : StochasticPolicy S A :=
+  <span class="bp-lean-keyword">fun</span> s =&gt;
+    { weights := Finsupp.equivFunOnFinite.symm <span class="bp-lean-keyword">fun</span> a =&gt; exp (θ s a) / ∑ b, exp (θ s b)
+      nonneg := <span class="bp-lean-keyword">fun</span> a =&gt; <span class="bp-lean-keyword">by</span>
+        simpa using div_nonneg (exp_pos (θ s a)).le (sum_exp_pos θ s).le
+      total := <span class="bp-lean-keyword">by</span>
+        rw [Finsupp.sum_fintype _ _ (<span class="bp-lean-keyword">by</span> simp)]
+        simp [← Finset.sum_div, div_self (sum_exp_pos θ s).ne&#x27;] }</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:75</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_1">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>S. Kakade, <em>A Natural Policy Gradient</em>, NeurIPS 2001</li>
+<li>A. Agarwal, S. M. Kakade, J. D. Lee, G. Mahajan, <em>On the Theory of Policy Gradient Methods: Optimality, Approximation, and Distribution Shift</em>, JMLR 22(98), 2021, arXiv:1908.00261, Lemma 5.1</li>
+<li>A. Agarwal, N. Jiang, S. M. Kakade, W. Sun, <em>Reinforcement Learning: Theory and Algorithms</em>, https://rltheorybook.github.io/rltheorybook_AJKS_V3.pdf, Lemma 12.6</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 7</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../heuristic-search-and-planning/value-iteration/index.html#mdp">Markov decision process</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../heuristic-search-and-planning/value-iteration/index.html#stochastic">Stochastic Markov decision process</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#softmax">Softmax policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../performance-difference-lemma/index.html#advantage">Advantage function</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lse-npg-logits-succ-sub-le">The NPG normalizer is bounded by the next policy&#x27;s advantage</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lse-npg-logits-succ-sub-nonneg">The NPG normalizer is at least one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#npg-improvement">Improvement lower bound for natural policy gradient</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#npg-logits-succ">One natural policy gradient step</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#npg-policy">Natural policy gradient policies</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#optimal-value-sub-stoch-value-npg-policy">Global convergence of natural policy gradient</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#stoch-value-npg-policy-mono">Natural policy gradient never decreases the value</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/reinforcement-learning/natural-policy-gradient/npg-logits-succ">
+<h4 class="bp-thmheading" id="npg-logits-succ">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">One natural policy gradient step</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/b5f4b5b4a5850d8c6b1f1a702b7d273d470785d4/CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean#L185" aria-label="View Cslib.Algorithms.Lean.MarkovDecision.npgLogits_succ in Lean source" title="View Cslib.Algorithms.Lean.MarkovDecision.npgLogits_succ in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#npg-logits-succ" aria-label="Link to One natural policy gradient step" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MarkovDecision.npgLogits_succ</div>
+<div class="bp-thmcontent">
+<p><span class="arithmatex">\(\theta_{t+1}(s,a) = \theta_t(s,a) + \frac{\eta}{1-\gamma} A^{\pi_t}(s,a)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> npgLogits_succ (η : ℝ) (t : ℕ) (s : S) (a : A) :
+    <a class="bp-lean-ref" href="#npg-logits" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgLogits">npgLogits</a> hM hγ0 hγ1 η (t + 1) s a = <a class="bp-lean-ref" href="#npg-logits" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgLogits">npgLogits</a> hM hγ0 hγ1 η t s a +
+      η / (1 - γ) * <a class="bp-lean-ref" href="../performance-difference-lemma/index.html#advantage" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.advantage">advantage</a> hM hγ0 hγ1 (<a class="bp-lean-ref" href="#npg-policy" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgPolicy">npgPolicy</a> hM hγ0 hγ1 η t) s a</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgLogits">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> npgLogits (η : ℝ) : ℕ → S → A → ℝ
+  | 0 =&gt; 0
+  | t + 1 =&gt; <span class="bp-lean-keyword">fun</span> s a =&gt;
+      npgLogits η t s a + η / (1 - γ) * advantage hM hγ0 hγ1 (softmax (npgLogits η t)) s a</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:173</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.advantage">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> advantage (π : StochasticPolicy S A) (s : S) (a : A) : ℝ :=
+  stochQValue hM hγ0 hγ1 π s a - stochValue M γ hM hγ0 hγ1 π s</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/PerformanceDifference.lean:62</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgPolicy">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> npgPolicy (η : ℝ) (t : ℕ) : StochasticPolicy S A :=
+  softmax (npgLogits hM hγ0 hγ1 η t)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:179</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../heuristic-search-and-planning/value-iteration/index.html#mdp">Markov decision process</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../heuristic-search-and-planning/value-iteration/index.html#stochastic">Stochastic Markov decision process</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../performance-difference-lemma/index.html#advantage">Advantage function</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#npg-logits">Natural policy gradient iterates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#npg-policy">Natural policy gradient policies</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lse-npg-logits-succ-sub-le">The NPG normalizer is bounded by the next policy&#x27;s advantage</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#optimal-value-sub-stoch-value-npg-policy">Global convergence of natural policy gradient</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/reinforcement-learning/natural-policy-gradient/npg-policy">
+<h4 class="bp-thmheading" id="npg-policy">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Natural policy gradient policies</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/b5f4b5b4a5850d8c6b1f1a702b7d273d470785d4/CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean#L179" aria-label="View Cslib.Algorithms.Lean.MarkovDecision.npgPolicy in Lean source" title="View Cslib.Algorithms.Lean.MarkovDecision.npgPolicy in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#npg-policy" aria-label="Link to Natural policy gradient policies" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MarkovDecision.npgPolicy</div>
+<div class="bp-thmcontent">
+<p>The policy <span class="arithmatex">\(\pi_t = \pi_{\theta_t}\)</span> after <span class="arithmatex">\(t\)</span> steps of natural policy gradient with softmax policies.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> npgPolicy (η : ℝ) (t : ℕ) : <a class="bp-lean-ref" href="../stochastic-policies-and-discounted-occupancy/index.html#stochastic-policy" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy">StochasticPolicy</a> S A :=
+  <a class="bp-lean-ref" href="#softmax" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax">softmax</a> (<a class="bp-lean-ref" href="#npg-logits" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgLogits">npgLogits</a> hM hγ0 hγ1 η t)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">abbrev</span> StochasticPolicy (S A : <span class="bp-lean-keyword">Type</span>*) := S → StdSimplex ℝ A</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/StochasticPolicy.lean:276</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.StochasticPolicy.softmax">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> softmax (θ : S → A → ℝ) : StochasticPolicy S A :=
+  <span class="bp-lean-keyword">fun</span> s =&gt;
+    { weights := Finsupp.equivFunOnFinite.symm <span class="bp-lean-keyword">fun</span> a =&gt; exp (θ s a) / ∑ b, exp (θ s b)
+      nonneg := <span class="bp-lean-keyword">fun</span> a =&gt; <span class="bp-lean-keyword">by</span>
+        simpa using div_nonneg (exp_pos (θ s a)).le (sum_exp_pos θ s).le
+      total := <span class="bp-lean-keyword">by</span>
+        rw [Finsupp.sum_fintype _ _ (<span class="bp-lean-keyword">by</span> simp)]
+        simp [← Finset.sum_div, div_self (sum_exp_pos θ s).ne&#x27;] }</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:75</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgLogits">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> npgLogits (η : ℝ) : ℕ → S → A → ℝ
+  | 0 =&gt; 0
+  | t + 1 =&gt; <span class="bp-lean-keyword">fun</span> s a =&gt;
+      npgLogits η t s a + η / (1 - γ) * advantage hM hγ0 hγ1 (softmax (npgLogits η t)) s a</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:173</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 6</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../heuristic-search-and-planning/value-iteration/index.html#mdp">Markov decision process</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../heuristic-search-and-planning/value-iteration/index.html#stochastic">Stochastic Markov decision process</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#stochastic-policy">Stochastic policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#softmax">Softmax policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#npg-logits">Natural policy gradient iterates</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lse-npg-logits-succ-sub-le">The NPG normalizer is bounded by the next policy&#x27;s advantage</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lse-npg-logits-succ-sub-nonneg">The NPG normalizer is at least one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#npg-improvement">Improvement lower bound for natural policy gradient</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#npg-logits-succ">One natural policy gradient step</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#optimal-value-sub-stoch-value-npg-policy">Global convergence of natural policy gradient</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#stoch-value-npg-policy-mono">Natural policy gradient never decreases the value</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/reinforcement-learning/natural-policy-gradient/lse-npg-logits-succ-sub-nonneg">
+<h4 class="bp-thmheading" id="lse-npg-logits-succ-sub-nonneg">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The NPG normalizer is at least one</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/b5f4b5b4a5850d8c6b1f1a702b7d273d470785d4/CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean#L190" aria-label="View Cslib.Algorithms.Lean.MarkovDecision.lse_npgLogits_succ_sub_nonneg in Lean source" title="View Cslib.Algorithms.Lean.MarkovDecision.lse_npgLogits_succ_sub_nonneg in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#lse-npg-logits-succ-sub-nonneg" aria-label="Link to The NPG normalizer is at least one" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MarkovDecision.lse_npgLogits_succ_sub_nonneg</div>
+<div class="bp-thmcontent">
+<p>Along natural policy gradient, <span class="arithmatex">\(\log Z_t(s) = \operatorname{lse}_{\theta_{t+1}}(s) - \operatorname{lse}_{\theta_t}(s) \ge 0\)</span> for every state <span class="arithmatex">\(s\)</span>, where <span class="arithmatex">\(Z_t(s) = \sum_a \pi_t(a \mid s) \exp(\eta A^{\pi_t}(s,a)/(1-\gamma))\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> lse_npgLogits_succ_sub_nonneg (η : ℝ) (t : ℕ) (s : S) :
+    0 ≤ <a class="bp-lean-ref" href="#lse" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.lse">lse</a> (<a class="bp-lean-ref" href="#npg-logits" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgLogits">npgLogits</a> hM hγ0 hγ1 η (t + 1)) s - <a class="bp-lean-ref" href="#lse" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.lse">lse</a> (<a class="bp-lean-ref" href="#npg-logits" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgLogits">npgLogits</a> hM hγ0 hγ1 η t) s</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.lse">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> lse (θ : S → A → ℝ) (s : S) : ℝ := log (∑ b, exp (θ s b))</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:63</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgLogits">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> npgLogits (η : ℝ) : ℕ → S → A → ℝ
+  | 0 =&gt; 0
+  | t + 1 =&gt; <span class="bp-lean-keyword">fun</span> s a =&gt;
+      npgLogits η t s a + η / (1 - γ) * advantage hM hγ0 hγ1 (softmax (npgLogits η t)) s a</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:173</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_2">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>A. Agarwal, S. M. Kakade, J. D. Lee, G. Mahajan, <em>On the Theory of Policy Gradient Methods: Optimality, Approximation, and Distribution Shift</em>, JMLR 22(98), 2021, arXiv:1908.00261, proof of Lemma 5.2</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 11 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../heuristic-search-and-planning/value-iteration/index.html#mdp">Markov decision process</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../heuristic-search-and-planning/value-iteration/index.html#stochastic">Stochastic Markov decision process</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lse">Log-partition function</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#npg-logits">Natural policy gradient iterates</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#stochastic-policy">Stochastic policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#prob">Action probability of a stochastic policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#softmax">Softmax policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../performance-difference-lemma/index.html#advantage">Advantage function</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#npg-policy">Natural policy gradient policies</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../performance-difference-lemma/index.html#sum-prob-mul-advantage">A policy has zero average advantage over itself</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#sum-softmax-prob-mul-sub-le-lse-sub">Convexity of the log-partition function</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#npg-improvement">Improvement lower bound for natural policy gradient</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#stoch-value-npg-policy-mono">Natural policy gradient never decreases the value</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/reinforcement-learning/natural-policy-gradient/lse-npg-logits-succ-sub-le">
+<h4 class="bp-thmheading" id="lse-npg-logits-succ-sub-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The NPG normalizer is bounded by the next policy&#x27;s advantage</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/b5f4b5b4a5850d8c6b1f1a702b7d273d470785d4/CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean#L208" aria-label="View Cslib.Algorithms.Lean.MarkovDecision.lse_npgLogits_succ_sub_le in Lean source" title="View Cslib.Algorithms.Lean.MarkovDecision.lse_npgLogits_succ_sub_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#lse-npg-logits-succ-sub-le" aria-label="Link to The NPG normalizer is bounded by the next policy&#x27;s advantage" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MarkovDecision.lse_npgLogits_succ_sub_le</div>
+<div class="bp-thmcontent">
+<p>Along natural policy gradient, for every state <span class="arithmatex">\(s\)</span>,</p>
+<div class="arithmatex">\[\log Z_t(s) \le \frac{\eta}{1-\gamma} \sum_a \pi_{t+1}(a \mid s)\, A^{\pi_t}(s,a),\]</div>
+<p>the gap being the relative entropy of <span class="arithmatex">\(\pi_{t+1}(\cdot \mid s)\)</span> from <span class="arithmatex">\(\pi_t(\cdot \mid s)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> lse_npgLogits_succ_sub_le (η : ℝ) (t : ℕ) (s : S) :
+    <a class="bp-lean-ref" href="#lse" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.lse">lse</a> (<a class="bp-lean-ref" href="#npg-logits" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgLogits">npgLogits</a> hM hγ0 hγ1 η (t + 1)) s - <a class="bp-lean-ref" href="#lse" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.lse">lse</a> (<a class="bp-lean-ref" href="#npg-logits" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgLogits">npgLogits</a> hM hγ0 hγ1 η t) s ≤
+      η / (1 - γ) * ∑ a, (<a class="bp-lean-ref" href="#npg-policy" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgPolicy">npgPolicy</a> hM hγ0 hγ1 η (t + 1)).prob s a *
+        <a class="bp-lean-ref" href="../performance-difference-lemma/index.html#advantage" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.advantage">advantage</a> hM hγ0 hγ1 (<a class="bp-lean-ref" href="#npg-policy" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgPolicy">npgPolicy</a> hM hγ0 hγ1 η t) s a</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.lse">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> lse (θ : S → A → ℝ) (s : S) : ℝ := log (∑ b, exp (θ s b))</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:63</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgLogits">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> npgLogits (η : ℝ) : ℕ → S → A → ℝ
+  | 0 =&gt; 0
+  | t + 1 =&gt; <span class="bp-lean-keyword">fun</span> s a =&gt;
+      npgLogits η t s a + η / (1 - γ) * advantage hM hγ0 hγ1 (softmax (npgLogits η t)) s a</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:173</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgPolicy">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> npgPolicy (η : ℝ) (t : ℕ) : StochasticPolicy S A :=
+  softmax (npgLogits hM hγ0 hγ1 η t)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:179</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.advantage">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> advantage (π : StochasticPolicy S A) (s : S) (a : A) : ℝ :=
+  stochQValue hM hγ0 hγ1 π s a - stochValue M γ hM hγ0 hγ1 π s</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/PerformanceDifference.lean:62</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_3">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>A. Agarwal, S. M. Kakade, J. D. Lee, G. Mahajan, <em>On the Theory of Policy Gradient Methods: Optimality, Approximation, and Distribution Shift</em>, JMLR 22(98), 2021, arXiv:1908.00261, proof of Lemma 5.2</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 13 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../heuristic-search-and-planning/value-iteration/index.html#mdp">Markov decision process</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../heuristic-search-and-planning/value-iteration/index.html#stochastic">Stochastic Markov decision process</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#prob">Action probability of a stochastic policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../performance-difference-lemma/index.html#advantage">Advantage function</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lse">Log-partition function</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#npg-logits">Natural policy gradient iterates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#npg-policy">Natural policy gradient policies</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#stochastic-policy">Stochastic policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#log-softmax-prob">Logarithm of a softmax probability</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#softmax">Softmax policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#sum-prob">Action probabilities sum to one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#npg-logits-succ">One natural policy gradient step</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#sum-softmax-mul-log-sub-nonneg">Gibbs&#x27; inequality for softmax policies</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#npg-improvement">Improvement lower bound for natural policy gradient</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/reinforcement-learning/natural-policy-gradient/npg-improvement">
+<h4 class="bp-thmheading" id="npg-improvement">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Improvement lower bound for natural policy gradient</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/b5f4b5b4a5850d8c6b1f1a702b7d273d470785d4/CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean#L230" aria-label="View Cslib.Algorithms.Lean.MarkovDecision.npg_improvement in Lean source" title="View Cslib.Algorithms.Lean.MarkovDecision.npg_improvement in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#npg-improvement" aria-label="Link to Improvement lower bound for natural policy gradient" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MarkovDecision.npg_improvement</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(M\)</span> be a Markov decision process with a finite set of states <span class="arithmatex">\(S\)</span>, a finite set of actions <span class="arithmatex">\(A\)</span>, real rewards <span class="arithmatex">\(r(s,a)\)</span> and transition probabilities <span class="arithmatex">\(P(s,a,s')\)</span> that are nonnegative and sum to <span class="arithmatex">\(1\)</span> over <span class="arithmatex">\(s'\)</span>, and let <span class="arithmatex">\(0 \le \gamma &lt; 1\)</span>. For a step size <span class="arithmatex">\(\eta &gt; 0\)</span>, the natural policy gradient iterates satisfy, for every <span class="arithmatex">\(t\)</span> and state <span class="arithmatex">\(s_0\)</span>,</p>
+<div class="arithmatex">\[V^{\pi_{t+1}}(s_0) - V^{\pi_t}(s_0) \ge \frac{1-\gamma}{\eta} \log Z_t(s_0) \ge 0.\]</div>
+<p>Here <span class="arithmatex">\(Z_t(s) = \sum_a \pi_t(a \mid s) \exp\bigl(\eta A^{\pi_t}(s,a)/(1-\gamma)\bigr) = \exp\bigl(\operatorname{lse}_{\theta_{t+1}}(s) - \operatorname{lse}_{\theta_t}(s)\bigr)\)</span>. The published statement averages over a start distribution <span class="arithmatex">\(\mu\)</span>; it follows by averaging.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> npg_improvement {η : ℝ} (hη : 0 &lt; η) (t : ℕ) (s₀ : S) :
+    (1 - γ) / η * (<a class="bp-lean-ref" href="#lse" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.lse">lse</a> (<a class="bp-lean-ref" href="#npg-logits" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgLogits">npgLogits</a> hM hγ0 hγ1 η (t + 1)) s₀ - <a class="bp-lean-ref" href="#lse" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.lse">lse</a> (<a class="bp-lean-ref" href="#npg-logits" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgLogits">npgLogits</a> hM hγ0 hγ1 η t) s₀)
+      ≤ <a class="bp-lean-ref" href="../stochastic-policies-and-discounted-occupancy/index.html#stoch-value" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.stochValue">stochValue</a> M γ hM hγ0 hγ1 (<a class="bp-lean-ref" href="#npg-policy" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgPolicy">npgPolicy</a> hM hγ0 hγ1 η (t + 1)) s₀ -
+        <a class="bp-lean-ref" href="../stochastic-policies-and-discounted-occupancy/index.html#stoch-value" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.stochValue">stochValue</a> M γ hM hγ0 hγ1 (<a class="bp-lean-ref" href="#npg-policy" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgPolicy">npgPolicy</a> hM hγ0 hγ1 η t) s₀</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.lse">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> lse (θ : S → A → ℝ) (s : S) : ℝ := log (∑ b, exp (θ s b))</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:63</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgLogits">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> npgLogits (η : ℝ) : ℕ → S → A → ℝ
+  | 0 =&gt; 0
+  | t + 1 =&gt; <span class="bp-lean-keyword">fun</span> s a =&gt;
+      npgLogits η t s a + η / (1 - γ) * advantage hM hγ0 hγ1 (softmax (npgLogits η t)) s a</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:173</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.stochValue">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> stochValue (M : MDP S A ℝ) (γ : ℝ) (hM : M.Stochastic) (hγ0 : 0 ≤ γ)
+    (hγ1 : γ &lt; 1) (π : StochasticPolicy S A) : S → ℝ :=
+  mrpValue (policyKernel M π) (policyKernel_mem hM π) hγ0 hγ1 (policyReward M π)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/StochasticPolicy.lean:345</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgPolicy">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> npgPolicy (η : ℝ) (t : ℕ) : StochasticPolicy S A :=
+  softmax (npgLogits hM hγ0 hγ1 η t)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:179</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_4">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>A. Agarwal, S. M. Kakade, J. D. Lee, G. Mahajan, <em>On the Theory of Policy Gradient Methods: Optimality, Approximation, and Distribution Shift</em>, JMLR 22(98), 2021, arXiv:1908.00261, Lemma 5.2</li>
+<li>A. Agarwal, N. Jiang, S. M. Kakade, W. Sun, <em>Reinforcement Learning: Theory and Algorithms</em>, https://rltheorybook.github.io/rltheorybook_AJKS_V3.pdf, Lemma 12.8</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 18 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../heuristic-search-and-planning/value-iteration/index.html#mdp">Markov decision process</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../heuristic-search-and-planning/value-iteration/index.html#stochastic">Stochastic Markov decision process</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#lse">Log-partition function</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#npg-logits">Natural policy gradient iterates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#npg-policy">Natural policy gradient policies</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#stoch-value">Value of a stochastic policy</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#stochastic-policy">Stochastic policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#prob">Action probability of a stochastic policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../performance-difference-lemma/index.html#advantage">Advantage function</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lse-npg-logits-succ-sub-le">The NPG normalizer is bounded by the next policy&#x27;s advantage</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lse-npg-logits-succ-sub-nonneg">The NPG normalizer is at least one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../performance-difference-lemma/index.html#occupancy">Discounted state occupancy of a policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../performance-difference-lemma/index.html#occupancy-nonneg">The discounted state occupancy is nonnegative</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#one-sub-le-visitation-self">The visitation charges its start state</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../performance-difference-lemma/index.html#performance-difference">Performance difference lemma</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#policy-kernel">Transition matrix of a stochastic policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#policy-kernel-mem">A stochastic policy induces a stochastic matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#visitation">Discounted state visitation</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#optimal-value-sub-stoch-value-npg-policy">Global convergence of natural policy gradient</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#stoch-value-npg-policy-mono">Natural policy gradient never decreases the value</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/reinforcement-learning/natural-policy-gradient/stoch-value-npg-policy-mono">
+<h4 class="bp-thmheading" id="stoch-value-npg-policy-mono">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Natural policy gradient never decreases the value</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/b5f4b5b4a5850d8c6b1f1a702b7d273d470785d4/CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean#L269" aria-label="View Cslib.Algorithms.Lean.MarkovDecision.stochValue_npgPolicy_mono in Lean source" title="View Cslib.Algorithms.Lean.MarkovDecision.stochValue_npgPolicy_mono in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#stoch-value-npg-policy-mono" aria-label="Link to Natural policy gradient never decreases the value" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MarkovDecision.stochValue_npgPolicy_mono</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(M\)</span> be a Markov decision process with a finite set of states <span class="arithmatex">\(S\)</span>, a finite set of actions <span class="arithmatex">\(A\)</span>, real rewards <span class="arithmatex">\(r(s,a)\)</span> and transition probabilities <span class="arithmatex">\(P(s,a,s')\)</span> that are nonnegative and sum to <span class="arithmatex">\(1\)</span> over <span class="arithmatex">\(s'\)</span>, and let <span class="arithmatex">\(0 \le \gamma &lt; 1\)</span>. For a step size <span class="arithmatex">\(\eta &gt; 0\)</span> and every state <span class="arithmatex">\(s\)</span>, <span class="arithmatex">\(t \mapsto V^{\pi_t}(s)\)</span> is nondecreasing.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> stochValue_npgPolicy_mono {η : ℝ} (hη : 0 &lt; η) (s : S) :
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Monotone#doc" title="Monotone">Monotone</a> <span class="bp-lean-keyword">fun</span> t =&gt; <a class="bp-lean-ref" href="../stochastic-policies-and-discounted-occupancy/index.html#stoch-value" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.stochValue">stochValue</a> M γ hM hγ0 hγ1 (<a class="bp-lean-ref" href="#npg-policy" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgPolicy">npgPolicy</a> hM hγ0 hγ1 η t) s</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.stochValue">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> stochValue (M : MDP S A ℝ) (γ : ℝ) (hM : M.Stochastic) (hγ0 : 0 ≤ γ)
+    (hγ1 : γ &lt; 1) (π : StochasticPolicy S A) : S → ℝ :=
+  mrpValue (policyKernel M π) (policyKernel_mem hM π) hγ0 hγ1 (policyReward M π)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/StochasticPolicy.lean:345</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgPolicy">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> npgPolicy (η : ℝ) (t : ℕ) : StochasticPolicy S A :=
+  softmax (npgLogits hM hγ0 hγ1 η t)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:179</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 8 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../heuristic-search-and-planning/value-iteration/index.html#mdp">Markov decision process</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../heuristic-search-and-planning/value-iteration/index.html#stochastic">Stochastic Markov decision process</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#npg-policy">Natural policy gradient policies</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#stoch-value">Value of a stochastic policy</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lse">Log-partition function</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lse-npg-logits-succ-sub-nonneg">The NPG normalizer is at least one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#npg-logits">Natural policy gradient iterates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#npg-improvement">Improvement lower bound for natural policy gradient</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#optimal-value-sub-stoch-value-npg-policy">Global convergence of natural policy gradient</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="ComputerScience/machine-learning/reinforcement-learning/natural-policy-gradient/optimal-value-sub-stoch-value-npg-policy">
+<h4 class="bp-thmheading" id="optimal-value-sub-stoch-value-npg-policy">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Global convergence of natural policy gradient</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/b5f4b5b4a5850d8c6b1f1a702b7d273d470785d4/CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean#L282" aria-label="View Cslib.Algorithms.Lean.MarkovDecision.optimalValue_sub_stochValue_npgPolicy_le in Lean source" title="View Cslib.Algorithms.Lean.MarkovDecision.optimalValue_sub_stochValue_npgPolicy_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#optimal-value-sub-stoch-value-npg-policy" aria-label="Link to Global convergence of natural policy gradient" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.Algorithms.Lean.MarkovDecision.optimalValue_sub_stochValue_npgPolicy_le</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(M\)</span> be a Markov decision process with a finite set of states <span class="arithmatex">\(S\)</span>, a finite set of actions <span class="arithmatex">\(A\)</span>, real rewards <span class="arithmatex">\(r(s,a)\)</span> and transition probabilities <span class="arithmatex">\(P(s,a,s')\)</span> that are nonnegative and sum to <span class="arithmatex">\(1\)</span> over <span class="arithmatex">\(s'\)</span>, and let <span class="arithmatex">\(0 \le \gamma &lt; 1\)</span>. Assume all rewards lie in <span class="arithmatex">\([0, 1]\)</span> and <span class="arithmatex">\(A\)</span> is nonempty, and run natural policy gradient with softmax policies from <span class="arithmatex">\(\theta_0 = 0\)</span> with step size <span class="arithmatex">\(\eta &gt; 0\)</span>. For every <span class="arithmatex">\(T \ge 1\)</span> and every state <span class="arithmatex">\(s_0\)</span>,</p>
+<div class="arithmatex">\[V^*(s_0) - V^{\pi_T}(s_0) \le \frac{\log |A|}{\eta T} + \frac{1}{(1-\gamma)^2 T}.\]</div>
+<p>Averaging over a start distribution <span class="arithmatex">\(\rho\)</span> gives the published form <span class="arithmatex">\(V^{\pi_T}(\rho) \ge V^*(\rho) - \log|A|/(\eta T) - 1/((1-\gamma)^2 T)\)</span>. The rate depends on neither the number of states nor a distribution mismatch coefficient, although <span class="arithmatex">\(V^{\pi_\theta}\)</span> is not concave in <span class="arithmatex">\(\theta\)</span>. The proof combines the performance difference lemma against an optimal deterministic policy with the regret analysis of multiplicative weights, as for the <a href="../../online-learning-and-boosting/hedge-algorithm/index.html">Hedge algorithm</a>, run in every state.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="../../online-learning-and-boosting/hedge-algorithm/index.html"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> optimalValue_sub_stochValue_npgPolicy_le
+    (hr : ∀ s a, 0 ≤ M.reward s a ∧ M.reward s a ≤ 1) {η : ℝ} (hη : 0 &lt; η) {T : ℕ}
+    (hT : 0 &lt; T) (s₀ : S) :
+    <a class="bp-lean-ref" href="../../../heuristic-search-and-planning/value-iteration/index.html#optimal-value" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.optimalValue">optimalValue</a> M γ hM hγ0 hγ1 s₀ - <a class="bp-lean-ref" href="../stochastic-policies-and-discounted-occupancy/index.html#stoch-value" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.stochValue">stochValue</a> M γ hM hγ0 hγ1 (<a class="bp-lean-ref" href="#npg-policy" data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgPolicy">npgPolicy</a> hM hγ0 hγ1 η T) s₀ ≤
+      <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.log#doc" title="Real.log">log</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype.card#doc" title="Fintype.card">Fintype.card</a> A) / (η * T) + 1 / ((1 - γ) ^ 2 * T)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.optimalValue">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> optimalValue (M : MDP S A ℝ) (γ : ℝ) (hM : M.Stochastic) (hγ0 : 0 ≤ γ)
+    (hγ1 : γ &lt; 1) : S → ℝ :=
+  ContractingWith.fixedPoint _ (bellman_contracting hM hγ0 hγ1)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/ValueIteration.lean:245</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.stochValue">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> stochValue (M : MDP S A ℝ) (γ : ℝ) (hM : M.Stochastic) (hγ0 : 0 ≤ γ)
+    (hγ1 : γ &lt; 1) (π : StochasticPolicy S A) : S → ℝ :=
+  mrpValue (policyKernel M π) (policyKernel_mem hM π) hγ0 hγ1 (policyReward M π)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/StochasticPolicy.lean:345</p>
+</div>
+<div data-lean-name="Cslib.Algorithms.Lean.MarkovDecision.npgPolicy">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> npgPolicy (η : ℝ) (t : ℕ) : StochasticPolicy S A :=
+  softmax (npgLogits hM hγ0 hγ1 η t)</code></pre>
+<p class="bp-lean-where">CSLibExt/Algorithms/Lean/MDP/NaturalPolicyGradient.lean:179</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_5">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>A. Agarwal, S. M. Kakade, J. D. Lee, G. Mahajan, <em>On the Theory of Policy Gradient Methods: Optimality, Approximation, and Distribution Shift</em>, JMLR 22(98), 2021, arXiv:1908.00261, Theorem 5.3</li>
+<li>A. Agarwal, N. Jiang, S. M. Kakade, W. Sun, <em>Reinforcement Learning: Theory and Algorithms</em>, https://rltheorybook.github.io/rltheorybook_AJKS_V3.pdf, Theorem 12.7</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="informally-uses">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="../../../heuristic-search-and-planning/value-iteration/index.html#optimal-value">Optimal value of a discounted Markov decision process</a>: the comparator <span class="arithmatex">\(V^*\)</span>.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="../../../heuristic-search-and-planning/value-iteration/index.html#optimal-value"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 30</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../heuristic-search-and-planning/value-iteration/index.html#mdp">Markov decision process</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../heuristic-search-and-planning/value-iteration/index.html#stochastic">Stochastic Markov decision process</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#npg-policy">Natural policy gradient policies</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../heuristic-search-and-planning/value-iteration/index.html#optimal-value">Optimal value of a discounted Markov decision process</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#stoch-value">Value of a stochastic policy</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#stochastic-policy">Stochastic policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#log-softmax-prob">Logarithm of a softmax probability</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#of-det">Deterministic policy as a stochastic policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#prob">Action probability of a stochastic policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#prob-nonneg">Action probabilities are nonnegative</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#softmax">Softmax policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#softmax-prob-le-one">Softmax probabilities are at most one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#softmax-prob-pos">Softmax policies charge every action</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#softmax-zero-prob">The softmax policy of zero logits is uniform</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#sum-prob">Action probabilities sum to one</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../performance-difference-lemma/index.html#advantage">Advantage function</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../heuristic-search-and-planning/value-iteration/index.html#greedy">Greedy policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#lse">Log-partition function</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#npg-logits">Natural policy gradient iterates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#npg-logits-succ">One natural policy gradient step</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#npg-improvement">Improvement lower bound for natural policy gradient</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../performance-difference-lemma/index.html#occupancy">Discounted state occupancy of a policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../performance-difference-lemma/index.html#occupancy-nonneg">The discounted state occupancy is nonnegative</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../performance-difference-lemma/index.html#performance-difference">Performance difference lemma</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../heuristic-search-and-planning/value-iteration/index.html#policy-value">Value of a policy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../heuristic-search-and-planning/value-iteration/index.html#policy-value-greedy">A greedy policy for the optimal value is optimal</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#stoch-value-mem-icc">Values of bounded rewards are bounded</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#stoch-value-npg-policy-mono">Natural policy gradient never decreases the value</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../stochastic-policies-and-discounted-occupancy/index.html#stoch-value-of-det">Compatibility with deterministic policies</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../performance-difference-lemma/index.html#sum-occupancy">The discounted state occupancy is a probability distribution</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="related-topics">Related topics</h2>
+<ul>
+<li><a href="../../online-learning-and-boosting/hedge-algorithm/index.html">Hedge algorithm</a></li>
+</ul>
+</div>
+<p><link rel="stylesheet" href="../../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../../dependencies/index.json" data-graph-src="../../../../../dependencies/scopes/ComputerScience/machine-learning/reinforcement-learning/natural-policy-gradient.json" data-page-href="index.html" data-scope-id="ComputerScience/machine-learning/reinforcement-learning/natural-policy-gradient">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>
