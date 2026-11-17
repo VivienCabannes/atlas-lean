@@ -1,0 +1,5756 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../ensemble-kalman-inversion/index.html">
+      
+      
+        <link rel="next" href="../../nonparametric-survival/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Empirical Bayes and Tweedie's formula - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-model" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Empirical Bayes and Tweedie's formula
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_18" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_18" id="__nav_2_1_18_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_18_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_18">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Probability
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../laws-of-large-numbers/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Laws of large numbers and random series
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../central-limit-theorems/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Central limit theorems and Poisson approximation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../markov-chains/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Markov chains
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../stochastic-calculus/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brownian motion and stochastic calculus
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../percolation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Percolation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../correlation-inequalities/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Correlation inequalities and stochastic domination
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../high-dimensional-probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    High-dimensional and geometric probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../distributions/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability distributions
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../hypothesis-testing/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hypothesis testing
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../linear-models-multivariate/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear models and multivariate analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../statistical-estimation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical estimation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_18_13" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bayesian statistics
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_18_13" id="__nav_2_1_18_13_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_18_13_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_18_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Bayesian statistics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dirichlet-process/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dirichlet process
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../blackwell-macqueen-urn/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blackwell–MacQueen urn
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../infinite-mixture-models/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infinite mixture models
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../indian-buffet-process/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Indian buffet process
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bayesian-inverse-problems/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bayesian inverse problems
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../function-space-mcmc/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Function-space MCMC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ensemble-kalman-inversion/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ensemble Kalman inversion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Empirical Bayes and Tweedie&#39;s formula
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Empirical Bayes and Tweedie&#39;s formula
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tweedies-formulas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tweedie's formulas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-normal-prior" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The normal prior
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#robbins-poisson-formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Robbins' Poisson formula
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-topics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related topics
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../nonparametric-survival/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nonparametric statistics and survival analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../foundations/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Foundations of probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../characteristic-functions/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Characteristic functions and generating functions
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../infinite-divisibility-regular-variation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infinitely divisible laws and regular variation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../convergence-of-measures/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Convergence of probability measures
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../large-deviations/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Large deviations
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../concentration-inequalities/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concentration inequalities
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../martingales/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Martingales and optional stopping
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../random-walks/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Random walks
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../branching-processes/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Branching processes
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../point-processes/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Point processes and stationary processes
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../random-fields/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Random fields on lattices
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../ComputerScience/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tweedies-formulas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tweedie's formulas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-normal-prior" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The normal prior
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#robbins-poisson-formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Robbins' Poisson formula
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-topics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related topics
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../index.html" tabindex="-1">Probability</a></li><li><a href="../index.html" tabindex="-1">Bayesian statistics</a></li><li aria-current="page">Empirical Bayes and Tweedie&#x27;s formula</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Empirical Bayes and Tweedie&#x27;s formula</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="Probability/bayesian-statistics/empirical-bayes-and-tweedie-s-formula" data-page-title="Empirical Bayes and Tweedie's formula">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}var g = location.hash.slice(1), u = new URLSearchParams(g), q = Array.from(u), y = {};var d = u.get("node"), o = r.getAttribute("data-autoform-node-id");var l = d !== null ? d === o || d.replace(/^(?:scope|boundary):/, "") === o : q.length > 0 && q.every(function (e) {var n = e[0], v = e[1]; if (y[n]) return false; y[n] = 1;if (n === "view") return v === "graph" || v === "list";if (n === "direction") return ["both", "prerequisites", "dependents"].indexOf(v) >= 0;if (n === "isolates") return v === "0" || v === "1";return n === "status" && (v === "-" || v.split(",").every(function (t) { return /^(?:mathlib|fully_proved|proved|defined|conditional|can_prove|stated|can_state|not_ready|planned|inventory_checked|inventory_pending)$/.test(t); }));});var a = history.state && history.state.autoformNavigation, c = a && a.version === 1 && a.url === location.href && a.snapshot;var i = r.hasAttribute("data-reader-overview") && (!g || l), j = i && Boolean(c && c.readingOpen !== false);var z = f.querySelector(".bp-dag-sheet-handle"), e = f.querySelector("h1.bp-dag-sr-only");f.classList.toggle("bp-dag-overview-only", i); f.classList.toggle("bp-dag-sheet-open", j); if (j && z) z.textContent = "\u00d7";if (e) e.hidden = !i || j;f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="empirical-bayes-and-tweedies-formula">Empirical Bayes and Tweedie's formula</h1>
+<p>In the Gaussian location model a parameter <span class="arithmatex">\(\mu\)</span> is drawn from a prior <span class="arithmatex">\(g\)</span> and one observes <span class="arithmatex">\(x \mid \mu \sim \mathcal N(\mu, \sigma^2)\)</span> with <span class="arithmatex">\(\sigma^2\)</span> known. The Bayes rule needs the prior, but Tweedie's formula expresses the posterior mean through the marginal density <span class="arithmatex">\(f(x) = \int \varphi_\sigma(x - \mu)\, g(d\mu)\)</span> alone: <span class="arithmatex">\(\mathbb E[\mu \mid x] = x + \sigma^2 (\log f)'(x)\)</span>, and similarly <span class="arithmatex">\(\operatorname{var}[\mu \mid x] = \sigma^2 (1 + \sigma^2 (\log f)''(x))\)</span>. In empirical Bayes work many observations <span class="arithmatex">\(x_1, \dots, x_N\)</span> share the same prior, so <span class="arithmatex">\(f\)</span> can be estimated from all of them (Efron 2011, <em>Tweedie's formula and selection bias</em>). With a normal prior the formula gives linear shrinkage, and estimating the shrinkage factor from the data gives the James–Stein estimator.</p>
+<p>Robbins' formula <span class="arithmatex">\(\mathbb E[\theta \mid x] = (x + 1) f(x + 1)/f(x)\)</span> is the Poisson counterpart, where <span class="arithmatex">\(f\)</span> is the marginal probability of the count <span class="arithmatex">\(x\)</span>. Tweedie's formulas are proved here for a prior that is any finite nonzero measure (for example any probability prior, atoms allowed), and the posterior mean is identified with the conditional expectation <span class="arithmatex">\(\mathbb E[\mu \mid x]\)</span> when the prior has a finite first moment.</p>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>14</strong> fully proved</span></div>
+</div>
+<h2 id="the-model">The model</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Probability/bayesian-statistics/empirical-bayes-and-tweedie-s-formula/gaussian-mixture-density">
+<h4 class="bp-thmheading" id="gaussian-mixture-density">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Marginal density of a Gaussian location mixture</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/d07317d2a6ea2b92b938f2028a1070a80972d6ad/MathlibExt/Probability/Statistics/Tweedie.lean#L66" aria-label="View ProbabilityTheory.gaussianMixtureDensity in Lean source" title="View ProbabilityTheory.gaussianMixtureDensity in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#gaussian-mixture-density" aria-label="Link to Marginal density of a Gaussian location mixture" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">ProbabilityTheory.gaussianMixtureDensity</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(g\)</span> be a measure on <span class="arithmatex">\(\mathbb R\)</span>, the prior of a location parameter <span class="arithmatex">\(\mu\)</span> (atoms are allowed), and let <span class="arithmatex">\(v \ge 0\)</span>. The marginal density is
+$<span class="arithmatex">\(f(x) = \int \varphi_v(x - \mu)\, g(d\mu), \qquad \varphi_v(t) = (2\pi v)^{-1/2} e^{-t^2/(2v)} .\)</span>$
+When <span class="arithmatex">\(g\)</span> is a probability measure and <span class="arithmatex">\(v &gt; 0\)</span>, <span class="arithmatex">\(f\)</span> is the density of <span class="arithmatex">\(x\)</span> in the model <span class="arithmatex">\(\mu \sim g\)</span>, <span class="arithmatex">\(x \mid \mu \sim \mathcal N(\mu, v)\)</span> (Efron 2011, equations (1.2)–(1.3), with <span class="arithmatex">\(\sigma^2 = v\)</span>).</p>
+<p>In Lean the integrand is Mathlib's <code>gaussianPDFReal μ v x</code>. For <span class="arithmatex">\(v = 0\)</span> Mathlib sets that density to <span class="arithmatex">\(0\)</span>, so <span class="arithmatex">\(f = 0\)</span>; every result in this topic assumes <span class="arithmatex">\(v &gt; 0\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> gaussianMixtureDensity (g : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ) (v : ℝ≥0) (x : ℝ) : ℝ :=
+  ∫ μ, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.gaussianPDFReal#doc" title="ProbabilityTheory.gaussianPDFReal">gaussianPDFReal</a> μ v x ∂g</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>B. Efron, "Tweedie's formula and selection bias", <em>J. Amer. Statist. Assoc.</em> 106 (2011) 1602–1614. Equation numbers are those of the author's manuscript at https://efron.ckirby.su.domains/papers/2011TweediesFormula.pdf.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 8</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#cond-exp-fst-gaussian-location-joint">Tweedie&#x27;s formula, conditional expectation form</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-mixture-density-pos">The marginal density of a Gaussian location mixture is positive</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-posterior-mean">Posterior mean in the Gaussian location model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-posterior-mean-eq-add-mul-deriv">Tweedie&#x27;s formula</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#gaussian-posterior-mean-gaussian-real">Posterior mean in the normal–normal model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-posterior-second-moment">Posterior second moment in the Gaussian location model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-posterior-second-moment-sub-sq">Tweedie&#x27;s formula for the posterior variance</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#has-deriv-at-gaussian-mixture-density">The marginal density of a Gaussian location mixture is differentiable</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Probability/bayesian-statistics/empirical-bayes-and-tweedie-s-formula/gaussian-posterior-mean">
+<h4 class="bp-thmheading" id="gaussian-posterior-mean">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Posterior mean in the Gaussian location model</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/d07317d2a6ea2b92b938f2028a1070a80972d6ad/MathlibExt/Probability/Statistics/Tweedie.lean#L71" aria-label="View ProbabilityTheory.gaussianPosteriorMean in Lean source" title="View ProbabilityTheory.gaussianPosteriorMean in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#gaussian-posterior-mean" aria-label="Link to Posterior mean in the Gaussian location model" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">ProbabilityTheory.gaussianPosteriorMean</div>
+<div class="bp-thmcontent">
+<p>For a prior <span class="arithmatex">\(g\)</span> on <span class="arithmatex">\(\mathbb R\)</span> and a variance <span class="arithmatex">\(v\)</span>, Bayes' rule gives the posterior mean of <span class="arithmatex">\(\mu\)</span> given <span class="arithmatex">\(x\)</span> in the model <span class="arithmatex">\(\mu \sim g\)</span>, <span class="arithmatex">\(x \mid \mu \sim \mathcal N(\mu, v)\)</span> as the ratio
+$<span class="arithmatex">\(m(x) = \frac{\int \mu\, \varphi_v(x - \mu)\, g(d\mu)}{f(x)}, \qquad f(x) = \int \varphi_v(x - \mu)\, g(d\mu) .\)</span>$
+The ratio does not change when <span class="arithmatex">\(g\)</span> is multiplied by a positive constant, so the results below allow any finite nonzero <span class="arithmatex">\(g\)</span>. If <span class="arithmatex">\(f(x) = 0\)</span>, Lean's convention <span class="arithmatex">\(a / 0 = 0\)</span> makes <span class="arithmatex">\(m(x) = 0\)</span>, but <a href="#gaussian-mixture-density-pos">the marginal density is positive</a> as soon as <span class="arithmatex">\(g \ne 0\)</span> is finite and <span class="arithmatex">\(v &gt; 0\)</span>.</p>
+<p>That this ratio is a version of the conditional expectation <span class="arithmatex">\(\mathbb E[\mu \mid x]\)</span> is proved separately, for priors with a finite first moment: see <a href="#cond-exp-fst-gaussian-location-joint">Tweedie's formula, conditional expectation form</a>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> gaussianPosteriorMean (g : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ) (v : ℝ≥0) (x : ℝ) : ℝ :=
+  (∫ μ, μ * <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.gaussianPDFReal#doc" title="ProbabilityTheory.gaussianPDFReal">gaussianPDFReal</a> μ v x ∂g) / <a class="bp-lean-ref" href="#gaussian-mixture-density" data-lean-name="ProbabilityTheory.gaussianMixtureDensity">gaussianMixtureDensity</a> g v x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="ProbabilityTheory.gaussianMixtureDensity">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> gaussianMixtureDensity (g : Measure ℝ) (v : ℝ≥0) (x : ℝ) : ℝ :=
+  ∫ μ, gaussianPDFReal μ v x ∂g</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/Tweedie.lean:66</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="background">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="#gaussian-mixture-density">Marginal density of a Gaussian location mixture</a>: the denominator.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_1">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>B. Efron, "Tweedie's formula and selection bias", <em>J. Amer. Statist. Assoc.</em> 106 (2011) 1602–1614. Equation numbers are those of the author's manuscript at https://efron.ckirby.su.domains/papers/2011TweediesFormula.pdf. The ratio is the left side of equation (1.4).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-mixture-density">Marginal density of a Gaussian location mixture</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/conjugate-priors/index.html#gaussian-posterior-mean-gaussian-real-eq">The Bayes-ratio posterior mean of the normal–normal model is the conjugate posterior mean</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#cond-exp-fst-gaussian-location-joint">Tweedie&#x27;s formula, conditional expectation form</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-posterior-mean-eq-add-mul-deriv">Tweedie&#x27;s formula</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-posterior-mean-gaussian-real">Posterior mean in the normal–normal model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-posterior-second-moment-sub-sq">Tweedie&#x27;s formula for the posterior variance</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Probability/bayesian-statistics/empirical-bayes-and-tweedie-s-formula/gaussian-posterior-second-moment">
+<h4 class="bp-thmheading" id="gaussian-posterior-second-moment">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Posterior second moment in the Gaussian location model</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/d07317d2a6ea2b92b938f2028a1070a80972d6ad/MathlibExt/Probability/Statistics/Tweedie.lean#L216" aria-label="View ProbabilityTheory.gaussianPosteriorSecondMoment in Lean source" title="View ProbabilityTheory.gaussianPosteriorSecondMoment in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#gaussian-posterior-second-moment" aria-label="Link to Posterior second moment in the Gaussian location model" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">ProbabilityTheory.gaussianPosteriorSecondMoment</div>
+<div class="bp-thmcontent">
+<p>For a prior <span class="arithmatex">\(g\)</span> and a variance <span class="arithmatex">\(v\)</span>, the posterior second moment of <span class="arithmatex">\(\mu\)</span> given <span class="arithmatex">\(x\)</span> is the Bayes ratio
+$<span class="arithmatex">\(\frac{\int \mu^2\, \varphi_v(x - \mu)\, g(d\mu)}{f(x)},\)</span>$
+with <span class="arithmatex">\(f\)</span> the <a href="#gaussian-mixture-density">marginal density</a>. With the <a href="#gaussian-posterior-mean">posterior mean</a> it gives the posterior variance used in <a href="#gaussian-posterior-second-moment-sub-sq">Tweedie's formula for the posterior variance</a>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> gaussianPosteriorSecondMoment (g : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ) (v : ℝ≥0) (x : ℝ) : ℝ :=
+  (∫ μ, μ ^ 2 * <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.gaussianPDFReal#doc" title="ProbabilityTheory.gaussianPDFReal">gaussianPDFReal</a> μ v x ∂g) / <a class="bp-lean-ref" href="#gaussian-mixture-density" data-lean-name="ProbabilityTheory.gaussianMixtureDensity">gaussianMixtureDensity</a> g v x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="ProbabilityTheory.gaussianMixtureDensity">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> gaussianMixtureDensity (g : Measure ℝ) (v : ℝ≥0) (x : ℝ) : ℝ :=
+  ∫ μ, gaussianPDFReal μ v x ∂g</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/Tweedie.lean:66</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_2">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>B. Efron, "Tweedie's formula and selection bias", <em>J. Amer. Statist. Assoc.</em> 106 (2011) 1602–1614. Equation numbers are those of the author's manuscript at https://efron.ckirby.su.domains/papers/2011TweediesFormula.pdf. The posterior variance is the second component of equation (2.8).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-mixture-density">Marginal density of a Gaussian location mixture</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-posterior-second-moment-sub-sq">Tweedie&#x27;s formula for the posterior variance</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Probability/bayesian-statistics/empirical-bayes-and-tweedie-s-formula/gaussian-location-joint">
+<h4 class="bp-thmheading" id="gaussian-location-joint">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Joint law of a Gaussian location model</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/d07317d2a6ea2b92b938f2028a1070a80972d6ad/MathlibExt/Probability/Statistics/Tweedie.lean#L345" aria-label="View ProbabilityTheory.gaussianLocationJoint in Lean source" title="View ProbabilityTheory.gaussianLocationJoint in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#gaussian-location-joint" aria-label="Link to Joint law of a Gaussian location model" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">ProbabilityTheory.gaussianLocationJoint</div>
+<div class="bp-thmcontent">
+<p>For a prior <span class="arithmatex">\(g\)</span> on <span class="arithmatex">\(\mathbb R\)</span> and a variance <span class="arithmatex">\(v\)</span>, the joint law of <span class="arithmatex">\((\mu, x)\)</span> in the model <span class="arithmatex">\(\mu \sim g\)</span>, <span class="arithmatex">\(x \mid \mu \sim \mathcal N(\mu, v)\)</span> is defined as the measure on <span class="arithmatex">\(\mathbb R \times \mathbb R\)</span> with density <span class="arithmatex">\(\varphi_v(x - \mu)\)</span> with respect to <span class="arithmatex">\(g \otimes \text{Lebesgue}\)</span>. That it has marginal <span class="arithmatex">\(g\)</span> and conditional law <span class="arithmatex">\(\mathcal N(\mu, v)\)</span> is <a href="#gaussian-location-joint-prod-apply">the joint law of a Gaussian location model has the right marginal and kernel</a>; it is a probability measure when <span class="arithmatex">\(g\)</span> is one and <span class="arithmatex">\(v &gt; 0\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> gaussianLocationJoint (g : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ) (v : ℝ≥0) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> (ℝ × ℝ) :=
+  (g.prod <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.MeasureSpace.volume#doc" title="MeasureTheory.MeasureSpace.volume">volume</a>).withDensity <span class="bp-lean-keyword">fun</span> q =&gt; ((<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.gaussianPDFReal#doc" title="ProbabilityTheory.gaussianPDFReal">gaussianPDFReal</a> q.1 v q.2).toNNReal : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ENNReal#doc" title="ENNReal">ENNReal</a>)</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_3">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>B. Efron, "Tweedie's formula and selection bias", <em>J. Amer. Statist. Assoc.</em> 106 (2011) 1602–1614. Equation numbers are those of the author's manuscript at https://efron.ckirby.su.domains/papers/2011TweediesFormula.pdf. The model is equation (1.2).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#cond-exp-fst-gaussian-location-joint">Tweedie&#x27;s formula, conditional expectation form</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-location-joint-prod-apply">The joint law of a Gaussian location model has the right marginal and kernel</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Probability/bayesian-statistics/empirical-bayes-and-tweedie-s-formula/gaussian-location-joint-prod-apply">
+<h4 class="bp-thmheading" id="gaussian-location-joint-prod-apply">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The joint law of a Gaussian location model has the right marginal and kernel</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/d07317d2a6ea2b92b938f2028a1070a80972d6ad/MathlibExt/Probability/Statistics/Tweedie.lean#L355" aria-label="View ProbabilityTheory.gaussianLocationJoint_prod_apply in Lean source" title="View ProbabilityTheory.gaussianLocationJoint_prod_apply in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#gaussian-location-joint-prod-apply" aria-label="Link to The joint law of a Gaussian location model has the right marginal and kernel" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">ProbabilityTheory.gaussianLocationJoint_prod_apply</div>
+<div class="bp-thmcontent">
+<p>For an s-finite prior <span class="arithmatex">\(g\)</span>, <span class="arithmatex">\(v &gt; 0\)</span> and measurable sets <span class="arithmatex">\(A, B \subseteq \mathbb R\)</span>, the <a href="#gaussian-location-joint">joint law</a> satisfies
+$<span class="arithmatex">\(\mathbb P(\mu \in A,\ x \in B) = \int_A \mathcal N(\mu, v)(B)\, g(d\mu) .\)</span>$
+Rectangles determine the measure, so this identifies the joint law with the composition of <span class="arithmatex">\(g\)</span> and the Gaussian kernel <span class="arithmatex">\(\mu \mapsto \mathcal N(\mu, v)\)</span>, which is model (1.2) of Efron (2011).</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> gaussianLocationJoint_prod_apply (g : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ) [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.SFinite#doc" title="MeasureTheory.SFinite">SFinite</a> g] {v : ℝ≥0} (hv : v ≠ 0)
+    {A B : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set#doc" title="Set">Set</a> ℝ} (hA : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasurableSet#doc" title="MeasurableSet">MeasurableSet</a> A) (hB : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasurableSet#doc" title="MeasurableSet">MeasurableSet</a> B) :
+    <a class="bp-lean-ref" href="#gaussian-location-joint" data-lean-name="ProbabilityTheory.gaussianLocationJoint">gaussianLocationJoint</a> g v (A ×ˢ B) = ∫⁻ μ <span class="bp-lean-keyword">in</span> A, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.gaussianReal#doc" title="ProbabilityTheory.gaussianReal">gaussianReal</a> μ v B ∂g</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="ProbabilityTheory.gaussianLocationJoint">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> gaussianLocationJoint (g : Measure ℝ) (v : ℝ≥0) : Measure (ℝ × ℝ) :=
+  (g.prod volume).withDensity <span class="bp-lean-keyword">fun</span> q =&gt; ((gaussianPDFReal q.1 v q.2).toNNReal : ENNReal)</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/Tweedie.lean:345</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_4">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>B. Efron, "Tweedie's formula and selection bias", <em>J. Amer. Statist. Assoc.</em> 106 (2011) 1602–1614. Equation numbers are those of the author's manuscript at https://efron.ckirby.su.domains/papers/2011TweediesFormula.pdf.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-location-joint">Joint law of a Gaussian location model</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#cond-exp-fst-gaussian-location-joint">Tweedie&#x27;s formula, conditional expectation form</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="tweedies-formulas">Tweedie's formulas</h2>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Probability/bayesian-statistics/empirical-bayes-and-tweedie-s-formula/has-deriv-at-gaussian-mixture-density">
+<h4 class="bp-thmheading" id="has-deriv-at-gaussian-mixture-density">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The marginal density of a Gaussian location mixture is differentiable</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/d07317d2a6ea2b92b938f2028a1070a80972d6ad/MathlibExt/Probability/Statistics/Tweedie.lean#L158" aria-label="View ProbabilityTheory.hasDerivAt_gaussianMixtureDensity in Lean source" title="View ProbabilityTheory.hasDerivAt_gaussianMixtureDensity in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#has-deriv-at-gaussian-mixture-density" aria-label="Link to The marginal density of a Gaussian location mixture is differentiable" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">ProbabilityTheory.hasDerivAt_gaussianMixtureDensity</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(g\)</span> be a finite measure on <span class="arithmatex">\(\mathbb R\)</span> and <span class="arithmatex">\(v &gt; 0\)</span>. The <a href="#gaussian-mixture-density">marginal density</a> <span class="arithmatex">\(f(x) = \int \varphi_v(x - \mu)\, g(d\mu)\)</span> is differentiable at every <span class="arithmatex">\(x\)</span>, with
+$<span class="arithmatex">\(f'(x) = \int \frac{\mu - x}{v}\, \varphi_v(x - \mu)\, g(d\mu) .\)</span>$
+No smoothness, density or moment assumption on <span class="arithmatex">\(g\)</span> is needed. The proof differentiates under the integral sign: <span class="arithmatex">\(\partial_x \varphi_v(x - \mu) = \frac{\mu - x}{v} \varphi_v(x - \mu)\)</span>, and the bound <span class="arithmatex">\(|t|\, e^{-t^2/(2v)} \le v + 1\)</span> dominates this derivative by a constant, which is integrable because <span class="arithmatex">\(g\)</span> is finite.</p>
+<p>Johnstone (draft, Section 2.3, before equation (2.26)) notes the stronger fact that <span class="arithmatex">\(f\)</span> is analytic, from the exponential-family form of the Gaussian kernel; only differentiability is proved here.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> hasDerivAt_gaussianMixtureDensity (g : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ) [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsFiniteMeasure#doc" title="MeasureTheory.IsFiniteMeasure">IsFiniteMeasure</a> g] {v : ℝ≥0}
+    (hv : v ≠ 0) (x : ℝ) :
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=HasDerivAt#doc" title="HasDerivAt">HasDerivAt</a> (<a class="bp-lean-ref" href="#gaussian-mixture-density" data-lean-name="ProbabilityTheory.gaussianMixtureDensity">gaussianMixtureDensity</a> g v)
+      (∫ μ, (μ - x) / v * <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.gaussianPDFReal#doc" title="ProbabilityTheory.gaussianPDFReal">gaussianPDFReal</a> μ v x ∂g) x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="ProbabilityTheory.gaussianMixtureDensity">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> gaussianMixtureDensity (g : Measure ℝ) (v : ℝ≥0) (x : ℝ) : ℝ :=
+  ∫ μ, gaussianPDFReal μ v x ∂g</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/Tweedie.lean:66</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_5">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>I. M. Johnstone, <em>Gaussian Estimation: Sequence and Wavelet Models</em>, pre-publication draft of 16 September 2019, https://imjohnstone.su.domains/GE_09_16_19.pdf. Numbers refer to that draft.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-mixture-density">Marginal density of a Gaussian location mixture</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#gaussian-posterior-mean-eq-add-mul-deriv">Tweedie&#x27;s formula</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#gaussian-posterior-second-moment-sub-sq">Tweedie&#x27;s formula for the posterior variance</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Probability/bayesian-statistics/empirical-bayes-and-tweedie-s-formula/gaussian-mixture-density-pos">
+<h4 class="bp-thmheading" id="gaussian-mixture-density-pos">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The marginal density of a Gaussian location mixture is positive</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/d07317d2a6ea2b92b938f2028a1070a80972d6ad/MathlibExt/Probability/Statistics/Tweedie.lean#L180" aria-label="View ProbabilityTheory.gaussianMixtureDensity_pos in Lean source" title="View ProbabilityTheory.gaussianMixtureDensity_pos in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#gaussian-mixture-density-pos" aria-label="Link to The marginal density of a Gaussian location mixture is positive" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">ProbabilityTheory.gaussianMixtureDensity_pos</div>
+<div class="bp-thmcontent">
+<p>If <span class="arithmatex">\(g\)</span> is a finite nonzero measure on <span class="arithmatex">\(\mathbb R\)</span> and <span class="arithmatex">\(v &gt; 0\)</span>, the <a href="#gaussian-mixture-density">marginal density</a> satisfies <span class="arithmatex">\(f(x) &gt; 0\)</span> for every <span class="arithmatex">\(x\)</span>, because the Gaussian density is positive everywhere. So the <a href="#gaussian-posterior-mean">posterior mean</a> and <span class="arithmatex">\(\log f\)</span> are well defined at every point.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> gaussianMixtureDensity_pos (g : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ) [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsFiniteMeasure#doc" title="MeasureTheory.IsFiniteMeasure">IsFiniteMeasure</a> g] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=NeZero#doc" title="NeZero">NeZero</a> g] {v : ℝ≥0}
+    (hv : v ≠ 0) (x : ℝ) : 0 &lt; <a class="bp-lean-ref" href="#gaussian-mixture-density" data-lean-name="ProbabilityTheory.gaussianMixtureDensity">gaussianMixtureDensity</a> g v x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="ProbabilityTheory.gaussianMixtureDensity">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> gaussianMixtureDensity (g : Measure ℝ) (v : ℝ≥0) (x : ℝ) : ℝ :=
+  ∫ μ, gaussianPDFReal μ v x ∂g</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/Tweedie.lean:66</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_6">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>B. Efron, "Tweedie's formula and selection bias", <em>J. Amer. Statist. Assoc.</em> 106 (2011) 1602–1614. Equation numbers are those of the author's manuscript at https://efron.ckirby.su.domains/papers/2011TweediesFormula.pdf.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-mixture-density">Marginal density of a Gaussian location mixture</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#cond-exp-fst-gaussian-location-joint">Tweedie&#x27;s formula, conditional expectation form</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#gaussian-posterior-mean-eq-add-mul-deriv">Tweedie&#x27;s formula</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#gaussian-posterior-mean-gaussian-real">Posterior mean in the normal–normal model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#gaussian-posterior-second-moment-sub-sq">Tweedie&#x27;s formula for the posterior variance</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Probability/bayesian-statistics/empirical-bayes-and-tweedie-s-formula/gaussian-posterior-mean-eq-add-mul-deriv">
+<h4 class="bp-thmheading" id="gaussian-posterior-mean-eq-add-mul-deriv">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Tweedie&#x27;s formula</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/d07317d2a6ea2b92b938f2028a1070a80972d6ad/MathlibExt/Probability/Statistics/Tweedie.lean#L193" aria-label="View ProbabilityTheory.gaussianPosteriorMean_eq_add_mul_deriv_log in Lean source" title="View ProbabilityTheory.gaussianPosteriorMean_eq_add_mul_deriv_log in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#gaussian-posterior-mean-eq-add-mul-deriv" aria-label="Link to Tweedie&#x27;s formula" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">ProbabilityTheory.gaussianPosteriorMean_eq_add_mul_deriv_log</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(g\)</span> be a finite nonzero measure on <span class="arithmatex">\(\mathbb R\)</span>, the prior of <span class="arithmatex">\(\mu\)</span>, and let <span class="arithmatex">\(x \mid \mu \sim \mathcal N(\mu, v)\)</span> with <span class="arithmatex">\(v &gt; 0\)</span>. Write <span class="arithmatex">\(f\)</span> for the <a href="#gaussian-mixture-density">marginal density</a> and <span class="arithmatex">\(m\)</span> for the <a href="#gaussian-posterior-mean">posterior mean</a>. Then for every <span class="arithmatex">\(x \in \mathbb R\)</span>,
+$<span class="arithmatex">\(m(x) = x + v\, (\log f)'(x) .\)</span>$
+The posterior mean is the unbiased estimate <span class="arithmatex">\(x\)</span> plus a Bayes correction that involves only the marginal density, not the prior. In empirical Bayes work <span class="arithmatex">\(f\)</span> is estimated from many observations sharing the prior, which avoids deconvolving <span class="arithmatex">\(f\)</span> to recover <span class="arithmatex">\(g\)</span>.</p>
+<p>This is Efron (2011), equation (1.4), <span class="arithmatex">\(\mathbb E\{\mu \mid z\} = z + \sigma^2 l'(z)\)</span> with <span class="arithmatex">\(l = \log f\)</span> and <span class="arithmatex">\(\sigma^2 = v\)</span>; Efron attributes it to Robbins (1956), who credits Tweedie. Johnstone's draft states the multivariate unit-variance version as equation (2.26), the Brown–Tweedie formula.</p>
+<p>How the Lean statement relates to the sources:</p>
+<ul>
+<li>Efron allows a prior "density" that may include atoms; the Lean statement takes any finite nonzero measure, with no density and no moment condition.</li>
+<li>The left side is the Bayes ratio. Its identification with a conditional expectation, which needs <span class="arithmatex">\(\int |\mu|\, g(d\mu) &lt; \infty\)</span>, is <a href="#cond-exp-fst-gaussian-location-joint">Tweedie's formula, conditional expectation form</a>.</li>
+<li>Efron derives (1.4) from the exponential-family form (2.1)–(2.8). The Lean proof is direct: by <a href="#has-deriv-at-gaussian-mixture-density">differentiation under the integral sign</a>, <span class="arithmatex">\(v f'(x) = \int \mu\, \varphi_v(x - \mu)\, g(d\mu) - x f(x)\)</span>, and <span class="arithmatex">\(f &gt; 0\)</span>.</li>
+</ul>
+<p>The second-order formula is <a href="#gaussian-posterior-second-moment-sub-sq">Tweedie's formula for the posterior variance</a>.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#gaussian-mixture-density"> </a></p>
+<p><a href="#gaussian-posterior-mean"> </a></p>
+<p><a href="#cond-exp-fst-gaussian-location-joint"> </a></p>
+<p><a href="#has-deriv-at-gaussian-mixture-density"> </a></p>
+<p><a href="#gaussian-posterior-second-moment-sub-sq"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> gaussianPosteriorMean_eq_add_mul_deriv_log (g : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ) [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsFiniteMeasure#doc" title="MeasureTheory.IsFiniteMeasure">IsFiniteMeasure</a> g] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=NeZero#doc" title="NeZero">NeZero</a> g]
+    {v : ℝ≥0} (hv : v ≠ 0) (x : ℝ) :
+    <a class="bp-lean-ref" href="#gaussian-posterior-mean" data-lean-name="ProbabilityTheory.gaussianPosteriorMean">gaussianPosteriorMean</a> g v x =
+      x + v * <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=deriv#doc" title="deriv">deriv</a> (<span class="bp-lean-keyword">fun</span> y =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.log#doc" title="Real.log">Real.log</a> (<a class="bp-lean-ref" href="#gaussian-mixture-density" data-lean-name="ProbabilityTheory.gaussianMixtureDensity">gaussianMixtureDensity</a> g v y)) x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="ProbabilityTheory.gaussianPosteriorMean">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> gaussianPosteriorMean (g : Measure ℝ) (v : ℝ≥0) (x : ℝ) : ℝ :=
+  (∫ μ, μ * gaussianPDFReal μ v x ∂g) / gaussianMixtureDensity g v x</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/Tweedie.lean:71</p>
+</div>
+<div data-lean-name="ProbabilityTheory.gaussianMixtureDensity">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> gaussianMixtureDensity (g : Measure ℝ) (v : ℝ≥0) (x : ℝ) : ℝ :=
+  ∫ μ, gaussianPDFReal μ v x ∂g</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/Tweedie.lean:66</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="background_1">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/mixture-models/index.html#has-gradient-at-log-marginal-joint-of-me">Finite-support Tweedie score identity</a>: the same identity as a finite-sum calculation for a prior with finitely many atoms in <span class="arithmatex">\(\mathbb R^d\)</span>, with scaling <span class="arithmatex">\(\lambda\)</span>.</li>
+<li><a href="../../../ComputerScience/machine-learning/diffusion-and-flow-generative-models/gaussian-data-score-and-denoiser.html">Score and optimal denoiser for Gaussian data</a>: the identity <span class="arithmatex">\(x + \sigma^2 \nabla \log p_\sigma(x) = \mathbb E[X_0 \mid X = x]\)</span> checked directly for Gaussian data in <span class="arithmatex">\(\mathbb R^D\)</span>, the form used for denoising in diffusion models.</li>
+<li><a href="#gaussian-posterior-mean-gaussian-real">Posterior mean in the normal–normal model</a>: the Gaussian prior, where the formula gives linear shrinkage.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_7">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>B. Efron, "Tweedie's formula and selection bias", <em>J. Amer. Statist. Assoc.</em> 106 (2011) 1602–1614. Equation numbers are those of the author's manuscript at https://efron.ckirby.su.domains/papers/2011TweediesFormula.pdf.</li>
+<li>H. Robbins, "An empirical Bayes approach to statistics", <em>Proc. Third Berkeley Symp. Math. Statist. Probab.</em>, Vol. 1 (1956) 157–163, which credits the formula to M. K. Tweedie (cited from Efron 2011; not consulted).</li>
+<li>I. M. Johnstone, <em>Gaussian Estimation: Sequence and Wavelet Models</em>, pre-publication draft of 16 September 2019, https://imjohnstone.su.domains/GE_09_16_19.pdf. Numbers refer to that draft.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/mixture-models/index.html#has-gradient-at-log-marginal-joint-of-me"> </a></p>
+<p><a href="../../../ComputerScience/machine-learning/diffusion-and-flow-generative-models/gaussian-data-score-and-denoiser.html"> </a></p>
+<p><a href="#gaussian-posterior-mean-gaussian-real"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-mixture-density">Marginal density of a Gaussian location mixture</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-posterior-mean">Posterior mean in the Gaussian location model</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#gaussian-mixture-density-pos">The marginal density of a Gaussian location mixture is positive</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#has-deriv-at-gaussian-mixture-density">The marginal density of a Gaussian location mixture is differentiable</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Probability/bayesian-statistics/empirical-bayes-and-tweedie-s-formula/gaussian-posterior-second-moment-sub-sq">
+<h4 class="bp-thmheading" id="gaussian-posterior-second-moment-sub-sq">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Tweedie&#x27;s formula for the posterior variance</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/d07317d2a6ea2b92b938f2028a1070a80972d6ad/MathlibExt/Probability/Statistics/Tweedie.lean#L295" aria-label="View ProbabilityTheory.gaussianPosteriorSecondMoment_sub_sq_eq in Lean source" title="View ProbabilityTheory.gaussianPosteriorSecondMoment_sub_sq_eq in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#gaussian-posterior-second-moment-sub-sq" aria-label="Link to Tweedie&#x27;s formula for the posterior variance" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">ProbabilityTheory.gaussianPosteriorSecondMoment_sub_sq_eq</div>
+<div class="bp-thmcontent">
+<p>Under the hypotheses of <a href="#gaussian-posterior-mean-eq-add-mul-deriv">Tweedie's formula</a> (a finite nonzero prior <span class="arithmatex">\(g\)</span> and <span class="arithmatex">\(v &gt; 0\)</span>), for every <span class="arithmatex">\(x \in \mathbb R\)</span>,
+$<span class="arithmatex">\(\mathbb E[\mu^2 \mid x] - \mathbb E[\mu \mid x]^2 = v\,\bigl(1 + v\, (\log f)''(x)\bigr),\)</span>$
+where both conditional moments are Bayes ratios (<a href="#gaussian-posterior-second-moment">posterior second moment</a>, <a href="#gaussian-posterior-mean">posterior mean</a>) and <span class="arithmatex">\(f\)</span> is the <a href="#gaussian-mixture-density">marginal density</a>. This is the second component of Efron (2011), equation (2.8), <span class="arithmatex">\(\operatorname{var}\{\mu \mid z\} = \sigma^2 (1 + \sigma^2 l''(z))\)</span>, with <span class="arithmatex">\(\sigma^2 = v\)</span>. Since the left side is a variance, it is nonnegative, so <span class="arithmatex">\((\log f)'' \ge -1/v\)</span> everywhere (this consequence is not formalized).</p>
+<p>The proof differentiates under the integral sign a second time, so it shows along the way that <span class="arithmatex">\(f\)</span> is twice differentiable; <span class="arithmatex">\((\log f)''\)</span> in the statement is Lean's <code>deriv (deriv (log ∘ f))</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> gaussianPosteriorSecondMoment_sub_sq_eq (g : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ) [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsFiniteMeasure#doc" title="MeasureTheory.IsFiniteMeasure">IsFiniteMeasure</a> g] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=NeZero#doc" title="NeZero">NeZero</a> g]
+    {v : ℝ≥0} (hv : v ≠ 0) (x : ℝ) :
+    <a class="bp-lean-ref" href="#gaussian-posterior-second-moment" data-lean-name="ProbabilityTheory.gaussianPosteriorSecondMoment">gaussianPosteriorSecondMoment</a> g v x - <a class="bp-lean-ref" href="#gaussian-posterior-mean" data-lean-name="ProbabilityTheory.gaussianPosteriorMean">gaussianPosteriorMean</a> g v x ^ 2 =
+      v * (1 + v * <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=deriv#doc" title="deriv">deriv</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=deriv#doc" title="deriv">deriv</a> <span class="bp-lean-keyword">fun</span> y =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.log#doc" title="Real.log">Real.log</a> (<a class="bp-lean-ref" href="#gaussian-mixture-density" data-lean-name="ProbabilityTheory.gaussianMixtureDensity">gaussianMixtureDensity</a> g v y)) x)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="ProbabilityTheory.gaussianPosteriorSecondMoment">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> gaussianPosteriorSecondMoment (g : Measure ℝ) (v : ℝ≥0) (x : ℝ) : ℝ :=
+  (∫ μ, μ ^ 2 * gaussianPDFReal μ v x ∂g) / gaussianMixtureDensity g v x</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/Tweedie.lean:216</p>
+</div>
+<div data-lean-name="ProbabilityTheory.gaussianPosteriorMean">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> gaussianPosteriorMean (g : Measure ℝ) (v : ℝ≥0) (x : ℝ) : ℝ :=
+  (∫ μ, μ * gaussianPDFReal μ v x ∂g) / gaussianMixtureDensity g v x</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/Tweedie.lean:71</p>
+</div>
+<div data-lean-name="ProbabilityTheory.gaussianMixtureDensity">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> gaussianMixtureDensity (g : Measure ℝ) (v : ℝ≥0) (x : ℝ) : ℝ :=
+  ∫ μ, gaussianPDFReal μ v x ∂g</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/Tweedie.lean:66</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_8">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>B. Efron, "Tweedie's formula and selection bias", <em>J. Amer. Statist. Assoc.</em> 106 (2011) 1602–1614. Equation numbers are those of the author's manuscript at https://efron.ckirby.su.domains/papers/2011TweediesFormula.pdf.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-mixture-density">Marginal density of a Gaussian location mixture</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-posterior-mean">Posterior mean in the Gaussian location model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-posterior-second-moment">Posterior second moment in the Gaussian location model</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#gaussian-mixture-density-pos">The marginal density of a Gaussian location mixture is positive</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#has-deriv-at-gaussian-mixture-density">The marginal density of a Gaussian location mixture is differentiable</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Probability/bayesian-statistics/empirical-bayes-and-tweedie-s-formula/cond-exp-fst-gaussian-location-joint">
+<h4 class="bp-thmheading" id="cond-exp-fst-gaussian-location-joint">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Tweedie&#x27;s formula, conditional expectation form</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/d07317d2a6ea2b92b938f2028a1070a80972d6ad/MathlibExt/Probability/Statistics/Tweedie.lean#L446" aria-label="View ProbabilityTheory.condExp_fst_gaussianLocationJoint in Lean source" title="View ProbabilityTheory.condExp_fst_gaussianLocationJoint in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#cond-exp-fst-gaussian-location-joint" aria-label="Link to Tweedie&#x27;s formula, conditional expectation form" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">ProbabilityTheory.condExp_fst_gaussianLocationJoint</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(g\)</span> be a probability measure on <span class="arithmatex">\(\mathbb R\)</span> with <span class="arithmatex">\(\int |\mu|\, g(d\mu) &lt; \infty\)</span> and let <span class="arithmatex">\(v &gt; 0\)</span>. Under the <a href="#gaussian-location-joint">joint law</a> of <span class="arithmatex">\((\mu, x)\)</span> in the model <span class="arithmatex">\(\mu \sim g\)</span>, <span class="arithmatex">\(x \mid \mu \sim \mathcal N(\mu, v)\)</span>,
+$<span class="arithmatex">\(\mathbb E[\mu \mid x] = m(x) \quad \text{almost surely},\)</span>$
+where <span class="arithmatex">\(m\)</span> is the Bayes ratio of the <a href="#gaussian-posterior-mean">posterior mean</a> and the conditional expectation is taken with respect to the <span class="arithmatex">\(\sigma\)</span>-algebra generated by <span class="arithmatex">\(x\)</span>. Combined with <a href="#gaussian-posterior-mean-eq-add-mul-deriv">Tweedie's formula</a>, <span class="arithmatex">\(\mathbb E[\mu \mid x] = x + v (\log f)'(x)\)</span> almost surely: this is Efron (2011), equations (1.2)–(1.4), read as a statement about conditional expectations, with <span class="arithmatex">\(\sigma^2 = v\)</span>.</p>
+<p>The moment condition is needed for <span class="arithmatex">\(\mathbb E[\mu \mid x]\)</span> to exist as a conditional expectation of an integrable variable; the pointwise formula needs no moment.</p>
+<p>The proof checks the defining property: for every measurable <span class="arithmatex">\(A\)</span>, <span class="arithmatex">\(\int_{x \in A} \mu = \int_{x \in A} m(x)\)</span> under the joint law, by two applications of Fubini's theorem and <span class="arithmatex">\(m(x) f(x) = \int \mu\, \varphi_v(x - \mu)\, g(d\mu)\)</span>.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#gaussian-location-joint"> </a></p>
+<p><a href="#gaussian-posterior-mean"> </a></p>
+<p><a href="#gaussian-posterior-mean-eq-add-mul-deriv"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> condExp_fst_gaussianLocationJoint (g : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ) [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsProbabilityMeasure#doc" title="MeasureTheory.IsProbabilityMeasure">IsProbabilityMeasure</a> g]
+    (hg : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Integrable#doc" title="MeasureTheory.Integrable">Integrable</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=id#doc" title="id">id</a> g) {v : ℝ≥0} (hv : v ≠ 0) :
+    (<span class="bp-lean-keyword">fun</span> q : ℝ × ℝ =&gt; <a class="bp-lean-ref" href="#gaussian-posterior-mean" data-lean-name="ProbabilityTheory.gaussianPosteriorMean">gaussianPosteriorMean</a> g v q.2) =ᵐ[<a class="bp-lean-ref" href="#gaussian-location-joint" data-lean-name="ProbabilityTheory.gaussianLocationJoint">gaussianLocationJoint</a> g v]
+      (<a class="bp-lean-ref" href="#gaussian-location-joint" data-lean-name="ProbabilityTheory.gaussianLocationJoint">gaussianLocationJoint</a> g v)[<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Prod.fst#doc" title="Prod.fst">Prod.fst</a> | <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasurableSpace.comap#doc" title="MeasurableSpace.comap">MeasurableSpace.comap</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Prod.snd#doc" title="Prod.snd">Prod.snd</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=inferInstance#doc" title="inferInstance">inferInstance</a>]</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="ProbabilityTheory.gaussianPosteriorMean">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> gaussianPosteriorMean (g : Measure ℝ) (v : ℝ≥0) (x : ℝ) : ℝ :=
+  (∫ μ, μ * gaussianPDFReal μ v x ∂g) / gaussianMixtureDensity g v x</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/Tweedie.lean:71</p>
+</div>
+<div data-lean-name="ProbabilityTheory.gaussianLocationJoint">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> gaussianLocationJoint (g : Measure ℝ) (v : ℝ≥0) : Measure (ℝ × ℝ) :=
+  (g.prod volume).withDensity <span class="bp-lean-keyword">fun</span> q =&gt; ((gaussianPDFReal q.1 v q.2).toNNReal : ENNReal)</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/Tweedie.lean:345</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_9">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>B. Efron, "Tweedie's formula and selection bias", <em>J. Amer. Statist. Assoc.</em> 106 (2011) 1602–1614. Equation numbers are those of the author's manuscript at https://efron.ckirby.su.domains/papers/2011TweediesFormula.pdf.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-location-joint">Joint law of a Gaussian location model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-posterior-mean">Posterior mean in the Gaussian location model</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#gaussian-location-joint-prod-apply">The joint law of a Gaussian location model has the right marginal and kernel</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#gaussian-mixture-density">Marginal density of a Gaussian location mixture</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#gaussian-mixture-density-pos">The marginal density of a Gaussian location mixture is positive</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="the-normal-prior">The normal prior</h2>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Probability/bayesian-statistics/empirical-bayes-and-tweedie-s-formula/gaussian-posterior-mean-gaussian-real">
+<h4 class="bp-thmheading" id="gaussian-posterior-mean-gaussian-real">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Posterior mean in the normal–normal model</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/d07317d2a6ea2b92b938f2028a1070a80972d6ad/MathlibExt/Probability/Statistics/Tweedie.lean#L503" aria-label="View ProbabilityTheory.gaussianPosteriorMean_gaussianReal in Lean source" title="View ProbabilityTheory.gaussianPosteriorMean_gaussianReal in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#gaussian-posterior-mean-gaussian-real" aria-label="Link to Posterior mean in the normal–normal model" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">ProbabilityTheory.gaussianPosteriorMean_gaussianReal</div>
+<div class="bp-thmcontent">
+<p>For the prior <span class="arithmatex">\(\mu \sim \mathcal N(0, A)\)</span> with <span class="arithmatex">\(A \ge 0\)</span> and <span class="arithmatex">\(x \mid \mu \sim \mathcal N(\mu, v)\)</span> with <span class="arithmatex">\(v &gt; 0\)</span>, the <a href="#gaussian-posterior-mean">posterior mean</a> is
+$<span class="arithmatex">\(\mathbb E[\mu \mid x] = \frac{A}{A + v}\, x \qquad \text{for every } x .\)</span>$
+This is Efron (2021), equation (3.10), <span class="arithmatex">\(\hat\theta^{\text{Bayes}} = M + B(x - M)\)</span> with <span class="arithmatex">\(B = A/(A + \sigma_0^2)\)</span>, in the case <span class="arithmatex">\(M = 0\)</span>, <span class="arithmatex">\(\sigma_0^2 = v\)</span>; the Lean statement does not cover a nonzero prior mean <span class="arithmatex">\(M\)</span>. With <span class="arithmatex">\(v = 1\)</span> and <span class="arithmatex">\(V = A + 1\)</span> the factor is <span class="arithmatex">\(1 - 1/V\)</span>, Efron (2011), equation (3.8). Estimating <span class="arithmatex">\(1/V\)</span> without bias by <span class="arithmatex">\((N - 2)/\sum_j z_j^2\)</span> turns this Bayes rule into the James–Stein estimator: see <a href="../../statistical-estimation/stein-s-lemma-and-james-stein-estimation/index.html#integral-james-stein-factor-pi-gaussian">the James–Stein shrinkage factor estimates <span class="arithmatex">\(1/V\)</span> without bias</a>. The case <span class="arithmatex">\(A = 0\)</span>, a point mass at <span class="arithmatex">\(0\)</span>, gives <span class="arithmatex">\(\mathbb E[\mu \mid x] = 0\)</span>.</p>
+<p>The Lean proof applies Stein's lemma to the prior: <span class="arithmatex">\(\int \mu\, \varphi_v(x - \mu)\, \mathcal N(0, A)(d\mu) = A \int \frac{x - \mu}{v}\, \varphi_v(x - \mu)\, \mathcal N(0, A)(d\mu)\)</span>, which is linear in the numerator and the marginal density.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> gaussianPosteriorMean_gaussianReal (A : ℝ≥0) {v : ℝ≥0} (hv : v ≠ 0) (x : ℝ) :
+    <a class="bp-lean-ref" href="#gaussian-posterior-mean" data-lean-name="ProbabilityTheory.gaussianPosteriorMean">gaussianPosteriorMean</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.gaussianReal#doc" title="ProbabilityTheory.gaussianReal">gaussianReal</a> 0 A) v x = A / (A + v) * x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="ProbabilityTheory.gaussianPosteriorMean">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> gaussianPosteriorMean (g : Measure ℝ) (v : ℝ≥0) (x : ℝ) : ℝ :=
+  (∫ μ, μ * gaussianPDFReal μ v x ∂g) / gaussianMixtureDensity g v x</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/Tweedie.lean:71</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="#gaussian-posterior-mean-eq-add-mul-deriv">Tweedie's formula</a>: Efron (2011) derives (3.8) from it, with the marginal <span class="arithmatex">\(\mathcal N(0, V)\)</span> and <span class="arithmatex">\(l'(z) = -z/V\)</span>.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="background_2">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="../../statistical-estimation/stein-s-lemma-and-james-stein-estimation/index.html#integrable-and-integral-sub-mul-gaussian">Stein's lemma</a>: the identity the Lean proof uses instead.</li>
+<li><a href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/conjugate-priors/index.html#normal-post-mean">Posterior mean of the Normal–Normal model</a>: the conjugate posterior mean <span class="arithmatex">\((v m_0 + v_0 x)/(v_0 + v)\)</span> with a general prior mean; <a href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/conjugate-priors/index.html#gaussian-posterior-mean-gaussian-real-eq">the bridge</a> shows the two agree when <span class="arithmatex">\(m_0 = 0\)</span>.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_10">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>B. Efron, "Empirical Bayes: Concepts and Methods", author's manuscript (2021), https://efron.ckirby.su.domains/papers/2021EB-concepts-methods.pdf.</li>
+<li>B. Efron, "Tweedie's formula and selection bias", <em>J. Amer. Statist. Assoc.</em> 106 (2011) 1602–1614. Equation numbers are those of the author's manuscript at https://efron.ckirby.su.domains/papers/2011TweediesFormula.pdf.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#gaussian-posterior-mean">Posterior mean in the Gaussian location model</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#gaussian-mixture-density">Marginal density of a Gaussian location mixture</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#gaussian-mixture-density-pos">The marginal density of a Gaussian location mixture is positive</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../statistical-estimation/stein-s-lemma-and-james-stein-estimation/index.html#integrable-and-integral-sub-mul-gaussian">Stein&#x27;s lemma</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/conjugate-priors/index.html#gaussian-posterior-mean-gaussian-real-eq">The Bayes-ratio posterior mean of the normal–normal model is the conjugate posterior mean</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="robbins-poisson-formula">Robbins' Poisson formula</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Probability/bayesian-statistics/empirical-bayes-and-tweedie-s-formula/poisson-mixture-mass">
+<h4 class="bp-thmheading" id="poisson-mixture-mass">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Marginal probability of a Poisson mixture</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/d07317d2a6ea2b92b938f2028a1070a80972d6ad/MathlibExt/Probability/Statistics/RobbinsFormula.lean#L46" aria-label="View ProbabilityTheory.poissonMixtureMass in Lean source" title="View ProbabilityTheory.poissonMixtureMass in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#poisson-mixture-mass" aria-label="Link to Marginal probability of a Poisson mixture" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">ProbabilityTheory.poissonMixtureMass</div>
+<div class="bp-thmcontent">
+<p>For a prior <span class="arithmatex">\(g\)</span> on the rate <span class="arithmatex">\(\theta \ge 0\)</span>, the marginal probability of a count <span class="arithmatex">\(x \in \mathbb N\)</span> is
+$<span class="arithmatex">\(f(x) = \int_0^\infty \frac{e^{-\theta} \theta^x}{x!}\, g(d\theta),\)</span>$
+the probability of <span class="arithmatex">\(x\)</span> when <span class="arithmatex">\(\theta \sim g\)</span> and <span class="arithmatex">\(x \mid \theta \sim \text{Poisson}(\theta)\)</span> (Efron 2021, equations (1.5)–(1.6)). In Lean the prior is a measure on <span class="arithmatex">\(\mathbb R_{\ge 0}\)</span> and the likelihood is Mathlib's <code>(poissonMeasure θ).real {x}</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> poissonMixtureMass (g : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ≥0) (x : ℕ) : ℝ :=
+  ∫ θ, (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.poissonMeasure#doc" title="ProbabilityTheory.poissonMeasure">poissonMeasure</a> θ).real {x} ∂g</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_11">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>B. Efron, "Empirical Bayes: Concepts and Methods", author's manuscript (2021), https://efron.ckirby.su.domains/papers/2021EB-concepts-methods.pdf.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#poisson-posterior-mean">Posterior mean in the Poisson model</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#poisson-posterior-mean-eq">Robbins&#x27; formula</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Probability/bayesian-statistics/empirical-bayes-and-tweedie-s-formula/poisson-posterior-mean">
+<h4 class="bp-thmheading" id="poisson-posterior-mean">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Posterior mean in the Poisson model</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/d07317d2a6ea2b92b938f2028a1070a80972d6ad/MathlibExt/Probability/Statistics/RobbinsFormula.lean#L51" aria-label="View ProbabilityTheory.poissonPosteriorMean in Lean source" title="View ProbabilityTheory.poissonPosteriorMean in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#poisson-posterior-mean" aria-label="Link to Posterior mean in the Poisson model" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">ProbabilityTheory.poissonPosteriorMean</div>
+<div class="bp-thmcontent">
+<p>For a prior <span class="arithmatex">\(g\)</span> on the rate and a count <span class="arithmatex">\(x\)</span>, Bayes' rule gives the posterior mean
+$<span class="arithmatex">\(\mathbb E[\theta \mid x] = \frac{\int \theta\, e^{-\theta} \theta^x / x!\; g(d\theta)}{f(x)},\)</span>$
+with <span class="arithmatex">\(f\)</span> the <a href="#poisson-mixture-mass">marginal probability</a> (Efron 2021, equations (1.6)–(1.7)). If <span class="arithmatex">\(f(x) = 0\)</span> Lean's convention gives <span class="arithmatex">\(0\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> poissonPosteriorMean (g : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ≥0) (x : ℕ) : ℝ :=
+  (∫ θ, (θ : ℝ) * (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ProbabilityTheory.poissonMeasure#doc" title="ProbabilityTheory.poissonMeasure">poissonMeasure</a> θ).real {x} ∂g) / <a class="bp-lean-ref" href="#poisson-mixture-mass" data-lean-name="ProbabilityTheory.poissonMixtureMass">poissonMixtureMass</a> g x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="ProbabilityTheory.poissonMixtureMass">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> poissonMixtureMass (g : Measure ℝ≥0) (x : ℕ) : ℝ :=
+  ∫ θ, (poissonMeasure θ).real {x} ∂g</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/RobbinsFormula.lean:46</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_12">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>B. Efron, "Empirical Bayes: Concepts and Methods", author's manuscript (2021), https://efron.ckirby.su.domains/papers/2021EB-concepts-methods.pdf.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#poisson-mixture-mass">Marginal probability of a Poisson mixture</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#poisson-posterior-mean-eq">Robbins&#x27; formula</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Probability/bayesian-statistics/empirical-bayes-and-tweedie-s-formula/poisson-posterior-mean-eq">
+<h4 class="bp-thmheading" id="poisson-posterior-mean-eq">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Robbins&#x27; formula</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/d07317d2a6ea2b92b938f2028a1070a80972d6ad/MathlibExt/Probability/Statistics/RobbinsFormula.lean#L58" aria-label="View ProbabilityTheory.poissonPosteriorMean_eq in Lean source" title="View ProbabilityTheory.poissonPosteriorMean_eq in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#poisson-posterior-mean-eq" aria-label="Link to Robbins&#x27; formula" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">ProbabilityTheory.poissonPosteriorMean_eq</div>
+<div class="bp-thmcontent">
+<p>For every prior <span class="arithmatex">\(g\)</span> on the Poisson rate and every count <span class="arithmatex">\(x \in \mathbb N\)</span>,
+$<span class="arithmatex">\(\mathbb E[\theta \mid x] = \frac{(x + 1)\, f(x + 1)}{f(x)},\)</span>$
+where the left side is the Bayes <a href="#poisson-posterior-mean">posterior mean</a> and <span class="arithmatex">\(f\)</span> is the <a href="#poisson-mixture-mass">marginal probability</a>. This is Efron (2021), equation (1.7), Robbins' (1956) derivation. Replacing <span class="arithmatex">\(f(x)\)</span> and <span class="arithmatex">\(f(x + 1)\)</span> by the observed proportions <span class="arithmatex">\(y_x/N\)</span> and <span class="arithmatex">\(y_{x+1}/N\)</span> of counts equal to <span class="arithmatex">\(x\)</span> and <span class="arithmatex">\(x + 1\)</span> gives Robbins' empirical Bayes estimate <span class="arithmatex">\((x + 1) y_{x+1}/y_x\)</span> (Efron 2021, equation (1.3)), which needs no knowledge of the prior. The estimation step is not formalized.</p>
+<p>The identity holds for any measure <span class="arithmatex">\(g\)</span>, with no moment assumption, because <span class="arithmatex">\(\theta\, e^{-\theta}\theta^x/x! = (x + 1)\, e^{-\theta}\theta^{x+1}/(x + 1)!\)</span> pointwise. It reads as a statement about <span class="arithmatex">\(\mathbb E[\theta \mid x]\)</span> when <span class="arithmatex">\(g\)</span> is a probability measure: then both integrals are finite, since <span class="arithmatex">\(\theta\, e^{-\theta}\theta^x/x! \le x + 1\)</span>, and <span class="arithmatex">\(f(x) &gt; 0\)</span> for every <span class="arithmatex">\(x\)</span> as soon as <span class="arithmatex">\(g\)</span> is not the point mass at <span class="arithmatex">\(0\)</span>. For a measure with infinite mass both integrals may fail to converge, in which case Lean's integral convention makes the two sides equal to <span class="arithmatex">\(0\)</span> and the formula says nothing about a posterior mean.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> poissonPosteriorMean_eq (g : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> ℝ≥0) (x : ℕ) :
+    <a class="bp-lean-ref" href="#poisson-posterior-mean" data-lean-name="ProbabilityTheory.poissonPosteriorMean">poissonPosteriorMean</a> g x =
+      (x + 1) * <a class="bp-lean-ref" href="#poisson-mixture-mass" data-lean-name="ProbabilityTheory.poissonMixtureMass">poissonMixtureMass</a> g (x + 1) / <a class="bp-lean-ref" href="#poisson-mixture-mass" data-lean-name="ProbabilityTheory.poissonMixtureMass">poissonMixtureMass</a> g x</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="ProbabilityTheory.poissonPosteriorMean">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> poissonPosteriorMean (g : Measure ℝ≥0) (x : ℕ) : ℝ :=
+  (∫ θ, (θ : ℝ) * (poissonMeasure θ).real {x} ∂g) / poissonMixtureMass g x</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/RobbinsFormula.lean:51</p>
+</div>
+<div data-lean-name="ProbabilityTheory.poissonMixtureMass">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> poissonMixtureMass (g : Measure ℝ≥0) (x : ℕ) : ℝ :=
+  ∫ θ, (poissonMeasure θ).real {x} ∂g</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/RobbinsFormula.lean:46</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="background_3">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="#gaussian-posterior-mean-eq-add-mul-deriv">Tweedie's formula</a>: the Gaussian counterpart, which also writes the posterior mean through the marginal density.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_13">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>B. Efron, "Empirical Bayes: Concepts and Methods", author's manuscript (2021), https://efron.ckirby.su.domains/papers/2021EB-concepts-methods.pdf.</li>
+<li>H. Robbins, "An empirical Bayes approach to statistics", <em>Proc. Third Berkeley Symp. Math. Statist. Probab.</em>, Vol. 1 (1956) 157–163 (cited from Efron 2021; not consulted).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#poisson-mixture-mass">Marginal probability of a Poisson mixture</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#poisson-posterior-mean">Posterior mean in the Poisson model</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="related-topics">Related topics</h2>
+<ul>
+<li><a href="../../statistical-estimation/stein-s-lemma-and-james-stein-estimation/index.html">Stein's lemma and James–Stein estimation</a>: the frequentist side of shrinkage; the James–Stein estimator is the normal-prior Bayes rule with its shrinkage factor estimated from the data.</li>
+<li><a href="../../hypothesis-testing/two-groups-model-and-local-false-discovery-rates/index.html">Two-groups model and local false discovery rates</a>: Efron's other empirical Bayes model, for large-scale testing, where the local false discovery rate is a posterior probability computed from the marginal density.</li>
+<li><a href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/conjugate-priors/index.html">Conjugate priors</a>: the normal–normal posterior kernel, with a general prior mean.</li>
+<li><a href="../../../ComputerScience/machine-learning/bayesian-inference-and-sampling/mixture-models/index.html">Mixture models</a>: the finite-support score identity used for Gaussian mixtures in machine learning.</li>
+</ul>
+</div>
+<p><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../dependencies/index.json" data-graph-src="../../../../dependencies/scopes/Probability/bayesian-statistics/empirical-bayes-and-tweedie-s-formula.json" data-page-href="index.html" data-scope-id="Probability/bayesian-statistics/empirical-bayes-and-tweedie-s-formula">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>
