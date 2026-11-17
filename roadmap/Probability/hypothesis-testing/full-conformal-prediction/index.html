@@ -1,0 +1,5824 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../split-conformal-prediction/index.html">
+      
+      
+        <link rel="next" href="../conformalized-quantile-regression/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Full conformal prediction - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#related-topics" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Full conformal prediction
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_18" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_18" id="__nav_2_1_18_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_18_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_18">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Probability
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../laws-of-large-numbers/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Laws of large numbers and random series
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../central-limit-theorems/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Central limit theorems and Poisson approximation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../markov-chains/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Markov chains
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../stochastic-calculus/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Brownian motion and stochastic calculus
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../percolation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Percolation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../correlation-inequalities/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Correlation inequalities and stochastic domination
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../high-dimensional-probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    High-dimensional and geometric probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../distributions/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability distributions
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_18_10" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hypothesis testing
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_18_10" id="__nav_2_1_18_10_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_18_10_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_18_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Hypothesis testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../valid-p-values-and-false-discovery-proportion/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Valid p-values and false discovery proportion
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bonferroni-correction/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bonferroni correction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../holm-bonferroni-method/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Holm–Bonferroni method
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../closed-testing-principle/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Closed testing principle
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../benjamini-hochberg-procedure/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benjamini–Hochberg procedure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../knockoff-filter/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knockoff filter
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../two-groups-model-and-local-false-discovery-rates/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Two-groups model and local false discovery rates
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../monotone-likelihood-ratio/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monotone likelihood ratio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../score-wald-and-likelihood-ratio-tests/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Score, Wald and likelihood-ratio tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../local-power-of-the-likelihood-ratio-test/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local power of the likelihood-ratio test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../universal-inference/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Universal inference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fisher-s-exact-test/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fisher&#39;s exact test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exact-test-for-hardy-weinberg-equilibrium/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exact test for Hardy–Weinberg equilibrium
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mann-whitney-statistic-and-roc-area/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mann–Whitney statistic and ROC area
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../permutation-tests/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Permutation tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../split-conformal-prediction/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Split conformal prediction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full conformal prediction
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Full conformal prediction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#related-topics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related topics
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../conformalized-quantile-regression/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conformalized quantile regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../conformal-prediction-under-covariate-shift/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conformal prediction under covariate shift
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../meta-analysis/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Meta-analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../linear-models-multivariate/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear models and multivariate analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../statistical-estimation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical estimation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../bayesian-statistics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bayesian statistics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../nonparametric-survival/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nonparametric statistics and survival analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../foundations/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Foundations of probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../characteristic-functions/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Characteristic functions and generating functions
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../infinite-divisibility-regular-variation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Infinitely divisible laws and regular variation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../convergence-of-measures/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Convergence of probability measures
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../large-deviations/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Large deviations
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../concentration-inequalities/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concentration inequalities
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../martingales/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Martingales and optional stopping
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../random-walks/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Random walks
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../branching-processes/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Branching processes
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../point-processes/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Point processes and stationary processes
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../random-fields/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Random fields on lattices
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../ComputerScience/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#related-topics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related topics
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../index.html" tabindex="-1">Probability</a></li><li><a href="../index.html" tabindex="-1">Hypothesis testing</a></li><li aria-current="page">Full conformal prediction</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Full conformal prediction</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="Probability/hypothesis-testing/full-conformal-prediction" data-page-title="Full conformal prediction">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}var g = location.hash.slice(1), u = new URLSearchParams(g), q = Array.from(u), y = {};var d = u.get("node"), o = r.getAttribute("data-autoform-node-id");var l = d !== null ? d === o || d.replace(/^(?:scope|boundary):/, "") === o : q.length > 0 && q.every(function (e) {var n = e[0], v = e[1]; if (y[n]) return false; y[n] = 1;if (n === "view") return v === "graph" || v === "list";if (n === "direction") return ["both", "prerequisites", "dependents"].indexOf(v) >= 0;if (n === "isolates") return v === "0" || v === "1";return n === "status" && (v === "-" || v.split(",").every(function (t) { return /^(?:mathlib|fully_proved|proved|defined|conditional|can_prove|stated|can_state|not_ready|planned|inventory_checked|inventory_pending)$/.test(t); }));});var a = history.state && history.state.autoformNavigation, c = a && a.version === 1 && a.url === location.href && a.snapshot;var i = r.hasAttribute("data-reader-overview") && (!g || l), j = i && Boolean(c && c.readingOpen !== false);var z = f.querySelector(".bp-dag-sheet-handle"), e = f.querySelector("h1.bp-dag-sr-only");f.classList.toggle("bp-dag-overview-only", i); f.classList.toggle("bp-dag-sheet-open", j); if (j && z) z.textContent = "\u00d7";if (e) e.hidden = !i || j;f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="full-conformal-prediction">Full conformal prediction</h1>
+<p>Full (transductive) conformal prediction needs no held-out calibration set. For a test covariate
+<span class="arithmatex">\(x\)</span> and each trial response <span class="arithmatex">\(y\)</span>, it refits the model on the augmented data
+<span class="arithmatex">\(Z_1, \dots, Z_n, (x, y)\)</span>, scores all <span class="arithmatex">\(n + 1\)</span> points, and keeps <span class="arithmatex">\(y\)</span> when the score of the trial
+point is at most the <span class="arithmatex">\(\lceil (1 - \alpha)(n + 1) \rceil\)</span>-th smallest of the other <span class="arithmatex">\(n\)</span> scores.
+At the true response the augmented data set is the data itself. So if the data are exchangeable
+and the scores are permutation equivariant (as residuals of a fitting algorithm that is
+symmetric in the data are), the coverage event is the split conformal event for an exchangeable
+score vector. The full conformal set therefore covers <span class="arithmatex">\(Y_{n+1}\)</span> with probability at least
+<span class="arithmatex">\(1 - \alpha\)</span>, and at most <span class="arithmatex">\(1 - \alpha + 1/(n + 1)\)</span> when there are no ties (Lei, G'Sell,
+Rinaldo, Tibshirani and Wasserman, arXiv:1604.04173v2, Theorem 2.1). Both bounds are proved
+here, for any exchangeable law, which includes the i.i.d. setting of the source.</p>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Probability/hypothesis-testing/full-conformal-prediction/is-perm-equivariant">
+<h4 class="bp-thmheading" id="is-perm-equivariant">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Permutation-equivariant score map</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/e20ec29053ed3495e4438c8c4e5613a52dbb3d38/MathlibExt/Probability/Statistics/FullConformal.lean#L77" aria-label="View MathlibExt.Probability.Statistics.FullConformal.IsPermEquivariant in Lean source" title="View MathlibExt.Probability.Statistics.FullConformal.IsPermEquivariant in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#is-perm-equivariant" aria-label="Link to Permutation-equivariant score map" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Probability.Statistics.FullConformal.IsPermEquivariant</div>
+<div class="bp-thmcontent">
+<p>A map <span class="arithmatex">\(S\)</span> from data vectors <span class="arithmatex">\(z = (z_1, \dots, z_{n+1})\)</span> to score vectors in <span class="arithmatex">\(\mathbb{R}^{n+1}\)</span> is
+permutation equivariant if permuting the data points permutes the scores in the same way:
+<span class="arithmatex">\(S(z \circ \sigma) = S(z) \circ \sigma\)</span> for every permutation <span class="arithmatex">\(\sigma\)</span> of <span class="arithmatex">\(\{1, \dots, n+1\}\)</span>.</p>
+<p>Scores of the form <span class="arithmatex">\(S(z)_i = f(z_{-i}; z_i)\)</span>, with <span class="arithmatex">\(f\)</span> symmetric in its first <span class="arithmatex">\(n\)</span> arguments, have
+this property; these are the conformity scores of Lei et al., Remark 2.4. So do the absolute
+residuals of a fitting algorithm that is symmetric in the data.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsPermEquivariant (S : (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1) → 𝒵) → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1) → ℝ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ (σ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Equiv.Perm#doc" title="Equiv.Perm">Equiv.Perm</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1))) (z : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1) → 𝒵), S (z ∘ σ) = S z ∘ σ</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>J. Lei, M. G'Sell, A. Rinaldo, R. J. Tibshirani and L. Wasserman, <em>Distribution-free predictive inference for regression</em>, arXiv:1604.04173v2 (9 March 2017); published in J. Amer. Statist. Assoc. 113 (2018) 1094–1111. Theorem and equation numbers refer to the arXiv version, which is the one read. Remark 2.4.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-perm-equivariant-abs-residual-score">Residuals of a symmetric algorithm are equivariant</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#map-comp-perm-map-eq">Equivariant scores of exchangeable data are exchangeable</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#measure-mem-full-conformal-set-le">Upper bound on full conformal coverage without ties</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#of-real-one-sub-le-measure-mem-full-conf">Full conformal coverage</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Probability/hypothesis-testing/full-conformal-prediction/map-comp-perm-map-eq">
+<h4 class="bp-thmheading" id="map-comp-perm-map-eq">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Equivariant scores of exchangeable data are exchangeable</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/e20ec29053ed3495e4438c8c4e5613a52dbb3d38/MathlibExt/Probability/Statistics/FullConformal.lean#L86" aria-label="View MathlibExt.Probability.Statistics.FullConformal.map_comp_perm_map_eq in Lean source" title="View MathlibExt.Probability.Statistics.FullConformal.map_comp_perm_map_eq in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#map-comp-perm-map-eq" aria-label="Link to Equivariant scores of exchangeable data are exchangeable" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Probability.Statistics.FullConformal.map_comp_perm_map_eq</div>
+<div class="bp-thmcontent">
+<p>Let the law <span class="arithmatex">\(\mu\)</span> of the data vector <span class="arithmatex">\((Z_1, \dots, Z_{n+1})\)</span> be invariant under every coordinate
+permutation, and let the score map <span class="arithmatex">\(S\)</span> be measurable and permutation equivariant. Then the law of
+the score vector <span class="arithmatex">\(S(Z)\)</span> is invariant under every coordinate permutation. Indeed,
+<span class="arithmatex">\(S(Z) \circ \sigma = S(Z \circ \sigma)\)</span>, and <span class="arithmatex">\(Z \circ \sigma\)</span> has the same law as <span class="arithmatex">\(Z\)</span>.</p>
+<p>This is the step that lets the split conformal bounds, which are statements about an exchangeable
+score vector, apply to full conformal prediction.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> map_comp_perm_map_eq (μ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1) → 𝒵))
+    (hμ : ∀ σ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Equiv.Perm#doc" title="Equiv.Perm">Equiv.Perm</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1)), μ.map (<span class="bp-lean-keyword">fun</span> z =&gt; z ∘ σ) = μ)
+    {S : (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1) → 𝒵) → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1) → ℝ} (hS : <a class="bp-lean-ref" href="#is-perm-equivariant" data-lean-name="MathlibExt.Probability.Statistics.FullConformal.IsPermEquivariant">IsPermEquivariant</a> S) (hSm : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Measurable#doc" title="Measurable">Measurable</a> S)
+    (σ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Equiv.Perm#doc" title="Equiv.Perm">Equiv.Perm</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1))) :
+    (μ.map S).map (<span class="bp-lean-keyword">fun</span> ω =&gt; ω ∘ σ) = μ.map S</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Probability.Statistics.FullConformal.IsPermEquivariant">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsPermEquivariant (S : (Fin (n + 1) → 𝒵) → Fin (n + 1) → ℝ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ (σ : Equiv.Perm (Fin (n + 1))) (z : Fin (n + 1) → 𝒵), S (z ∘ σ) = S z ∘ σ</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/FullConformal.lean:77</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="background">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="#is-perm-equivariant">Permutation-equivariant score map</a>: the hypothesis on <span class="arithmatex">\(S\)</span>.</li>
+<li><a href="../../distributions/negative-binomial-and-beta-binomial-distribution/index.html#map-comp-perm-pi">Product measures are exchangeable</a>: i.i.d. data satisfy the hypothesis on <span class="arithmatex">\(\mu\)</span>.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-perm-equivariant">Permutation-equivariant score map</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#measure-mem-full-conformal-set-le">Upper bound on full conformal coverage without ties</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#of-real-one-sub-le-measure-mem-full-conf">Full conformal coverage</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Probability/hypothesis-testing/full-conformal-prediction/full-conformal-set">
+<h4 class="bp-thmheading" id="full-conformal-set">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Full conformal prediction set</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/e20ec29053ed3495e4438c8c4e5613a52dbb3d38/MathlibExt/Probability/Statistics/FullConformal.lean#L116" aria-label="View MathlibExt.Probability.Statistics.FullConformal.fullConformalSet in Lean source" title="View MathlibExt.Probability.Statistics.FullConformal.fullConformalSet in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#full-conformal-set" aria-label="Link to Full conformal prediction set" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Probability.Statistics.FullConformal.fullConformalSet</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(z = (z_1, \dots, z_n)\)</span> be <span class="arithmatex">\(n\)</span> data points <span class="arithmatex">\(z_i = (x_i, y_i) \in \mathcal X \times \mathcal Y\)</span>,
+let <span class="arithmatex">\(x\)</span> be a test covariate, and let <span class="arithmatex">\(S\)</span> be a score map on augmented data vectors of length
+<span class="arithmatex">\(n + 1\)</span>. For a trial response <span class="arithmatex">\(y\)</span>, write <span class="arithmatex">\(R^y = S(z_1, \dots, z_n, (x, y))\)</span>. The full conformal set
+at level <span class="arithmatex">\(k\)</span> is</p>
+<div class="arithmatex">\[C_k(z, x) = \bigl\{ y \in \mathcal Y : R^y_{n+1} \le R^y_{(k)} \bigr\},\]</div>
+<p>where <span class="arithmatex">\(R^y_{(k)}\)</span> is the <span class="arithmatex">\(k\)</span>-th smallest of <span class="arithmatex">\(R^y_1, \dots, R^y_n\)</span>, counted with multiplicity, and
+<span class="arithmatex">\(+\infty\)</span> when <span class="arithmatex">\(k &gt; n\)</span>. Equivalently, <span class="arithmatex">\(y\)</span> is kept when fewer than <span class="arithmatex">\(k\)</span> of the <span class="arithmatex">\(n\)</span> data scores are
+strictly smaller than the trial score. The level used in the theorems is
+<span class="arithmatex">\(k = \lceil (1 - \alpha)(n + 1) \rceil\)</span>.</p>
+<p>When the <span class="arithmatex">\(n + 1\)</span> scores are distinct, this is the set <span class="arithmatex">\(\{y : (n + 1)\pi(y) \le \lceil (1 - \alpha)(n + 1) \rceil\}\)</span>
+of Lei et al., equation (7). The two sets treat ties differently. Their <span class="arithmatex">\(\pi(y)\)</span> in (5) counts the
+data scores with <span class="arithmatex">\(R^y_i \le R^y_{n+1}\)</span>, so a trial value tied with many data scores is excluded.
+Here only the strictly smaller scores count, as in the split conformal threshold of this library,
+so such a value is kept. With the count of (5), the lower coverage bound needs the scores to be
+almost surely distinct (or ties to be broken at random). For example, if every residual is <span class="arithmatex">\(0\)</span>
+almost surely, the set (7) never contains <span class="arithmatex">\(Y_{n+1}\)</span> once <span class="arithmatex">\(\alpha \ge 1/(n+1)\)</span>. With the count used
+here, the lower bound holds with no assumption on ties.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> fullConformalSet (S : (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1) → 𝒳 × 𝒴) → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1) → ℝ) (k : ℕ)
+    (z : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → 𝒳 × 𝒴) (x : 𝒳) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Set#doc" title="Set">Set</a> 𝒴 :=
+  {y | (S (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin.snoc#doc" title="Fin.snoc">Fin.snoc</a> (α := <span class="bp-lean-keyword">fun</span> _ =&gt; 𝒳 × 𝒴) z (x, y)) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin.last#doc" title="Fin.last">Fin.last</a> n) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=WithTop#doc" title="WithTop">WithTop</a> ℝ) ≤
+    <a class="bp-lean-ref" href="../split-conformal-prediction/index.html#split-conformal-threshold" data-lean-name="MathlibExt.Probability.Statistics.SplitConformal.splitConformalThreshold">splitConformalThreshold</a> k (S (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin.snoc#doc" title="Fin.snoc">Fin.snoc</a> (α := <span class="bp-lean-keyword">fun</span> _ =&gt; 𝒳 × 𝒴) z (x, y)))}</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Probability.Statistics.SplitConformal.splitConformalThreshold">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> splitConformalThreshold (k : ℕ) (ω : Fin (n + 1) → ℝ) : WithTop ℝ :=
+  orderStatistic (<span class="bp-lean-keyword">fun</span> i : Fin n =&gt; ω i.castSucc) k</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/SplitConformal.lean:248</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="background_1">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="../split-conformal-prediction/index.html#split-conformal-threshold">Split conformal threshold</a>: the <span class="arithmatex">\(k\)</span>-th smallest calibration score, applied here to the augmented scores.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_1">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>J. Lei, M. G'Sell, A. Rinaldo, R. J. Tibshirani and L. Wasserman, <em>Distribution-free predictive inference for regression</em>, arXiv:1604.04173v2 (9 March 2017); published in J. Amer. Statist. Assoc. 113 (2018) 1094–1111. Theorem and equation numbers refer to the arXiv version, which is the one read. Equations (4), (5) and (7) and Algorithm 1.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../split-conformal-prediction/index.html#split-conformal-threshold">Split conformal threshold</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#measure-mem-full-conformal-set-le">Upper bound on full conformal coverage without ties</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#of-real-one-sub-le-measure-mem-full-conf">Full conformal coverage</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#set-of-mem-full-conformal-set-eq">Full conformal coverage event as a split conformal event</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Probability/hypothesis-testing/full-conformal-prediction/set-of-mem-full-conformal-set-eq">
+<h4 class="bp-thmheading" id="set-of-mem-full-conformal-set-eq">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Full conformal coverage event as a split conformal event</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/e20ec29053ed3495e4438c8c4e5613a52dbb3d38/MathlibExt/Probability/Statistics/FullConformal.lean#L124" aria-label="View MathlibExt.Probability.Statistics.FullConformal.setOf_mem_fullConformalSet_eq in Lean source" title="View MathlibExt.Probability.Statistics.FullConformal.setOf_mem_fullConformalSet_eq in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#set-of-mem-full-conformal-set-eq" aria-label="Link to Full conformal coverage event as a split conformal event" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Probability.Statistics.FullConformal.setOf_mem_fullConformalSet_eq</div>
+<div class="bp-thmcontent">
+<p>For a data vector <span class="arithmatex">\(Z = (Z_1, \dots, Z_{n+1})\)</span> with <span class="arithmatex">\(Z_{n+1} = (X_{n+1}, Y_{n+1})\)</span>, the event
+<span class="arithmatex">\(Y_{n+1} \in C_k(Z_1, \dots, Z_n; X_{n+1})\)</span> equals the event that the last coordinate of the score
+vector <span class="arithmatex">\(S(Z)\)</span> is at most the <span class="arithmatex">\(k\)</span>-th smallest of its first <span class="arithmatex">\(n\)</span> coordinates. The reason is that at the
+true response <span class="arithmatex">\(y = Y_{n+1}\)</span> the augmented data set <span class="arithmatex">\((Z_1, \dots, Z_n, (X_{n+1}, y))\)</span> is <span class="arithmatex">\(Z\)</span> itself.</p>
+<p>This identity is the whole of the reduction of full conformal prediction to the split conformal
+case: it is how Lei et al. derive the first part of their Theorem 2.1 from the rank property (6).</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> setOf_mem_fullConformalSet_eq (S : (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1) → 𝒳 × 𝒴) → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1) → ℝ) (k : ℕ) :
+    {z : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1) → 𝒳 × 𝒴 |
+        (z (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin.last#doc" title="Fin.last">Fin.last</a> n)).2 ∈ <a class="bp-lean-ref" href="#full-conformal-set" data-lean-name="MathlibExt.Probability.Statistics.FullConformal.fullConformalSet">fullConformalSet</a> S k (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin.init#doc" title="Fin.init">Fin.init</a> z) (z (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin.last#doc" title="Fin.last">Fin.last</a> n)).1} =
+      S ⁻¹&#x27; {ω | (ω (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin.last#doc" title="Fin.last">Fin.last</a> n) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=WithTop#doc" title="WithTop">WithTop</a> ℝ) ≤ <a class="bp-lean-ref" href="../split-conformal-prediction/index.html#split-conformal-threshold" data-lean-name="MathlibExt.Probability.Statistics.SplitConformal.splitConformalThreshold">splitConformalThreshold</a> k ω}</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Probability.Statistics.FullConformal.fullConformalSet">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> fullConformalSet (S : (Fin (n + 1) → 𝒳 × 𝒴) → Fin (n + 1) → ℝ) (k : ℕ)
+    (z : Fin n → 𝒳 × 𝒴) (x : 𝒳) : Set 𝒴 :=
+  {y | (S (Fin.snoc (α := <span class="bp-lean-keyword">fun</span> _ =&gt; 𝒳 × 𝒴) z (x, y)) (Fin.last n) : WithTop ℝ) ≤
+    splitConformalThreshold k (S (Fin.snoc (α := <span class="bp-lean-keyword">fun</span> _ =&gt; 𝒳 × 𝒴) z (x, y)))}</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/FullConformal.lean:116</p>
+</div>
+<div data-lean-name="MathlibExt.Probability.Statistics.SplitConformal.splitConformalThreshold">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> splitConformalThreshold (k : ℕ) (ω : Fin (n + 1) → ℝ) : WithTop ℝ :=
+  orderStatistic (<span class="bp-lean-keyword">fun</span> i : Fin n =&gt; ω i.castSucc) k</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/SplitConformal.lean:248</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_2">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>J. Lei, M. G'Sell, A. Rinaldo, R. J. Tibshirani and L. Wasserman, <em>Distribution-free predictive inference for regression</em>, arXiv:1604.04173v2 (9 March 2017); published in J. Amer. Statist. Assoc. 113 (2018) 1094–1111. Theorem and equation numbers refer to the arXiv version, which is the one read. Section 2.1, display (6) and the proof of Theorem 2.1 in Appendix A.1.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#full-conformal-set">Full conformal prediction set</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../split-conformal-prediction/index.html#split-conformal-threshold">Split conformal threshold</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#measure-mem-full-conformal-set-le">Upper bound on full conformal coverage without ties</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#of-real-one-sub-le-measure-mem-full-conf">Full conformal coverage</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Probability/hypothesis-testing/full-conformal-prediction/of-real-one-sub-le-measure-mem-full-conf">
+<h4 class="bp-thmheading" id="of-real-one-sub-le-measure-mem-full-conf">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Full conformal coverage</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/e20ec29053ed3495e4438c8c4e5613a52dbb3d38/MathlibExt/Probability/Statistics/FullConformal.lean#L152" aria-label="View MathlibExt.Probability.Statistics.FullConformal.ofReal_one_sub_le_measure_mem_fullConformalSet in Lean source" title="View MathlibExt.Probability.Statistics.FullConformal.ofReal_one_sub_le_measure_mem_fullConformalSet in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#of-real-one-sub-le-measure-mem-full-conf" aria-label="Link to Full conformal coverage" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Probability.Statistics.FullConformal.ofReal_one_sub_le_measure_mem_fullConformalSet</div>
+<div class="bp-thmcontent">
+<p>Let the law <span class="arithmatex">\(\mu\)</span> of the data vector <span class="arithmatex">\((Z_1, \dots, Z_{n+1})\)</span>, with <span class="arithmatex">\(Z_i = (X_i, Y_i)\)</span>, be a
+probability measure invariant under every coordinate permutation; an i.i.d. law is an example. Let
+the score map <span class="arithmatex">\(S\)</span> be measurable and permutation equivariant. Then for <span class="arithmatex">\(0 \le \alpha &lt; 1\)</span> the full
+conformal set built from the first <span class="arithmatex">\(n\)</span> points at level <span class="arithmatex">\(k = \lceil (1 - \alpha)(n + 1) \rceil\)</span> covers
+<span class="arithmatex">\(Y_{n+1}\)</span> at <span class="arithmatex">\(X_{n+1}\)</span> with probability at least <span class="arithmatex">\(1 - \alpha\)</span>:</p>
+<div class="arithmatex">\[\mu\bigl(Y_{n+1} \in C_k(Z_1, \dots, Z_n; X_{n+1})\bigr) \ge 1 - \alpha.\]</div>
+<p>Lei et al. state this for i.i.d. data and a fitting algorithm that is symmetric in the data. The
+statement here assumes exchangeability only and allows any measurable equivariant score, which
+includes their absolute residuals. It also allows ties, which their count (5) does not; see
+<a href="#full-conformal-set">Full conformal prediction set</a>. The source's range is <span class="arithmatex">\(0 &lt; \alpha &lt; 1\)</span>; the
+endpoint <span class="arithmatex">\(\alpha = 0\)</span> (the set is all of <span class="arithmatex">\(\mathcal Y\)</span>) is a trivial case.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#full-conformal-set"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> ofReal_one_sub_le_measure_mem_fullConformalSet (μ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1) → 𝒳 × 𝒴))
+    [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsProbabilityMeasure#doc" title="MeasureTheory.IsProbabilityMeasure">IsProbabilityMeasure</a> μ] (hμ : ∀ σ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Equiv.Perm#doc" title="Equiv.Perm">Equiv.Perm</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1)), μ.map (<span class="bp-lean-keyword">fun</span> z =&gt; z ∘ σ) = μ)
+    {S : (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1) → 𝒳 × 𝒴) → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1) → ℝ} (hS : <a class="bp-lean-ref" href="#is-perm-equivariant" data-lean-name="MathlibExt.Probability.Statistics.FullConformal.IsPermEquivariant">IsPermEquivariant</a> S)
+    (hSm : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Measurable#doc" title="Measurable">Measurable</a> S) {α : ℝ} (hα0 : 0 ≤ α) (hα1 : α &lt; 1) :
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ENNReal.ofReal#doc" title="ENNReal.ofReal">ENNReal.ofReal</a> (1 - α) ≤
+      μ {z | (z (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin.last#doc" title="Fin.last">Fin.last</a> n)).2 ∈
+        <a class="bp-lean-ref" href="#full-conformal-set" data-lean-name="MathlibExt.Probability.Statistics.FullConformal.fullConformalSet">fullConformalSet</a> S ⌈(1 - α) * (n + 1)⌉₊ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin.init#doc" title="Fin.init">Fin.init</a> z) (z (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin.last#doc" title="Fin.last">Fin.last</a> n)).1}</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Probability.Statistics.FullConformal.IsPermEquivariant">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsPermEquivariant (S : (Fin (n + 1) → 𝒵) → Fin (n + 1) → ℝ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ (σ : Equiv.Perm (Fin (n + 1))) (z : Fin (n + 1) → 𝒵), S (z ∘ σ) = S z ∘ σ</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/FullConformal.lean:77</p>
+</div>
+<div data-lean-name="MathlibExt.Probability.Statistics.FullConformal.fullConformalSet">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> fullConformalSet (S : (Fin (n + 1) → 𝒳 × 𝒴) → Fin (n + 1) → ℝ) (k : ℕ)
+    (z : Fin n → 𝒳 × 𝒴) (x : 𝒳) : Set 𝒴 :=
+  {y | (S (Fin.snoc (α := <span class="bp-lean-keyword">fun</span> _ =&gt; 𝒳 × 𝒴) z (x, y)) (Fin.last n) : WithTop ℝ) ≤
+    splitConformalThreshold k (S (Fin.snoc (α := <span class="bp-lean-keyword">fun</span> _ =&gt; 𝒳 × 𝒴) z (x, y)))}</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/FullConformal.lean:116</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="#set-of-mem-full-conformal-set-eq">Full conformal coverage event as a split conformal event</a>: the coverage event is a split conformal event for the score vector.</li>
+<li><a href="#map-comp-perm-map-eq">Equivariant scores of exchangeable data are exchangeable</a>: the score vector is exchangeable.</li>
+<li><a href="../split-conformal-prediction/index.html#of-real-one-sub-le-measure-coe-le-split">Split conformal coverage</a>: the lower bound for an exchangeable score vector.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="background_2">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="../permutation-tests/index.html#is-valid-pvalue-permutation-pvalue">Validity of permutation p-values</a>: the split conformal bound is itself the validity of the permutation p-value of the test score, <span class="arithmatex">\(\#\{i \le n+1 : R_i \ge R_{n+1}\}/(n+1)\)</span>, which equals <span class="arithmatex">\(1 - \pi(Y_{n+1}) + 1/(n+1)\)</span> when there are no ties.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_3">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>J. Lei, M. G'Sell, A. Rinaldo, R. J. Tibshirani and L. Wasserman, <em>Distribution-free predictive inference for regression</em>, arXiv:1604.04173v2 (9 March 2017); published in J. Amer. Statist. Assoc. 113 (2018) 1094–1111. Theorem and equation numbers refer to the arXiv version, which is the one read. Theorem 2.1, first part (attributed there to Vovk).</li>
+<li>V. Vovk, A. Gammerman and G. Shafer, <em>Algorithmic Learning in a Random World</em>, Springer (2005).</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#set-of-mem-full-conformal-set-eq"> </a></p>
+<p><a href="#map-comp-perm-map-eq"> </a></p>
+<p><a href="../split-conformal-prediction/index.html#of-real-one-sub-le-measure-coe-le-split"> </a></p>
+<p><a href="../permutation-tests/index.html#is-valid-pvalue-permutation-pvalue"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 9</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-perm-equivariant">Permutation-equivariant score map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#full-conformal-set">Full conformal prediction set</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#map-comp-perm-map-eq">Equivariant scores of exchangeable data are exchangeable</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#set-of-mem-full-conformal-set-eq">Full conformal coverage event as a split conformal event</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../split-conformal-prediction/index.html#coe-le-split-conformal-threshold-iff">Coverage through the strict lower count</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../split-conformal-prediction/index.html#of-real-one-sub-le-measure-coe-le-split">Split conformal coverage</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../split-conformal-prediction/index.html#split-conformal-threshold">Split conformal threshold</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../split-conformal-prediction/index.html#strict-lower-count">Strict lower count of the test score</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../split-conformal-prediction/index.html#measurable-strict-lower-count">The strict lower count is measurable</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Probability/hypothesis-testing/full-conformal-prediction/measure-mem-full-conformal-set-le">
+<h4 class="bp-thmheading" id="measure-mem-full-conformal-set-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Upper bound on full conformal coverage without ties</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/e20ec29053ed3495e4438c8c4e5613a52dbb3d38/MathlibExt/Probability/Statistics/FullConformal.lean#L172" aria-label="View MathlibExt.Probability.Statistics.FullConformal.measure_mem_fullConformalSet_le in Lean source" title="View MathlibExt.Probability.Statistics.FullConformal.measure_mem_fullConformalSet_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#measure-mem-full-conformal-set-le" aria-label="Link to Upper bound on full conformal coverage without ties" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Probability.Statistics.FullConformal.measure_mem_fullConformalSet_le</div>
+<div class="bp-thmcontent">
+<p>Under the hypotheses of <a href="#of-real-one-sub-le-measure-mem-full-conf">full conformal coverage</a>, if
+moreover the <span class="arithmatex">\(n + 1\)</span> scores <span class="arithmatex">\(S(Z)\)</span> are almost surely distinct, then for <span class="arithmatex">\(0 \le \alpha &lt; 1\)</span> the full
+conformal set at level <span class="arithmatex">\(k = \lceil (1 - \alpha)(n + 1) \rceil\)</span> covers <span class="arithmatex">\(Y_{n+1}\)</span> with probability at
+most <span class="arithmatex">\(1 - \alpha + 1/(n + 1)\)</span>. Together with the lower bound, full conformal prediction is valid and
+nearly exact: its coverage lies in <span class="arithmatex">\([1 - \alpha, 1 - \alpha + 1/(n+1)]\)</span>.</p>
+<p>Lei et al. assume that the fitted absolute residuals have a continuous joint distribution, and use
+it only to exclude ties; almost sure distinctness is the hypothesis used here. Without it the
+bound fails: if all scores are equal, the coverage is <span class="arithmatex">\(1\)</span>.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#of-real-one-sub-le-measure-mem-full-conf"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> measure_mem_fullConformalSet_le (μ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1) → 𝒳 × 𝒴))
+    [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsProbabilityMeasure#doc" title="MeasureTheory.IsProbabilityMeasure">IsProbabilityMeasure</a> μ] (hμ : ∀ σ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Equiv.Perm#doc" title="Equiv.Perm">Equiv.Perm</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1)), μ.map (<span class="bp-lean-keyword">fun</span> z =&gt; z ∘ σ) = μ)
+    {S : (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1) → 𝒳 × 𝒴) → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1) → ℝ} (hS : <a class="bp-lean-ref" href="#is-perm-equivariant" data-lean-name="MathlibExt.Probability.Statistics.FullConformal.IsPermEquivariant">IsPermEquivariant</a> S)
+    (hSm : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Measurable#doc" title="Measurable">Measurable</a> S) (hinj : ∀ᵐ z ∂μ, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Function.Injective#doc" title="Function.Injective">Function.Injective</a> (S z)) {α : ℝ} (hα0 : 0 ≤ α)
+    (hα1 : α &lt; 1) :
+    μ {z | (z (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin.last#doc" title="Fin.last">Fin.last</a> n)).2 ∈
+        <a class="bp-lean-ref" href="#full-conformal-set" data-lean-name="MathlibExt.Probability.Statistics.FullConformal.fullConformalSet">fullConformalSet</a> S ⌈(1 - α) * (n + 1)⌉₊ (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin.init#doc" title="Fin.init">Fin.init</a> z) (z (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin.last#doc" title="Fin.last">Fin.last</a> n)).1} ≤
+      <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=ENNReal.ofReal#doc" title="ENNReal.ofReal">ENNReal.ofReal</a> (1 - α + 1 / (n + 1))</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Probability.Statistics.FullConformal.IsPermEquivariant">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsPermEquivariant (S : (Fin (n + 1) → 𝒵) → Fin (n + 1) → ℝ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ (σ : Equiv.Perm (Fin (n + 1))) (z : Fin (n + 1) → 𝒵), S (z ∘ σ) = S z ∘ σ</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/FullConformal.lean:77</p>
+</div>
+<div data-lean-name="MathlibExt.Probability.Statistics.FullConformal.fullConformalSet">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> fullConformalSet (S : (Fin (n + 1) → 𝒳 × 𝒴) → Fin (n + 1) → ℝ) (k : ℕ)
+    (z : Fin n → 𝒳 × 𝒴) (x : 𝒳) : Set 𝒴 :=
+  {y | (S (Fin.snoc (α := <span class="bp-lean-keyword">fun</span> _ =&gt; 𝒳 × 𝒴) z (x, y)) (Fin.last n) : WithTop ℝ) ≤
+    splitConformalThreshold k (S (Fin.snoc (α := <span class="bp-lean-keyword">fun</span> _ =&gt; 𝒳 × 𝒴) z (x, y)))}</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/FullConformal.lean:116</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses_1">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="#set-of-mem-full-conformal-set-eq">Full conformal coverage event as a split conformal event</a>: the coverage event is a split conformal event for the score vector.</li>
+<li><a href="#map-comp-perm-map-eq">Equivariant scores of exchangeable data are exchangeable</a>: the score vector is exchangeable.</li>
+<li><a href="../split-conformal-prediction/index.html#measure-coe-le-split-conformal-threshold-2">Upper bound on split conformal coverage without ties</a>: the upper bound for an exchangeable score vector without ties.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_4">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>J. Lei, M. G'Sell, A. Rinaldo, R. J. Tibshirani and L. Wasserman, <em>Distribution-free predictive inference for regression</em>, arXiv:1604.04173v2 (9 March 2017); published in J. Amer. Statist. Assoc. 113 (2018) 1094–1111. Theorem and equation numbers refer to the arXiv version, which is the one read. Theorem 2.1, second part, and its proof in Appendix A.1.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#set-of-mem-full-conformal-set-eq"> </a></p>
+<p><a href="#map-comp-perm-map-eq"> </a></p>
+<p><a href="../split-conformal-prediction/index.html#measure-coe-le-split-conformal-threshold-2"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 10</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-perm-equivariant">Permutation-equivariant score map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#full-conformal-set">Full conformal prediction set</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#map-comp-perm-map-eq">Equivariant scores of exchangeable data are exchangeable</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#set-of-mem-full-conformal-set-eq">Full conformal coverage event as a split conformal event</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../split-conformal-prediction/index.html#coe-le-split-conformal-threshold-iff">Coverage through the strict lower count</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../split-conformal-prediction/index.html#split-conformal-threshold">Split conformal threshold</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../split-conformal-prediction/index.html#strict-lower-count">Strict lower count of the test score</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../split-conformal-prediction/index.html#measurable-set-set-of-injective">Distinctness is a measurable event</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../split-conformal-prediction/index.html#measurable-strict-lower-count">The strict lower count is measurable</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../split-conformal-prediction/index.html#measure-coe-le-split-conformal-threshold-2">Upper bound on split conformal coverage without ties</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Probability/hypothesis-testing/full-conformal-prediction/abs-residual-score">
+<h4 class="bp-thmheading" id="abs-residual-score">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Absolute residual score of a fitting algorithm</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/e20ec29053ed3495e4438c8c4e5613a52dbb3d38/MathlibExt/Probability/Statistics/FullConformal.lean#L198" aria-label="View MathlibExt.Probability.Statistics.FullConformal.absResidualScore in Lean source" title="View MathlibExt.Probability.Statistics.FullConformal.absResidualScore in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#abs-residual-score" aria-label="Link to Absolute residual score of a fitting algorithm" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Probability.Statistics.FullConformal.absResidualScore</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(A\)</span> be a fitting algorithm that maps a data vector <span class="arithmatex">\(z\)</span> of length <span class="arithmatex">\(n + 1\)</span> to a regression
+function <span class="arithmatex">\(\hat\mu = A(z) : \mathcal X \to \mathbb{R}\)</span>. Its absolute residual score is
+<span class="arithmatex">\(S(z)_i = \lvert y_i - \hat\mu(x_i) \rvert\)</span>, the residual of point <span class="arithmatex">\(i\)</span> under the fit trained on all
+<span class="arithmatex">\(n + 1\)</span> points. Evaluated on the augmented data <span class="arithmatex">\((z_1, \dots, z_n, (x, y))\)</span>, these are the residuals
+<span class="arithmatex">\(R_{y,i}\)</span> of Lei et al., equation (4), with <span class="arithmatex">\(\hat\mu_y = A(z_1, \dots, z_n, (x, y))\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> absResidualScore (A : (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1) → 𝒳 × ℝ) → 𝒳 → ℝ)
+    (z : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1) → 𝒳 × ℝ) (i : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1)) : ℝ :=
+  |(z i).2 - A z (z i).1|</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_5">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>J. Lei, M. G'Sell, A. Rinaldo, R. J. Tibshirani and L. Wasserman, <em>Distribution-free predictive inference for regression</em>, arXiv:1604.04173v2 (9 March 2017); published in J. Amer. Statist. Assoc. 113 (2018) 1094–1111. Theorem and equation numbers refer to the arXiv version, which is the one read. Equation (4).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-perm-equivariant-abs-residual-score">Residuals of a symmetric algorithm are equivariant</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Probability/hypothesis-testing/full-conformal-prediction/is-perm-equivariant-abs-residual-score">
+<h4 class="bp-thmheading" id="is-perm-equivariant-abs-residual-score">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Residuals of a symmetric algorithm are equivariant</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/e20ec29053ed3495e4438c8c4e5613a52dbb3d38/MathlibExt/Probability/Statistics/FullConformal.lean#L206" aria-label="View MathlibExt.Probability.Statistics.FullConformal.isPermEquivariant_absResidualScore in Lean source" title="View MathlibExt.Probability.Statistics.FullConformal.isPermEquivariant_absResidualScore in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#is-perm-equivariant-abs-residual-score" aria-label="Link to Residuals of a symmetric algorithm are equivariant" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Probability.Statistics.FullConformal.isPermEquivariant_absResidualScore</div>
+<div class="bp-thmcontent">
+<p>If the fitted regression function does not depend on the order of the data points,
+<span class="arithmatex">\(A(z \circ \sigma) = A(z)\)</span> for every permutation <span class="arithmatex">\(\sigma\)</span>, then the absolute residual score is
+permutation equivariant. The full conformal coverage theorems therefore apply to the regression
+set of Lei et al., equations (4) and (7), up to the treatment of ties discussed on the page of the
+<a href="#full-conformal-set">full conformal prediction set</a>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> isPermEquivariant_absResidualScore {A : (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1) → 𝒳 × ℝ) → 𝒳 → ℝ}
+    (hA : ∀ (σ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Equiv.Perm#doc" title="Equiv.Perm">Equiv.Perm</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1))) (z : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> (n + 1) → 𝒳 × ℝ), A (z ∘ σ) = A z) :
+    <a class="bp-lean-ref" href="#is-perm-equivariant" data-lean-name="MathlibExt.Probability.Statistics.FullConformal.IsPermEquivariant">IsPermEquivariant</a> (<a class="bp-lean-ref" href="#abs-residual-score" data-lean-name="MathlibExt.Probability.Statistics.FullConformal.absResidualScore">absResidualScore</a> A)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Probability.Statistics.FullConformal.IsPermEquivariant">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsPermEquivariant (S : (Fin (n + 1) → 𝒵) → Fin (n + 1) → ℝ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ (σ : Equiv.Perm (Fin (n + 1))) (z : Fin (n + 1) → 𝒵), S (z ∘ σ) = S z ∘ σ</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/FullConformal.lean:77</p>
+</div>
+<div data-lean-name="MathlibExt.Probability.Statistics.FullConformal.absResidualScore">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> absResidualScore (A : (Fin (n + 1) → 𝒳 × ℝ) → 𝒳 → ℝ)
+    (z : Fin (n + 1) → 𝒳 × ℝ) (i : Fin (n + 1)) : ℝ :=
+  |(z i).2 - A z (z i).1|</code></pre>
+<p class="bp-lean-where">MathlibExt/Probability/Statistics/FullConformal.lean:198</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_6">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>J. Lei, M. G'Sell, A. Rinaldo, R. J. Tibshirani and L. Wasserman, <em>Distribution-free predictive inference for regression</em>, arXiv:1604.04173v2 (9 March 2017); published in J. Amer. Statist. Assoc. 113 (2018) 1094–1111. Theorem and equation numbers refer to the arXiv version, which is the one read. Section 2.1 (the requirement that <span class="arithmatex">\(\hat\mu\)</span> be a symmetric function of the data).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-perm-equivariant">Permutation-equivariant score map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#abs-residual-score">Absolute residual score of a fitting algorithm</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>8</strong> fully proved</span></div>
+</div>
+<h2 id="related-topics">Related topics</h2>
+<ul>
+<li><a href="../split-conformal-prediction/index.html">Split conformal prediction</a>: the coverage bounds for an exchangeable score vector, to which full conformal prediction reduces; split conformal prediction avoids refitting for every trial response at the price of a held-out calibration set.</li>
+<li><a href="../permutation-tests/index.html">Permutation tests</a>: the conformal p-value of a trial response is the permutation p-value of its score among the augmented scores.</li>
+<li><a href="../../distributions/negative-binomial-and-beta-binomial-distribution/index.html">Negative binomial and beta-binomial distributions</a>: the topic holds <a href="../../distributions/negative-binomial-and-beta-binomial-distribution/index.html#map-comp-perm-pi">product measures are exchangeable</a>, so i.i.d. data satisfy the hypothesis of the coverage theorems, and the law of the rank of a test score among i.i.d. scores.</li>
+<li><a href="../../statistical-estimation/bootstrap-and-the-mallows-metric/index.html">Bootstrap and the Mallows metric</a>: the bootstrap gives asymptotic predictive and confidence statements under regularity conditions; conformal prediction gives finite-sample marginal coverage with none.</li>
+</ul>
+</div>
+<p><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../dependencies/index.json" data-graph-src="../../../../dependencies/scopes/Probability/hypothesis-testing/full-conformal-prediction.json" data-page-href="index.html" data-scope-id="Probability/hypothesis-testing/full-conformal-prediction">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>
