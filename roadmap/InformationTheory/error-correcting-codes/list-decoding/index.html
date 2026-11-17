@@ -1,0 +1,4859 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../linear-codes/index.html">
+      
+      
+        <link rel="next" href="../hamming-7-4-code/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>List decoding - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#definition" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              List decoding
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../ComputerScience/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_24" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_24" id="__nav_2_1_24_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_24_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_24">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Information Theory
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../source-coding/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Source coding
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_24_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error-correcting codes
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_24_3" id="__nav_2_1_24_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_24_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_24_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Error-correcting codes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bounds-on-code-size/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bounds on code size
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cyclic-redundancy-checks/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cyclic redundancy checks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linear-codes/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    List decoding
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    List decoding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definition
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-johnson-bound" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Johnson bound
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#list-decoding-capacity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        List-decoding capacity
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guruswamisudan-decoding-of-reedsolomon-codes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guruswami–Sudan decoding of Reed–Solomon codes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-topics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related topics
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hamming-7-4-code/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hamming (7,4) code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../locally-testable-codes/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Locally testable codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reed-solomon-codes/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reed–Solomon codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../entropy-and-mutual-information/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Entropy and mutual information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../information-inequalities/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information inequalities
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../channel-simulation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channel simulation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../channel-coding/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channel coding
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definition
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-johnson-bound" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Johnson bound
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#list-decoding-capacity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        List-decoding capacity
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guruswamisudan-decoding-of-reedsolomon-codes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guruswami–Sudan decoding of Reed–Solomon codes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-topics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related topics
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../index.html" tabindex="-1">Information Theory</a></li><li><a href="../index.html" tabindex="-1">Error-correcting codes</a></li><li aria-current="page">List decoding</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← List decoding</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding" data-page-title="List decoding">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}var g = location.hash.slice(1), u = new URLSearchParams(g), q = Array.from(u), y = {};var d = u.get("node"), o = r.getAttribute("data-autoform-node-id");var l = d !== null ? d === o || d.replace(/^(?:scope|boundary):/, "") === o : q.length > 0 && q.every(function (e) {var n = e[0], v = e[1]; if (y[n]) return false; y[n] = 1;if (n === "view") return v === "graph" || v === "list";if (n === "direction") return ["both", "prerequisites", "dependents"].indexOf(v) >= 0;if (n === "isolates") return v === "0" || v === "1";return n === "status" && (v === "-" || v.split(",").every(function (t) { return /^(?:mathlib|fully_proved|proved|defined|conditional|can_prove|stated|can_state|not_ready|planned|inventory_checked|inventory_pending)$/.test(t); }));});var a = history.state && history.state.autoformNavigation, c = a && a.version === 1 && a.url === location.href && a.snapshot;var i = r.hasAttribute("data-reader-overview") && (!g || l), j = i && Boolean(c && c.readingOpen !== false);var z = f.querySelector(".bp-dag-sheet-handle"), e = f.querySelector("h1.bp-dag-sr-only");f.classList.toggle("bp-dag-overview-only", i); f.classList.toggle("bp-dag-sheet-open", j); if (j && z) z.textContent = "\u00d7";if (e) e.hidden = !i || j;f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="list-decoding">List decoding</h1>
+<p>A code is list decodable from <span class="arithmatex">\(e\)</span> errors with list size <span class="arithmatex">\(L\)</span> if every Hamming ball of radius <span class="arithmatex">\(e\)</span>
+contains at most <span class="arithmatex">\(L\)</span> codewords. Allowing a short list instead of a unique answer lets a decoder
+correct far more than half the minimum distance. The Johnson bound guarantees polynomial lists for
+every code up to the radius <span class="arithmatex">\(n - \sqrt{n(n-d)}\)</span>, which for Reed–Solomon codes of rate <span class="arithmatex">\(R\)</span> is a
+<span class="arithmatex">\(1 - \sqrt{R}\)</span> fraction of errors; the list-decoding capacity theorem identifies <span class="arithmatex">\(1 - H_q(\rho)\)</span>
+as the best rate for a fraction <span class="arithmatex">\(\rho\)</span> of errors. The Guruswami–Sudan algorithm finds, for any
+parameters <span class="arithmatex">\(D, r\)</span> with enough monomials, every message polynomial agreeing with the received word
+in more than <span class="arithmatex">\(D / r\)</span> positions; this correctness is proved here. Guruswami, Rudra and Sudan
+(Theorem 12.2.12) choose <span class="arithmatex">\(D\)</span> and <span class="arithmatex">\(r\)</span> so that it decodes up to the <span class="arithmatex">\(1 - \sqrt{R}\)</span> radius; that
+parameter choice and the running time are not formalized.</p>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>25</strong> fully proved</span></div>
+</div>
+<h2 id="definition">Definition</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/is-list-decodable">
+<h4 class="bp-thmheading" id="is-list-decodable">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">List-decodable code</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/MathlibExt/Combinatorics/Coding/ListDecoding.lean#L57" aria-label="View MathlibExt.Combinatorics.Coding.ListDecoding.IsListDecodable in Lean source" title="View MathlibExt.Combinatorics.Coding.ListDecoding.IsListDecodable in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#is-list-decodable" aria-label="Link to List-decodable code" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Combinatorics.Coding.ListDecoding.IsListDecodable</div>
+<div class="bp-thmcontent">
+<p>A code <span class="arithmatex">\(C \subseteq \alpha^n\)</span> is <em>list decodable from <span class="arithmatex">\(e\)</span> errors with list size <span class="arithmatex">\(L\)</span></em> if every
+Hamming ball of radius <span class="arithmatex">\(e\)</span> contains at most <span class="arithmatex">\(L\)</span> codewords: for every received word
+<span class="arithmatex">\(y \in \alpha^n\)</span>,</p>
+<div class="arithmatex">\[|\{c \in C : \Delta(y, c) \le e\}| \le L.\]</div>
+<p>Guruswami, Rudra and Sudan (Definition 7.2.1) call such a code <span class="arithmatex">\((\rho, L)\)</span>-list decodable, with
+the radius written <span class="arithmatex">\(\rho n\)</span> for a fraction <span class="arithmatex">\(\rho\)</span> of errors; here the radius is the integer <span class="arithmatex">\(e\)</span>.
+For <span class="arithmatex">\(L = 1\)</span> and <span class="arithmatex">\(e = \lfloor (d-1)/2 \rfloor\)</span> this is unique decoding up to half the minimum
+distance <span class="arithmatex">\(d\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsListDecodable (C : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset#doc" title="Finset">Finset</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → α)) (e L : ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ y : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → α, (C.filter <span class="bp-lean-keyword">fun</span> c =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=hammingDist#doc" title="hammingDist">hammingDist</a> y c ≤ e).card ≤ L</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>V. Guruswami, A. Rudra, M. Sudan, <em>Essential Coding Theory</em>, draft of August 26, 2025, Definition 7.2.1.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#exists-is-list-decodable">List-decodable codes of rate <span class="arithmatex">\(1 - H_q(\rho) - 1/L\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-list-decodable-mono">List decodability is monotone in the list size</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-list-decodable-of-johnson">Every code is list decodable up to the Johnson radius</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/is-list-decodable-mono">
+<h4 class="bp-thmheading" id="is-list-decodable-mono">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">List decodability is monotone in the list size</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/MathlibExt/Combinatorics/Coding/ListDecoding.lean#L62" aria-label="View MathlibExt.Combinatorics.Coding.ListDecoding.IsListDecodable.mono in Lean source" title="View MathlibExt.Combinatorics.Coding.ListDecoding.IsListDecodable.mono in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#is-list-decodable-mono" aria-label="Link to List decodability is monotone in the list size" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Combinatorics.Coding.ListDecoding.IsListDecodable.mono</div>
+<div class="bp-thmcontent">
+<p>If a code is <a href="#is-list-decodable">list decodable</a> from <span class="arithmatex">\(e\)</span> errors with list size <span class="arithmatex">\(L\)</span>, it is list
+decodable from <span class="arithmatex">\(e\)</span> errors with every list size <span class="arithmatex">\(L' \ge L\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> IsListDecodable.mono {C : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset#doc" title="Finset">Finset</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → α)} {e L L&#x27; : ℕ}
+    (h : <a class="bp-lean-ref" href="#is-list-decodable" data-lean-name="MathlibExt.Combinatorics.Coding.ListDecoding.IsListDecodable">IsListDecodable</a> C e L) (hL : L ≤ L&#x27;) : <a class="bp-lean-ref" href="#is-list-decodable" data-lean-name="MathlibExt.Combinatorics.Coding.ListDecoding.IsListDecodable">IsListDecodable</a> C e L&#x27;</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Combinatorics.Coding.ListDecoding.IsListDecodable">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsListDecodable (C : Finset (Fin n → α)) (e L : ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ y : Fin n → α, (C.filter <span class="bp-lean-keyword">fun</span> c =&gt; hammingDist y c ≤ e).card ≤ L</code></pre>
+<p class="bp-lean-where">MathlibExt/Combinatorics/Coding/ListDecoding.lean:57</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-list-decodable">List-decodable code</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="the-johnson-bound">The Johnson bound</h2>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/card-filter-eq">
+<h4 class="bp-thmheading" id="card-filter-eq">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Agreements of two words</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/MathlibExt/Combinatorics/Coding/ListDecoding.lean#L67" aria-label="View MathlibExt.Combinatorics.Coding.ListDecoding.card_filter_eq in Lean source" title="View MathlibExt.Combinatorics.Coding.ListDecoding.card_filter_eq in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#card-filter-eq" aria-label="Link to Agreements of two words" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Combinatorics.Coding.ListDecoding.card_filter_eq</div>
+<div class="bp-thmcontent">
+<p>Two words <span class="arithmatex">\(x, y\)</span> of length <span class="arithmatex">\(n\)</span> agree in exactly <span class="arithmatex">\(n - \Delta(x, y)\)</span> coordinates, where <span class="arithmatex">\(\Delta\)</span> is
+the Hamming distance. The proof of the <a href="#johnson-bound">Johnson bound</a> counts agreements rather
+than disagreements.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> card_filter_eq (x y : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → α) :
+    (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.univ#doc" title="Finset.univ">univ</a>.filter <span class="bp-lean-keyword">fun</span> j =&gt; x j = y j).card = n - <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=hammingDist#doc" title="hammingDist">hammingDist</a> x y</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-le-of-agree-ge">Reed–Solomon codes are list decodable up to the Johnson radius</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#johnson-bound">Johnson bound</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/johnson-bound">
+<h4 class="bp-thmheading" id="johnson-bound">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Johnson bound</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/MathlibExt/Combinatorics/Coding/ListDecoding.lean#L118" aria-label="View MathlibExt.Combinatorics.Coding.ListDecoding.johnson_bound in Lean source" title="View MathlibExt.Combinatorics.Coding.ListDecoding.johnson_bound in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#johnson-bound" aria-label="Link to Johnson bound" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Combinatorics.Coding.ListDecoding.johnson_bound</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(S\)</span> be a set of words of length <span class="arithmatex">\(n\)</span> over a finite alphabet, any two distinct at Hamming
+distance at least <span class="arithmatex">\(d\)</span>, all within distance <span class="arithmatex">\(e\)</span> of a word <span class="arithmatex">\(y\)</span>. Suppose <span class="arithmatex">\(e \le n\)</span>, <span class="arithmatex">\(d \le n\)</span> and</p>
+<div class="arithmatex">\[n (n - d) &lt; (n - e)^2, \quad\text{that is,}\quad e &lt; n - \sqrt{n (n - d)}.\]</div>
+<p>Then</p>
+<div class="arithmatex">\[|S| \bigl((n - e)^2 - n (n - d)\bigr) \le n (d - e);\]</div>
+<p>both factors in brackets are positive under the hypothesis. So a code of minimum distance <span class="arithmatex">\(d\)</span> has
+at most <span class="arithmatex">\(n (d - e) / ((n - e)^2 - n(n - d))\)</span> codewords in any ball of radius <span class="arithmatex">\(e\)</span>, in particular at
+most <span class="arithmatex">\(n d\)</span> (<a href="#card-le-mul-of-johnson">list size <span class="arithmatex">\(n d\)</span></a>).</p>
+<p>This is the strict-inequality case of the alphabet-free Johnson bound, Theorem 7.3.3 of
+Guruswami, Rudra and Sudan, with an explicit list size (they give <span class="arithmatex">\(q n d\)</span>; their Exercise 7.5
+improves it to <span class="arithmatex">\(n\)</span> for radius at most <span class="arithmatex">\(n - \sqrt{n(n-d)} - 1\)</span>, so <span class="arithmatex">\(n d\)</span> is not the best
+alphabet-free list size). The proof is the
+double-counting argument they give for the binary case of Theorem 7.3.1: with <span class="arithmatex">\(m_j\)</span> the number of
+words of <span class="arithmatex">\(S\)</span> agreeing with <span class="arithmatex">\(y\)</span> in coordinate <span class="arithmatex">\(j\)</span>,</p>
+<ul>
+<li><span class="arithmatex">\(\sum_j m_j \ge |S| (n - e)\)</span>, since each word agrees with <span class="arithmatex">\(y\)</span> in at least <span class="arithmatex">\(n - e\)</span> places;</li>
+<li><span class="arithmatex">\(\sum_j m_j (m_j - 1) \le |S| (|S| - 1)(n - d)\)</span>, since two distinct words agreeing with <span class="arithmatex">\(y\)</span> in a
+  coordinate agree with each other there, which happens in at most <span class="arithmatex">\(n - d\)</span> coordinates;</li>
+<li><span class="arithmatex">\((\sum_j m_j)^2 \le n \sum_j m_j^2\)</span> by Cauchy–Schwarz,</li>
+</ul>
+<p>and the three combine into the stated inequality.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#card-le-mul-of-johnson"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> johnson_bound (S : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset#doc" title="Finset">Finset</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → α)) (y : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → α) {d e : ℕ} (hen : e ≤ n)
+    (hdn : d ≤ n) (hdist : ∀ c₁ ∈ S, ∀ c₂ ∈ S, c₁ ≠ c₂ → d ≤ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=hammingDist#doc" title="hammingDist">hammingDist</a> c₁ c₂)
+    (hball : ∀ c ∈ S, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=hammingDist#doc" title="hammingDist">hammingDist</a> y c ≤ e) (hJ : n * (n - d) &lt; (n - e) ^ 2) :
+    S.card * ((n - e) ^ 2 - n * (n - d)) ≤ n * ((n - e) - (n - d))</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="#card-filter-eq">Agreements of two words</a>: the conversion between agreements and Hamming distance.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="background">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="../bounds-on-code-size/index.html#hamming-sphere-packing-bound">Hamming bound</a>: balls of radius
+  <span class="arithmatex">\(\lfloor (d-1)/2 \rfloor\)</span> around codewords are disjoint, so the list size there is <span class="arithmatex">\(1\)</span>. The
+  Johnson radius <span class="arithmatex">\(n - \sqrt{n(n-d)}\)</span> is at least <span class="arithmatex">\(d/2\)</span> (as <span class="arithmatex">\((1 - s/2)^2 \ge 1 - s\)</span>), so list
+  decoding up to it goes beyond unique decoding.</li>
+<li><a href="#card-le-of-agree-ge">Reed–Solomon codes are list decodable up to the Johnson radius</a>: the
+  bound for the MDS codes, <span class="arithmatex">\(d = n - k + 1\)</span>, where it gives the radius <span class="arithmatex">\(1 - \sqrt{R}\)</span>, which the
+  Guruswami–Sudan algorithm reaches with the parameters of Theorem 12.2.12.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_1">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>S. M. Johnson, "A new upper bound for error-correcting codes", <em>IRE Transactions on Information Theory</em> 8 (1962), 203–207.</li>
+<li>V. Guruswami, A. Rudra, M. Sudan, <em>Essential Coding Theory</em>, draft of August 26, 2025, Theorems 7.3.1 and 7.3.3.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#card-filter-eq"> </a></p>
+<p><a href="../bounds-on-code-size/index.html#hamming-sphere-packing-bound"> </a></p>
+<p><a href="#card-le-of-agree-ge"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-filter-eq">Agreements of two words</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-le-mul-of-johnson">Johnson bound, list size <span class="arithmatex">\(n d\)</span></a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/card-le-mul-of-johnson">
+<h4 class="bp-thmheading" id="card-le-mul-of-johnson">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Johnson bound, list size <span class="arithmatex">\(n d\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/MathlibExt/Combinatorics/Coding/ListDecoding.lean#L214" aria-label="View MathlibExt.Combinatorics.Coding.ListDecoding.card_le_mul_of_johnson in Lean source" title="View MathlibExt.Combinatorics.Coding.ListDecoding.card_le_mul_of_johnson in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#card-le-mul-of-johnson" aria-label="Link to Johnson bound, list size n d" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Combinatorics.Coding.ListDecoding.card_le_mul_of_johnson</div>
+<div class="bp-thmcontent">
+<p>Under the hypotheses of the <a href="#johnson-bound">Johnson bound</a> (<span class="arithmatex">\(e \le n\)</span>, <span class="arithmatex">\(d \le n\)</span>, words pairwise
+at distance at least <span class="arithmatex">\(d\)</span>, all within distance <span class="arithmatex">\(e\)</span> of <span class="arithmatex">\(y\)</span>, and <span class="arithmatex">\(n(n-d) &lt; (n-e)^2\)</span>), the set has at
+most <span class="arithmatex">\(n d\)</span> words: the denominator <span class="arithmatex">\((n-e)^2 - n(n-d)\)</span> is a positive integer and the numerator
+<span class="arithmatex">\(n (d - e)\)</span> is at most <span class="arithmatex">\(n d\)</span>.</p>
+<p>Guruswami, Rudra and Sudan (Theorem 7.3.3) state the list size <span class="arithmatex">\(q n d\)</span>; the bound <span class="arithmatex">\(n d\)</span> proved
+here is smaller. Their Exercise 7.5 gives the still smaller list size <span class="arithmatex">\(n\)</span> for radius at most
+<span class="arithmatex">\(n - \sqrt{n(n-d)} - 1\)</span>, which is not formalized here.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#johnson-bound"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> card_le_mul_of_johnson (S : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset#doc" title="Finset">Finset</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → α)) (y : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → α) {d e : ℕ} (hen : e ≤ n)
+    (hdn : d ≤ n) (hdist : ∀ c₁ ∈ S, ∀ c₂ ∈ S, c₁ ≠ c₂ → d ≤ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=hammingDist#doc" title="hammingDist">hammingDist</a> c₁ c₂)
+    (hball : ∀ c ∈ S, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=hammingDist#doc" title="hammingDist">hammingDist</a> y c ≤ e) (hJ : n * (n - d) &lt; (n - e) ^ 2) :
+    S.card ≤ n * d</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_2">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>V. Guruswami, A. Rudra, M. Sudan, <em>Essential Coding Theory</em>, draft of August 26, 2025, Theorem 7.3.3.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#johnson-bound">Johnson bound</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-le-of-agree-ge">Reed–Solomon codes are list decodable up to the Johnson radius</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#is-list-decodable-of-johnson">Every code is list decodable up to the Johnson radius</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/is-list-decodable-of-johnson">
+<h4 class="bp-thmheading" id="is-list-decodable-of-johnson">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Every code is list decodable up to the Johnson radius</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/MathlibExt/Combinatorics/Coding/ListDecoding.lean#L229" aria-label="View MathlibExt.Combinatorics.Coding.ListDecoding.isListDecodable_of_johnson in Lean source" title="View MathlibExt.Combinatorics.Coding.ListDecoding.isListDecodable_of_johnson in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#is-list-decodable-of-johnson" aria-label="Link to Every code is list decodable up to the Johnson radius" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Combinatorics.Coding.ListDecoding.isListDecodable_of_johnson</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(C\)</span> be a code of length <span class="arithmatex">\(n\)</span> whose distinct codewords are at Hamming distance at least
+<span class="arithmatex">\(d \le n\)</span>, and let <span class="arithmatex">\(e \le n\)</span> satisfy <span class="arithmatex">\(n(n-d) &lt; (n-e)^2\)</span>, that is <span class="arithmatex">\(e &lt; n - \sqrt{n(n-d)}\)</span>. Then <span class="arithmatex">\(C\)</span>
+is <a href="#is-list-decodable">list decodable</a> from <span class="arithmatex">\(e\)</span> errors with list size <span class="arithmatex">\(n d\)</span>.</p>
+<p>In relative terms: a code of relative distance <span class="arithmatex">\(\delta\)</span> is list decodable with polynomial list
+size from any fraction of errors below <span class="arithmatex">\(1 - \sqrt{1 - \delta}\)</span>, whatever the alphabet. This is the
+strict case of Theorem 7.3.3 of Guruswami, Rudra and Sudan, with list size <span class="arithmatex">\(n d\)</span> instead of
+<span class="arithmatex">\(q n d\)</span>. Their Theorem 7.3.1 gives the larger alphabet-dependent radius
+<span class="arithmatex">\(J_q(\delta) = (1 - 1/q)(1 - \sqrt{1 - q\delta/(q-1)})\)</span>, not formalized here.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#is-list-decodable"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> isListDecodable_of_johnson (C : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset#doc" title="Finset">Finset</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → α)) {d e : ℕ} (hen : e ≤ n)
+    (hdn : d ≤ n) (hdist : ∀ c₁ ∈ C, ∀ c₂ ∈ C, c₁ ≠ c₂ → d ≤ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=hammingDist#doc" title="hammingDist">hammingDist</a> c₁ c₂)
+    (hJ : n * (n - d) &lt; (n - e) ^ 2) : <a class="bp-lean-ref" href="#is-list-decodable" data-lean-name="MathlibExt.Combinatorics.Coding.ListDecoding.IsListDecodable">IsListDecodable</a> C e (n * d)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Combinatorics.Coding.ListDecoding.IsListDecodable">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsListDecodable (C : Finset (Fin n → α)) (e L : ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ y : Fin n → α, (C.filter <span class="bp-lean-keyword">fun</span> c =&gt; hammingDist y c ≤ e).card ≤ L</code></pre>
+<p class="bp-lean-where">MathlibExt/Combinatorics/Coding/ListDecoding.lean:57</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_3">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>V. Guruswami, A. Rudra, M. Sudan, <em>Essential Coding Theory</em>, draft of August 26, 2025, Theorems 7.3.1 and 7.3.3.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-list-decodable">List-decodable code</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-le-mul-of-johnson">Johnson bound, list size <span class="arithmatex">\(n d\)</span></a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bounds-on-code-size/index.html#elias-bassalygo-bound">Elias–Bassalygo bound (alphabet-free form)</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="list-decoding-capacity">List-decoding capacity</h2>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/exists-encoding-list-decodable">
+<h4 class="bp-thmheading" id="exists-encoding-list-decodable">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">List-decoding capacity, achievability</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/MathlibExt/Combinatorics/Coding/ListDecodingCapacity.lean#L54" aria-label="View MathlibExt.Combinatorics.Coding.ListDecodingCapacity.exists_encoding_listDecodable in Lean source" title="View MathlibExt.Combinatorics.Coding.ListDecodingCapacity.exists_encoding_listDecodable in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#exists-encoding-list-decodable" aria-label="Link to List-decoding capacity, achievability" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Combinatorics.Coding.ListDecodingCapacity.exists_encoding_listDecodable</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\alpha\)</span> be an alphabet with <span class="arithmatex">\(q \ge 2\)</span> letters, let <span class="arithmatex">\(0 &lt; \rho &lt; 1 - 1/q\)</span> and <span class="arithmatex">\(L \ge 1\)</span>, and let
+<span class="arithmatex">\(n, k\)</span> be natural numbers with</p>
+<div class="arithmatex">\[k \le \Bigl(1 - H_q(\rho) - \frac{1}{L}\Bigr) n,\]</div>
+<p>where <span class="arithmatex">\(H_q(\rho)\)</span> is the <span class="arithmatex">\(q\)</span>-ary entropy (written in Lean as <code>Real.qaryEntropy q ρ / log q</code>). Then
+there is an encoding map <span class="arithmatex">\(C : \alpha^k \to \alpha^n\)</span> such that every Hamming ball of radius
+<span class="arithmatex">\(\rho n\)</span> contains the encodings of at most <span class="arithmatex">\(L\)</span> messages.</p>
+<p>This is Theorem 7.4.2 (i) of Guruswami, Rudra and Sudan in the form proved in their Section 7.4.1:
+if the <span class="arithmatex">\(q^k\)</span> codewords are chosen independently and uniformly, the union bound over the <span class="arithmatex">\(q^n\)</span>
+centres and the <span class="arithmatex">\(\binom{q^k}{L+1}\)</span> sets of <span class="arithmatex">\(L + 1\)</span> messages bounds the probability of a bad event
+by <span class="arithmatex">\(q^{-n/L} &lt; 1\)</span>. The Lean proof is that union bound written as a count of encoding maps: at most
+<span class="arithmatex">\(q^n \binom{q^k}{L+1} \mathrm{Vol}_q(n, \rho n)^{L+1} (q^n)^{q^k - L - 1}\)</span> of the <span class="arithmatex">\((q^n)^{q^k}\)</span>
+maps are bad. List sizes are counted over messages, as in that proof; the
+<a href="#exists-is-list-decodable">set form</a> gives a list-decodable code with at least <span class="arithmatex">\(q^k / L\)</span>
+codewords. Together with the
+<a href="#exists-many-in-ball">converse</a> it shows that the list-decoding capacity is <span class="arithmatex">\(1 - H_q(\rho)\)</span>.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#exists-is-list-decodable"> </a></p>
+<p><a href="#exists-many-in-ball"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> exists_encoding_listDecodable {α : <span class="bp-lean-keyword">Type</span>*} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype#doc" title="Fintype">Fintype</a> α] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=DecidableEq#doc" title="DecidableEq">DecidableEq</a> α]
+    (hq : 2 ≤ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype.card#doc" title="Fintype.card">Fintype.card</a> α) {ρ : ℝ} (hρ0 : 0 &lt; ρ) (hρ1 : ρ &lt; 1 - 1 / (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype.card#doc" title="Fintype.card">Fintype.card</a> α : ℝ))
+    {L : ℕ} (hL : 1 ≤ L) (n k : ℕ)
+    (hk : (k : ℝ) ≤
+      (1 - <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.qaryEntropy#doc" title="Real.qaryEntropy">qaryEntropy</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype.card#doc" title="Fintype.card">Fintype.card</a> α) ρ / <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.log#doc" title="Real.log">log</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype.card#doc" title="Fintype.card">Fintype.card</a> α) - 1 / (L : ℝ)) * n) :
+    ∃ C : (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> k → α) → (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → α), ∀ y : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → α,
+      (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.univ#doc" title="Finset.univ">univ</a>.filter <span class="bp-lean-keyword">fun</span> m =&gt; (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=hammingDist#doc" title="hammingDist">hammingDist</a> y (C m) : ℝ) ≤ ρ * n).card ≤ L</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses_1">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="../bounds-on-code-size/index.html#sum-choose-mul-pow-le-exp">Volume of a Hamming ball, entropy upper bound</a>:
+  a random word lies in a fixed ball of radius <span class="arithmatex">\(\rho n\)</span> with probability at most <span class="arithmatex">\(q^{-(1 - H_q(\rho)) n}\)</span> (equation (7.7)).</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_4">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>V. Guruswami, A. Rudra, M. Sudan, <em>Essential Coding Theory</em>, draft of August 26, 2025, Theorem 7.4.2 (i) and its proof in Section 7.4.1, equations (7.7)–(7.11).</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="../bounds-on-code-size/index.html#sum-choose-mul-pow-le-exp"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bounds-on-code-size/index.html#ball">Closed Hamming ball</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bounds-on-code-size/index.html#card-ball">Size of a Hamming ball</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bounds-on-code-size/index.html#sum-choose-mul-pow-le-exp">Volume of a Hamming ball, entropy upper bound</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#exists-is-list-decodable">List-decodable codes of rate <span class="arithmatex">\(1 - H_q(\rho) - 1/L\)</span></a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/exists-is-list-decodable">
+<h4 class="bp-thmheading" id="exists-is-list-decodable">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">List-decodable codes of rate <span class="arithmatex">\(1 - H_q(\rho) - 1/L\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/MathlibExt/Combinatorics/Coding/ListDecodingCapacity.lean#L256" aria-label="View MathlibExt.Combinatorics.Coding.ListDecodingCapacity.exists_isListDecodable in Lean source" title="View MathlibExt.Combinatorics.Coding.ListDecodingCapacity.exists_isListDecodable in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#exists-is-list-decodable" aria-label="Link to List-decodable codes of rate 1 - H_q(ρ) - 1/L" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Combinatorics.Coding.ListDecodingCapacity.exists_isListDecodable</div>
+<div class="bp-thmcontent">
+<p>Under the hypotheses of <a href="#exists-encoding-list-decodable">list-decoding capacity, achievability</a>
+(<span class="arithmatex">\(q \ge 2\)</span>, <span class="arithmatex">\(0 &lt; \rho &lt; 1 - 1/q\)</span>, <span class="arithmatex">\(L \ge 1\)</span>, <span class="arithmatex">\(k \le (1 - H_q(\rho) - 1/L) n\)</span>), there is a code
+<span class="arithmatex">\(C \subseteq \alpha^n\)</span> that is <a href="#is-list-decodable">list decodable</a> from <span class="arithmatex">\(\lfloor \rho n \rfloor\)</span>
+errors with list size <span class="arithmatex">\(L\)</span> and has <span class="arithmatex">\(q^k \le L \cdot |C|\)</span>. It is the set of codewords of the encoding
+map: each codeword has at most <span class="arithmatex">\(L\)</span> preimages, since they all lie in the ball of radius <span class="arithmatex">\(0\)</span> around
+it. Taking <span class="arithmatex">\(k = \lfloor (1 - H_q(\rho) - 1/L) n \rfloor\)</span>, the rate of <span class="arithmatex">\(C\)</span> is at least
+<span class="arithmatex">\(1 - H_q(\rho) - 1/L - o(1)\)</span>, the set form of Theorem 7.4.2 (i) of Guruswami, Rudra and Sudan.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#exists-encoding-list-decodable"> </a></p>
+<p><a href="#is-list-decodable"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> exists_isListDecodable {α : <span class="bp-lean-keyword">Type</span>*} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype#doc" title="Fintype">Fintype</a> α] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=DecidableEq#doc" title="DecidableEq">DecidableEq</a> α]
+    (hq : 2 ≤ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype.card#doc" title="Fintype.card">Fintype.card</a> α) {ρ : ℝ} (hρ0 : 0 &lt; ρ) (hρ1 : ρ &lt; 1 - 1 / (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype.card#doc" title="Fintype.card">Fintype.card</a> α : ℝ))
+    {L : ℕ} (hL : 1 ≤ L) (n k : ℕ)
+    (hk : (k : ℝ) ≤
+      (1 - <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.qaryEntropy#doc" title="Real.qaryEntropy">qaryEntropy</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype.card#doc" title="Fintype.card">Fintype.card</a> α) ρ / <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.log#doc" title="Real.log">log</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype.card#doc" title="Fintype.card">Fintype.card</a> α) - 1 / (L : ℝ)) * n) :
+    ∃ C : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset#doc" title="Finset">Finset</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → α), <a class="bp-lean-ref" href="#is-list-decodable" data-lean-name="MathlibExt.Combinatorics.Coding.ListDecoding.IsListDecodable">IsListDecodable</a> C ⌊ρ * n⌋₊ L ∧
+      <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype.card#doc" title="Fintype.card">Fintype.card</a> α ^ k ≤ L * C.card</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Combinatorics.Coding.ListDecoding.IsListDecodable">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> IsListDecodable (C : Finset (Fin n → α)) (e L : ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ y : Fin n → α, (C.filter <span class="bp-lean-keyword">fun</span> c =&gt; hammingDist y c ≤ e).card ≤ L</code></pre>
+<p class="bp-lean-where">MathlibExt/Combinatorics/Coding/ListDecoding.lean:57</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_5">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>V. Guruswami, A. Rudra, M. Sudan, <em>Essential Coding Theory</em>, draft of August 26, 2025, Definition 7.2.1 and Theorem 7.4.2 (i).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#is-list-decodable">List-decodable code</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#exists-encoding-list-decodable">List-decoding capacity, achievability</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/exists-mul-card-filter-ge">
+<h4 class="bp-thmheading" id="exists-mul-card-filter-ge">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Some ball holds many codewords</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/MathlibExt/Combinatorics/Coding/ListDecoding.lean#L246" aria-label="View MathlibExt.Combinatorics.Coding.ListDecoding.exists_mul_card_filter_ge in Lean source" title="View MathlibExt.Combinatorics.Coding.ListDecoding.exists_mul_card_filter_ge in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#exists-mul-card-filter-ge" aria-label="Link to Some ball holds many codewords" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Combinatorics.Coding.ListDecoding.exists_mul_card_filter_ge</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(C\)</span> be a code of length <span class="arithmatex">\(n\)</span> over a nonempty alphabet with <span class="arithmatex">\(q\)</span> letters and let <span class="arithmatex">\(e\)</span> be a
+radius. Some word <span class="arithmatex">\(y\)</span> satisfies</p>
+<div class="arithmatex">\[|C| \cdot \mathrm{Vol}_q(n, e) \le q^n \cdot |\{c \in C : \Delta(y, c) \le e\}|, \qquad \mathrm{Vol}_q(n, e) = \sum_{i=0}^{e} \binom{n}{i} (q-1)^i.\]</div>
+<p>For a uniformly random centre <span class="arithmatex">\(y\)</span> each codeword lies in the ball <span class="arithmatex">\(B(y, e)\)</span> with probability
+<span class="arithmatex">\(\mathrm{Vol}_q(n, e)/q^n\)</span>, so the expected number of codewords in the ball is
+<span class="arithmatex">\(|C| \mathrm{Vol}_q(n, e) / q^n\)</span> and some centre does at least as well. This is Lemma 8.1.2 of
+Guruswami, Rudra and Sudan, and the averaging step (equations (7.12)–(7.16)) in their proof of the
+<a href="#exists-many-in-ball">converse half of list-decoding capacity</a>; with the
+<a href="../bounds-on-code-size/index.html#sum-choose-mul-pow-ge-exp">volume lower bound</a>
+<span class="arithmatex">\(\mathrm{Vol}_q(n, \rho n) \ge q^{H_q(\rho) n - o(n)}\)</span> it forces lists of size <span class="arithmatex">\(q^{\Omega(\varepsilon n)}\)</span>
+at rate <span class="arithmatex">\(1 - H_q(\rho) + \varepsilon\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> exists_mul_card_filter_ge [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype#doc" title="Fintype">Fintype</a> α] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Nonempty#doc" title="Nonempty">Nonempty</a> α] (C : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset#doc" title="Finset">Finset</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → α)) (e : ℕ) :
+    ∃ y : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → α,
+      C.card * ∑ i ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">range</a> (e + 1), n.choose i * (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype.card#doc" title="Fintype.card">Fintype.card</a> α - 1) ^ i ≤
+        <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype.card#doc" title="Fintype.card">Fintype.card</a> α ^ n * (C.filter <span class="bp-lean-keyword">fun</span> c =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=hammingDist#doc" title="hammingDist">hammingDist</a> y c ≤ e).card</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses_2">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="../bounds-on-code-size/index.html#card-ball">Size of a Hamming ball</a>: each ball around a codeword has <span class="arithmatex">\(\mathrm{Vol}_q(n, e)\)</span> words.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_6">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>V. Guruswami, A. Rudra, M. Sudan, <em>Essential Coding Theory</em>, draft of August 26, 2025, Lemma 8.1.2 and the proof of Theorem 7.4.2 (ii), equations (7.12)–(7.17).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bounds-on-code-size/index.html#ball">Closed Hamming ball</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bounds-on-code-size/index.html#card-ball">Size of a Hamming ball</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bounds-on-code-size/index.html#elias-bassalygo-bound">Elias–Bassalygo bound (alphabet-free form)</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#exists-many-in-ball">List-decoding capacity, converse</a></span></div>
+</div>
+</details>
+</div>
+<ul>
+<li><a href="../bounds-on-code-size/index.html#sum-choose-mul-pow-ge-exp">Volume of a Hamming ball, entropy lower bound</a></li>
+</ul>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/exists-many-in-ball">
+<h4 class="bp-thmheading" id="exists-many-in-ball">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">List-decoding capacity, converse</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/MathlibExt/Combinatorics/Coding/ListDecodingCapacity.lean#L201" aria-label="View MathlibExt.Combinatorics.Coding.ListDecodingCapacity.exists_many_in_ball in Lean source" title="View MathlibExt.Combinatorics.Coding.ListDecodingCapacity.exists_many_in_ball in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#exists-many-in-ball" aria-label="Link to List-decoding capacity, converse" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Combinatorics.Coding.ListDecodingCapacity.exists_many_in_ball</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\alpha\)</span> be an alphabet with <span class="arithmatex">\(q \ge 2\)</span> letters, let <span class="arithmatex">\(0 &lt; \rho &lt; 1 - 1/q\)</span> and <span class="arithmatex">\(\varepsilon &gt; 0\)</span>.
+For all large enough <span class="arithmatex">\(n\)</span>, every code <span class="arithmatex">\(C \subseteq \alpha^n\)</span> with at least
+<span class="arithmatex">\(q^{(1 - H_q(\rho) + \varepsilon) n}\)</span> codewords has a Hamming ball of radius <span class="arithmatex">\(\rho n\)</span> containing at
+least <span class="arithmatex">\(q^{\varepsilon n / 2}\)</span> codewords. So a code of rate <span class="arithmatex">\(1 - H_q(\rho) + \varepsilon\)</span> that is
+list decodable from <span class="arithmatex">\(\rho n\)</span> errors needs lists of size at least <span class="arithmatex">\(q^{\varepsilon n / 2}\)</span>.</p>
+<p>This is Theorem 7.4.1 (ii) (equivalently Theorem 7.4.2 (ii)) of Guruswami, Rudra and Sudan, which
+states <span class="arithmatex">\(L \ge q^{\Omega(\varepsilon n)}\)</span>; the constant in <span class="arithmatex">\(\Omega\)</span> is taken here to be <span class="arithmatex">\(1/2\)</span>. The
+proof is theirs: a ball with a uniformly random centre holds <span class="arithmatex">\(|C| \mathrm{Vol}_q(n, \rho n) / q^n\)</span>
+codewords on average, and <span class="arithmatex">\(\mathrm{Vol}_q(n, \rho n) \ge q^{H_q(\rho) n - \varepsilon n / 2}\)</span> for large <span class="arithmatex">\(n\)</span>.
+In the Lean statement <span class="arithmatex">\(q^x\)</span> is written <span class="arithmatex">\(\exp(x \log q)\)</span> and <span class="arithmatex">\(H_q(\rho) \log q\)</span> is
+<code>Real.qaryEntropy q ρ</code>. Together with <a href="#exists-encoding-list-decodable">achievability</a> it shows
+that the list-decoding capacity is <span class="arithmatex">\(1 - H_q(\rho)\)</span>.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#exists-encoding-list-decodable"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> exists_many_in_ball {α : <span class="bp-lean-keyword">Type</span>*} [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype#doc" title="Fintype">Fintype</a> α] [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=DecidableEq#doc" title="DecidableEq">DecidableEq</a> α]
+    (hq : 2 ≤ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype.card#doc" title="Fintype.card">Fintype.card</a> α) {ρ : ℝ} (hρ0 : 0 &lt; ρ) (hρ1 : ρ &lt; 1 - 1 / (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype.card#doc" title="Fintype.card">Fintype.card</a> α : ℝ))
+    {ε : ℝ} (hε : 0 &lt; ε) :
+    ∃ N : ℕ, ∀ n ≥ N, ∀ C : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset#doc" title="Finset">Finset</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → α),
+      <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.exp#doc" title="Real.exp">exp</a> (n * (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.log#doc" title="Real.log">log</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype.card#doc" title="Fintype.card">Fintype.card</a> α) - <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.qaryEntropy#doc" title="Real.qaryEntropy">qaryEntropy</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype.card#doc" title="Fintype.card">Fintype.card</a> α) ρ +
+        ε * <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.log#doc" title="Real.log">log</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype.card#doc" title="Fintype.card">Fintype.card</a> α))) ≤ C.card →
+      ∃ y : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → α,
+        <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.exp#doc" title="Real.exp">exp</a> (ε * n / 2 * <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.log#doc" title="Real.log">log</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fintype.card#doc" title="Fintype.card">Fintype.card</a> α)) ≤
+          ((C.filter <span class="bp-lean-keyword">fun</span> c =&gt; (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=hammingDist#doc" title="hammingDist">hammingDist</a> y c : ℝ) ≤ ρ * n).card : ℝ)</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses_3">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="#exists-mul-card-filter-ge">Some ball holds many codewords</a>: the averaging over a random centre, equations (7.14)–(7.16).</li>
+<li><a href="../bounds-on-code-size/index.html#sum-choose-mul-pow-ge-exp">Volume of a Hamming ball, entropy lower bound</a>: equation (7.13).</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_7">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>V. Guruswami, A. Rudra, M. Sudan, <em>Essential Coding Theory</em>, draft of August 26, 2025, Theorems 7.4.1 and 7.4.2 (ii), equations (7.12)–(7.17).</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#exists-mul-card-filter-ge"> </a></p>
+<p><a href="../bounds-on-code-size/index.html#sum-choose-mul-pow-ge-exp"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#exists-mul-card-filter-ge">Some ball holds many codewords</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../bounds-on-code-size/index.html#sum-choose-mul-pow-ge-exp">Volume of a Hamming ball, entropy lower bound</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="guruswamisudan-decoding-of-reedsolomon-codes">Guruswami–Sudan decoding of Reed–Solomon codes</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/weighted-deg-le">
+<h4 class="bp-thmheading" id="weighted-deg-le">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Weighted degree bound</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/CSLibExt/Coding/GuruswamiSudan.lean#L69" aria-label="View Cslib.CodingTheory.GuruswamiSudan.WeightedDegLE in Lean source" title="View Cslib.CodingTheory.GuruswamiSudan.WeightedDegLE in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#weighted-deg-le" aria-label="Link to Weighted degree bound" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.CodingTheory.GuruswamiSudan.WeightedDegLE</div>
+<div class="bp-thmcontent">
+<p>A bivariate polynomial <span class="arithmatex">\(Q(X, Y) = \sum_{i,j} q_{ij} X^i Y^j\)</span> over a field <span class="arithmatex">\(F\)</span> has
+<span class="arithmatex">\((1, w)\)</span>-weighted degree at most <span class="arithmatex">\(D\)</span> if <span class="arithmatex">\(i + w j \le D\)</span> for every monomial <span class="arithmatex">\(X^i Y^j\)</span> with
+<span class="arithmatex">\(q_{ij} \ne 0\)</span>. For <span class="arithmatex">\(w = 1\)</span> this is the total degree.</p>
+<p>In Lean, bivariate polynomials are elements of <code>F[X][X]</code>: the outer variable is <span class="arithmatex">\(Y\)</span> and the
+coefficients are polynomials in <span class="arithmatex">\(X\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> WeightedDegLE (w D : ℕ) (Q : F[X][X]) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ j i, (Q.coeff j).coeff i ≠ 0 → i + w * j ≤ D</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_8">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>V. Guruswami, A. Rudra, M. Sudan, <em>Essential Coding Theory</em>, draft of August 26, 2025, Definition 12.2.5.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 6</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#card-le-div-of-dvd">The list has at most <span class="arithmatex">\(D / w\)</span> polynomials</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#eval-eq-zero-of-agree">Guruswami–Sudan root-finding lemma</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#exists-interpolant">Guruswami–Sudan interpolation step</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#exists-interpolant-dvd">Guruswami–Sudan list decoding</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#nat-degree-eval-le">Substitution respects the weighted degree</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#x-sub-c-dvd-of-agree"><span class="arithmatex">\(Y - P(X)\)</span> divides the interpolating polynomial</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/point-ideal">
+<h4 class="bp-thmheading" id="point-ideal">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Ideal of a point of the plane</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/CSLibExt/Coding/GuruswamiSudan.lean#L74" aria-label="View Cslib.CodingTheory.GuruswamiSudan.pointIdeal in Lean source" title="View Cslib.CodingTheory.GuruswamiSudan.pointIdeal in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#point-ideal" aria-label="Link to Ideal of a point of the plane" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.CodingTheory.GuruswamiSudan.pointIdeal</div>
+<div class="bp-thmcontent">
+<p>For <span class="arithmatex">\(a, b \in F\)</span>, the ideal <span class="arithmatex">\((X - a, Y - b)\)</span> of <span class="arithmatex">\(F[X][Y]\)</span>, generated by <span class="arithmatex">\(X - a\)</span> and <span class="arithmatex">\(Y - b\)</span>: the
+polynomials vanishing at <span class="arithmatex">\((a, b)\)</span>. Its powers measure the
+<a href="#has-root-mult">multiplicity of a root</a>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> pointIdeal (a b : F) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Ideal#doc" title="Ideal">Ideal</a> F[X][X] :=
+  <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Ideal.span#doc" title="Ideal.span">Ideal.span</a> {<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial.C#doc" title="Polynomial.C">C</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial.X#doc" title="Polynomial.X">X</a> - <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial.C#doc" title="Polynomial.C">C</a> a), <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial.X#doc" title="Polynomial.X">X</a> - <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial.C#doc" title="Polynomial.C">C</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial.C#doc" title="Polynomial.C">C</a> b)}</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#has-root-mult">Root of multiplicity <span class="arithmatex">\(r\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#has-root-mult-of-coeff">Multiplicity from the translated coefficients</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#pow-dvd-eval-of-has-root-mult">A root of multiplicity <span class="arithmatex">\(r\)</span> survives substitution</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/has-root-mult">
+<h4 class="bp-thmheading" id="has-root-mult">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Root of multiplicity <span class="arithmatex">\(r\)</span></span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/CSLibExt/Coding/GuruswamiSudan.lean#L82" aria-label="View Cslib.CodingTheory.GuruswamiSudan.HasRootMult in Lean source" title="View Cslib.CodingTheory.GuruswamiSudan.HasRootMult in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#has-root-mult" aria-label="Link to Root of multiplicity r" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.CodingTheory.GuruswamiSudan.HasRootMult</div>
+<div class="bp-thmcontent">
+<p>A bivariate polynomial <span class="arithmatex">\(Q \in F[X][Y]\)</span> has a root of multiplicity at least <span class="arithmatex">\(r\)</span> at <span class="arithmatex">\((a, b)\)</span> if <span class="arithmatex">\(Q\)</span>
+lies in the <span class="arithmatex">\(r\)</span>-th power of the <a href="#point-ideal">ideal of the point</a> <span class="arithmatex">\((X - a, Y - b)\)</span>.</p>
+<p>Guruswami, Rudra and Sudan (Definitions 12.2.8 and 12.2.9) phrase this as: the translate
+<span class="arithmatex">\(Q(X + a, Y + b)\)</span> has no monomial of total degree less than <span class="arithmatex">\(r\)</span>. The two definitions agree, since
+the translation is a ring automorphism carrying <span class="arithmatex">\((X - a, Y - b)\)</span> to <span class="arithmatex">\((X, Y)\)</span>, and a polynomial lies
+in <span class="arithmatex">\((X, Y)^r\)</span> exactly when all its monomials have total degree at least <span class="arithmatex">\(r\)</span>. The direction used
+by the interpolation step is <a href="#has-root-mult-of-coeff">proved</a>; the converse is not formalized. For <span class="arithmatex">\(r = 1\)</span> the condition is <span class="arithmatex">\(Q(a, b) = 0\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> HasRootMult (Q : F[X][X]) (a b : F) (r : ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  Q ∈ <a class="bp-lean-ref" href="#point-ideal" data-lean-name="Cslib.CodingTheory.GuruswamiSudan.pointIdeal">pointIdeal</a> a b ^ r</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.CodingTheory.GuruswamiSudan.pointIdeal">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> pointIdeal (a b : F) : Ideal F[X][X] :=
+  Ideal.span {C (X - C a), X - C (C b)}</code></pre>
+<p class="bp-lean-where">CSLibExt/Coding/GuruswamiSudan.lean:74</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_9">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>V. Guruswami, A. Rudra, M. Sudan, <em>Essential Coding Theory</em>, draft of August 26, 2025, Definitions 12.2.8 and 12.2.9.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 6</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#point-ideal">Ideal of a point of the plane</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#eval-eq-zero-of-agree">Guruswami–Sudan root-finding lemma</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#exists-interpolant">Guruswami–Sudan interpolation step</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#exists-interpolant-dvd">Guruswami–Sudan list decoding</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#has-root-mult-of-coeff">Multiplicity from the translated coefficients</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#pow-dvd-eval-of-has-root-mult">A root of multiplicity <span class="arithmatex">\(r\)</span> survives substitution</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#x-sub-c-dvd-of-agree"><span class="arithmatex">\(Y - P(X)\)</span> divides the interpolating polynomial</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/nat-degree-eval-le">
+<h4 class="bp-thmheading" id="nat-degree-eval-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Substitution respects the weighted degree</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/CSLibExt/Coding/GuruswamiSudan.lean#L88" aria-label="View Cslib.CodingTheory.GuruswamiSudan.natDegree_eval_le in Lean source" title="View Cslib.CodingTheory.GuruswamiSudan.natDegree_eval_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#nat-degree-eval-le" aria-label="Link to Substitution respects the weighted degree" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.CodingTheory.GuruswamiSudan.natDegree_eval_le</div>
+<div class="bp-thmcontent">
+<p>If <span class="arithmatex">\(Q(X, Y)\)</span> has <a href="#weighted-deg-le"><span class="arithmatex">\((1, w)\)</span>-weighted degree</a> at most <span class="arithmatex">\(D\)</span> and <span class="arithmatex">\(P \in F[X]\)</span> has
+degree at most <span class="arithmatex">\(w\)</span>, then <span class="arithmatex">\(Q(X, P(X))\)</span> has degree at most <span class="arithmatex">\(D\)</span>: each monomial <span class="arithmatex">\(X^i Y^j\)</span> becomes
+<span class="arithmatex">\(X^i P(X)^j\)</span>, of degree at most <span class="arithmatex">\(i + w j\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> natDegree_eval_le {w D : ℕ} {Q : F[X][X]} (hQ : <a class="bp-lean-ref" href="#weighted-deg-le" data-lean-name="Cslib.CodingTheory.GuruswamiSudan.WeightedDegLE">WeightedDegLE</a> w D Q) {P : F[X]}
+    (hP : P.natDegree ≤ w) : (Q.eval P).natDegree ≤ D</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.CodingTheory.GuruswamiSudan.WeightedDegLE">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> WeightedDegLE (w D : ℕ) (Q : F[X][X]) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ j i, (Q.coeff j).coeff i ≠ 0 → i + w * j ≤ D</code></pre>
+<p class="bp-lean-where">CSLibExt/Coding/GuruswamiSudan.lean:69</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_10">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>V. Guruswami, A. Rudra, M. Sudan, <em>Essential Coding Theory</em>, draft of August 26, 2025, Lemma 12.2.6.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#weighted-deg-le">Weighted degree bound</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#eval-eq-zero-of-agree">Guruswami–Sudan root-finding lemma</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/pow-dvd-eval-of-has-root-mult">
+<h4 class="bp-thmheading" id="pow-dvd-eval-of-has-root-mult">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">A root of multiplicity <span class="arithmatex">\(r\)</span> survives substitution</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/CSLibExt/Coding/GuruswamiSudan.lean#L108" aria-label="View Cslib.CodingTheory.GuruswamiSudan.pow_dvd_eval_of_hasRootMult in Lean source" title="View Cslib.CodingTheory.GuruswamiSudan.pow_dvd_eval_of_hasRootMult in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#pow-dvd-eval-of-has-root-mult" aria-label="Link to A root of multiplicity r survives substitution" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.CodingTheory.GuruswamiSudan.pow_dvd_eval_of_hasRootMult</div>
+<div class="bp-thmcontent">
+<p>If <span class="arithmatex">\(Q(X, Y)\)</span> has a <a href="#has-root-mult">root of multiplicity</a> at least <span class="arithmatex">\(r\)</span> at <span class="arithmatex">\((a, b)\)</span> and
+<span class="arithmatex">\(P \in F[X]\)</span> satisfies <span class="arithmatex">\(P(a) = b\)</span>, then <span class="arithmatex">\((X - a)^r\)</span> divides <span class="arithmatex">\(Q(X, P(X))\)</span>.</p>
+<p>The substitution <span class="arithmatex">\(Y \mapsto P(X)\)</span> is a ring homomorphism <span class="arithmatex">\(F[X][Y] \to F[X]\)</span> sending <span class="arithmatex">\(X - a\)</span> to
+itself and <span class="arithmatex">\(Y - b\)</span> to <span class="arithmatex">\(P(X) - P(a)\)</span>, a multiple of <span class="arithmatex">\(X - a\)</span>. It therefore maps the ideal
+<span class="arithmatex">\((X - a, Y - b)^r\)</span> into <span class="arithmatex">\((X - a)^r\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> pow_dvd_eval_of_hasRootMult {Q : F[X][X]} {a b : F} {r : ℕ} (hQ : <a class="bp-lean-ref" href="#has-root-mult" data-lean-name="Cslib.CodingTheory.GuruswamiSudan.HasRootMult">HasRootMult</a> Q a b r)
+    {P : F[X]} (hP : P.eval a = b) : (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial.X#doc" title="Polynomial.X">X</a> - <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial.C#doc" title="Polynomial.C">C</a> a) ^ r ∣ Q.eval P</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.CodingTheory.GuruswamiSudan.HasRootMult">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> HasRootMult (Q : F[X][X]) (a b : F) (r : ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  Q ∈ pointIdeal a b ^ r</code></pre>
+<p class="bp-lean-where">CSLibExt/Coding/GuruswamiSudan.lean:82</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_11">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>V. Guruswami, A. Rudra, M. Sudan, <em>Essential Coding Theory</em>, draft of August 26, 2025, Lemma 12.2.11 and Claim 12.2.14.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#has-root-mult">Root of multiplicity <span class="arithmatex">\(r\)</span></a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#point-ideal">Ideal of a point of the plane</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#eval-eq-zero-of-agree">Guruswami–Sudan root-finding lemma</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/shift">
+<h4 class="bp-thmheading" id="shift">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Translation of the plane</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/CSLibExt/Coding/GuruswamiSudan.lean#L168" aria-label="View Cslib.CodingTheory.GuruswamiSudan.shift in Lean source" title="View Cslib.CodingTheory.GuruswamiSudan.shift in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#shift" aria-label="Link to Translation of the plane" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.CodingTheory.GuruswamiSudan.shift</div>
+<div class="bp-thmcontent">
+<p>For <span class="arithmatex">\(a, b \in F\)</span>, the <span class="arithmatex">\(F\)</span>-algebra automorphism <span class="arithmatex">\(Q(X, Y) \mapsto Q(X + a, Y + b)\)</span> of <span class="arithmatex">\(F[X][Y]\)</span>. A
+root of <span class="arithmatex">\(Q\)</span> at <span class="arithmatex">\((a, b)\)</span> becomes a root of the translate at the origin, which is how Guruswami,
+Rudra and Sudan define <a href="#has-root-mult">multiplicity</a> at a general point (Definition 12.2.9).</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> shift (a b : F) : F[X][X] →ₐ[F] F[X][X] :=
+  (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial.mapAlgHom#doc" title="Polynomial.mapAlgHom">mapAlgHom</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial.taylorAlgHom#doc" title="Polynomial.taylorAlgHom">taylorAlgHom</a> a)).comp ((<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial.taylorAlgHom#doc" title="Polynomial.taylorAlgHom">taylorAlgHom</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial.C#doc" title="Polynomial.C">C</a> b)).restrictScalars F)</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_12">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>V. Guruswami, A. Rudra, M. Sudan, <em>Essential Coding Theory</em>, draft of August 26, 2025, Definition 12.2.9.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#exists-interpolant">Guruswami–Sudan interpolation step</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#has-root-mult-of-coeff">Multiplicity from the translated coefficients</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/has-root-mult-of-coeff">
+<h4 class="bp-thmheading" id="has-root-mult-of-coeff">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Multiplicity from the translated coefficients</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/CSLibExt/Coding/GuruswamiSudan.lean#L222" aria-label="View Cslib.CodingTheory.GuruswamiSudan.hasRootMult_of_coeff in Lean source" title="View Cslib.CodingTheory.GuruswamiSudan.hasRootMult_of_coeff in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#has-root-mult-of-coeff" aria-label="Link to Multiplicity from the translated coefficients" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.CodingTheory.GuruswamiSudan.hasRootMult_of_coeff</div>
+<div class="bp-thmcontent">
+<p>If the <a href="#shift">translate</a> <span class="arithmatex">\(Q(X + a, Y + b)\)</span> has no monomial of total degree less than <span class="arithmatex">\(r\)</span>, then
+<span class="arithmatex">\(Q\)</span> has a <a href="#has-root-mult">root of multiplicity</a> at least <span class="arithmatex">\(r\)</span> at <span class="arithmatex">\((a, b)\)</span>, that is
+<span class="arithmatex">\(Q \in (X - a, Y - b)^r\)</span>.</p>
+<p>Every monomial <span class="arithmatex">\(X^i Y^j\)</span> with <span class="arithmatex">\(i + j \ge r\)</span> lies in <span class="arithmatex">\((X, Y)^r\)</span>, so the translate lies in
+<span class="arithmatex">\((X, Y)^r\)</span>; translating back by <span class="arithmatex">\((-a, -b)\)</span> carries <span class="arithmatex">\((X, Y)\)</span> into <span class="arithmatex">\((X - a, Y - b)\)</span>. This is the
+direction of the equivalence with Definition 12.2.9 of Guruswami, Rudra and Sudan that the
+<a href="#exists-interpolant">interpolation step</a> needs; the converse is not formalized.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> hasRootMult_of_coeff {Q : F[X][X]} {a b : F} {r : ℕ}
+    (hQ : ∀ i j, i + j &lt; r → ((<a class="bp-lean-ref" href="#shift" data-lean-name="Cslib.CodingTheory.GuruswamiSudan.shift">shift</a> a b Q).coeff j).coeff i = 0) : <a class="bp-lean-ref" href="#has-root-mult" data-lean-name="Cslib.CodingTheory.GuruswamiSudan.HasRootMult">HasRootMult</a> Q a b r</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.CodingTheory.GuruswamiSudan.shift">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> shift (a b : F) : F[X][X] →ₐ[F] F[X][X] :=
+  (mapAlgHom (taylorAlgHom a)).comp ((taylorAlgHom (C b)).restrictScalars F)</code></pre>
+<p class="bp-lean-where">CSLibExt/Coding/GuruswamiSudan.lean:168</p>
+</div>
+<div data-lean-name="Cslib.CodingTheory.GuruswamiSudan.HasRootMult">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> HasRootMult (Q : F[X][X]) (a b : F) (r : ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  Q ∈ pointIdeal a b ^ r</code></pre>
+<p class="bp-lean-where">CSLibExt/Coding/GuruswamiSudan.lean:82</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_13">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>V. Guruswami, A. Rudra, M. Sudan, <em>Essential Coding Theory</em>, draft of August 26, 2025, Definitions 12.2.8 and 12.2.9.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#has-root-mult">Root of multiplicity <span class="arithmatex">\(r\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#shift">Translation of the plane</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#point-ideal">Ideal of a point of the plane</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#exists-interpolant">Guruswami–Sudan interpolation step</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/low-monomials">
+<h4 class="bp-thmheading" id="low-monomials">
+<span class="bp-thmcaption" data-search-exclude>Abbreviation</span><span class="bp-thmtitle">Monomials of low total degree</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/CSLibExt/Coding/GuruswamiSudan.lean#L237" aria-label="View Cslib.CodingTheory.GuruswamiSudan.lowMonomials in Lean source" title="View Cslib.CodingTheory.GuruswamiSudan.lowMonomials in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#low-monomials" aria-label="Link to Monomials of low total degree" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.CodingTheory.GuruswamiSudan.lowMonomials</div>
+<div class="bp-thmcontent">
+<p>The pairs <span class="arithmatex">\((u, v)\)</span> of natural numbers with <span class="arithmatex">\(u + v &lt; r\)</span>, grouped by the total degree <span class="arithmatex">\(s = u + v\)</span>:
+the exponents of the monomials <span class="arithmatex">\(X^u Y^v\)</span> whose coefficients in the <a href="#shift">translate</a> of <span class="arithmatex">\(Q\)</span>
+must vanish for a <a href="#has-root-mult">root of multiplicity</a> <span class="arithmatex">\(r\)</span>.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#shift"> </a></p>
+<p><a href="#has-root-mult"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">abbrev</span> lowMonomials (r : ℕ) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset#doc" title="Finset">Finset</a> (Σ _ : ℕ, ℕ × ℕ) :=
+  (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">range</a> r).sigma <span class="bp-lean-keyword">fun</span> s =&gt; <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.HasAntidiagonal.antidiagonal#doc" title="Finset.HasAntidiagonal.antidiagonal">antidiagonal</a> s</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#card-low-monomials">Number of multiplicity constraints</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#exists-interpolant">Guruswami–Sudan interpolation step</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/card-low-monomials">
+<h4 class="bp-thmheading" id="card-low-monomials">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Number of multiplicity constraints</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/CSLibExt/Coding/GuruswamiSudan.lean#L243" aria-label="View Cslib.CodingTheory.GuruswamiSudan.card_lowMonomials in Lean source" title="View Cslib.CodingTheory.GuruswamiSudan.card_lowMonomials in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#card-low-monomials" aria-label="Link to Number of multiplicity constraints" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.CodingTheory.GuruswamiSudan.card_lowMonomials</div>
+<div class="bp-thmcontent">
+<p>There are <span class="arithmatex">\(r(r+1)/2 = \binom{r+1}{2}\)</span> <a href="#low-monomials">monomials of total degree less than <span class="arithmatex">\(r\)</span></a>:
+<span class="arithmatex">\(s + 1\)</span> of each total degree <span class="arithmatex">\(s &lt; r\)</span>. So a root of multiplicity <span class="arithmatex">\(r\)</span> at one point imposes
+<span class="arithmatex">\(\binom{r+1}{2}\)</span> linear constraints on the coefficients of <span class="arithmatex">\(Q\)</span>.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#low-monomials"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> card_lowMonomials (r : ℕ) : (<a class="bp-lean-ref" href="#low-monomials" data-lean-name="Cslib.CodingTheory.GuruswamiSudan.lowMonomials">lowMonomials</a> r).card = r * (r + 1) / 2</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.CodingTheory.GuruswamiSudan.lowMonomials">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">abbrev</span> lowMonomials (r : ℕ) : Finset (Σ _ : ℕ, ℕ × ℕ) :=
+  (range r).sigma <span class="bp-lean-keyword">fun</span> s =&gt; antidiagonal s</code></pre>
+<p class="bp-lean-where">CSLibExt/Coding/GuruswamiSudan.lean:237</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_14">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>V. Guruswami, A. Rudra, M. Sudan, <em>Essential Coding Theory</em>, draft of August 26, 2025, Lemma 12.2.10.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#low-monomials">Monomials of low total degree</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#exists-interpolant">Guruswami–Sudan interpolation step</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/exists-interpolant">
+<h4 class="bp-thmheading" id="exists-interpolant">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Guruswami–Sudan interpolation step</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/CSLibExt/Coding/GuruswamiSudan.lean#L264" aria-label="View Cslib.CodingTheory.GuruswamiSudan.exists_interpolant in Lean source" title="View Cslib.CodingTheory.GuruswamiSudan.exists_interpolant in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#exists-interpolant" aria-label="Link to Guruswami–Sudan interpolation step" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.CodingTheory.GuruswamiSudan.exists_interpolant</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(F\)</span> be a field, <span class="arithmatex">\((\alpha_1, y_1), \dots, (\alpha_n, y_n) \in F^2\)</span>, and <span class="arithmatex">\(w, D, r\)</span> natural
+numbers. If the number of monomials <span class="arithmatex">\(X^i Y^j\)</span> with <span class="arithmatex">\(i, j \le D\)</span> and <span class="arithmatex">\(i + w j \le D\)</span> exceeds
+<span class="arithmatex">\(n \cdot r(r+1)/2\)</span>, there is a nonzero <span class="arithmatex">\(Q \in F[X][Y]\)</span> of
+<a href="#weighted-deg-le"><span class="arithmatex">\((1, w)\)</span>-weighted degree</a> at most <span class="arithmatex">\(D\)</span> with a
+<a href="#has-root-mult">root of multiplicity</a> at least <span class="arithmatex">\(r\)</span> at every point <span class="arithmatex">\((\alpha_i, y_i)\)</span>.</p>
+<p>This is the correctness of Step 1 of Algorithm 12.2.3 in Guruswami, Rudra and Sudan. The
+coefficients of the monomials of <span class="arithmatex">\((1, w)\)</span>-degree at most <span class="arithmatex">\(D\)</span> are the unknowns; for each point the
+coefficients of <span class="arithmatex">\(X^u Y^v\)</span>, <span class="arithmatex">\(u + v &lt; r\)</span>, in the <a href="#shift">translate</a> <span class="arithmatex">\(Q(X + \alpha_i, Y + y_i)\)</span>
+are <span class="arithmatex">\(\binom{r+1}{2}\)</span> <a href="#card-low-monomials">linear constraints</a> (Lemma 12.2.10) whose vanishing
+gives the <a href="#has-root-mult-of-coeff">multiplicity</a>; a homogeneous linear system with more
+unknowns than equations has a nonzero solution. (The bound <span class="arithmatex">\(i, j \le D\)</span> loses nothing when
+<span class="arithmatex">\(w \ge 1\)</span>.)</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#weighted-deg-le"> </a></p>
+<p><a href="#has-root-mult"> </a></p>
+<p><a href="#shift"> </a></p>
+<p><a href="#card-low-monomials"> </a></p>
+<p><a href="#has-root-mult-of-coeff"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> exists_interpolant {n : ℕ} (α y : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → F) (w D r : ℕ)
+    (hcount : n * (r * (r + 1) / 2) &lt;
+      ((<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">range</a> (D + 1) ×ˢ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">range</a> (D + 1)).filter <span class="bp-lean-keyword">fun</span> ij : ℕ × ℕ =&gt; ij.1 + w * ij.2 ≤ D).card) :
+    ∃ Q : F[X][X], Q ≠ 0 ∧ <a class="bp-lean-ref" href="#weighted-deg-le" data-lean-name="Cslib.CodingTheory.GuruswamiSudan.WeightedDegLE">WeightedDegLE</a> w D Q ∧ ∀ i, <a class="bp-lean-ref" href="#has-root-mult" data-lean-name="Cslib.CodingTheory.GuruswamiSudan.HasRootMult">HasRootMult</a> Q (α i) (y i) r</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.CodingTheory.GuruswamiSudan.WeightedDegLE">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> WeightedDegLE (w D : ℕ) (Q : F[X][X]) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ j i, (Q.coeff j).coeff i ≠ 0 → i + w * j ≤ D</code></pre>
+<p class="bp-lean-where">CSLibExt/Coding/GuruswamiSudan.lean:69</p>
+</div>
+<div data-lean-name="Cslib.CodingTheory.GuruswamiSudan.HasRootMult">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> HasRootMult (Q : F[X][X]) (a b : F) (r : ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  Q ∈ pointIdeal a b ^ r</code></pre>
+<p class="bp-lean-where">CSLibExt/Coding/GuruswamiSudan.lean:82</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses_4">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="#card-low-monomials">Number of multiplicity constraints</a>: Lemma 12.2.10.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="background_1">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="#has-root-mult-of-coeff">Multiplicity from the translated coefficients</a>: why the vanishing of the low-degree translated coefficients gives the multiplicity in the ideal formulation used here.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_15">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>V. Guruswami, M. Sudan, "Improved decoding of Reed–Solomon and algebraic-geometry codes", <em>IEEE Transactions on Information Theory</em> 45(6) (1999), 1757–1767.</li>
+<li>V. Guruswami, A. Rudra, M. Sudan, <em>Essential Coding Theory</em>, draft of August 26, 2025, Algorithm 12.2.3, Lemma 12.2.10 and the analysis of Step 1 before Theorem 12.2.12.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#card-low-monomials"> </a></p>
+<p><a href="#has-root-mult-of-coeff"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 6 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#has-root-mult">Root of multiplicity <span class="arithmatex">\(r\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#weighted-deg-le">Weighted degree bound</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-low-monomials">Number of multiplicity constraints</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#has-root-mult-of-coeff">Multiplicity from the translated coefficients</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#low-monomials">Monomials of low total degree</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#shift">Translation of the plane</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#exists-interpolant-dvd">Guruswami–Sudan list decoding</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/eval-eq-zero-of-agree">
+<h4 class="bp-thmheading" id="eval-eq-zero-of-agree">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Guruswami–Sudan root-finding lemma</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/CSLibExt/Coding/GuruswamiSudan.lean#L135" aria-label="View Cslib.CodingTheory.GuruswamiSudan.eval_eq_zero_of_agree in Lean source" title="View Cslib.CodingTheory.GuruswamiSudan.eval_eq_zero_of_agree in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#eval-eq-zero-of-agree" aria-label="Link to Guruswami–Sudan root-finding lemma" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.CodingTheory.GuruswamiSudan.eval_eq_zero_of_agree</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\alpha_1, \dots, \alpha_n \in F\)</span> be distinct and <span class="arithmatex">\(y \in F^n\)</span>. Let <span class="arithmatex">\(Q \in F[X][Y]\)</span> have
+<a href="#weighted-deg-le"><span class="arithmatex">\((1, w)\)</span>-weighted degree</a> at most <span class="arithmatex">\(D\)</span> and a
+<a href="#has-root-mult">root of multiplicity</a> at least <span class="arithmatex">\(r\)</span> at every point <span class="arithmatex">\((\alpha_i, y_i)\)</span>. If
+<span class="arithmatex">\(P \in F[X]\)</span> has degree at most <span class="arithmatex">\(w\)</span> and <span class="arithmatex">\(P(\alpha_i) = y_i\)</span> for <span class="arithmatex">\(t\)</span> indices <span class="arithmatex">\(i\)</span> with <span class="arithmatex">\(t r &gt; D\)</span>,
+then <span class="arithmatex">\(Q(X, P(X)) = 0\)</span>; equivalently <a href="#x-sub-c-dvd-of-agree"><span class="arithmatex">\(Y - P(X)\)</span> divides <span class="arithmatex">\(Q\)</span></a>.</p>
+<p>Indeed <span class="arithmatex">\(R(X) = Q(X, P(X))\)</span> has degree at most <span class="arithmatex">\(D\)</span>, while <span class="arithmatex">\((X - \alpha_i)^r\)</span> divides <span class="arithmatex">\(R\)</span> for each
+of the <span class="arithmatex">\(t\)</span> agreeing indices, so <span class="arithmatex">\(R\)</span> is divisible by a polynomial of degree <span class="arithmatex">\(t r &gt; D\)</span>.</p>
+<p>This is Lemma 12.2.13 of Guruswami, Rudra and Sudan with <span class="arithmatex">\(w = k - 1\)</span>, stated there for the
+polynomial found by the interpolation step of their Algorithm 12.2.3; only its weighted-degree and
+multiplicity properties are used, so it is stated here for every such <span class="arithmatex">\(Q\)</span>. It is the
+root-finding half of the <a href="#exists-interpolant-dvd">Guruswami–Sudan list decoder</a> for
+Reed–Solomon codes; the other half is the <a href="#exists-interpolant">interpolation step</a>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> eval_eq_zero_of_agree [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=DecidableEq#doc" title="DecidableEq">DecidableEq</a> F] {n w D r : ℕ} {α : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → F}
+    (hα : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Function.Injective#doc" title="Function.Injective">Function.Injective</a> α) {y : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → F} {Q : F[X][X]} (hQ : <a class="bp-lean-ref" href="#weighted-deg-le" data-lean-name="Cslib.CodingTheory.GuruswamiSudan.WeightedDegLE">WeightedDegLE</a> w D Q)
+    (hmult : ∀ i, <a class="bp-lean-ref" href="#has-root-mult" data-lean-name="Cslib.CodingTheory.GuruswamiSudan.HasRootMult">HasRootMult</a> Q (α i) (y i) r) {P : F[X]} (hP : P.natDegree ≤ w)
+    (hagree : D &lt; #{i | P.eval (α i) = y i} * r) : Q.eval P = 0</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.CodingTheory.GuruswamiSudan.WeightedDegLE">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> WeightedDegLE (w D : ℕ) (Q : F[X][X]) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ j i, (Q.coeff j).coeff i ≠ 0 → i + w * j ≤ D</code></pre>
+<p class="bp-lean-where">CSLibExt/Coding/GuruswamiSudan.lean:69</p>
+</div>
+<div data-lean-name="Cslib.CodingTheory.GuruswamiSudan.HasRootMult">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> HasRootMult (Q : F[X][X]) (a b : F) (r : ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  Q ∈ pointIdeal a b ^ r</code></pre>
+<p class="bp-lean-where">CSLibExt/Coding/GuruswamiSudan.lean:82</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses_5">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="#nat-degree-eval-le">Substitution respects the weighted degree</a>: <span class="arithmatex">\(\deg R \le D\)</span> (Lemma 12.2.6).</li>
+<li><a href="#pow-dvd-eval-of-has-root-mult">A root of multiplicity <span class="arithmatex">\(r\)</span> survives substitution</a>: Claim 12.2.14.</li>
+<li><a href="../reed-solomon-codes/index.html#card-eval-eq-zero-le">Root count at distinct points</a>: the "degree mantra" (Proposition 5.1.5) that the source's proof invokes, here counted with multiplicity.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_16">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>V. Guruswami, M. Sudan, "Improved decoding of Reed–Solomon and algebraic-geometry codes", <em>IEEE Transactions on Information Theory</em> 45(6) (1999), 1757–1767.</li>
+<li>V. Guruswami, A. Rudra, M. Sudan, <em>Essential Coding Theory</em>, draft of August 26, 2025, Algorithm 12.2.3 and Lemma 12.2.13.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#has-root-mult">Root of multiplicity <span class="arithmatex">\(r\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#weighted-deg-le">Weighted degree bound</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#nat-degree-eval-le">Substitution respects the weighted degree</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#pow-dvd-eval-of-has-root-mult">A root of multiplicity <span class="arithmatex">\(r\)</span> survives substitution</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#x-sub-c-dvd-of-agree"><span class="arithmatex">\(Y - P(X)\)</span> divides the interpolating polynomial</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/x-sub-c-dvd-of-agree">
+<h4 class="bp-thmheading" id="x-sub-c-dvd-of-agree">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle"><span class="arithmatex">\(Y - P(X)\)</span> divides the interpolating polynomial</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/CSLibExt/Coding/GuruswamiSudan.lean#L158" aria-label="View Cslib.CodingTheory.GuruswamiSudan.X_sub_C_dvd_of_agree in Lean source" title="View Cslib.CodingTheory.GuruswamiSudan.X_sub_C_dvd_of_agree in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#x-sub-c-dvd-of-agree" aria-label="Link to Y - P(X) divides the interpolating polynomial" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.CodingTheory.GuruswamiSudan.X_sub_C_dvd_of_agree</div>
+<div class="bp-thmcontent">
+<p>Under the hypotheses of the <a href="#eval-eq-zero-of-agree">root-finding lemma</a>, <span class="arithmatex">\(Y - P(X)\)</span> divides
+<span class="arithmatex">\(Q(X, Y)\)</span> in <span class="arithmatex">\(F[X][Y]\)</span>. So Step 3 of the Guruswami–Sudan algorithm, which factors <span class="arithmatex">\(Q\)</span> and keeps
+the factors <span class="arithmatex">\(Y - P(X)\)</span> with <span class="arithmatex">\(\deg P &lt; k\)</span> close to the received word, finds every polynomial that
+agrees with the received word in more than <span class="arithmatex">\(D / r\)</span> positions.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#eval-eq-zero-of-agree"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> X_sub_C_dvd_of_agree [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=DecidableEq#doc" title="DecidableEq">DecidableEq</a> F] {n w D r : ℕ} {α : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → F}
+    (hα : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Function.Injective#doc" title="Function.Injective">Function.Injective</a> α) {y : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → F} {Q : F[X][X]} (hQ : <a class="bp-lean-ref" href="#weighted-deg-le" data-lean-name="Cslib.CodingTheory.GuruswamiSudan.WeightedDegLE">WeightedDegLE</a> w D Q)
+    (hmult : ∀ i, <a class="bp-lean-ref" href="#has-root-mult" data-lean-name="Cslib.CodingTheory.GuruswamiSudan.HasRootMult">HasRootMult</a> Q (α i) (y i) r) {P : F[X]} (hP : P.natDegree ≤ w)
+    (hagree : D &lt; #{i | P.eval (α i) = y i} * r) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial.X#doc" title="Polynomial.X">X</a> - <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial.C#doc" title="Polynomial.C">C</a> P ∣ Q</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.CodingTheory.GuruswamiSudan.WeightedDegLE">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> WeightedDegLE (w D : ℕ) (Q : F[X][X]) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ j i, (Q.coeff j).coeff i ≠ 0 → i + w * j ≤ D</code></pre>
+<p class="bp-lean-where">CSLibExt/Coding/GuruswamiSudan.lean:69</p>
+</div>
+<div data-lean-name="Cslib.CodingTheory.GuruswamiSudan.HasRootMult">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> HasRootMult (Q : F[X][X]) (a b : F) (r : ℕ) : <span class="bp-lean-keyword">Prop</span> :=
+  Q ∈ pointIdeal a b ^ r</code></pre>
+<p class="bp-lean-where">CSLibExt/Coding/GuruswamiSudan.lean:82</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses_6">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="#eval-eq-zero-of-agree">Guruswami–Sudan root-finding lemma</a>: <span class="arithmatex">\(Q(X, P(X)) = 0\)</span>, then the factor theorem in <span class="arithmatex">\(F[X][Y]\)</span>.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_17">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>V. Guruswami, A. Rudra, M. Sudan, <em>Essential Coding Theory</em>, draft of August 26, 2025, Algorithm 12.2.3 and Lemma 12.2.13.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#eval-eq-zero-of-agree"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#has-root-mult">Root of multiplicity <span class="arithmatex">\(r\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#weighted-deg-le">Weighted degree bound</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#eval-eq-zero-of-agree">Guruswami–Sudan root-finding lemma</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#exists-interpolant-dvd">Guruswami–Sudan list decoding</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/exists-interpolant-dvd">
+<h4 class="bp-thmheading" id="exists-interpolant-dvd">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Guruswami–Sudan list decoding</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/CSLibExt/Coding/GuruswamiSudan.lean#L343" aria-label="View Cslib.CodingTheory.GuruswamiSudan.exists_interpolant_dvd in Lean source" title="View Cslib.CodingTheory.GuruswamiSudan.exists_interpolant_dvd in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#exists-interpolant-dvd" aria-label="Link to Guruswami–Sudan list decoding" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.CodingTheory.GuruswamiSudan.exists_interpolant_dvd</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\alpha_1, \dots, \alpha_n \in F\)</span> be distinct, <span class="arithmatex">\(y \in F^n\)</span>, and <span class="arithmatex">\(w, D, r\)</span> natural numbers such
+that more than <span class="arithmatex">\(n \cdot r(r+1)/2\)</span> monomials <span class="arithmatex">\(X^i Y^j\)</span> (with <span class="arithmatex">\(i, j \le D\)</span>) satisfy
+<span class="arithmatex">\(i + w j \le D\)</span>. There is one nonzero <span class="arithmatex">\(Q \in F[X][Y]\)</span> of <a href="#weighted-deg-le"><span class="arithmatex">\((1, w)\)</span>-weighted degree</a>
+at most <span class="arithmatex">\(D\)</span>, depending only on <span class="arithmatex">\(\alpha\)</span> and <span class="arithmatex">\(y\)</span>, such that <span class="arithmatex">\(Y - P(X)\)</span> divides <span class="arithmatex">\(Q\)</span> for every
+<span class="arithmatex">\(P \in F[X]\)</span> of degree at most <span class="arithmatex">\(w\)</span> with <span class="arithmatex">\(P(\alpha_i) = y_i\)</span> for more than <span class="arithmatex">\(D / r\)</span> indices <span class="arithmatex">\(i\)</span>.
+At most <span class="arithmatex">\(D / w\)</span> polynomials <span class="arithmatex">\(P\)</span> have this property (<a href="#card-le-div-of-dvd">list size</a>).</p>
+<p>With <span class="arithmatex">\(w = k - 1\)</span> this is the correctness of the Guruswami–Sudan algorithm (Algorithm 12.2.3 of
+Guruswami, Rudra and Sudan) for any parameters <span class="arithmatex">\(D, r\)</span> satisfying the monomial-count hypothesis:
+interpolate, then read off the factors <span class="arithmatex">\(Y - P(X)\)</span> of <span class="arithmatex">\(Q\)</span>. What is proved is exactly this: every
+<span class="arithmatex">\(P\)</span> with <span class="arithmatex">\(\deg P \le w\)</span> and <span class="arithmatex">\(t\)</span> agreements, where <span class="arithmatex">\(D &lt; t r\)</span>, is found. Their choice
+<span class="arithmatex">\(D = \lceil \sqrt{(k-1) n r (r+1)} \rceil\)</span> with <span class="arithmatex">\(r\)</span> large makes the agreement threshold <span class="arithmatex">\(D / r\)</span>
+drop to about <span class="arithmatex">\(\sqrt{(k-1) n}\)</span>, so that Reed–Solomon codes of rate <span class="arithmatex">\(R\)</span> are decoded from up to a
+<span class="arithmatex">\(1 - \sqrt{R}\)</span> fraction of errors (Theorem 12.2.12); that parameter choice and the polynomial
+running time are not formalized.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#weighted-deg-le"> </a></p>
+<p><a href="#card-le-div-of-dvd"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> exists_interpolant_dvd [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=DecidableEq#doc" title="DecidableEq">DecidableEq</a> F] {n : ℕ} {α : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → F}
+    (hα : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Function.Injective#doc" title="Function.Injective">Function.Injective</a> α) (y : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → F) (w D r : ℕ)
+    (hcount : n * (r * (r + 1) / 2) &lt;
+      ((<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">range</a> (D + 1) ×ˢ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">range</a> (D + 1)).filter <span class="bp-lean-keyword">fun</span> ij : ℕ × ℕ =&gt; ij.1 + w * ij.2 ≤ D).card) :
+    ∃ Q : F[X][X], Q ≠ 0 ∧ <a class="bp-lean-ref" href="#weighted-deg-le" data-lean-name="Cslib.CodingTheory.GuruswamiSudan.WeightedDegLE">WeightedDegLE</a> w D Q ∧ ∀ P : F[X], P.natDegree ≤ w →
+      D &lt; #{i | P.eval (α i) = y i} * r → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial.X#doc" title="Polynomial.X">X</a> - <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial.C#doc" title="Polynomial.C">C</a> P ∣ Q</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.CodingTheory.GuruswamiSudan.WeightedDegLE">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> WeightedDegLE (w D : ℕ) (Q : F[X][X]) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ j i, (Q.coeff j).coeff i ≠ 0 → i + w * j ≤ D</code></pre>
+<p class="bp-lean-where">CSLibExt/Coding/GuruswamiSudan.lean:69</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses_7">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="#exists-interpolant">Guruswami–Sudan interpolation step</a>: Step 1.</li>
+<li><a href="#x-sub-c-dvd-of-agree"><span class="arithmatex">\(Y - P(X)\)</span> divides the interpolating polynomial</a>: Steps 2 and 3, via Lemma 12.2.13.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_18">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>V. Guruswami, M. Sudan, "Improved decoding of Reed–Solomon and algebraic-geometry codes", <em>IEEE Transactions on Information Theory</em> 45(6) (1999), 1757–1767.</li>
+<li>V. Guruswami, A. Rudra, M. Sudan, <em>Essential Coding Theory</em>, draft of August 26, 2025, Algorithm 12.2.3 and Theorem 12.2.12.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#exists-interpolant"> </a></p>
+<p><a href="#x-sub-c-dvd-of-agree"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#weighted-deg-le">Weighted degree bound</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#has-root-mult">Root of multiplicity <span class="arithmatex">\(r\)</span></a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#x-sub-c-dvd-of-agree"><span class="arithmatex">\(Y - P(X)\)</span> divides the interpolating polynomial</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#exists-interpolant">Guruswami–Sudan interpolation step</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/card-le-div-of-dvd">
+<h4 class="bp-thmheading" id="card-le-div-of-dvd">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The list has at most <span class="arithmatex">\(D / w\)</span> polynomials</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/CSLibExt/Coding/GuruswamiSudan.lean#L357" aria-label="View Cslib.CodingTheory.GuruswamiSudan.card_le_div_of_dvd in Lean source" title="View Cslib.CodingTheory.GuruswamiSudan.card_le_div_of_dvd in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#card-le-div-of-dvd" aria-label="Link to The list has at most D / w polynomials" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.CodingTheory.GuruswamiSudan.card_le_div_of_dvd</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(Q \in F[X][Y]\)</span> be nonzero with <a href="#weighted-deg-le"><span class="arithmatex">\((1, w)\)</span>-weighted degree</a> at most <span class="arithmatex">\(D\)</span>,
+where <span class="arithmatex">\(w \ge 1\)</span>. At most <span class="arithmatex">\(D / w\)</span> (integer division) polynomials <span class="arithmatex">\(P \in F[X]\)</span> have <span class="arithmatex">\(Y - P(X)\)</span>
+dividing <span class="arithmatex">\(Q\)</span>: each such <span class="arithmatex">\(P\)</span> is a root of <span class="arithmatex">\(Q\)</span> viewed as a polynomial in <span class="arithmatex">\(Y\)</span> over the integral domain
+<span class="arithmatex">\(F[X]\)</span>, and <span class="arithmatex">\(Q\)</span> has <span class="arithmatex">\(Y\)</span>-degree at most <span class="arithmatex">\(D / w\)</span>. This bounds the size of the list output by the
+<a href="#exists-interpolant-dvd">Guruswami–Sudan decoder</a>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> card_le_div_of_dvd {w D : ℕ} (hw : 1 ≤ w) {Q : F[X][X]} (hQ0 : Q ≠ 0)
+    (hQ : <a class="bp-lean-ref" href="#weighted-deg-le" data-lean-name="Cslib.CodingTheory.GuruswamiSudan.WeightedDegLE">WeightedDegLE</a> w D Q) (Ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset#doc" title="Finset">Finset</a> F[X]) (hPs : ∀ P ∈ Ps, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial.X#doc" title="Polynomial.X">X</a> - <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Polynomial.C#doc" title="Polynomial.C">C</a> P ∣ Q) :
+    Ps.card ≤ D / w</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.CodingTheory.GuruswamiSudan.WeightedDegLE">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> WeightedDegLE (w D : ℕ) (Q : F[X][X]) : <span class="bp-lean-keyword">Prop</span> :=
+  ∀ j i, (Q.coeff j).coeff i ≠ 0 → i + w * j ≤ D</code></pre>
+<p class="bp-lean-where">CSLibExt/Coding/GuruswamiSudan.lean:69</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="sources_19">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>V. Guruswami, A. Rudra, M. Sudan, <em>Essential Coding Theory</em>, draft of August 26, 2025, Section 12.2 (Algorithm 12.2.3, Step 3).</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#weighted-deg-le">Weighted degree bound</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="InformationTheory/error-correcting-codes/list-decoding/card-le-of-agree-ge">
+<h4 class="bp-thmheading" id="card-le-of-agree-ge">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Reed–Solomon codes are list decodable up to the Johnson radius</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/fbe4c7ff444cd3fb7df141b09ec8e12618a000e1/CSLibExt/Coding/GuruswamiSudan.lean#L388" aria-label="View Cslib.CodingTheory.GuruswamiSudan.card_le_of_agree_ge in Lean source" title="View Cslib.CodingTheory.GuruswamiSudan.card_le_of_agree_ge in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#card-le-of-agree-ge" aria-label="Link to Reed–Solomon codes are list decodable up to the Johnson radius" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.CodingTheory.GuruswamiSudan.card_le_of_agree_ge</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(\alpha_1, \dots, \alpha_n \in F\)</span> be distinct, <span class="arithmatex">\(1 \le k \le n\)</span>, <span class="arithmatex">\(y \in F^n\)</span>, and <span class="arithmatex">\(t \le n\)</span>
+with <span class="arithmatex">\(t^2 &gt; n (k - 1)\)</span>. Every finite set of polynomials of degree less than <span class="arithmatex">\(k\)</span>, each agreeing
+with <span class="arithmatex">\(y\)</span> in at least <span class="arithmatex">\(t\)</span> positions, has at most <span class="arithmatex">\(n (n - k + 1)\)</span> elements.</p>
+<p>So <a href="../reed-solomon-codes/index.html">Reed–Solomon codes</a> of rate <span class="arithmatex">\(R = k/n\)</span> are list decodable with
+polynomial list size from any fraction of errors below <span class="arithmatex">\(1 - \sqrt{R}\)</span> (agreement
+<span class="arithmatex">\(t &gt; \sqrt{n(k-1)}\)</span>). This is the Johnson bound (Theorem 7.3.3 of Guruswami, Rudra and Sudan,
+strict case) applied to the MDS Reed–Solomon codes (their Theorem 5.2.4): the list-size guarantee
+behind their Theorem 12.2.12. The <a href="#exists-interpolant-dvd">Guruswami–Sudan decoder</a> is proved
+correct for any admissible parameters <span class="arithmatex">\(D, r\)</span>; the choice of <span class="arithmatex">\(D, r\)</span> that reaches this radius and
+the polynomial running time are not formalized.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="../reed-solomon-codes/index.html"> </a></p>
+<p><a href="#exists-interpolant-dvd"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> card_le_of_agree_ge [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=DecidableEq#doc" title="DecidableEq">DecidableEq</a> F] {n k t : ℕ} {α : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → F}
+    (hα : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Function.Injective#doc" title="Function.Injective">Function.Injective</a> α) (hk : 1 ≤ k) (hkn : k ≤ n) (htn : t ≤ n) (y : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> n → F)
+    (hJ : n * (k - 1) &lt; t ^ 2) (Ps : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset#doc" title="Finset">Finset</a> F[X])
+    (hPs : ∀ p ∈ Ps, p.degree &lt; k ∧ t ≤ #{i | p.eval (α i) = y i}) :
+    Ps.card ≤ n * (n - k + 1)</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses_8">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="#card-le-mul-of-johnson">Johnson bound, list size <span class="arithmatex">\(n d\)</span></a>: applied with <span class="arithmatex">\(d = n - k + 1\)</span> and <span class="arithmatex">\(e = n - t\)</span>, so that <span class="arithmatex">\(n(n - d) = n(k-1) &lt; t^2\)</span>.</li>
+<li><a href="../reed-solomon-codes/index.html#le-hamming-norm-encode">Nonzero Reed-Solomon codewords are heavy</a>: distinct codewords are at distance at least <span class="arithmatex">\(n - k + 1\)</span> (the MDS property).</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="sources_20">Sources</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Sources</div>
+<ul>
+<li>V. Guruswami, A. Rudra, M. Sudan, <em>Essential Coding Theory</em>, draft of August 26, 2025, Theorems 5.2.4 and 7.3.3 (and Theorem 12.2.12 for context).</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#card-le-mul-of-johnson"> </a></p>
+<p><a href="../reed-solomon-codes/index.html#le-hamming-norm-encode"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 7</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../reed-solomon-codes/index.html#encode">Reed-Solomon encoder</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../reed-solomon-codes/index.html#encode-lin">Reed-Solomon encoder as a linear map</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../reed-solomon-codes/index.html#inj-on-encode">The Reed-Solomon encoder is injective on low-degree polynomials</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../reed-solomon-codes/index.html#le-hamming-norm-encode">Nonzero Reed-Solomon codewords are heavy</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../linear-codes/index.html#hamming-dist-eq-hamming-norm-sub">Hamming distance is the weight of the difference</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-filter-eq">Agreements of two words</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#card-le-mul-of-johnson">Johnson bound, list size <span class="arithmatex">\(n d\)</span></a></span></div>
+</div>
+</details>
+</div>
+<h2 id="related-topics">Related topics</h2>
+<ul>
+<li><a href="../bounds-on-code-size/index.html">Bounds on code size</a>: Hamming-ball volumes and the unique-decoding bounds that list decoding goes beyond.</li>
+<li><a href="../reed-solomon-codes/index.html">Reed–Solomon codes</a>: the MDS codes whose unique decoding (Berlekamp–Welch) stops at half the minimum distance, and which the Johnson bound makes list decodable up to a <span class="arithmatex">\(1 - \sqrt{R}\)</span> fraction of errors.</li>
+<li><a href="../../channel-coding/shannon-s-channel-coding-theorem/index.html">Shannon's channel coding theorem</a>: the capacity <span class="arithmatex">\(1 - H_q(\rho)\)</span> of the <span class="arithmatex">\(q\)</span>-ary symmetric channel with crossover probability <span class="arithmatex">\(\rho\)</span> equals the list-decoding capacity for a fraction <span class="arithmatex">\(\rho\)</span> of worst-case errors (Guruswami, Rudra and Sudan, Section 7.4).</li>
+</ul>
+</div>
+<p><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../dependencies/index.json" data-graph-src="../../../../dependencies/scopes/InformationTheory/error-correcting-codes/list-decoding.json" data-page-href="index.html" data-scope-id="InformationTheory/error-correcting-codes/list-decoding">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>
