@@ -1,0 +1,5704 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../nonlinear-controllability-and-stabilisation/index.html">
+      
+      
+        <link rel="next" href="../capability-and-limits-of-feedback/index.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/autoform.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Recursive least squares - ATLAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Plus+Jakarta+Sans:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Plus Jakarta Sans";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../stylesheets/blueprint.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-algorithm" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../index.html" title="ATLAS" class="md-header__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ATLAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Recursive least squares
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../index.html" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../index.html" title="ATLAS" class="md-nav__button md-logo" aria-label="ATLAS" data-md-component="logo">
+      
+  <img src="../../../../assets/autoform.svg" alt="logo">
+
+    </a>
+    ATLAS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/facebookresearch/atlas-lean" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Mathematics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS roadmap
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ATLAS roadmap
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Logic/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logic
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../SetTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Set Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Order/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Order Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../CategoryTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Category Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Algebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GroupTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Group Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RingTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ring Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../FieldTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Field Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../LinearAlgebra/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linear Algebra
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../RepresentationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Representation Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../NumberTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Number Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../AlgebraicGeometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Algebraic Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Geometry/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Geometry
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Topology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_16" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_16" id="__nav_2_1_16_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_16_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_16">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Analysis
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../operator-theory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operator theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../complex-analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Complex analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../harmonic-analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Harmonic analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../banach-spaces/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Banach space theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../special-functions/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Special functions
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../real-functions/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Real functions and calculus
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../sequences-and-series/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sequences, series and summability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../numerical-analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Numerical analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_16_10" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../index.html" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Control theory
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_16_10" id="__nav_2_1_16_10_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_2_1_16_10_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_16_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Control theory
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controllability-of-linear-systems/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Controllability of linear systems
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pole-placement/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pole placement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nonlinear-controllability-and-stabilisation/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nonlinear controllability and stabilisation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recursive least squares
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="index.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Recursive least squares
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The algorithm
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recursive-least-squares-is-batch-least-squares" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recursive least squares is batch least squares
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#convergence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Convergence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-topics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related topics
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../capability-and-limits-of-feedback/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Capability and limits of feedback
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../inequalities/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inequalities
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../asymptotic-analysis/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Asymptotic analysis
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../potential-theory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Potential theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../hilbert-spaces/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hilbert spaces
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../operator-algebras/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Banach and operator algebras
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../function-spaces/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Function spaces and Sobolev inequalities
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../distributions/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Distributions
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../ordinary-differential-equations/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ordinary differential equations
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../rough-paths-and-path-signatures/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rough paths and path signatures
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../partial-differential-equations/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Partial differential equations
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../convex-analysis-and-variations/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Convex analysis and calculus of variations
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../fixed-point-theory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fixed-point theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../approximation-theory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Approximation theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../MeasureTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Measure Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Probability/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Probability
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Dynamics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dynamical Systems
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Combinatorics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combinatorics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GraphTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Graph Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../TheoryOfComputation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Theory of Computation
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../ComputerScience/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Computer Science
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../InformationTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Information Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../QuantumInformation/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quantum Information
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../GameTheory/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Game Theory
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../Biology/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mathematical Biology
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+      
+        
+        
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+  
+    <a href="../../../StatisticalMechanics/index.html" class="md-nav__link">
+      
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Statistical Mechanics
+  
+
+    
+  </span>
+  
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../coverage/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ATLAS coverage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The algorithm
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recursive-least-squares-is-batch-least-squares" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recursive least squares is batch least squares
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#convergence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Convergence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-topics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related topics
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div class="bp-dag-viewer bp-dag-integrated bp-book-frame" hidden data-search-exclude><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style><header class="bp-dag-head" aria-hidden="true"><div class="bp-dag-context"><nav class="bp-dag-breadcrumb"><ol><li><a class="bp-dag-book" href="../../../../index.html" tabindex="-1">Home</a></li><li><a href="../../../index.html" tabindex="-1">ATLAS roadmap</a></li><li><a href="../../index.html" tabindex="-1">Analysis</a></li><li><a href="../index.html" tabindex="-1">Control theory</a></li><li aria-current="page">Recursive least squares</li></ol></nav><button type="button" class="bp-dag-map-only" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button><button type="button" class="bp-dag-button bp-dag-theme" tabindex="-1"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"></circle><path d="M10 2.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"></path></svg></button></div><div class="bp-dag-toolbar"><div class="bp-dag-search-wrap"><input class="bp-dag-search" type="search" placeholder="Search titles and Lean names" readonly tabindex="-1"></div><button type="button" class="bp-dag-button bp-dag-outline-toggle" tabindex="-1">Contents</button><div class="bp-dag-filters"><button type="button" class="bp-dag-filter-summary" tabindex="-1">Filter: all statuses</button></div><div class="bp-dag-browse"><button type="button" class="bp-dag-button" tabindex="-1">Statements</button></div></div></header><div class="bp-dag-body"><aside class="bp-dag-navigation" aria-hidden="true"><div class="bp-dag-navigation-inner"></div></aside><div class="bp-dag-main" aria-hidden="true"><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-map" tabindex="-1">Map</button><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-topics" tabindex="-1" hidden>Contents</button><p class="bp-dag-map-loading">Loading the map…</p><button type="button" class="bp-dag-pane-tab bp-dag-pane-tab-reading" tabindex="-1" hidden>Reading</button></div><aside class="bp-dag-inspector bp-reading-pane" aria-label="Mathematical reading"><div class="bp-dag-inspector-inner"><div class="bp-reading-context" aria-hidden="true" data-boot-target><a class="bp-reading-around" href="index.html" tabindex="-1">← Recursive least squares</a></div><article class="bp-reading-body md-typeset"></article></div></aside></div></div>
+
+<div class="bp-explorer-page">
+<div class="bp-reading-source" data-autoform-node-id="Analysis/control-theory/recursive-least-squares" data-page-title="Recursive least squares">
+<script>(function (s) {var r = s.parentNode, home = r.parentNode;var f = document.querySelector(".bp-book-frame"), b = document.body, ok = false;s.remove();if (!f) return;var m = function (q) { return Boolean(window.matchMedia && matchMedia(q).matches); };var h = window.matchMedia && matchMedia("(max-width: 720px)");try { ok = f.querySelector("link").sheet.cssRules.length > 0; } catch (e) {}if (!ok || h && h.matches) { f.remove(); return; }var p = null, k = window.__md_scope && window.__md_scope.pathname;try { p = JSON.parse(localStorage.getItem("autoform:book-panes:v1" + (k ? ":" + k : ""))); } catch (e) {}if (p && typeof p === "object" && !Array.isArray(p)) {var w = !window.matchMedia || m("(min-width: 1101px)");if (p.topics >= 160 && p.topics <= 480) f.style.setProperty("--dag-navigation-width", p.topics + "px");if (p.reading > 0 && p.reading < 1) {f.style.setProperty("--dag-reading-width", "minmax(300px, " + (100 * p.reading).toFixed(2) + "%)");}["topics", "reading"].forEach(function (n) {var x = Boolean(p[n + "Hidden"]) && (n === "reading" || w), t = f.querySelector(".bp-dag-pane-tab-" + n);f.classList.toggle("bp-dag-" + n + "-hidden", x); if (t) t.hidden = !x;});f.classList.toggle("bp-dag-map-hidden", p.mapHidden === true && !p.readingHidden);}var g = location.hash.slice(1), u = new URLSearchParams(g), q = Array.from(u), y = {};var d = u.get("node"), o = r.getAttribute("data-autoform-node-id");var l = d !== null ? d === o || d.replace(/^(?:scope|boundary):/, "") === o : q.length > 0 && q.every(function (e) {var n = e[0], v = e[1]; if (y[n]) return false; y[n] = 1;if (n === "view") return v === "graph" || v === "list";if (n === "direction") return ["both", "prerequisites", "dependents"].indexOf(v) >= 0;if (n === "isolates") return v === "0" || v === "1";return n === "status" && (v === "-" || v.split(",").every(function (t) { return /^(?:mathlib|fully_proved|proved|defined|conditional|can_prove|stated|can_state|not_ready|planned|inventory_checked|inventory_pending)$/.test(t); }));});var a = history.state && history.state.autoformNavigation, c = a && a.version === 1 && a.url === location.href && a.snapshot;var i = r.hasAttribute("data-reader-overview") && (!g || l), j = i && Boolean(c && c.readingOpen !== false);var z = f.querySelector(".bp-dag-sheet-handle"), e = f.querySelector("h1.bp-dag-sr-only");f.classList.toggle("bp-dag-overview-only", i); f.classList.toggle("bp-dag-sheet-open", j); if (j && z) z.textContent = "\u00d7";if (e) e.hidden = !i || j;f.querySelector(".bp-reading-body").appendChild(r); b.classList.add("bp-book");window.AutoformBookBoot = {release: function () {if (!f.isConnected) return;home.prepend(r); f.remove(); b.classList.remove("bp-book");}};if (h && h.addEventListener) h.addEventListener("change", function (e) { if (e.matches) window.AutoformBookBoot.release(); });addEventListener("error", function (e) {var t = e.target, bundle = /[/]javascripts[/]blueprint-dag[.]js([?#]|$)/;var failed = t && t.tagName === "SCRIPT" ? bundle.test(t.src) : bundle.test(e.filename || "");if (failed) window.AutoformBookBoot.release();}, true);})(document.currentScript);</script>
+<h1 id="recursive-least-squares">Recursive least squares</h1>
+<p>Recursive least squares (RLS) estimates the parameter <span class="arithmatex">\(\theta \in \mathbb{R}^d\)</span> of the linear regression
+<span class="arithmatex">\(y_{k+1} = \varphi_k^\top \theta + w_{k+1}\)</span> from the regressors <span class="arithmatex">\(\varphi_k\)</span> and the observations <span class="arithmatex">\(y_{k+1}\)</span>, updating
+an estimate <span class="arithmatex">\(\theta_k\)</span> and a matrix <span class="arithmatex">\(P_k\)</span> at each step. In system identification and adaptive control the regressor
+<span class="arithmatex">\(\varphi_k\)</span> collects past outputs and inputs, and the inputs are themselves computed from the estimates, so the data are
+generated in closed loop and are neither independent nor stationary; the theory of Chen and Guo (<em>Identification and
+Stochastic Adaptive Control</em>, Birkhäuser 1991) and of Lai and Wei (Ann. Statist. 10 (1982)) is built for this setting.</p>
+<p>The pages below prove that the recursion computes the regularised batch least-squares estimate (the matrix inversion
+lemma), identify it with ridge regression when started at <span class="arithmatex">\(\theta_0 = 0\)</span>, <span class="arithmatex">\(P_0 = \lambda^{-1} I\)</span>, and prove convergence
+in the noise-free case once the smallest eigenvalue of <span class="arithmatex">\(\sum_k \varphi_k \varphi_k^\top\)</span> tends to infinity. The
+stochastic convergence rate <span class="arithmatex">\(|\theta_{t+1} - \theta|^2 = O(\log r_t / \lambda_{\min}(t))\)</span> under martingale-difference
+noise, with no excitation assumption, and the logarithmic regret of the least-squares adaptive predictor are recorded
+as wanted theorems.</p>
+<div class="bp-progress-overview">
+<div class="bp-progress-states"><span class="bp-progress-state" title="Proved, and every prerequisite is fully proved too."><span class="bp-swatch bp-swatch-fully_proved"></span><strong>14</strong> fully proved</span><span class="bp-progress-state" title="Statement is in Lean and nothing it needs is blocked, so the proof can start."><span class="bp-swatch bp-swatch-can_prove"></span><strong>2</strong> ready to prove</span></div>
+</div>
+<h2 id="the-algorithm">The algorithm</h2>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Analysis/control-theory/recursive-least-squares/rls-step">
+<h4 class="bp-thmheading" id="rls-step">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">One step of recursive least squares</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/7c4f9db1925b674d79de9903cb4a5a385314ac1d/MathlibExt/Analysis/Control/RecursiveLeastSquares.lean#L59" aria-label="View MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsStep in Lean source" title="View MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsStep in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#rls-step" aria-label="Link to One step of recursive least squares" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsStep</div>
+<div class="bp-thmcontent">
+<p>From the estimate <span class="arithmatex">\(\theta\)</span>, the matrix <span class="arithmatex">\(P\)</span>, the regressor <span class="arithmatex">\(\varphi\)</span> and the new observation <span class="arithmatex">\(y\)</span>, one step of recursive
+least squares returns
+$<span class="arithmatex">\(\theta' = \theta + \frac{P \varphi \,(y - \varphi^\top \theta)}{1 + \varphi^\top P \varphi}, \qquad
+P' = P - \frac{P \varphi \varphi^\top P}{1 + \varphi^\top P \varphi}.\)</span>$
+This is Algorithm 1, equations (2)–(4), of Xie, Zhang and Guo, <em>Convergence of a distributed least squares</em>, IEEE Trans. Automat. Control, accepted version (2020), DOI 10.1109/TAC.2020.3047989, with a single sensor (their Remark 2.1: with the identity adjacency
+matrix the distributed algorithm is the classical one at each sensor).</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rlsStep (φ : n → ℝ) (y : ℝ) (θP : (n → ℝ) × <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> n n ℝ) :
+    (n → ℝ) × <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> n n ℝ :=
+  (θP.1 + ((y - φ ⬝ᵥ θP.1) / (1 + φ ⬝ᵥ (θP.2 *ᵥ φ))) • (θP.2 *ᵥ φ),
+    θP.2 - (1 + φ ⬝ᵥ (θP.2 *ᵥ φ))⁻¹ • (θP.2 * <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix.vecMulVec#doc" title="Matrix.vecMulVec">vecMulVec</a> φ φ * θP.2))</code></pre>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="background">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="../../../ComputerScience/machine-learning/probabilistic-graphical-models/kalman-filter/index.html#update">Kalman filter update</a>: with the constant state <span class="arithmatex">\(\theta' = \theta\)</span>, observation matrix <span class="arithmatex">\(\varphi^\top\)</span>
+  and unit observation noise variance, the Kalman gain is <span class="arithmatex">\(P \varphi / (1 + \varphi^\top P \varphi)\)</span> and the Kalman
+  update is exactly this step.</li>
+</ul>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 3</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls">Recursive least-squares estimates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-information-mul-vec-rls-fst">RLS solves the regularised normal equations</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-snd-eq-inv">The RLS matrix is the inverse of the information matrix</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Analysis/control-theory/recursive-least-squares/rls">
+<h4 class="bp-thmheading" id="rls">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Recursive least-squares estimates</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/7c4f9db1925b674d79de9903cb4a5a385314ac1d/MathlibExt/Analysis/Control/RecursiveLeastSquares.lean#L68" aria-label="View MathlibExt.Analysis.Control.RecursiveLeastSquares.rls in Lean source" title="View MathlibExt.Analysis.Control.RecursiveLeastSquares.rls in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#rls" aria-label="Link to Recursive least-squares estimates" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Analysis.Control.RecursiveLeastSquares.rls</div>
+<div class="bp-thmcontent">
+<p>For regressors <span class="arithmatex">\(\varphi_k\)</span>, observations <span class="arithmatex">\(y_{k+1}\)</span>, an initial estimate <span class="arithmatex">\(\theta_0\)</span> and an initial matrix <span class="arithmatex">\(P_0\)</span>,
+<code>rls φ y θ₀ P₀ t = (θ_t, P_t)</code> is obtained by applying <a href="#rls-step">one step of recursive least squares</a> with
+<span class="arithmatex">\((\varphi_k, y_{k+1})\)</span> for <span class="arithmatex">\(k = 0, \dots, t - 1\)</span>. The observation <span class="arithmatex">\(y_{k+1}\)</span> follows the regressor <span class="arithmatex">\(\varphi_k\)</span>, as in
+the model <span class="arithmatex">\(y_{k+1} = \varphi_k^\top \theta + w_{k+1}\)</span>, so <span class="arithmatex">\(\theta_t\)</span> uses the data <span class="arithmatex">\((\varphi_k, y_{k+1})_{k &lt; t}\)</span>.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#rls-step"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rls (φ : ℕ → n → ℝ) (y : ℕ → ℝ) (θ₀ : n → ℝ) (P₀ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> n n ℝ) :
+    ℕ → (n → ℝ) × <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> n n ℝ
+  | 0 =&gt; (θ₀, P₀)
+  | t + 1 =&gt; <a class="bp-lean-ref" href="#rls-step" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsStep">rlsStep</a> (φ t) (y (t + 1)) (rls φ y θ₀ P₀ t)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsStep">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rlsStep (φ : n → ℝ) (y : ℝ) (θP : (n → ℝ) × Matrix n n ℝ) :
+    (n → ℝ) × Matrix n n ℝ :=
+  (θP.1 + ((y - φ ⬝ᵥ θP.1) / (1 + φ ⬝ᵥ (θP.2 *ᵥ φ))) • (θP.2 *ᵥ φ),
+    θP.2 - (1 + φ ⬝ᵥ (θP.2 *ᵥ φ))⁻¹ • (θP.2 * vecMulVec φ φ * θP.2))</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Control/RecursiveLeastSquares.lean:59</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 11</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls-step">One step of recursive least squares</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ridge-le-rls-fst">The RLS estimate minimises the ridge objective</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls-error-sq-le">Error bound of noise-free RLS under excitation</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-can_prove" title="1 statement dependency" href="#rls-error-sq-le-log-div-lambda-min">Convergence rate of recursive least squares under martingale-difference noise</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls-fst-eq">Recursive least squares equals batch regularised least squares</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls-fst-eq-ridge-estimate">Recursive least squares started at <code>θ_0 = 0</code>, <code>P_0 = λ⁻¹ I</code> is ridge regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls-information-mul-vec-error-of-noise-f">Error identity of noise-free RLS</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls-information-mul-vec-rls-fst">RLS solves the regularised normal equations</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-can_prove" title="1 statement dependency" href="#rls-regret-sum-le-log">Logarithmic regret of the least-squares adaptive predictor</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls-snd-eq-inv">The RLS matrix is the inverse of the information matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sum-rls-gain-le-log-det">Logarithmic bound on the accumulated RLS gains</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#tendsto-rls-fst-of-noise-free">Convergence of noise-free RLS under growing excitation</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Analysis/control-theory/recursive-least-squares/rls-information">
+<h4 class="bp-thmheading" id="rls-information">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Information matrix of recursive least squares</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/7c4f9db1925b674d79de9903cb4a5a385314ac1d/MathlibExt/Analysis/Control/RecursiveLeastSquares.lean#L75" aria-label="View MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation in Lean source" title="View MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#rls-information" aria-label="Link to Information matrix of recursive least squares" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation</div>
+<div class="bp-thmcontent">
+<p>The matrix <span class="arithmatex">\(P_0^{-1} + \sum_{k&lt;t} \varphi_k \varphi_k^\top\)</span>. For positive definite <span class="arithmatex">\(P_0\)</span> it is the inverse of the
+RLS matrix <span class="arithmatex">\(P_t\)</span> (<a href="#rls-snd-eq-inv">the RLS matrix is the inverse of the information matrix</a>); its smallest
+eigenvalue measures how much the data excite all directions of the parameter.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#rls-snd-eq-inv"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rlsInformation (P₀ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> n n ℝ) (φ : ℕ → n → ℝ) (t : ℕ) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> n n ℝ :=
+  P₀⁻¹ + ∑ k ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">Finset.range</a> t, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix.vecMulVec#doc" title="Matrix.vecMulVec">vecMulVec</a> (φ k) (φ k)</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 9</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#pos-def-rls-information">The information matrix is positive definite</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-error-sq-le">Error bound of noise-free RLS under excitation</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-can_prove" title="1 statement dependency" href="#rls-error-sq-le-log-div-lambda-min">Convergence rate of recursive least squares under martingale-difference noise</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls-fst-eq">Recursive least squares equals batch regularised least squares</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-fst-eq-ridge-estimate">Recursive least squares started at <code>θ_0 = 0</code>, <code>P_0 = λ⁻¹ I</code> is ridge regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls-information-mul-vec-error-of-noise-f">Error identity of noise-free RLS</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls-information-mul-vec-rls-fst">RLS solves the regularised normal equations</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls-snd-eq-inv">The RLS matrix is the inverse of the information matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#sum-rls-gain-le-log-det">Logarithmic bound on the accumulated RLS gains</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Analysis/control-theory/recursive-least-squares/pos-def-rls-information">
+<h4 class="bp-thmheading" id="pos-def-rls-information">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The information matrix is positive definite</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/7c4f9db1925b674d79de9903cb4a5a385314ac1d/MathlibExt/Analysis/Control/RecursiveLeastSquares.lean#L87" aria-label="View MathlibExt.Analysis.Control.RecursiveLeastSquares.posDef_rlsInformation in Lean source" title="View MathlibExt.Analysis.Control.RecursiveLeastSquares.posDef_rlsInformation in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#pos-def-rls-information" aria-label="Link to The information matrix is positive definite" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Analysis.Control.RecursiveLeastSquares.posDef_rlsInformation</div>
+<div class="bp-thmcontent">
+<p>If <span class="arithmatex">\(P_0\)</span> is positive definite, then <span class="arithmatex">\(P_0^{-1} + \sum_{k&lt;t} \varphi_k \varphi_k^\top\)</span> is positive definite for every
+regressor sequence and every <span class="arithmatex">\(t\)</span>: it is a positive definite matrix plus a sum of positive semidefinite rank-one
+matrices.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> posDef_rlsInformation {P₀ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> n n ℝ} (hP₀ : P₀.PosDef) (φ : ℕ → n → ℝ) (t : ℕ) :
+    (<a class="bp-lean-ref" href="#rls-information" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation">rlsInformation</a> P₀ φ t).PosDef</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rlsInformation (P₀ : Matrix n n ℝ) (φ : ℕ → n → ℝ) (t : ℕ) : Matrix n n ℝ :=
+  P₀⁻¹ + ∑ k ∈ Finset.range t, vecMulVec (φ k) (φ k)</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Control/RecursiveLeastSquares.lean:75</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="background_1">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="../../../LinearAlgebra/positive-definite-matrices/index.html">Positive definite matrices and matrix inequalities</a>:
+  inverses and sums of positive definite and semidefinite matrices.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="../../../LinearAlgebra/positive-definite-matrices/index.html"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1 · Used by 4</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls-information">Information matrix of recursive least squares</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-fst-eq">Recursive least squares equals batch regularised least squares</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-information-mul-vec-rls-fst">RLS solves the regularised normal equations</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-snd-eq-inv">The RLS matrix is the inverse of the information matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#sum-rls-gain-le-log-det">Logarithmic bound on the accumulated RLS gains</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="recursive-least-squares-is-batch-least-squares">Recursive least squares is batch least squares</h2>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Analysis/control-theory/recursive-least-squares/rls-snd-eq-inv">
+<h4 class="bp-thmheading" id="rls-snd-eq-inv">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The RLS matrix is the inverse of the information matrix</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/7c4f9db1925b674d79de9903cb4a5a385314ac1d/MathlibExt/Analysis/Control/RecursiveLeastSquares.lean#L167" aria-label="View MathlibExt.Analysis.Control.RecursiveLeastSquares.rls_snd_eq_inv in Lean source" title="View MathlibExt.Analysis.Control.RecursiveLeastSquares.rls_snd_eq_inv in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#rls-snd-eq-inv" aria-label="Link to The RLS matrix is the inverse of the information matrix" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Analysis.Control.RecursiveLeastSquares.rls_snd_eq_inv</div>
+<div class="bp-thmcontent">
+<p>For positive definite <span class="arithmatex">\(P_0\)</span>, every regressor sequence <span class="arithmatex">\(\varphi\)</span> and every <span class="arithmatex">\(t\)</span>,
+$<span class="arithmatex">\(P_t = \Big(P_0^{-1} + \sum_{k&lt;t} \varphi_k \varphi_k^\top\Big)^{-1}.\)</span>$
+The update <span class="arithmatex">\(P_{k+1} = P_k - P_k \varphi_k \varphi_k^\top P_k / (1 + \varphi_k^\top P_k \varphi_k)\)</span> is the
+Sherman–Morrison form of <span class="arithmatex">\(P_{k+1}^{-1} = P_k^{-1} + \varphi_k \varphi_k^\top\)</span> (the matrix inversion lemma), the
+information form in which Liu (arXiv:2609.11831v3, equation (2.2)) writes the recursion. The proof checks
+<span class="arithmatex">\((R + \varphi \varphi^\top) P' = I\)</span> directly from <span class="arithmatex">\(R P = I\)</span>, using <span class="arithmatex">\(\varphi^\top P \varphi \ge 0\)</span>; Mathlib's general
+Woodbury identity is <code>Matrix.add_mul_mul_inv_eq_sub</code>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> rls_snd_eq_inv {P₀ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> n n ℝ} (hP₀ : P₀.PosDef) (φ : ℕ → n → ℝ) (y : ℕ → ℝ)
+    (θ₀ : n → ℝ) (t : ℕ) : (<a class="bp-lean-ref" href="#rls" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">rls</a> φ y θ₀ P₀ t).2 = (<a class="bp-lean-ref" href="#rls-information" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation">rlsInformation</a> P₀ φ t)⁻¹</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rls (φ : ℕ → n → ℝ) (y : ℕ → ℝ) (θ₀ : n → ℝ) (P₀ : Matrix n n ℝ) :
+    ℕ → (n → ℝ) × Matrix n n ℝ
+  | 0 =&gt; (θ₀, P₀)
+  | t + 1 =&gt; rlsStep (φ t) (y (t + 1)) (rls φ y θ₀ P₀ t)</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Control/RecursiveLeastSquares.lean:68</p>
+</div>
+<div data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rlsInformation (P₀ : Matrix n n ℝ) (φ : ℕ → n → ℝ) (t : ℕ) : Matrix n n ℝ :=
+  P₀⁻¹ + ∑ k ∈ Finset.range t, vecMulVec (φ k) (φ k)</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Control/RecursiveLeastSquares.lean:75</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="background_2">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="../../../Biology/statistical-genetics/proximal-contamination-in-mixed-model-associatio/index.html#inv-add-smul-vec-mul-vec-mul-vec">Sherman–Morrison applied to the candidate marker</a>:
+  the same rank-one inverse update, applied to a vector, in mixed-model association.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="../../../Biology/statistical-genetics/proximal-contamination-in-mixed-model-associatio/index.html#inv-add-smul-vec-mul-vec-mul-vec"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls">Recursive least-squares estimates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls-information">Information matrix of recursive least squares</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#pos-def-rls-information">The information matrix is positive definite</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-step">One step of recursive least squares</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#sum-rls-gain-le-log-det">Logarithmic bound on the accumulated RLS gains</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Analysis/control-theory/recursive-least-squares/rls-information-mul-vec-rls-fst">
+<h4 class="bp-thmheading" id="rls-information-mul-vec-rls-fst">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">RLS solves the regularised normal equations</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/7c4f9db1925b674d79de9903cb4a5a385314ac1d/MathlibExt/Analysis/Control/RecursiveLeastSquares.lean#L175" aria-label="View MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation_mulVec_rls_fst in Lean source" title="View MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation_mulVec_rls_fst in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#rls-information-mul-vec-rls-fst" aria-label="Link to RLS solves the regularised normal equations" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation_mulVec_rls_fst</div>
+<div class="bp-thmcontent">
+<p>For positive definite <span class="arithmatex">\(P_0\)</span>, the RLS estimate satisfies
+$<span class="arithmatex">\(\Big(P_0^{-1} + \sum_{k&lt;t} \varphi_k \varphi_k^\top\Big) \theta_t = P_0^{-1} \theta_0 + \sum_{k&lt;t} y_{k+1} \varphi_k,\)</span>$
+the normal equations of the batch problem of minimising
+<span class="arithmatex">\((\theta - \theta_0)^\top P_0^{-1} (\theta - \theta_0) + \sum_{k&lt;t} (y_{k+1} - \varphi_k^\top \theta)^2\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> rlsInformation_mulVec_rls_fst {P₀ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> n n ℝ} (hP₀ : P₀.PosDef) (φ : ℕ → n → ℝ)
+    (y : ℕ → ℝ) (θ₀ : n → ℝ) (t : ℕ) :
+    <a class="bp-lean-ref" href="#rls-information" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation">rlsInformation</a> P₀ φ t *ᵥ (<a class="bp-lean-ref" href="#rls" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">rls</a> φ y θ₀ P₀ t).1 =
+      P₀⁻¹ *ᵥ θ₀ + ∑ k ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">Finset.range</a> t, y (k + 1) • φ k</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rlsInformation (P₀ : Matrix n n ℝ) (φ : ℕ → n → ℝ) (t : ℕ) : Matrix n n ℝ :=
+  P₀⁻¹ + ∑ k ∈ Finset.range t, vecMulVec (φ k) (φ k)</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Control/RecursiveLeastSquares.lean:75</p>
+</div>
+<div data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rls (φ : ℕ → n → ℝ) (y : ℕ → ℝ) (θ₀ : n → ℝ) (P₀ : Matrix n n ℝ) :
+    ℕ → (n → ℝ) × Matrix n n ℝ
+  | 0 =&gt; (θ₀, P₀)
+  | t + 1 =&gt; rlsStep (φ t) (y (t + 1)) (rls φ y θ₀ P₀ t)</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Control/RecursiveLeastSquares.lean:68</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="background_3">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="../../../ComputerScience/machine-learning/supervised-learning/least-squares-ridge-and-lasso-regression/index.html#rss-le-iff-normal">Least squares and the normal equations</a>: minimisers of a residual sum of squares are
+  exactly the solutions of its normal equations; the regularised problem here adds the positive definite quadratic
+  penalty <span class="arithmatex">\((\theta - \theta_0)^\top P_0^{-1} (\theta - \theta_0)\)</span>.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="../../../ComputerScience/machine-learning/supervised-learning/least-squares-ridge-and-lasso-regression/index.html#rss-le-iff-normal"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls">Recursive least-squares estimates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls-information">Information matrix of recursive least squares</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#pos-def-rls-information">The information matrix is positive definite</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-step">One step of recursive least squares</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-fst-eq">Recursive least squares equals batch regularised least squares</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-information-mul-vec-error-of-noise-f">Error identity of noise-free RLS</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Analysis/control-theory/recursive-least-squares/rls-fst-eq">
+<h4 class="bp-thmheading" id="rls-fst-eq">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Recursive least squares equals batch regularised least squares</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/7c4f9db1925b674d79de9903cb4a5a385314ac1d/MathlibExt/Analysis/Control/RecursiveLeastSquares.lean#L184" aria-label="View MathlibExt.Analysis.Control.RecursiveLeastSquares.rls_fst_eq in Lean source" title="View MathlibExt.Analysis.Control.RecursiveLeastSquares.rls_fst_eq in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#rls-fst-eq" aria-label="Link to Recursive least squares equals batch regularised least squares" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Analysis.Control.RecursiveLeastSquares.rls_fst_eq</div>
+<div class="bp-thmcontent">
+<p>For positive definite <span class="arithmatex">\(P_0\)</span>,
+$<span class="arithmatex">\(\theta_t = \Big(P_0^{-1} + \sum_{k&lt;t} \varphi_k \varphi_k^\top\Big)^{-1} \Big(P_0^{-1} \theta_0 + \sum_{k&lt;t} y_{k+1} \varphi_k\Big),\)</span>$
+the unique solution of the normal equations of
+<a href="#rls-information-mul-vec-rls-fst">RLS solves the regularised normal equations</a>: the recursion computes, with one
+rank-one update per observation, the batch regularised least-squares estimate.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#rls-information-mul-vec-rls-fst"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> rls_fst_eq {P₀ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> n n ℝ} (hP₀ : P₀.PosDef) (φ : ℕ → n → ℝ) (y : ℕ → ℝ)
+    (θ₀ : n → ℝ) (t : ℕ) :
+    (<a class="bp-lean-ref" href="#rls" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">rls</a> φ y θ₀ P₀ t).1 =
+      (<a class="bp-lean-ref" href="#rls-information" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation">rlsInformation</a> P₀ φ t)⁻¹ *ᵥ (P₀⁻¹ *ᵥ θ₀ + ∑ k ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">Finset.range</a> t, y (k + 1) • φ k)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rls (φ : ℕ → n → ℝ) (y : ℕ → ℝ) (θ₀ : n → ℝ) (P₀ : Matrix n n ℝ) :
+    ℕ → (n → ℝ) × Matrix n n ℝ
+  | 0 =&gt; (θ₀, P₀)
+  | t + 1 =&gt; rlsStep (φ t) (y (t + 1)) (rls φ y θ₀ P₀ t)</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Control/RecursiveLeastSquares.lean:68</p>
+</div>
+<div data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rlsInformation (P₀ : Matrix n n ℝ) (φ : ℕ → n → ℝ) (t : ℕ) : Matrix n n ℝ :=
+  P₀⁻¹ + ∑ k ∈ Finset.range t, vecMulVec (φ k) (φ k)</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Control/RecursiveLeastSquares.lean:75</p>
+</div>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 4 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls">Recursive least-squares estimates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls-information">Information matrix of recursive least squares</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#pos-def-rls-information">The information matrix is positive definite</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-information-mul-vec-rls-fst">RLS solves the regularised normal equations</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-fst-eq-ridge-estimate">Recursive least squares started at <code>θ_0 = 0</code>, <code>P_0 = λ⁻¹ I</code> is ridge regression</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-definition bp-fully_proved" data-autoform-node-id="Analysis/control-theory/recursive-least-squares/design-matrix">
+<h4 class="bp-thmheading" id="design-matrix">
+<span class="bp-thmcaption" data-search-exclude>Definition</span><span class="bp-thmtitle">Design matrix of the first <code>t</code> regressors</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/7c4f9db1925b674d79de9903cb4a5a385314ac1d/CSLibExt/MachineLearning/Regression/RecursiveLeastSquares.lean#L36" aria-label="View Cslib.MachineLearning.RecursiveLeastSquares.designMatrix in Lean source" title="View Cslib.MachineLearning.RecursiveLeastSquares.designMatrix in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#design-matrix" aria-label="Link to Design matrix of the first `t` regressors" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.MachineLearning.RecursiveLeastSquares.designMatrix</div>
+<div class="bp-thmcontent">
+<p>The <span class="arithmatex">\(t \times d\)</span> matrix whose rows are <span class="arithmatex">\(\varphi_0^\top, \dots, \varphi_{t-1}^\top\)</span>; with the responses
+<span class="arithmatex">\(Y = (y_1, \dots, y_t)\)</span> it puts the first <span class="arithmatex">\(t\)</span> observations of the regression in the batch form of linear regression.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> designMatrix (φ : ℕ → n → ℝ) (t : ℕ) : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> t) n ℝ :=
+  <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix.of#doc" title="Matrix.of">Matrix.of</a> <span class="bp-lean-keyword">fun</span> k i =&gt; φ k i</code></pre>
+</div>
+<details class="bp-dependencies">
+<summary>Used by 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#ridge-le-rls-fst">The RLS estimate minimises the ridge objective</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls-fst-eq-ridge-estimate">Recursive least squares started at <code>θ_0 = 0</code>, <code>P_0 = λ⁻¹ I</code> is ridge regression</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Analysis/control-theory/recursive-least-squares/rls-fst-eq-ridge-estimate">
+<h4 class="bp-thmheading" id="rls-fst-eq-ridge-estimate">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Recursive least squares started at <code>θ_0 = 0</code>, <code>P_0 = λ⁻¹ I</code> is ridge regression</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/7c4f9db1925b674d79de9903cb4a5a385314ac1d/CSLibExt/MachineLearning/Regression/RecursiveLeastSquares.lean#L62" aria-label="View Cslib.MachineLearning.RecursiveLeastSquares.rls_fst_eq_ridgeEstimate in Lean source" title="View Cslib.MachineLearning.RecursiveLeastSquares.rls_fst_eq_ridgeEstimate in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#rls-fst-eq-ridge-estimate" aria-label="Link to Recursive least squares started at `θ_0 = 0`, `P_0 = λ⁻¹ I` is ridge regression" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.MachineLearning.RecursiveLeastSquares.rls_fst_eq_ridgeEstimate</div>
+<div class="bp-thmcontent">
+<p>For <span class="arithmatex">\(\lambda &gt; 0\)</span> and every <span class="arithmatex">\(t\)</span>, the RLS estimate started at <span class="arithmatex">\(\theta_0 = 0\)</span> and <span class="arithmatex">\(P_0 = \lambda^{-1} I\)</span> equals the
+ridge estimate <span class="arithmatex">\((X^\top X + \lambda I)^{-1} X^\top Y\)</span>, where <span class="arithmatex">\(X\)</span> is the
+<a href="#design-matrix">design matrix of the first <code>t</code> regressors</a> and <span class="arithmatex">\(Y_k = y_{k+1}\)</span>.</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#design-matrix"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> rls_fst_eq_ridgeEstimate (φ : ℕ → n → ℝ) (y : ℕ → ℝ) {lam : ℝ} (hlam : 0 &lt; lam)
+    (t : ℕ) :
+    (<a class="bp-lean-ref" href="#rls" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">rls</a> φ y 0 (lam⁻¹ • (1 : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> n n ℝ)) t).1 =
+      <a class="bp-lean-ref" href="../../../ComputerScience/machine-learning/supervised-learning/least-squares-ridge-and-lasso-regression/index.html#ridge-estimate" data-lean-name="Cslib.MachineLearning.LeastSquares.ridgeEstimate">ridgeEstimate</a> (<a class="bp-lean-ref" href="#design-matrix" data-lean-name="Cslib.MachineLearning.RecursiveLeastSquares.designMatrix">designMatrix</a> φ t) (<span class="bp-lean-keyword">fun</span> k : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> t =&gt; y (k + 1)) lam</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rls (φ : ℕ → n → ℝ) (y : ℕ → ℝ) (θ₀ : n → ℝ) (P₀ : Matrix n n ℝ) :
+    ℕ → (n → ℝ) × Matrix n n ℝ
+  | 0 =&gt; (θ₀, P₀)
+  | t + 1 =&gt; rlsStep (φ t) (y (t + 1)) (rls φ y θ₀ P₀ t)</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Control/RecursiveLeastSquares.lean:68</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.LeastSquares.ridgeEstimate">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> ridgeEstimate (X : Matrix (Fin m) ι ℝ) (y : Fin m → ℝ) (lam : ℝ) : ι → ℝ :=
+  (Xᵀ * X + lam • 1)⁻¹ *ᵥ (Xᵀ *ᵥ y)</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/Regression/LeastSquares.lean:287</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.RecursiveLeastSquares.designMatrix">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> designMatrix (φ : ℕ → n → ℝ) (t : ℕ) : Matrix (Fin t) n ℝ :=
+  Matrix.of <span class="bp-lean-keyword">fun</span> k i =&gt; φ k i</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/Regression/RecursiveLeastSquares.lean:36</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="#rls-fst-eq">Recursive least squares equals batch regularised least squares</a>: with <span class="arithmatex">\(\theta_0 = 0\)</span> and
+  <span class="arithmatex">\(P_0^{-1} = \lambda I\)</span> the batch formula is the ridge formula, since <span class="arithmatex">\(X^\top X = \sum_{k&lt;t} \varphi_k \varphi_k^\top\)</span>
+  and <span class="arithmatex">\(X^\top Y = \sum_{k&lt;t} y_{k+1} \varphi_k\)</span>.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="background_4">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="../../../ComputerScience/machine-learning/supervised-learning/least-squares-ridge-and-lasso-regression/index.html#ridge-estimate">Ridge estimate</a>: the closed form identified here.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#rls-fst-eq"> </a></p>
+<p><a href="../../../ComputerScience/machine-learning/supervised-learning/least-squares-ridge-and-lasso-regression/index.html#ridge-estimate"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../ComputerScience/machine-learning/supervised-learning/least-squares-ridge-and-lasso-regression/index.html#ridge-estimate">Ridge estimate</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#design-matrix">Design matrix of the first <code>t</code> regressors</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls">Recursive least-squares estimates</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-information">Information matrix of recursive least squares</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-fst-eq">Recursive least squares equals batch regularised least squares</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#ridge-le-rls-fst">The RLS estimate minimises the ridge objective</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Analysis/control-theory/recursive-least-squares/ridge-le-rls-fst">
+<h4 class="bp-thmheading" id="ridge-le-rls-fst">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">The RLS estimate minimises the ridge objective</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/7c4f9db1925b674d79de9903cb4a5a385314ac1d/CSLibExt/MachineLearning/Regression/RecursiveLeastSquares.lean#L75" aria-label="View Cslib.MachineLearning.RecursiveLeastSquares.ridge_le_rls_fst in Lean source" title="View Cslib.MachineLearning.RecursiveLeastSquares.ridge_le_rls_fst in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#ridge-le-rls-fst" aria-label="Link to The RLS estimate minimises the ridge objective" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">Cslib.MachineLearning.RecursiveLeastSquares.ridge_le_rls_fst</div>
+<div class="bp-thmcontent">
+<p>For <span class="arithmatex">\(\lambda &gt; 0\)</span>, the RLS estimate started at <span class="arithmatex">\(\theta_0 = 0\)</span> and <span class="arithmatex">\(P_0 = \lambda^{-1} I\)</span> minimises
+<span class="arithmatex">\(\sum_{k&lt;t} (y_{k+1} - \varphi_k^\top \theta)^2 + \lambda |\theta|^2\)</span> over all <span class="arithmatex">\(\theta\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> ridge_le_rls_fst (φ : ℕ → n → ℝ) (y : ℕ → ℝ) {lam : ℝ} (hlam : 0 &lt; lam) (t : ℕ)
+    (θ : n → ℝ) :
+    <a class="bp-lean-ref" href="../../../ComputerScience/machine-learning/supervised-learning/least-squares-ridge-and-lasso-regression/index.html#ridge" data-lean-name="Cslib.MachineLearning.LeastSquares.ridge">ridge</a> (<a class="bp-lean-ref" href="#design-matrix" data-lean-name="Cslib.MachineLearning.RecursiveLeastSquares.designMatrix">designMatrix</a> φ t) (<span class="bp-lean-keyword">fun</span> k : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> t =&gt; y (k + 1)) lam
+        (<a class="bp-lean-ref" href="#rls" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">rls</a> φ y 0 (lam⁻¹ • (1 : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> n n ℝ)) t).1 ≤
+      <a class="bp-lean-ref" href="../../../ComputerScience/machine-learning/supervised-learning/least-squares-ridge-and-lasso-regression/index.html#ridge" data-lean-name="Cslib.MachineLearning.LeastSquares.ridge">ridge</a> (<a class="bp-lean-ref" href="#design-matrix" data-lean-name="Cslib.MachineLearning.RecursiveLeastSquares.designMatrix">designMatrix</a> φ t) (<span class="bp-lean-keyword">fun</span> k : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> t =&gt; y (k + 1)) lam θ</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="Cslib.MachineLearning.LeastSquares.ridge">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> ridge (X : Matrix (Fin m) ι ℝ) (y : Fin m → ℝ) (lam : ℝ) (θ : ι → ℝ) : ℝ :=
+  rss X y θ + lam * (θ ⬝ᵥ θ)</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/Regression/LeastSquares.lean:246</p>
+</div>
+<div data-lean-name="Cslib.MachineLearning.RecursiveLeastSquares.designMatrix">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">def</span> designMatrix (φ : ℕ → n → ℝ) (t : ℕ) : Matrix (Fin t) n ℝ :=
+  Matrix.of <span class="bp-lean-keyword">fun</span> k i =&gt; φ k i</code></pre>
+<p class="bp-lean-where">CSLibExt/MachineLearning/Regression/RecursiveLeastSquares.lean:36</p>
+</div>
+<div data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rls (φ : ℕ → n → ℝ) (y : ℕ → ℝ) (θ₀ : n → ℝ) (P₀ : Matrix n n ℝ) :
+    ℕ → (n → ℝ) × Matrix n n ℝ
+  | 0 =&gt; (θ₀, P₀)
+  | t + 1 =&gt; rlsStep (φ t) (y (t + 1)) (rls φ y θ₀ P₀ t)</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Control/RecursiveLeastSquares.lean:68</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses_1">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="#rls-fst-eq-ridge-estimate">Recursive least squares started at <code>θ_0 = 0</code>, <code>P_0 = λ⁻¹ I</code> is ridge regression</a>:
+  the estimate is the ridge estimate.</li>
+<li><a href="../../../ComputerScience/machine-learning/supervised-learning/least-squares-ridge-and-lasso-regression/index.html#ridge-le-ridge-estimate">Closed form of ridge regression</a>: the ridge estimate minimises the ridge objective.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#rls-fst-eq-ridge-estimate"> </a></p>
+<p><a href="../../../ComputerScience/machine-learning/supervised-learning/least-squares-ridge-and-lasso-regression/index.html#ridge-le-ridge-estimate"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 6</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="../../../ComputerScience/machine-learning/supervised-learning/least-squares-ridge-and-lasso-regression/index.html#ridge">Ridge objective</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#design-matrix">Design matrix of the first <code>t</code> regressors</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls">Recursive least-squares estimates</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../ComputerScience/machine-learning/supervised-learning/least-squares-ridge-and-lasso-regression/index.html#ridge-estimate">Ridge estimate</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../ComputerScience/machine-learning/supervised-learning/least-squares-ridge-and-lasso-regression/index.html#ridge-le-ridge-estimate">Closed form of ridge regression</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-fst-eq-ridge-estimate">Recursive least squares started at <code>θ_0 = 0</code>, <code>P_0 = λ⁻¹ I</code> is ridge regression</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="convergence">Convergence</h2>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Analysis/control-theory/recursive-least-squares/sum-rls-gain-le-log-det">
+<h4 class="bp-thmheading" id="sum-rls-gain-le-log-det">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Logarithmic bound on the accumulated RLS gains</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/7c4f9db1925b674d79de9903cb4a5a385314ac1d/MathlibExt/Analysis/Control/RecursiveLeastSquares.lean#L277" aria-label="View MathlibExt.Analysis.Control.RecursiveLeastSquares.sum_rls_gain_le_log_det in Lean source" title="View MathlibExt.Analysis.Control.RecursiveLeastSquares.sum_rls_gain_le_log_det in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#sum-rls-gain-le-log-det" aria-label="Link to Logarithmic bound on the accumulated RLS gains" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Analysis.Control.RecursiveLeastSquares.sum_rls_gain_le_log_det</div>
+<div class="bp-thmcontent">
+<p>For positive definite <span class="arithmatex">\(P_0\)</span>, with <span class="arithmatex">\(P_k\)</span> the RLS matrix,
+$<span class="arithmatex">\(\sum_{k&lt;t} \frac{\varphi_k^\top P_k \varphi_k}{1 + \varphi_k^\top P_k \varphi_k} \le
+\log \det\Big(P_0^{-1} + \sum_{k&lt;t} \varphi_k \varphi_k^\top\Big) - \log \det P_0^{-1}.\)</span>$
+No assumption is made on the regressors. Since <span class="arithmatex">\(\log \det (P_0^{-1} + \sum_{k&lt;t} \varphi_k \varphi_k^\top) \le
+d \log \lambda_{\max}\)</span>, the accumulated gains grow at most logarithmically in the size of the data; this is the
+deterministic inequality behind the <span class="arithmatex">\(O(\log r_t)\)</span> terms of the stochastic theory.</p>
+<p>Source: the single-sensor case of inequality (33) of Xie, Zhang and Guo, <em>Convergence of a distributed least squares</em>,
+IEEE Trans. Automat. Control, accepted version (2020), DOI 10.1109/TAC.2020.3047989, whose proof follows Lai and Wei
+(Ann. Statist. 10 (1982)).</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> sum_rls_gain_le_log_det {P₀ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> n n ℝ} (hP₀ : P₀.PosDef) (φ : ℕ → n → ℝ)
+    (y : ℕ → ℝ) (θ₀ : n → ℝ) (t : ℕ) :
+    ∑ k ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">Finset.range</a> t, φ k ⬝ᵥ ((<a class="bp-lean-ref" href="#rls" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">rls</a> φ y θ₀ P₀ k).2 *ᵥ φ k) /
+        (1 + φ k ⬝ᵥ ((<a class="bp-lean-ref" href="#rls" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">rls</a> φ y θ₀ P₀ k).2 *ᵥ φ k)) ≤
+      <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.log#doc" title="Real.log">Real.log</a> (<a class="bp-lean-ref" href="#rls-information" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation">rlsInformation</a> P₀ φ t).det - <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.log#doc" title="Real.log">Real.log</a> P₀⁻¹.det</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rls (φ : ℕ → n → ℝ) (y : ℕ → ℝ) (θ₀ : n → ℝ) (P₀ : Matrix n n ℝ) :
+    ℕ → (n → ℝ) × Matrix n n ℝ
+  | 0 =&gt; (θ₀, P₀)
+  | t + 1 =&gt; rlsStep (φ t) (y (t + 1)) (rls φ y θ₀ P₀ t)</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Control/RecursiveLeastSquares.lean:68</p>
+</div>
+<div data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rlsInformation (P₀ : Matrix n n ℝ) (φ : ℕ → n → ℝ) (t : ℕ) : Matrix n n ℝ :=
+  P₀⁻¹ + ∑ k ∈ Finset.range t, vecMulVec (φ k) (φ k)</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Control/RecursiveLeastSquares.lean:75</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses_2">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="../../../LinearAlgebra/determinants-and-matrix-identities/matrix-determinant-lemma/index.html#det-add-vec-mul-vec-of-is-unit-det">Multiplicative matrix determinant lemma for invertible matrices</a>:
+  <span class="arithmatex">\(\det P_{k+1}^{-1} = \det P_k^{-1} \, (1 + \varphi_k^\top P_k \varphi_k)\)</span>, so each term is
+  <span class="arithmatex">\(q / (1 + q) \le \log(1 + q)\)</span> with <span class="arithmatex">\(q = \varphi_k^\top P_k \varphi_k \ge 0\)</span>, and the sum telescopes.</li>
+<li><a href="#rls-snd-eq-inv">The RLS matrix is the inverse of the information matrix</a>: <span class="arithmatex">\(P_k^{-1}\)</span> is the information matrix.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="../../../LinearAlgebra/determinants-and-matrix-identities/matrix-determinant-lemma/index.html#det-add-vec-mul-vec-of-is-unit-det"> </a></p>
+<p><a href="#rls-snd-eq-inv"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 5</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls">Recursive least-squares estimates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls-information">Information matrix of recursive least squares</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#pos-def-rls-information">The information matrix is positive definite</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-snd-eq-inv">The RLS matrix is the inverse of the information matrix</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="../../../LinearAlgebra/determinants-and-matrix-identities/matrix-determinant-lemma/index.html#det-add-vec-mul-vec-of-is-unit-det">Multiplicative matrix determinant lemma for invertible matrices</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Analysis/control-theory/recursive-least-squares/rls-information-mul-vec-error-of-noise-f">
+<h4 class="bp-thmheading" id="rls-information-mul-vec-error-of-noise-f">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Error identity of noise-free RLS</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/7c4f9db1925b674d79de9903cb4a5a385314ac1d/MathlibExt/Analysis/Control/RecursiveLeastSquares.lean#L197" aria-label="View MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation_mulVec_error_of_noiseFree in Lean source" title="View MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation_mulVec_error_of_noiseFree in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#rls-information-mul-vec-error-of-noise-f" aria-label="Link to Error identity of noise-free RLS" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation_mulVec_error_of_noiseFree</div>
+<div class="bp-thmcontent">
+<p>If <span class="arithmatex">\(y_{k+1} = \varphi_k^\top \theta\)</span> for every <span class="arithmatex">\(k &lt; t\)</span> and <span class="arithmatex">\(P_0\)</span> is positive definite, then
+$<span class="arithmatex">\(\Big(P_0^{-1} + \sum_{k&lt;t} \varphi_k \varphi_k^\top\Big)(\theta_t - \theta) = P_0^{-1} (\theta_0 - \theta).\)</span>$
+This is the noise-free case of the error recursion (9) of Xie, Zhang and Guo, <em>Convergence of a distributed least squares</em>, IEEE Trans. Automat. Control, accepted version (2020), DOI 10.1109/TAC.2020.3047989, with a single sensor: iterating
+<span class="arithmatex">\(\tilde\theta_{k+1} = P_{k+1} P_k^{-1} \tilde\theta_k\)</span> gives <span class="arithmatex">\(P_t^{-1} \tilde\theta_t = P_0^{-1} \tilde\theta_0\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> rlsInformation_mulVec_error_of_noiseFree {P₀ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> n n ℝ} (hP₀ : P₀.PosDef)
+    (φ : ℕ → n → ℝ) (y : ℕ → ℝ) (θ₀ θ : n → ℝ) (t : ℕ)
+    (hy : ∀ k &lt; t, y (k + 1) = φ k ⬝ᵥ θ) :
+    <a class="bp-lean-ref" href="#rls-information" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation">rlsInformation</a> P₀ φ t *ᵥ ((<a class="bp-lean-ref" href="#rls" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">rls</a> φ y θ₀ P₀ t).1 - θ) = P₀⁻¹ *ᵥ (θ₀ - θ)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rlsInformation (P₀ : Matrix n n ℝ) (φ : ℕ → n → ℝ) (t : ℕ) : Matrix n n ℝ :=
+  P₀⁻¹ + ∑ k ∈ Finset.range t, vecMulVec (φ k) (φ k)</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Control/RecursiveLeastSquares.lean:75</p>
+</div>
+<div data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rls (φ : ℕ → n → ℝ) (y : ℕ → ℝ) (θ₀ : n → ℝ) (P₀ : Matrix n n ℝ) :
+    ℕ → (n → ℝ) × Matrix n n ℝ
+  | 0 =&gt; (θ₀, P₀)
+  | t + 1 =&gt; rlsStep (φ t) (y (t + 1)) (rls φ y θ₀ P₀ t)</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Control/RecursiveLeastSquares.lean:68</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses_3">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="#rls-information-mul-vec-rls-fst">RLS solves the regularised normal equations</a>: subtract the normal equations
+  satisfied by <span class="arithmatex">\(\theta\)</span> itself when the data are noise free.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#rls-information-mul-vec-rls-fst"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls">Recursive least-squares estimates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls-information">Information matrix of recursive least squares</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-information-mul-vec-rls-fst">RLS solves the regularised normal equations</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-error-sq-le">Error bound of noise-free RLS under excitation</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Analysis/control-theory/recursive-least-squares/rls-error-sq-le">
+<h4 class="bp-thmheading" id="rls-error-sq-le">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Error bound of noise-free RLS under excitation</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/7c4f9db1925b674d79de9903cb4a5a385314ac1d/MathlibExt/Analysis/Control/RecursiveLeastSquares.lean#L214" aria-label="View MathlibExt.Analysis.Control.RecursiveLeastSquares.rls_error_sq_le in Lean source" title="View MathlibExt.Analysis.Control.RecursiveLeastSquares.rls_error_sq_le in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#rls-error-sq-le" aria-label="Link to Error bound of noise-free RLS under excitation" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Analysis.Control.RecursiveLeastSquares.rls_error_sq_le</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(P_0\)</span> be positive definite and <span class="arithmatex">\(y_{k+1} = \varphi_k^\top \theta\)</span> for <span class="arithmatex">\(k &lt; t\)</span>. If <span class="arithmatex">\(M &gt; 0\)</span> is a lower bound for the
+smallest eigenvalue of <span class="arithmatex">\(\sum_{k&lt;t} \varphi_k \varphi_k^\top\)</span>, in the form
+<span class="arithmatex">\(M |x|^2 \le x^\top \big(\sum_{k&lt;t} \varphi_k \varphi_k^\top\big) x\)</span> for all <span class="arithmatex">\(x\)</span>, then
+$<span class="arithmatex">\(|\theta_t - \theta|^2 \le \frac{|P_0^{-1} (\theta_0 - \theta)|^2}{M^2}\)</span>$
+(Euclidean norms, written in Lean as dot products).</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> rls_error_sq_le {P₀ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> n n ℝ} (hP₀ : P₀.PosDef) (φ : ℕ → n → ℝ) (y : ℕ → ℝ)
+    (θ₀ θ : n → ℝ) (t : ℕ) (hy : ∀ k &lt; t, y (k + 1) = φ k ⬝ᵥ θ) {M : ℝ} (hM : 0 &lt; M)
+    (hexc : ∀ x : n → ℝ,
+      M * (x ⬝ᵥ x) ≤ x ⬝ᵥ ((∑ k ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">Finset.range</a> t, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix.vecMulVec#doc" title="Matrix.vecMulVec">vecMulVec</a> (φ k) (φ k)) *ᵥ x)) :
+    ((<a class="bp-lean-ref" href="#rls" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">rls</a> φ y θ₀ P₀ t).1 - θ) ⬝ᵥ ((<a class="bp-lean-ref" href="#rls" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">rls</a> φ y θ₀ P₀ t).1 - θ) ≤
+      (P₀⁻¹ *ᵥ (θ₀ - θ)) ⬝ᵥ (P₀⁻¹ *ᵥ (θ₀ - θ)) / M ^ 2</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rls (φ : ℕ → n → ℝ) (y : ℕ → ℝ) (θ₀ : n → ℝ) (P₀ : Matrix n n ℝ) :
+    ℕ → (n → ℝ) × Matrix n n ℝ
+  | 0 =&gt; (θ₀, P₀)
+  | t + 1 =&gt; rlsStep (φ t) (y (t + 1)) (rls φ y θ₀ P₀ t)</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Control/RecursiveLeastSquares.lean:68</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses_4">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="#rls-information-mul-vec-error-of-noise-f">Error identity of noise-free RLS</a>: with <span class="arithmatex">\(e = \theta_t - \theta\)</span> and
+  <span class="arithmatex">\(c = P_0^{-1}(\theta_0 - \theta)\)</span>, <span class="arithmatex">\(M |e|^2 \le e^\top (P_0^{-1} + \sum_k \varphi_k \varphi_k^\top) e = e^\top c
+  \le |e| \, |c|\)</span>.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#rls-information-mul-vec-error-of-noise-f"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 3 · Used by 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls">Recursive least-squares estimates</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-information">Information matrix of recursive least squares</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-information-mul-vec-error-of-noise-f">Error identity of noise-free RLS</a></span></div>
+<div class="bp-row"><span class="bp-key">Used by</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#tendsto-rls-fst-of-noise-free">Convergence of noise-free RLS under growing excitation</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-fully_proved" data-autoform-node-id="Analysis/control-theory/recursive-least-squares/tendsto-rls-fst-of-noise-free">
+<h4 class="bp-thmheading" id="tendsto-rls-fst-of-noise-free">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Convergence of noise-free RLS under growing excitation</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/7c4f9db1925b674d79de9903cb4a5a385314ac1d/MathlibExt/Analysis/Control/RecursiveLeastSquares.lean#L244" aria-label="View MathlibExt.Analysis.Control.RecursiveLeastSquares.tendsto_rls_fst_of_noiseFree in Lean source" title="View MathlibExt.Analysis.Control.RecursiveLeastSquares.tendsto_rls_fst_of_noiseFree in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#tendsto-rls-fst-of-noise-free" aria-label="Link to Convergence of noise-free RLS under growing excitation" data-search-exclude>#</a><span class="bp-mark" title="fully proved" data-search-exclude>✓<span class="bp-mark-label">fully proved</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Analysis.Control.RecursiveLeastSquares.tendsto_rls_fst_of_noiseFree</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\(P_0\)</span> be positive definite and let the data be noise free, <span class="arithmatex">\(y_{k+1} = \varphi_k^\top \theta\)</span> for every <span class="arithmatex">\(k\)</span>. If the
+smallest eigenvalue of <span class="arithmatex">\(\sum_{k&lt;t} \varphi_k \varphi_k^\top\)</span> tends to infinity, written as: for every <span class="arithmatex">\(M\)</span>, eventually
+<span class="arithmatex">\(M |x|^2 \le x^\top \big(\sum_{k&lt;t} \varphi_k \varphi_k^\top\big) x\)</span> for all <span class="arithmatex">\(x\)</span>, then <span class="arithmatex">\(\theta_t \to \theta\)</span> for
+every initial estimate <span class="arithmatex">\(\theta_0\)</span>. Persistent excitation, <span class="arithmatex">\(\lambda_{\min}(\sum_{k&lt;t} \varphi_k \varphi_k^\top) \ge c t\)</span>
+for some <span class="arithmatex">\(c &gt; 0\)</span>, is a special case; in the noise-free case no rate condition relating the largest and smallest
+eigenvalues is needed.</p>
+</div>
+<div class="bp-lean-source">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem</span> tendsto_rls_fst_of_noiseFree {P₀ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> n n ℝ} (hP₀ : P₀.PosDef) (φ : ℕ → n → ℝ)
+    (y : ℕ → ℝ) (θ₀ θ : n → ℝ) (hy : ∀ k, y (k + 1) = φ k ⬝ᵥ θ)
+    (hexc : ∀ M : ℝ, ∀ᶠ t <span class="bp-lean-keyword">in</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Filter.atTop#doc" title="Filter.atTop">atTop</a>, ∀ x : n → ℝ,
+      M * (x ⬝ᵥ x) ≤ x ⬝ᵥ ((∑ k ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">Finset.range</a> t, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix.vecMulVec#doc" title="Matrix.vecMulVec">vecMulVec</a> (φ k) (φ k)) *ᵥ x)) :
+    <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Filter.Tendsto#doc" title="Filter.Tendsto">Tendsto</a> (<span class="bp-lean-keyword">fun</span> t =&gt; (<a class="bp-lean-ref" href="#rls" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">rls</a> φ y θ₀ P₀ t).1) <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Filter.atTop#doc" title="Filter.atTop">atTop</a> (𝓝 θ)</code></pre>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rls (φ : ℕ → n → ℝ) (y : ℕ → ℝ) (θ₀ : n → ℝ) (P₀ : Matrix n n ℝ) :
+    ℕ → (n → ℝ) × Matrix n n ℝ
+  | 0 =&gt; (θ₀, P₀)
+  | t + 1 =&gt; rlsStep (φ t) (y (t + 1)) (rls φ y θ₀ P₀ t)</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Control/RecursiveLeastSquares.lean:68</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses_5">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="#rls-error-sq-le">Error bound of noise-free RLS under excitation</a>: the error is at most
+  <span class="arithmatex">\(|P_0^{-1}(\theta_0 - \theta)| / M\)</span> once the smallest eigenvalue exceeds <span class="arithmatex">\(M\)</span>.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#rls-error-sq-le"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls">Recursive least-squares estimates</a></span></div>
+<div class="bp-row"><span class="bp-key">Proof uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 proof dependency" href="#rls-error-sq-le">Error bound of noise-free RLS under excitation</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-can_prove" data-autoform-node-id="Analysis/control-theory/recursive-least-squares/rls-error-sq-le-log-div-lambda-min">
+<h4 class="bp-thmheading" id="rls-error-sq-le-log-div-lambda-min">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Convergence rate of recursive least squares under martingale-difference noise</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/7c4f9db1925b674d79de9903cb4a5a385314ac1d/WantedExt/Analysis/Control/RecursiveLeastSquaresWanted.lean#L58" aria-label="View MathlibExt.Analysis.Control.RecursiveLeastSquaresWanted.rls_error_sq_le_log_div_lambdaMin in Lean source" title="View MathlibExt.Analysis.Control.RecursiveLeastSquaresWanted.rls_error_sq_le_log_div_lambdaMin in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#rls-error-sq-le-log-div-lambda-min" aria-label="Link to Convergence rate of recursive least squares under martingale-difference noise" data-search-exclude>#</a><span class="bp-mark" title="ready to prove" data-search-exclude>●<span class="bp-mark-label">ready to prove</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Analysis.Control.RecursiveLeastSquaresWanted.rls_error_sq_le_log_div_lambdaMin</div>
+<div class="bp-thmcontent">
+<p>Let <span class="arithmatex">\((\mathcal F_k)\)</span> be a filtration, <span class="arithmatex">\(\theta \in \mathbb R^d\)</span> and <span class="arithmatex">\(y_{k+1} = \varphi_k^\top \theta + w_{k+1}\)</span>, where
+the regressor <span class="arithmatex">\(\varphi_k\)</span> and the noise <span class="arithmatex">\(w_k\)</span> are <span class="arithmatex">\(\mathcal F_k\)</span>-measurable (so <span class="arithmatex">\(\varphi_k\)</span> may be computed by feedback
+from past outputs), <span class="arithmatex">\(E[w_{k+1} \mid \mathcal F_k] = 0\)</span>, and for some <span class="arithmatex">\(\beta &gt; 2\)</span>,
+<span class="arithmatex">\(\sup_k E[|w_{k+1}|^\beta \mid \mathcal F_k] &lt; \infty\)</span> almost surely. Let <span class="arithmatex">\(\theta_t\)</span> be the RLS estimate from
+<span class="arithmatex">\(\theta_0\)</span> and a positive definite <span class="arithmatex">\(P_0\)</span>. Then almost surely, on the event <span class="arithmatex">\(\sum_{k \le t} |\varphi_k|^2 \to \infty\)</span>,
+there is <span class="arithmatex">\(C\)</span> with
+$<span class="arithmatex">\(\lambda_{\min}(t) \, |\theta_{t+1} - \theta|^2 \le C \log\Big(1 + \sum_{k \le t} |\varphi_k|^2\Big)\)</span>$
+for all large <span class="arithmatex">\(t\)</span>, where <span class="arithmatex">\(\lambda_{\min}(t)\)</span> is the smallest eigenvalue of <span class="arithmatex">\(P_0^{-1} + \sum_{k \le t} \varphi_k \varphi_k^\top\)</span>.
+In particular <span class="arithmatex">\(\theta_t \to \theta\)</span> almost surely on the event where
+<span class="arithmatex">\(\log(1 + \sum_{k \le t} |\varphi_k|^2) / \lambda_{\min}(t) \to 0\)</span> and <span class="arithmatex">\(\sum_k |\varphi_k|^2 = \infty\)</span>, the Lai–Wei
+excitation condition, which requires no independence, stationarity or persistent excitation.</p>
+<p>Source: Xie, Zhang and Guo, <em>Convergence of a distributed least squares</em>, IEEE Trans. Automat. Control, accepted version (2020), DOI 10.1109/TAC.2020.3047989, Theorem 3.3 with <span class="arithmatex">\(n = 1\)</span> sensor and graph diameter <span class="arithmatex">\(D_G = 1\)</span> (their Remark 3.3); the paper's
+introduction and Remark 3.3 attribute the single-sensor theory to Lai and Wei (Ann. Statist. 10 (1982)) and to Chen and
+Guo (<em>Identification and Stochastic Adaptive Control</em>, Birkhäuser 1991), which were not consulted directly.</p>
+<p><strong>Differences from the source.</strong> The smallest eigenvalue enters through its lower bounds <code>lam</code>
+(<span class="arithmatex">\(\mathrm{lam} \, |x|^2 \le x^\top (P_0^{-1} + \sum_{k \le t} \varphi_k \varphi_k^\top) x\)</span> for all <span class="arithmatex">\(x\)</span>), which is
+equivalent. The statement also assumes <span class="arithmatex">\(E|w_{k+1}|^\beta &lt; \infty\)</span>, because Mathlib's conditional expectation of a
+non-integrable function is zero. It is restricted to the event <span class="arithmatex">\(\sum_k |\varphi_k|^2 = \infty\)</span>, on which
+<span class="arithmatex">\(\log(1 + \sum_{k \le t} |\varphi_k|^2)\)</span> and the source's <span class="arithmatex">\(\log r_t\)</span>, <span class="arithmatex">\(r_t = \lambda_{\max}(P_0^{-1}) + \sum_{k \le t} |\varphi_k|^2\)</span>,
+differ by a factor tending to one. Without such a restriction the bound <span class="arithmatex">\(O(\log r_t / \lambda_{\min}(t))\)</span> cannot hold
+literally in degenerate cases: with <span class="arithmatex">\(P_0 = I\)</span> and <span class="arithmatex">\(\varphi_k = 0\)</span> for all <span class="arithmatex">\(k\)</span>, <span class="arithmatex">\(r_t = 1\)</span> and <span class="arithmatex">\(\log r_t = 0\)</span>, while
+<span class="arithmatex">\(\theta_t = \theta_0\)</span> for all <span class="arithmatex">\(t\)</span>, so the error is <span class="arithmatex">\(|\theta_0 - \theta|^2 \ne 0\)</span> whenever <span class="arithmatex">\(\theta_0 \ne \theta\)</span>. (The source's <span class="arithmatex">\(O(b_t)\)</span> is defined only for positive <span class="arithmatex">\(b_t\)</span>, Section II.A; here <span class="arithmatex">\(\log r_t \le 0\)</span>, so the stated bound is either undefined or, read as <span class="arithmatex">\(\|A_t\| \le M \log r_t\)</span>, false.)</p>
+<p>The hypotheses are jointly satisfiable in a non-degenerate way: <span class="arithmatex">\(d = 1\)</span>, <span class="arithmatex">\(\varphi_k = 1\)</span>, and <span class="arithmatex">\(w_k\)</span> independent standard
+Gaussian variables with <span class="arithmatex">\(\mathcal F_k = \sigma(w_1, \dots, w_k)\)</span>; then <span class="arithmatex">\(\lambda_{\min}(t) = P_0^{-1} + t + 1\)</span> and the
+statement gives <span class="arithmatex">\(|\theta_{t+1} - \theta|^2 = O(\log t / t)\)</span>.</p>
+</div>
+<div class="bp-lean-source">
+<details class="bp-lean-fold">
+<summary><code>MathlibExt.Analysis.Control.RecursiveLeastSquaresWanted.rls_error_sq_le_log_div_lambdaMin</code> · 17 lines</summary>
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem_wanted</span> rls_error_sq_le_log_div_lambdaMin {Ω : <span class="bp-lean-keyword">Type</span>*} {m₀ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasurableSpace#doc" title="MeasurableSpace">MeasurableSpace</a> Ω}
+    (μ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> Ω) [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsProbabilityMeasure#doc" title="MeasureTheory.IsProbabilityMeasure">IsProbabilityMeasure</a> μ] (ℱ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Filtration#doc" title="MeasureTheory.Filtration">Filtration</a> ℕ m₀) {d : ℕ}
+    (θ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> d → ℝ) (φ : ℕ → Ω → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> d → ℝ) (w y : ℕ → Ω → ℝ)
+    (hφ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Adapted#doc" title="MeasureTheory.Adapted">Adapted</a> ℱ φ) (hw : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Adapted#doc" title="MeasureTheory.Adapted">Adapted</a> ℱ w) {β : ℝ} (hβ : 2 &lt; β)
+    (hint : ∀ k, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Integrable#doc" title="MeasureTheory.Integrable">Integrable</a> (<span class="bp-lean-keyword">fun</span> ω =&gt; |w (k + 1) ω| ^ β) μ)
+    (hmart : ∀ k, μ[w (k + 1) | ℱ k] =ᵐ[μ] 0)
+    (hmom : ∃ C : Ω → ℝ, ∀ k, μ[<span class="bp-lean-keyword">fun</span> ω =&gt; |w (k + 1) ω| ^ β | ℱ k] ≤ᵐ[μ] C)
+    (hy : ∀ k ω, y (k + 1) ω = φ k ω ⬝ᵥ θ + w (k + 1) ω)
+    (θ₀ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> d → ℝ) {P₀ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> d) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> d) ℝ} (hP₀ : P₀.PosDef) :
+    ∀ᵐ ω ∂μ,
+      <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Filter.Tendsto#doc" title="Filter.Tendsto">Tendsto</a> (<span class="bp-lean-keyword">fun</span> t =&gt; ∑ k ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">Finset.range</a> (t + 1), φ k ω ⬝ᵥ φ k ω) <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Filter.atTop#doc" title="Filter.atTop">atTop</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Filter.atTop#doc" title="Filter.atTop">atTop</a> →
+      ∃ C : ℝ, ∀ᶠ t <span class="bp-lean-keyword">in</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Filter.atTop#doc" title="Filter.atTop">atTop</a>, ∀ lam : ℝ,
+        (∀ x : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> d → ℝ,
+          lam * (x ⬝ᵥ x) ≤ x ⬝ᵥ (<a class="bp-lean-ref" href="#rls-information" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation">rlsInformation</a> P₀ (<span class="bp-lean-keyword">fun</span> k =&gt; φ k ω) (t + 1) *ᵥ x)) →
+        lam * (((<a class="bp-lean-ref" href="#rls" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">rls</a> (<span class="bp-lean-keyword">fun</span> k =&gt; φ k ω) (<span class="bp-lean-keyword">fun</span> k =&gt; y k ω) θ₀ P₀ (t + 1)).1 - θ) ⬝ᵥ
+            ((<a class="bp-lean-ref" href="#rls" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">rls</a> (<span class="bp-lean-keyword">fun</span> k =&gt; φ k ω) (<span class="bp-lean-keyword">fun</span> k =&gt; y k ω) θ₀ P₀ (t + 1)).1 - θ)) ≤
+          C * <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.log#doc" title="Real.log">Real.log</a> (1 + ∑ k ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">Finset.range</a> (t + 1), φ k ω ⬝ᵥ φ k ω)</code></pre>
+</details>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rlsInformation">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rlsInformation (P₀ : Matrix n n ℝ) (φ : ℕ → n → ℝ) (t : ℕ) : Matrix n n ℝ :=
+  P₀⁻¹ + ∑ k ∈ Finset.range t, vecMulVec (φ k) (φ k)</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Control/RecursiveLeastSquares.lean:75</p>
+</div>
+<div data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rls (φ : ℕ → n → ℝ) (y : ℕ → ℝ) (θ₀ : n → ℝ) (P₀ : Matrix n n ℝ) :
+    ℕ → (n → ℝ) × Matrix n n ℝ
+  | 0 =&gt; (θ₀, P₀)
+  | t + 1 =&gt; rlsStep (φ t) (y (t + 1)) (rls φ y θ₀ P₀ t)</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Control/RecursiveLeastSquares.lean:68</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses_6">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="#rls-snd-eq-inv">The RLS matrix is the inverse of the information matrix</a>: the proof of Theorem 3.1 of the source,
+  on which Theorem 3.3 rests, applies the matrix inversion lemma to the recursion.</li>
+<li><a href="#sum-rls-gain-le-log-det">Logarithmic bound on the accumulated RLS gains</a>: inequality (33) of the source, which
+  bounds the noise contribution in the proof of Theorem 3.1 by <span class="arithmatex">\(\log \det P_{t+1}^{-1}\)</span>.</li>
+</ul>
+<div class="bp-notes-heading">
+<h6 id="background_5">Background</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Background</div>
+<ul>
+<li><a href="../../../Probability/martingales/index.html">Martingales and optional stopping</a>: the source's proof uses a martingale
+  estimation theorem for <span class="arithmatex">\(\sum_k a_k w_{k+1}\)</span> with adapted weights.</li>
+<li><a href="#tendsto-rls-fst-of-noise-free">Convergence of noise-free RLS under growing excitation</a>: the deterministic case,
+  where any growth of the smallest eigenvalue suffices.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#rls-snd-eq-inv"> </a></p>
+<p><a href="#sum-rls-gain-le-log-det"> </a></p>
+<p><a href="../../../Probability/martingales/index.html"> </a></p>
+<p><a href="#tendsto-rls-fst-of-noise-free"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 2</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls">Recursive least-squares estimates</a> <span class="bp-ref-sep">·</span> <a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls-information">Information matrix of recursive least squares</a></span></div>
+</div>
+</details>
+</div>
+<div class="bp-thmwrapper theorem-style-plain bp-can_prove" data-autoform-node-id="Analysis/control-theory/recursive-least-squares/rls-regret-sum-le-log">
+<h4 class="bp-thmheading" id="rls-regret-sum-le-log">
+<span class="bp-thmcaption" data-search-exclude>Theorem</span><span class="bp-thmtitle">Logarithmic regret of the least-squares adaptive predictor</span><span class="bp-code-links"><a class="bp-code-link" href="https://github.com/VivienCabannes/atlas-lean/blob/7c4f9db1925b674d79de9903cb4a5a385314ac1d/WantedExt/Analysis/Control/RecursiveLeastSquaresWanted.lean#L86" aria-label="View MathlibExt.Analysis.Control.RecursiveLeastSquaresWanted.rls_regret_sum_le_log in Lean source" title="View MathlibExt.Analysis.Control.RecursiveLeastSquaresWanted.rls_regret_sum_le_log in Lean source"><svg class="bp-code-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m8 9-3 3 3 3M16 9l3 3-3 3M14 5l-4 14"/></svg></a></span><a class="bp-permalink" href="#rls-regret-sum-le-log" aria-label="Link to Logarithmic regret of the least-squares adaptive predictor" data-search-exclude>#</a><span class="bp-mark" title="ready to prove" data-search-exclude>●<span class="bp-mark-label">ready to prove</span></span>
+</h4>
+<div class="bp-search-names" hidden="hidden">MathlibExt.Analysis.Control.RecursiveLeastSquaresWanted.rls_regret_sum_le_log</div>
+<div class="bp-thmcontent">
+<p>In the setting of <a href="#rls-error-sq-le-log-div-lambda-min">the convergence rate of recursive least squares</a>
+(<span class="arithmatex">\(y_{k+1} = \varphi_k^\top \theta + w_{k+1}\)</span>, adapted regressors, martingale-difference noise with
+<span class="arithmatex">\(\sup_k E[|w_{k+1}|^\beta \mid \mathcal F_k] &lt; \infty\)</span> for some <span class="arithmatex">\(\beta &gt; 2\)</span>), the best predictor of <span class="arithmatex">\(y_{k+1}\)</span> given
+<span class="arithmatex">\(\mathcal F_k\)</span> is <span class="arithmatex">\(\varphi_k^\top \theta\)</span> and the adaptive predictor built from the RLS estimate is
+<span class="arithmatex">\(\varphi_k^\top \theta_k\)</span>. Their squared difference <span class="arithmatex">\(R_k = (\varphi_k^\top (\theta_k - \theta))^2\)</span> is the regret. If
+<span class="arithmatex">\(\varphi_t^\top P_t \varphi_t\)</span> is bounded in <span class="arithmatex">\(t\)</span> almost surely, then almost surely, on the event
+<span class="arithmatex">\(\sum_{k \le t} |\varphi_k|^2 \to \infty\)</span>, there is <span class="arithmatex">\(C\)</span> with
+$<span class="arithmatex">\(\sum_{k \le t} R_k \le C \log\Big(1 + \sum_{k \le t} |\varphi_k|^2\Big)\)</span>$
+for all large <span class="arithmatex">\(t\)</span>. No excitation condition is assumed: the predictions become good on average even when the
+parameter itself is not identified. This is the property on which the analysis of least-squares-based self-tuning
+regulators rests, since the certainty-equivalence control makes <span class="arithmatex">\(\varphi_k^\top \theta_k\)</span> equal to the reference.</p>
+<p>Source: Xie, Zhang and Guo, <em>Convergence of a distributed least squares</em>, IEEE Trans. Automat. Control, accepted version (2020), DOI 10.1109/TAC.2020.3047989, Theorem 3.2 with one sensor.</p>
+<p><strong>Differences from the source.</strong> As on the companion page, the statement assumes <span class="arithmatex">\(E|w_{k+1}|^\beta &lt; \infty\)</span> and is
+restricted to the event <span class="arithmatex">\(\sum_k |\varphi_k|^2 = \infty\)</span>, where <span class="arithmatex">\(\log(1 + \sum_{k \le t} |\varphi_k|^2)\)</span> and the source's
+<span class="arithmatex">\(\log r_t\)</span> differ by a factor tending to one. Without the restriction the bound cannot hold literally: with
+<span class="arithmatex">\(P_0 = 100 I\)</span> in dimension one, <span class="arithmatex">\(\varphi_0 = 0.1\)</span> and <span class="arithmatex">\(\varphi_k = 0\)</span> for <span class="arithmatex">\(k \ge 1\)</span>, <span class="arithmatex">\(r_t = 0.01 + 0.01 = 0.02\)</span>, so
+<span class="arithmatex">\(\log r_t &lt; 0\)</span>, while <span class="arithmatex">\(R_0 = 0.01 (\theta_0 - \theta)^2 &gt; 0\)</span> whenever <span class="arithmatex">\(\theta_0 \ne \theta\)</span>. (The source's <span class="arithmatex">\(O(b_t)\)</span> is defined only for positive <span class="arithmatex">\(b_t\)</span>, Section II.A; here <span class="arithmatex">\(\log r_t \le 0\)</span>, so the stated bound is either undefined or, read as <span class="arithmatex">\(\|A_t\| \le M \log r_t\)</span>, false.)</p>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#rls-error-sq-le-log-div-lambda-min"> </a></p>
+</div>
+</div>
+<div class="bp-lean-source">
+<details class="bp-lean-fold">
+<summary><code>MathlibExt.Analysis.Control.RecursiveLeastSquaresWanted.rls_regret_sum_le_log</code> · 17 lines</summary>
+<pre class="bp-lean"><code><span class="bp-lean-keyword">theorem_wanted</span> rls_regret_sum_le_log {Ω : <span class="bp-lean-keyword">Type</span>*} {m₀ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasurableSpace#doc" title="MeasurableSpace">MeasurableSpace</a> Ω}
+    (μ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Measure#doc" title="MeasureTheory.Measure">Measure</a> Ω) [<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.IsProbabilityMeasure#doc" title="MeasureTheory.IsProbabilityMeasure">IsProbabilityMeasure</a> μ] (ℱ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Filtration#doc" title="MeasureTheory.Filtration">Filtration</a> ℕ m₀) {d : ℕ}
+    (θ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> d → ℝ) (φ : ℕ → Ω → <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> d → ℝ) (w y : ℕ → Ω → ℝ)
+    (hφ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Adapted#doc" title="MeasureTheory.Adapted">Adapted</a> ℱ φ) (hw : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Adapted#doc" title="MeasureTheory.Adapted">Adapted</a> ℱ w) {β : ℝ} (hβ : 2 &lt; β)
+    (hint : ∀ k, <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=MeasureTheory.Integrable#doc" title="MeasureTheory.Integrable">Integrable</a> (<span class="bp-lean-keyword">fun</span> ω =&gt; |w (k + 1) ω| ^ β) μ)
+    (hmart : ∀ k, μ[w (k + 1) | ℱ k] =ᵐ[μ] 0)
+    (hmom : ∃ C : Ω → ℝ, ∀ k, μ[<span class="bp-lean-keyword">fun</span> ω =&gt; |w (k + 1) ω| ^ β | ℱ k] ≤ᵐ[μ] C)
+    (hy : ∀ k ω, y (k + 1) ω = φ k ω ⬝ᵥ θ + w (k + 1) ω)
+    (θ₀ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> d → ℝ) {P₀ : <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Matrix#doc" title="Matrix">Matrix</a> (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> d) (<a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Fin#doc" title="Fin">Fin</a> d) ℝ} (hP₀ : P₀.PosDef)
+    (hbdd : ∀ᵐ ω ∂μ, ∃ B : ℝ, ∀ t,
+      φ t ω ⬝ᵥ ((<a class="bp-lean-ref" href="#rls" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">rls</a> (<span class="bp-lean-keyword">fun</span> k =&gt; φ k ω) (<span class="bp-lean-keyword">fun</span> k =&gt; y k ω) θ₀ P₀ t).2 *ᵥ φ t ω) ≤ B) :
+    ∀ᵐ ω ∂μ,
+      <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Filter.Tendsto#doc" title="Filter.Tendsto">Tendsto</a> (<span class="bp-lean-keyword">fun</span> t =&gt; ∑ k ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">Finset.range</a> (t + 1), φ k ω ⬝ᵥ φ k ω) <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Filter.atTop#doc" title="Filter.atTop">atTop</a> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Filter.atTop#doc" title="Filter.atTop">atTop</a> →
+      ∃ C : ℝ, ∀ᶠ t <span class="bp-lean-keyword">in</span> <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Filter.atTop#doc" title="Filter.atTop">atTop</a>,
+        ∑ k ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">Finset.range</a> (t + 1),
+            (φ k ω ⬝ᵥ ((<a class="bp-lean-ref" href="#rls" data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">rls</a> (<span class="bp-lean-keyword">fun</span> k =&gt; φ k ω) (<span class="bp-lean-keyword">fun</span> k =&gt; y k ω) θ₀ P₀ k).1 - θ)) ^ 2 ≤
+          C * <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Real.log#doc" title="Real.log">Real.log</a> (1 + ∑ k ∈ <a class="bp-lean-doc" href="https://leanprover-community.github.io/mathlib4_docs/find/?pattern=Finset.range#doc" title="Finset.range">Finset.range</a> (t + 1), φ k ω ⬝ᵥ φ k ω)</code></pre>
+</details>
+<div class="bp-lean-names" hidden="hidden">
+<div data-lean-name="MathlibExt.Analysis.Control.RecursiveLeastSquares.rls">
+<pre class="bp-lean"><code><span class="bp-lean-keyword">noncomputable</span> <span class="bp-lean-keyword">def</span> rls (φ : ℕ → n → ℝ) (y : ℕ → ℝ) (θ₀ : n → ℝ) (P₀ : Matrix n n ℝ) :
+    ℕ → (n → ℝ) × Matrix n n ℝ
+  | 0 =&gt; (θ₀, P₀)
+  | t + 1 =&gt; rlsStep (φ t) (y (t + 1)) (rls φ y θ₀ P₀ t)</code></pre>
+<p class="bp-lean-where">MathlibExt/Analysis/Control/RecursiveLeastSquares.lean:68</p>
+</div>
+</div>
+</div>
+<div class="bp-thmnotes">
+<div class="bp-notes-heading">
+<h6 id="informally-uses_7">Informally uses</h6>
+</div>
+<div class="bp-search-text" hidden="hidden">Informally uses</div>
+<ul>
+<li><a href="#sum-rls-gain-le-log-det">Logarithmic bound on the accumulated RLS gains</a>: the source's proof of Theorem 3.1,
+  from which Theorem 3.2 follows, bounds the noise contribution by inequality (33).</li>
+<li><a href="#rls-snd-eq-inv">The RLS matrix is the inverse of the information matrix</a>: the matrix inversion lemma in the same
+  proof.</li>
+</ul>
+<div class="bp-body-link-validation" hidden="hidden">
+<p><a href="#sum-rls-gain-le-log-det"> </a></p>
+<p><a href="#rls-snd-eq-inv"> </a></p>
+</div>
+</div>
+<details class="bp-dependencies">
+<summary>Uses 1</summary>
+<div class="bp-dependency-body">
+<div class="bp-row"><span class="bp-key">Statement uses</span><span class="bp-value"><a class="bp-ref bp-ref-fully_proved" title="1 statement dependency" href="#rls">Recursive least-squares estimates</a></span></div>
+</div>
+</details>
+</div>
+<h2 id="related-topics">Related topics</h2>
+<ul>
+<li><a href="../../../ComputerScience/machine-learning/supervised-learning/least-squares-ridge-and-lasso-regression/index.html">Least squares, ridge and lasso regression</a>: the batch problem that the recursion solves; its ridge closed form is used by the identification with ridge regression.</li>
+<li><a href="../../../LinearAlgebra/matrix-decompositions/linear-least-squares/index.html">Linear least squares</a>: the same normal equations solved by matrix factorisations instead of rank-one updates.</li>
+<li><a href="../../../ComputerScience/machine-learning/probabilistic-graphical-models/kalman-filter/index.html">Kalman filter</a>: RLS is the Kalman filter for the constant state <span class="arithmatex">\(\theta_{k+1} = \theta_k\)</span> observed through <span class="arithmatex">\(y_{k+1} = \varphi_k^\top \theta_k + v_{k+1}\)</span> with unit noise variance, <span class="arithmatex">\(P_k\)</span> playing the role of the covariance.</li>
+<li><a href="../../../ComputerScience/machine-learning/reinforcement-learning/linear-quadratic-regulator/index.html">Linear quadratic regulator</a>: Recht's dynamic programming pages; adaptive linear-quadratic control combines least-squares estimates of the system with the Riccati feedback by certainty equivalence.</li>
+<li><a href="../../../ComputerScience/heuristic-search-and-planning/optimality-of-stationary-policies/index.html">Optimality of stationary policies</a>: Bertsekas's dynamic programming, the optimisation side of feedback design when the model is known.</li>
+<li><a href="../../../Probability/martingales/index.html">Martingales and optional stopping</a>: the martingale convergence and estimation theorems on which the stochastic convergence theory rests.</li>
+<li><a href="../capability-and-limits-of-feedback/index.html">Capability and limits of feedback</a>: what feedback, adaptive or not, can achieve for uncertain systems.</li>
+<li><a href="../pole-placement/index.html">Pole placement</a>: Coron's stabilisation of known linear systems by state feedback, the problem adaptive control solves when the system is unknown.</li>
+</ul>
+</div>
+<p><link rel="stylesheet" href="../../../../stylesheets/blueprint-dag.css" data-autoform-dag-style></p>
+<div class="bp-dag-viewer" data-catalog-src="../../../../dependencies/index.json" data-graph-src="../../../../dependencies/scopes/Analysis/control-theory/recursive-least-squares.json" data-page-href="index.html" data-scope-id="Analysis/control-theory/recursive-least-squares">
+<p class="bp-dag-loading" hidden="hidden" role="status">Loading dependency explorer…</p>
+<div class="bp-dag-fallback">
+    <p>The dependency explorer needs JavaScript and its graph data.</p>
+    <p><a href="../../../../dependencies/index.json">Download the complete graph data</a>.</p>
+  </div>
+</div>
+<script defer="defer" src="../../../../javascripts/blueprint-dag.js"></script>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+<footer class="md-footer">
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+        Developed with
+        <a href="https://github.com/facebookresearch/autoform-bot">AutoformBot</a>.
+        
+        <a href="https://github.com/facebookresearch/atlas-lean">Formalization source</a>.
+        
+      </div>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.prune", "navigation.indexes", "navigation.top", "toc.follow", "search.suggest"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei" crossorigin="anonymous"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js" integrity="sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I" crossorigin="anonymous"></script>
+      
+        <script src="../../../../javascripts/blueprint-mermaid.js"></script>
+      
+        <script src="../../../../javascripts/blueprint-live.js"></script>
+      
+    
+  </body>
+</html>
